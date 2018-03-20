@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_websearch"
+        android:icon="@mipmap/ic_launcher_round"
+        android:orderInCategory="3"
+        android:title="Info"
+        app:showAsAction="ifRoom">
+
+    <menu>
+        <item
+            android:id="@+id/action_reply"
+            android:title="reply" />
+
+        <item
+            android:id="@+id/action_replyall"
+            android:title="replyall" />
+
+        <item
+            android:id="@+id/action_forward"
+            android:title="forward" />
+    </menu>
+</item>
+
+    </menu>
