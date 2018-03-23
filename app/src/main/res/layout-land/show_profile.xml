@@ -1,41 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-
 
     <ImageView
 
         android:id="@+id/personalPhoto"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/profile_photo_height"
+        android:layout_width="200dp"
+        android:layout_height="fill_parent"
         android:visibility="visible"
         android:src="@drawable/ic_account_circle_white_48dp"
         android:background="@color/colorText"
-        android:layout_marginBottom="50dp"/>
-
-
-
+        android:layout_marginRight="50dp"/>
     <TextView
         android:id= "@+id/Username"
-        android:layout_below="@id/personalPhoto"
+        android:layout_toRightOf="@id/personalPhoto"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/text_view_container_height"
         android:textSize="@dimen/text_view_height"
         android:textColor="@color/colorText"
         android:text="UserName"
-        android:layout_marginLeft="16dp"/>
-
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"/>
     <TextView
         android:id="@+id/City"
         android:layout_below="@id/Username"
+        android:layout_toRightOf="@id/personalPhoto"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/text_view_container_height"
         android:textSize="@dimen/text_view_height"
@@ -46,6 +41,7 @@
     <TextView
         android:id="@+id/profile_mail"
         android:layout_below="@id/City"
+        android:layout_toRightOf="@id/personalPhoto"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/text_view_container_height"
         android:textSize="@dimen/text_view_height"
@@ -58,13 +54,13 @@
     <TextView
         android:id="@+id/profile_AboutMe"
         android:layout_below="@id/profile_mail"
+        android:layout_toRightOf="@id/personalPhoto"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/text_view_container_height"
         android:textSize="@dimen/text_view_height"
         android:layout_marginLeft="16dp"
         android:textColor="@color/colorText"
         android:text="About Me"/>
-
 
 
 </RelativeLayout>
