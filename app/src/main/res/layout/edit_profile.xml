@@ -24,6 +24,8 @@
         android:layout_height="wrap_content"
         android:textColor="@color/colorText"
         android:textSize="@dimen/edit_text_content_height"
+        android:inputType="text"
+        android:maxLines="1"
         android:hint="@string/profile_username"/>
     <EditText
         android:id="@+id/City"
@@ -32,6 +34,8 @@
         android:layout_height="wrap_content"
         android:textColor="@color/colorText"
         android:textSize="@dimen/edit_text_content_height"
+        android:inputType="text"
+        android:maxLines="1"
         android:hint="@string/profile_city"/>
     <EditText
         android:id="@+id/profile_mail"
@@ -39,6 +43,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/edit_text_content_height"
+        android:inputType="textEmailAddress"
+        android:maxLines="1"
         android:hint="@string/profile_mail"/>
     <EditText
         android:id="@+id/profile_about"
@@ -46,5 +52,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/edit_text_content_height"
+        android:inputType="textMultiLine"
+        android:scrollbars = "vertical"
         android:hint="@string/profile_about"/>
 </RelativeLayout>
