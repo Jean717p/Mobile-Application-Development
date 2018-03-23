@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/profile_photo"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/profile_height"
+        android:contentDescription="@string/profile_photo"/>
+    <EditText
+        android:id="@+id/profile_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/edit_text_content_height"
+        android:hint="@string/profile_username"/>
+    <EditText
+        android:id="@+id/profile_city"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/edit_text_content_height"
+        android:hint="@string/profile_city"/>
+    <EditText
+        android:id="@+id/profile_mail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/edit_text_content_height"
+        android:hint="@string/profile_mail"/>
+    <EditText
+        android:id="@+id/profile_about"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/edit_text_content_height"
+        android:hint="@string/profile_about"/>
+</LinearLayout>
