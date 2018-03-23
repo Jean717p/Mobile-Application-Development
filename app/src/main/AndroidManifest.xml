@@ -20,7 +20,7 @@
             android:name=".EditActivity"
             android:label="@string/title_activity_edit"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mad18.nullpointerexception.takeabook.MainActivity" />

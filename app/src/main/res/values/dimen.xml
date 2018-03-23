@@ -4,4 +4,5 @@
     <dimen name="edit_text_content_height">18sp</dimen>
     <dimen name="text_view_height">18sp</dimen>
     <dimen name = "text_view_container_height">36dp</dimen>
+    <dimen name="profile_height">170dp</dimen>
 </resources>
