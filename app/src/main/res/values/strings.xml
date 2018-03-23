@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">TakeABook</string>
+    <string name="profile_username">Superman</string>
+    <string name="profile_city">Turin</string>
+    <string name="profile_mail">JerrySiegel@gmail.com</string>
+    <string name="profile_about">About me</string>
+    <string name="profile_photo">Profile photo</string>
 </resources>

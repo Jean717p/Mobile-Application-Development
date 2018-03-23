@@ -7,8 +7,7 @@
     <ImageView
         android:id="@+id/personalPhoto"
         android:layout_width="match_parent"
-        android:layout_height="170dp"
-        android:background="@android:drawable/dialog_holo_light_frame"
+        android:layout_height="@dimen/profile_height"
         android:visibility="visible" />
 
     <TextView
