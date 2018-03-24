@@ -1,7 +1,9 @@
 package com.mad18.nullpointerexception.takeabook;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +14,7 @@ import android.widget.EditText;
 
 public class EditActivity extends AppCompatActivity {
     private SharedPreferences sharedPref;
+    private static final int PICK_IMAGE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +50,26 @@ public class EditActivity extends AppCompatActivity {
         super.onResume();
         fillUserEditData();
     }
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == PICK_IMAGE) {
+                Uri selectedMediaUri = data.getData();
+                if (selectedMediaUri.toString().contains("image")) {
+                    //handle image
+                }
+            }
+        }
+    }
+
+    private void selectUserImg(){
+        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        getIntent.setType("image/*");
+        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.setType("image/*");
+        Intent chooserIntent = Intent.createChooser(getIntent,"Select Image");
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+        startActivityForResult(chooserIntent, PICK_IMAGE);
+    }
 
     private void storeUserEditData(){
         EditText text;
@@ -66,7 +89,7 @@ public class EditActivity extends AppCompatActivity {
         }
         text = (EditText) findViewById(R.id.profile_about);
         if(text.getText().toString().isEmpty()==false){
-                //&& t.getText().toString().length()<600) {
+            //&& t.getText().toString().length()<600) {
             editor.putString("user_about", text.getText().toString());
         }
         editor.apply();
