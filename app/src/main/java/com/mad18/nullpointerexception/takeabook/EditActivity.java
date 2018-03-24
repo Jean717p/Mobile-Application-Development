@@ -19,6 +19,7 @@ public class EditActivity extends AppCompatActivity {
         sharedPref = this.
                 getSharedPreferences(getString(R.string.app_name),Context.MODE_PRIVATE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(R.string.app_name);
     }
 
     @Override
@@ -50,12 +51,12 @@ public class EditActivity extends AppCompatActivity {
     private void storeUserEditData(){
         EditText text;
         SharedPreferences.Editor editor = sharedPref.edit();
-        text = (EditText) findViewById(R.id.profile_username);
+        text = (EditText) findViewById(R.id.Username);
         if(text.getText().toString().isEmpty()==false) {
             String x = text.getText().toString();
             editor.putString("user_name", text.getText().toString());
         }
-        text = (EditText) findViewById(R.id.profile_city);
+        text = (EditText) findViewById(R.id.City);
         if(text.getText().toString().isEmpty()==false) {
             editor.putString("user_city", text.getText().toString());
         }
@@ -73,9 +74,9 @@ public class EditActivity extends AppCompatActivity {
 
     private void fillUserEditData(){
         EditText inputText;
-        inputText = (EditText) findViewById(R.id.profile_username);
+        inputText = (EditText) findViewById(R.id.Username);
         inputText.setText(sharedPref.getString("user_name", ""));
-        inputText = (EditText) findViewById(R.id.profile_city);
+        inputText = (EditText) findViewById(R.id.City);
         inputText.setText(sharedPref.getString("user_city", ""));
         inputText = (EditText) findViewById(R.id.profile_mail);
         inputText.setText(sharedPref.getString("user_mail", ""));
