@@ -5,11 +5,14 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-
+import android.view.WindowManager;
 
 public class MainActivity extends AppCompatActivity {
     private SharedPreferences sharedPref;
@@ -22,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         sharedPref = getSharedPreferences(getString(R.string.app_name),Context.MODE_PRIVATE);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -119,20 +123,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void goToViewMode(){
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         changeIcon(R.drawable.ic_mode_edit_white_24dp);
         for(int i:editTextBoxesIds){
             findViewById(i).setEnabled(false);
+
+
         }
         fillUserData();
         this.editMode = false;
+
     }
 
     private void goToEditMode(){
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         changeIcon(R.drawable.ic_done_white_48dp);
         for(int i: editTextBoxesIds){
+
             findViewById(i).setEnabled(true);
+
         }
         this.editMode =true;
     }
