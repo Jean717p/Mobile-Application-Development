@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
             text = findViewById(i);
             outState.putString(Integer.toString(i),text.getText().toString());
         }
+        outState.putString("editMode",Boolean.toString(this.editMode));
     }
 
     @Override
@@ -100,6 +101,10 @@ public class MainActivity extends AppCompatActivity {
             text = findViewById(i);
             text.setText(savedInstanceState.getString(Integer.toString(i),""));
         }
+        if(savedInstanceState.getString("editMode","false").equals("true")==true){
+            goToEditMode();
+        }
+
     }
 
     public void changeIcon(int iconID){
