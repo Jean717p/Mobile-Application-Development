@@ -1,8 +1,15 @@
 <resources>
-    <string name="app_name">TakeABook</string>
-    <string name="profile_city">Turin</string>
+    <string name="app_name">AppName</string>
+    <string name="profile_name">Nome</string>
+    <string name="profile_username">NomeUtente</string>
+    <string name="profile_city">Torino</string>
     <string name="profile_mail">JerrySiegel@gmail.com</string>
-    <string name="profile_about">About me</string>
-    <string name="profile_photo">Profile photo</string>
-    <string name="title_activity_edit">EditActivity</string>
+    <string name="profile_about">Info</string>
+    <string name="profile_photo">Foto profilo</string>
+    <string name="title_activity_edit">Modifica profilo</string>
+    <string name="Username">NomeUtente</string>
+    <string name="City">Città</string>
+    <string name="Email">mail@mail.com</string>
+    <string name="AboutMe">Info</string>
+
 </resources>

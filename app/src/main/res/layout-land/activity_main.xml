@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
-
+    android:background="@color/white"
+    >
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -19,11 +18,13 @@
         app:title="@string/app_name"
         />
 
+
     <ImageView
+
         android:id="@+id/personalPhoto"
         android:layout_below="@id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:visibility="visible"
         android:src="@drawable/ic_account_circle_white_48dp"
         android:background="@color/backgroundPhoto"
@@ -32,9 +33,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:layout_below="@id/personalPhoto"
-        >
+        android:layout_toRightOf="@id/personalPhoto"
+        android:layout_below="@id/toolbar"
+        android:layout_margin="16dp">
+
         <EditText
             android:id="@+id/Username"
             android:enabled="false"
@@ -43,9 +45,10 @@
             android:textSize="@dimen/text_view_height"
             android:inputType="text"
             android:maxLines="1"
-            android:hint="Name"
             android:textColor="@color/textColor"
+            android:hint="Name"
             android:textColorHint="@color/colorAccent"/>
+
 
         <EditText
             android:id="@+id/City"
@@ -54,12 +57,13 @@
             android:layout_height="wrap_content"
             android:inputType="text"
             android:textSize="@dimen/text_view_height"
-            android:textColor="@color/textColor"
             android:textColorHint="@color/colorAccent"
             android:enabled="false"
             android:maxLines="1"
             android:hint="City"
+            android:textColor="@color/textColor"
             />
+
 
         <EditText
             android:id="@+id/profile_mail"
@@ -70,11 +74,11 @@
             android:inputType="textEmailAddress"
             android:maxLines="1"
             android:hint="Email"
+            android:textSize="@dimen/text_view_height"
             android:textColor="@color/textColor"
             android:textColorHint="@color/colorAccent"
-            android:textSize="18sp"
-
             />
+
 
         <EditText
             android:id="@+id/profile_about"
@@ -88,7 +92,7 @@
             android:textColor="@color/textColor"
             android:textColorHint="@color/colorAccent"
             android:textSize="18sp"
-            />
-    </RelativeLayout>
+
+            /></RelativeLayout>
 
 </RelativeLayout>

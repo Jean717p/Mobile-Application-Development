@@ -1,9 +1,14 @@
 <resources>
-    <string name="app_name">TakeABook</string>
+    <string name="app_name">AppName</string>
+    <string name="profile_name">Name</string>
     <string name="profile_username">Superman</string>
     <string name="profile_city">Turin</string>
     <string name="profile_mail">JerrySiegel@gmail.com</string>
     <string name="profile_about">About me</string>
     <string name="profile_photo">Profile photo</string>
     <string name="title_activity_edit">EditActivity</string>
+    <string name="Username">Username</string>
+    <string name="City">City</string>
+    <string name="Email">mail@mail.com</string>
+    <string name="AboutMe">About Me</string>
 </resources>

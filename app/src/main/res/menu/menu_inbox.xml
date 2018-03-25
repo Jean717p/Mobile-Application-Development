@@ -3,25 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_edit"
+        android:id="@+id/action_settings"
         android:icon="@drawable/ic_mode_edit_white_24dp"
         android:orderInCategory="4"
-        android:title="Info"
-        app:showAsAction="ifRoom">
-
-    <!--<menu>-->
-        <!--<item-->
-            <!--android:id="@+id/action_reply"-->
-            <!--android:title="reply" />-->
-
-        <!--<item-->
-            <!--android:id="@+id/action_replyall"-->
-            <!--android:title="replyall" />-->
-
-        <!--<item-->
-            <!--android:id="@+id/action_forward"-->
-            <!--android:title="forward" />-->
-    <!--</menu>-->
+        android:title="Settings"
+        app:showAsAction="always">
     </item>
 
 </menu>
