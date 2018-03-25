@@ -59,8 +59,8 @@ public class EditActivity extends AppCompatActivity {
             if (requestCode == PICK_IMAGE) {
                 Uri selectedMediaUri = data.getData();
                 if (selectedMediaUri.toString().contains("image")) {
-                    //handle image
-                }
+                    //handle image  -- To Do salvare immagine e settarla come immagine
+                 }
             }
         }
     }
