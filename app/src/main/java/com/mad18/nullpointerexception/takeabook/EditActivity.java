@@ -14,6 +14,8 @@ import android.widget.EditText;
 
 public class EditActivity extends AppCompatActivity {
     private SharedPreferences sharedPref;
+    private int editTextIds[] = new int[]{R.id.Username,R.id.City,R.id.profile_mail,R.id.profile_about};
+
     private static final int PICK_IMAGE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,9 @@ public class EditActivity extends AppCompatActivity {
                 getSharedPreferences(getString(R.string.app_name),Context.MODE_PRIVATE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.app_name);
+        if(savedInstanceState == null){
+            fillUserEditData();
+        }
     }
 
     @Override
@@ -48,7 +53,6 @@ public class EditActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        fillUserEditData();
     }
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
@@ -89,7 +93,6 @@ public class EditActivity extends AppCompatActivity {
         }
         text = (EditText) findViewById(R.id.profile_about);
         if(text.getText().toString().isEmpty()==false){
-            //&& t.getText().toString().length()<600) {
             editor.putString("user_about", text.getText().toString());
         }
         editor.apply();
@@ -107,4 +110,23 @@ public class EditActivity extends AppCompatActivity {
         inputText.setText(sharedPref.getString("user_about",""));
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        EditText text;
+        for(int i: editTextIds){
+            text = findViewById(i);
+            outState.putString(Integer.toString(i),text.getText().toString());
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        EditText text;
+        for(int i: editTextIds){
+            text = findViewById(i);
+            text.setText(savedInstanceState.getString(Integer.toString(i),""));
+        }
+    }
 }
