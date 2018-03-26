@@ -5,12 +5,9 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.view.WindowManager;
 
@@ -24,15 +21,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         sharedPref = getSharedPreferences(getString(R.string.app_name),Context.MODE_PRIVATE);
+        setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(R.string.app_name);
-        editMode =false;
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         if(savedInstanceState == null){
+            this.editMode = false;
             fillUserData();
+        }
+        else{
+            if(savedInstanceState.getString("editMode","false").equals("true")){
+                this.editMode = true;
+            }
         }
     }
 
@@ -41,7 +43,10 @@ public class MainActivity extends AppCompatActivity {
         this.menu=menu;
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_inbox, menu); //.xml file name
-        return super.onCreateOptionsMenu(menu);
+        if(this.editMode){
+            goToEditMode();
+        }
+        return true;
     }
 
     @Override
@@ -62,10 +67,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-    @Override
-    protected void onResume(){
-        super.onResume();
     }
 
     private void fillUserData(){
@@ -105,10 +106,6 @@ public class MainActivity extends AppCompatActivity {
             text = findViewById(i);
             text.setText(savedInstanceState.getString(Integer.toString(i),""));
         }
-        if(savedInstanceState.getString("editMode","false").equals("true")==true){
-            goToEditMode();
-        }
-
     }
 
     public void changeIcon(int iconID){
@@ -123,39 +120,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void goToViewMode(){
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         changeIcon(R.drawable.ic_mode_edit_white_24dp);
         for(int i:editTextBoxesIds){
             findViewById(i).setEnabled(false);
-
-
         }
         fillUserData();
         this.editMode = false;
-
     }
 
     private void goToEditMode(){
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         changeIcon(R.drawable.ic_done_white_48dp);
         for(int i: editTextBoxesIds){
-
             findViewById(i).setEnabled(true);
-
         }
-        this.editMode =true;
+        this.editMode = true;
     }
 
     @Override
     public void onBackPressed() {
-        if(this.editMode ==true){
+        if(this.editMode){
             goToViewMode();
         }
         else{
             super.onBackPressed();
         }
     }
+
     /***** To Do */
 //    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        if (resultCode == RESULT_OK) {
