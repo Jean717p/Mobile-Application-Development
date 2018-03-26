@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.view.WindowManager;
 
-public class MainActivity extends AppCompatActivity {
+public class showProfile extends AppCompatActivity {
     private SharedPreferences sharedPref;
     private int editTextBoxesIds[] = new int[]{R.id.Username,R.id.City,
             R.id.profile_about,R.id.profile_mail};

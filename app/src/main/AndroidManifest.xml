@@ -13,8 +13,15 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".showProfile"
+            android:label="@string/title_activity_show_profile"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <category android:name="android.intent.category.LAUNCHER" />
+
         </activity>
     </application>
 
