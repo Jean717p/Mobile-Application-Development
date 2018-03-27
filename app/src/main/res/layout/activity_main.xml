@@ -19,7 +19,7 @@
         app:title="@string/app_name"
         />
 
-    <ImageView
+    <com.mad18.nullpointerexception.takeabook.RoundedImageView
         android:id="@+id/personalPhoto"
         android:layout_below="@id/toolbar"
         android:layout_width="match_parent"
