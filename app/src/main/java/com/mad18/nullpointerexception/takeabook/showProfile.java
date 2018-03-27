@@ -3,6 +3,8 @@ package com.mad18.nullpointerexception.takeabook;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -11,12 +13,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.view.WindowManager;
+import android.widget.ImageView;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class showProfile extends AppCompatActivity {
     private SharedPreferences sharedPref;
     private int editTextBoxesIds[] = new int[]{R.id.Username,R.id.City,
             R.id.profile_about,R.id.profile_mail};
     private Menu menu;
+    private String profileImgName = "profile.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +73,12 @@ public class showProfile extends AppCompatActivity {
             text = findViewById(i);
             text.setText(sharedPref.getString(Integer.toString(i),""));
         }
+        if(!sharedPref.getString(profileImgName,"").isEmpty()){
+            loadImageFromStorage(sharedPref.getString(profileImgName,""),R.id.personalPhoto);
+        }
     }
 
-    public void changeIcon(int iconID){
+    private void changeIcon(int iconID){
         runOnUiThread(() -> {
             if (menu != null) {
                 MenuItem item = menu.findItem(R.id.action_settings);
@@ -84,6 +95,24 @@ public class showProfile extends AppCompatActivity {
         for(int i:editTextBoxesIds){
             findViewById(i).setEnabled(false);
         }
+        ImageView iw = findViewById(R.id.personalPhoto);
+        iw.setClickable(false);
+    }
+
+    private Bitmap loadImageFromStorage(String path, int id) {
+        Bitmap b = null;
+        File file = new File(path);
+        if(file.exists() == false){
+            return null;
+        }
+        try {
+            b = BitmapFactory.decodeStream(new FileInputStream(file));
+            ImageView img = (ImageView) findViewById(id);
+            img.setImageBitmap(b);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return b;
     }
 
 }
