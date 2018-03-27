@@ -10,18 +10,23 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-
-            </intent-filter>
         </activity>
         <activity
-            android:name=".showProfile"
+            android:name="com.mad18.nullpointerexception.takeabook.showProfile"
             android:label="@string/title_activity_show_profile"
             android:theme="@style/Theme.AppCompat.NoActionBar">
-            <category android:name="android.intent.category.LAUNCHER" />
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.mad18.nullpointerexception.takeabook.editProfile"
+            android:parentActivityName="com.mad18.nullpointerexception.takeabook.showProfile"
+            android:label="@string/title_activity_edit"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mad18.nullpointerexception.takeabook.showProfile"/>
         </activity>
     </application>
 
