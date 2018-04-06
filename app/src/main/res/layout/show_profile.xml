@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/show_profile_toolbar"
+        android:minHeight="?android:attr/actionBarSize"
+        android:elevation="8dp"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:title="@string/app_name"
+        />
+
+    <ImageView
+        android:id="@+id/show_profile_personalPhoto"
+        android:layout_below="@id/show_profile_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:src="@drawable/ic_account_circle_white_48dp"
+        android:background="@color/backgroundPhoto"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_below="@id/show_profile_personalPhoto"
+        >
+
+        <TextView
+            android:id="@+id/show_profile_Username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_view_height"
+            android:maxLines="1"
+            android:textColor="@color/textColor"
+            android:text="Name"
+            />
+
+        <TextView
+            android:id="@+id/show_profile_City"
+            android:layout_below="@id/show_profile_Username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:textColor="@color/textColor"
+            android:text="City"
+            android:textSize="18sp"
+
+            />
+
+
+
+        <TextView
+            android:id="@+id/show_profile_mail"
+            android:layout_below="@id/show_profile_City"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="Email"
+            android:textColor="@color/textColor"
+            android:textSize="18sp"
+
+            />
+
+        <TextView
+            android:id="@+id/show_profile_about"
+            android:layout_below="@id/show_profile_mail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars = "vertical"
+            android:text="AboutMe"
+            android:maxLines="2"
+            android:textColor="@color/textColor"
+            android:textSize="18sp"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>

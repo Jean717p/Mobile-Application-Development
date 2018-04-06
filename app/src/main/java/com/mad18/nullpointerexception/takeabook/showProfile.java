@@ -14,15 +14,15 @@ import android.view.WindowManager;
 
 public class showProfile extends AppCompatActivity {
     private SharedPreferences sharedPref;
-    private int editTextBoxesIds[] = new int[]{R.id.Username,R.id.City,
-            R.id.profile_about,R.id.profile_mail};
+    private int editTextBoxesIds[] = new int[]{R.id.show_profile_Username,R.id.show_profile_City,
+            R.id.show_profile_about,R.id.show_profile_mail};
     private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedPref = getSharedPreferences(getString(R.string.app_name),Context.MODE_PRIVATE);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.show_profile);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle(R.string.app_name);
