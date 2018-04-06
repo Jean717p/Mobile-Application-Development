@@ -96,7 +96,6 @@
             android:textSize="18sp"
 
             />
-
         <EditText
             android:id="@+id/profile_about"
             android:enabled="false"
@@ -104,13 +103,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
+            android:gravity="top"
+            android:maxLength="20"
+            android:lines="15"
             android:scrollbars = "vertical"
             android:hint="AboutMe"
             android:textColor="@color/textColor"
             android:textColorHint="@color/colorAccent"
             android:textSize="18sp"
             />
-
     </RelativeLayout>
     </LinearLayout>
     </ScrollView>
