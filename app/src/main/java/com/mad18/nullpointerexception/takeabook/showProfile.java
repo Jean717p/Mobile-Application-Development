@@ -18,11 +18,13 @@ import android.widget.ImageView;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import android.widget.TextView;
 
 public class showProfile extends AppCompatActivity {
     private SharedPreferences sharedPref;
-    private int editTextBoxesIds[] = new int[]{R.id.Username,R.id.City,
-            R.id.profile_about,R.id.profile_mail};
+    private int textViewIds[] = new int[]{R.id.show_profile_Username,R.id.show_profile_City,
+            R.id.show_profile_mail,R.id.show_profile_about};
+    public static final String sharedUserDataKeys[] = new String[]{"usr_name","usr_city","usr_mail","usr_about"};
     private Menu menu;
     private String profileImgName = "profile.jpg";
 
@@ -30,8 +32,8 @@ public class showProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedPref = getSharedPreferences(getString(R.string.app_name),Context.MODE_PRIVATE);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        setContentView(R.layout.show_profile);
+        Toolbar toolbar = findViewById(R.id.show_profile_toolbar);
         setSupportActionBar(toolbar);
         setTitle(R.string.app_name);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -48,7 +50,6 @@ public class showProfile extends AppCompatActivity {
         this.menu = menu;
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_inbox, menu); //.xml file name
-        goToViewMode();
         return true;
     }
 
@@ -68,32 +69,13 @@ public class showProfile extends AppCompatActivity {
     }
 
     private void fillUserData(){
-        EditText text;
-        for(int i:editTextBoxesIds){
-            text = findViewById(i);
-            text.setText(sharedPref.getString(Integer.toString(i),""));
-        }
-        if(!sharedPref.getString(profileImgName,"").isEmpty()){
-            loadImageFromStorage(sharedPref.getString(profileImgName,""),R.id.personalPhoto);
-        }
-    }
-
-    private void changeIcon(int iconID){
-        runOnUiThread(() -> {
-            if (menu != null) {
-                MenuItem item = menu.findItem(R.id.action_settings);
-                if (item != null) {
-                    item.setIcon(iconID);
-                }
+        TextView text;
+        int i=0;
+        for(String x:sharedUserDataKeys){
+            text = findViewById(textViewIds[i++]);
+            if(sharedPref.contains(x)){
+                text.setText(sharedPref.getString(x,""));
             }
-        });
-    }
-
-    private void goToViewMode(){
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        changeIcon(R.drawable.ic_mode_edit_white_24dp);
-        for(int i:editTextBoxesIds){
-            findViewById(i).setEnabled(false);
         }
         ImageView iw = findViewById(R.id.personalPhoto);
         iw.setClickable(false);
