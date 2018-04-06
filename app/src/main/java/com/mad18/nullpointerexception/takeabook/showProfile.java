@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.view.WindowManager;
+import android.widget.RatingBar;
 
 public class showProfile extends AppCompatActivity {
     private SharedPreferences sharedPref;
