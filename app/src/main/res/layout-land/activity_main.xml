@@ -29,7 +29,16 @@
         android:src="@drawable/ic_account_circle_white_48dp"
         android:background="@color/backgroundPhoto"
         />
-
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/personalPhoto"
+        android:layout_below="@id/toolbar">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/personalPhoto"
+        android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -94,5 +103,7 @@
             android:textSize="18sp"
 
             /></RelativeLayout>
+    </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

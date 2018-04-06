@@ -64,7 +64,8 @@
             android:text="X"
             android:layout_toRightOf="@id/Username"
             android:layout_above="@id/City"
-            android:visibility="visible"
+            android:visibility="invisible"
+            android:enabled="false"
             android:background="@color/colorPrimaryDark"/>
 
         <EditText
