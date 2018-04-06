@@ -37,13 +37,13 @@
         >
         <EditText
             android:id="@+id/edit_profile_Username"
-            android:enabled="false"
+            android:enabled="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_view_height"
             android:inputType="text"
             android:maxLines="1"
-            android:hint="Name"
+            android:hint="@string/Username"
             android:textColor="@color/textColor"
             android:textColorHint="@color/colorAccent"/>
 
@@ -56,20 +56,20 @@
             android:textSize="@dimen/text_view_height"
             android:textColor="@color/textColor"
             android:textColorHint="@color/colorAccent"
-            android:enabled="false"
+            android:enabled="true"
             android:maxLines="1"
-            android:hint="City"
+            android:hint="@string/City"
             />
 
         <EditText
             android:id="@+id/edit_profile_profile_mail"
-            android:enabled="false"
+            android:enabled="true"
             android:layout_below="@id/edit_profile_City"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
             android:maxLines="1"
-            android:hint="Email"
+            android:hint="@string/Email"
             android:textColor="@color/textColor"
             android:textColorHint="@color/colorAccent"
             android:textSize="18sp"
@@ -78,13 +78,13 @@
 
         <EditText
             android:id="@+id/edit_profile_about"
-            android:enabled="false"
+            android:enabled="true"
             android:layout_below="@id/edit_profile_profile_mail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
             android:scrollbars = "vertical"
-            android:hint="AboutMe"
+            android:hint="@string/AboutMe"
             android:textColor="@color/textColor"
             android:textColorHint="@color/colorAccent"
             android:textSize="18sp"
