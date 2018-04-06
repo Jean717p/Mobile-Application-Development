@@ -47,30 +47,36 @@
         android:layout_below="@id/personalPhoto"
         android:id="@+id/rellayedittexts"
         >
+
+
+
         <EditText
             android:id="@+id/Username"
             android:enabled="false"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:layout_below="@id/rating"
             android:textSize="@dimen/text_view_height"
             android:inputType="text"
             android:maxLines="1"
             android:hint="Name"
             android:textColor="@color/textColor"
             android:textColorHint="@color/colorAccent"/>
-        <Button
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:text="X"
-            android:layout_toRightOf="@id/Username"
-            android:layout_above="@id/City"
-            android:visibility="invisible"
-            android:enabled="false"
-            android:background="@color/colorPrimaryDark"/>
+
+        <RatingBar
+            android:id="@+id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/Username"
+            style="?android:attr/ratingBarStyleSmall"
+            android:numStars="5"
+            android:stepSize="0.1"
+            android:rating="5"
+            android:isIndicator="true" />
 
         <EditText
             android:id="@+id/City"
-            android:layout_below="@id/Username"
+            android:layout_below="@id/rating"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
