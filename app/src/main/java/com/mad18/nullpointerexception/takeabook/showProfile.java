@@ -77,8 +77,9 @@ public class showProfile extends AppCompatActivity {
                 text.setText(sharedPref.getString(x,""));
             }
         }
-        ImageView iw = findViewById(R.id.personalPhoto);
-        iw.setClickable(false);
+//        if(sharedPref.contains(profileImgName)){
+//            loadImageFromStorage(sharedPref.getString(profileImgName,""),R.id.edit_profile_personalPhoto);
+//        }
     }
 
     private Bitmap loadImageFromStorage(String path, int id) {

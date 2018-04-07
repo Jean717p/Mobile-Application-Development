@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -31,7 +29,7 @@ public class editProfile extends AppCompatActivity {
     private int editTextBoxesIds[] = new int[]{R.id.edit_profile_Username,R.id.edit_profile_City,
             R.id.edit_profile_profile_mail,R.id.edit_profile_about};
     private Menu menu;
-    private static int PICK_IMAGE = 1;
+    private final int REQUEST_PICK_IMAGE = 1,REQUEST_CROP_IMG=3;
     private String profileImgName = "profile.jpg";
     private Bitmap profileImg = null;
 
@@ -48,6 +46,14 @@ public class editProfile extends AppCompatActivity {
         if(savedInstanceState == null){
             fillUserData();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ImageView iw = findViewById(R.id.edit_profile_personalPhoto);
+        iw.setClickable(true);
+        iw.setOnClickListener(view -> editProfile.this.selectUserImg());
     }
 
     @Override
@@ -92,59 +98,113 @@ public class editProfile extends AppCompatActivity {
             text = findViewById(i);
             outState.putString(Integer.toString(i),text.getText().toString());
         }
-        outState.putString("profileImgPath",saveToInternalStorage(profileImg,profileImgName));
+        if(profileImg!=null){
+            outState.putString("profileImgPath",saveToInternalStorage(profileImg,"temp_"+profileImgName));
+        }
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         EditText text;
+        String path=savedInstanceState.getString("profileImgPath");
         for(int i: editTextBoxesIds){
             text = findViewById(i);
             text.setText(savedInstanceState.getString(Integer.toString(i),""));
         }
-        File file = new File(savedInstanceState.getString("profileImgPath"));
-        if(file.exists()){
-            profileImg = loadImageFromStorage(file.getAbsolutePath(),R.id.personalPhoto);
-            file.delete();
+        if(path!=null) {
+            File file = new File(path);
+            if (file.exists()) {
+                profileImg = loadImageFromStorage(file.getAbsolutePath(), R.id.edit_profile_personalPhoto);
+                file.delete();
+            }
         }
     }
 
     private void fillUserData(){
         EditText text;
         int i=0;
+        ImageView iw;
         for(String x:showProfile.sharedUserDataKeys){
             text = findViewById(editTextBoxesIds[i++]);
             if(sharedPref.contains(x)) {
                 text.setText(sharedPref.getString(x,""));
             }
         }
+        if(sharedPref.contains(profileImgName)){
+            profileImg = loadImageFromStorage(sharedPref.getString(profileImgName,""),R.id.edit_profile_personalPhoto);
+        }
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
+        ImageView iw;
         if (resultCode == RESULT_OK) {
-            if (requestCode == PICK_IMAGE && data!=null) {
-                Uri selectedMediaUri = data.getData();
-                if (selectedMediaUri.toString().contains("image")) {
-                    try {
-                        profileImg = MediaStore.Images.Media.getBitmap(
-                                this.getContentResolver(),selectedMediaUri);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+            switch (requestCode) {
+
+                case REQUEST_PICK_IMAGE:
+                    if (data != null) {
+                        Uri selectedMediaUri = data.getData();
+                        if (selectedMediaUri.toString().contains("image")) {
+
+                            cropProfileImg(selectedMediaUri);
+                            /**try {
+                                profileImg = MediaStore.Images.Media.getBitmap(
+                                        this.getContentResolver(),selectedMediaUri);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            iw = findViewById(R.id.edit_profile_personalPhoto);
+                            iw.setImageBitmap(profileImg);*/
+                            //findViewById(R.id.personalPhoto);
+                            //Bitmap.createScaledBitmap(profileImg,150,150,false);
+                            //profileImg = getCroppedBitmap(profileImg);
+                            //                    try {
+                            //                        profileImg = modifyOrientation(profileImg,selectedMediaUri.getPath());
+                            //                    } catch (IOException e) {
+                            //                        e.printStackTrace();
+                            //                    }
+                        }
                     }
-                    //findViewById(R.id.personalPhoto);
-                    //Bitmap.createScaledBitmap(profileImg,150,150,false);
-                    //profileImg = getCroppedBitmap(profileImg);
-//                    try {
-//                        profileImg = modifyOrientation(profileImg,selectedMediaUri.getPath());
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-                    ImageView iw =  findViewById(R.id.personalPhoto);
-                    iw.setImageBitmap(profileImg);
-                }
+                    break;
+                case REQUEST_CROP_IMG:
+                    if (data != null) {
+                        Uri selectedMediaUri = data.getData();
+                        if (selectedMediaUri.toString().contains("image")) {
+                            try {
+                                profileImg = MediaStore.Images.Media.getBitmap(
+                                        this.getContentResolver(), selectedMediaUri);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            iw = findViewById(R.id.edit_profile_personalPhoto);
+                            iw.setImageBitmap(profileImg);
+                        }
+                    }
             }
+        }
+    }
+
+    private void cropProfileImg(Uri mediaUri){
+        ImageView iw;
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setClassName("con.android.camera",
+                "com.android.camera.CropImage");
+        intent.setType("image/*");
+        intent.setData(mediaUri);
+        intent.putExtra("crop","true");
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("outputX", 320);
+        intent.putExtra("outputY", 320);
+//        intent.putExtra("scale", true);
+//        intent.putExtra("scaleUpIfNeeded",true);
+        intent.putExtra("return-data", true);
+//        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+//        intent.putExtra("noFaceDetection",true);
+//        intent.putExtra("circleCrop",true);
+        if(intent.resolveActivity(getPackageManager())!=null){
+            startActivityForResult(intent,REQUEST_CROP_IMG);
         }
     }
 
@@ -178,10 +238,13 @@ public class editProfile extends AppCompatActivity {
 //        startActivityForResult(chooserIntent, PICK_IMAGE);
         Intent pickPhoto = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(pickPhoto,PICK_IMAGE);
+        startActivityForResult(pickPhoto,REQUEST_PICK_IMAGE);
     }
 
     private String saveToInternalStorage(Bitmap bitmapImage,String filename){
+        if(bitmapImage==null){
+            return null;
+        }
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         // path to /data/data/appname/app_data/imageDir internal
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
@@ -192,7 +255,11 @@ public class editProfile extends AppCompatActivity {
         try {
             out = new FileOutputStream(file);
             // Use the compress method on the BitMap object to write image to the OutputStream
-            bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, out); //decrementare secondo parametro per compressare
+            if(bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, out)==false){
+                //decrementare secondo parametro per compressare
+                out.close();
+                return null;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -206,14 +273,17 @@ public class editProfile extends AppCompatActivity {
     }
 
     private Bitmap loadImageFromStorage(String path,int id) {
+        if(path==null){
+            return null;
+        }
         Bitmap b = null;
         File file = new File(path);
-        if(file.exists() == false){
+        ImageView img = (ImageView) findViewById(id);
+        if(file.exists() == false||img==null){
             return null;
         }
         try {
             b = BitmapFactory.decodeStream(new FileInputStream(file));
-            ImageView img = (ImageView) findViewById(id);
             img.setImageBitmap(b);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
