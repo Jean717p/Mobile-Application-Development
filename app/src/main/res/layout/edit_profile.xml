@@ -19,14 +19,16 @@
         app:title="@string/app_name"
         />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/edit_profile_personalPhoto"
         android:layout_below="@id/edit_profile_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:src="@drawable/ic_account_circle_white_48dp"
-        android:background="@color/backgroundPhoto"
+        app:civ_border_width="2dp"
+        app:civ_border_color="#FF000000"
+        android:layout_centerInParent="true"
+        android:gravity="center_vertical"
         />
 
     <RelativeLayout

@@ -70,15 +70,18 @@ public class showProfile extends AppCompatActivity {
 
     private void fillUserData(){
         TextView text;
+        String y;
         int i=0;
         for(String x:sharedUserDataKeys){
             text = findViewById(textViewIds[i++]);
-            if(sharedPref.contains(x)){
-                text.setText(sharedPref.getString(x,""));
+            y=sharedPref.getString(x,"");
+            if(y.length()>0){
+                text.setText(y);
             }
         }
-        if(sharedPref.contains(profileImgName)){
-            loadImageFromStorage(sharedPref.getString(profileImgName,""),R.id.show_profile_personalPhoto);
+        y=sharedPref.getString(profileImgName,"");
+        if(y.length()>0){
+            loadImageFromStorage(y,R.id.show_profile_personalPhoto);
         }
     }
 
