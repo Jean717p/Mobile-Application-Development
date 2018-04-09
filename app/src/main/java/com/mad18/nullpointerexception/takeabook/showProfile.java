@@ -77,20 +77,23 @@ public class showProfile extends AppCompatActivity {
                 text.setText(sharedPref.getString(x,""));
             }
         }
-//        if(sharedPref.contains(profileImgName)){
-//            loadImageFromStorage(sharedPref.getString(profileImgName,""),R.id.edit_profile_personalPhoto);
-//        }
+        if(sharedPref.contains(profileImgName)){
+            loadImageFromStorage(sharedPref.getString(profileImgName,""),R.id.show_profile_personalPhoto);
+        }
     }
 
-    private Bitmap loadImageFromStorage(String path, int id) {
+    private Bitmap loadImageFromStorage(String path,int id) {
+        if(path==null){
+            return null;
+        }
         Bitmap b = null;
         File file = new File(path);
-        if(file.exists() == false){
+        ImageView img = (ImageView) findViewById(id);
+        if(file.exists() == false||img==null){
             return null;
         }
         try {
             b = BitmapFactory.decodeStream(new FileInputStream(file));
-            ImageView img = (ImageView) findViewById(id);
             img.setImageBitmap(b);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
