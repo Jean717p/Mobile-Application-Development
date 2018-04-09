@@ -147,15 +147,17 @@ public class editProfile extends AppCompatActivity {
                         Uri selectedMediaUri = data.getData();
                         if (selectedMediaUri.toString().contains("image")) {
 
-                            cropProfileImg(selectedMediaUri);
-                            /**try {
+                            //cropProfileImg(selectedMediaUri);
+                            try {
                                 profileImg = MediaStore.Images.Media.getBitmap(
                                         this.getContentResolver(),selectedMediaUri);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
                             iw = findViewById(R.id.edit_profile_personalPhoto);
-                            iw.setImageBitmap(profileImg);*/
+                            if(iw!=null) {
+                                iw.setImageBitmap(profileImg);
+                            }
                             //findViewById(R.id.personalPhoto);
                             //Bitmap.createScaledBitmap(profileImg,150,150,false);
                             //profileImg = getCroppedBitmap(profileImg);
