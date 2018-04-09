@@ -5,11 +5,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.ImageView;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -19,6 +26,7 @@ public class showProfile extends AppCompatActivity {
             R.id.show_profile_mail,R.id.show_profile_about};
     public static final String sharedUserDataKeys[] = new String[]{"usr_name","usr_city","usr_mail","usr_about"};
     private Menu menu;
+    private String profileImgName = "profile.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,13 +70,38 @@ public class showProfile extends AppCompatActivity {
 
     private void fillUserData(){
         TextView text;
+        String y;
         int i=0;
         for(String x:sharedUserDataKeys){
             text = findViewById(textViewIds[i++]);
-            if(sharedPref.contains(x)){
-                text.setText(sharedPref.getString(x,""));
+            y=sharedPref.getString(x,"");
+            if(y.length()>0){
+                text.setText(y);
             }
         }
+        y=sharedPref.getString(profileImgName,"");
+        if(y.length()>0){
+            loadImageFromStorage(y,R.id.show_profile_personalPhoto);
+        }
+    }
+
+    private Bitmap loadImageFromStorage(String path,int id) {
+        if(path==null){
+            return null;
+        }
+        Bitmap b = null;
+        File file = new File(path);
+        ImageView img = (ImageView) findViewById(id);
+        if(file.exists() == false||img==null){
+            return null;
+        }
+        try {
+            b = BitmapFactory.decodeStream(new FileInputStream(file));
+            img.setImageBitmap(b);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return b;
     }
 
 }
