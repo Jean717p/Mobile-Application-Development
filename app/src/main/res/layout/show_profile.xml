@@ -21,15 +21,15 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/show_profile_personalPhoto"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:layout_below="@id/show_profile_toolbar"
-        android:src="@drawable/ic_account_circle_white_48dp"
-        app:civ_border_color="#FF000000"
-        app:civ_border_width="2dp"
-        android:layout_centerInParent="true"
+        android:layout_width="@dimen/profile_photo_height"
+        android:layout_height="@dimen/profile_photo_height"
+        android:layout_below="@+id/show_profile_toolbar"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/fab_margin"
         android:gravity="center_vertical"
-        />
+        android:src="@drawable/userdefault"
+        app:civ_border_color="@color/textColor"
+        app:civ_border_width="0dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
