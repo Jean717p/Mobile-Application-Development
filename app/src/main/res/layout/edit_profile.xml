@@ -18,89 +18,92 @@
         android:layout_height="56dp"
         app:title="@string/app_name"
         />
+
     <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/edit_profile_personalPhoto"
-        android:layout_width="@dimen/profile_photo_height"
-        android:layout_height="@dimen/profile_photo_height"
-        android:layout_below="@id/edit_profile_toolbar"
-        android:layout_centerInParent="true"
-        android:layout_margin="@dimen/fab_margin"
-        android:gravity="center_vertical"
-        android:src="@drawable/userdefault"
-        app:civ_border_color="#FF000000"
-        app:civ_border_width="0dp" />
-
-    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:layout_below="@id/edit_profile_personalPhoto"
-        >
-        <EditText
-            android:id="@+id/edit_profile_Username"
-            android:enabled="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/edit_profile_toolbar"
+        android:layout_alignParentLeft="true">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_view_height"
-            android:inputType="text"
-            android:maxLines="1"
-            android:hint="@string/Username"
-            android:textColor="@color/textColor"
-            android:textColorHint="@color/colorAccent"/>
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/edit_profile_City"
-            android:layout_below="@id/edit_profile_Username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:textSize="@dimen/text_view_height"
-            android:textColor="@color/textColor"
-            android:textColorHint="@color/colorAccent"
-            android:enabled="true"
-            android:maxLines="1"
-            android:hint="@string/City"
-            />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/edit_profile_personalPhoto"
+                android:layout_width="@dimen/profile_photo_height"
+                android:layout_height="@dimen/profile_photo_height"
+                android:layout_below="@id/edit_profile_toolbar"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="@dimen/fab_margin"
+                android:gravity="top|center_horizontal"
+                android:src="@drawable/userdefault"
+                app:civ_border_color="@color/textColor"
+                app:civ_border_width="0dp" />
 
-        <EditText
-            android:id="@+id/edit_profile_profile_mail"
-            android:enabled="true"
-            android:layout_below="@id/edit_profile_City"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:maxLines="1"
-            android:hint="@string/Email"
-            android:textColor="@color/textColor"
-            android:textColorHint="@color/colorAccent"
-            android:textSize="18sp"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edit_profile_personalPhoto"
+                android:layout_margin="16dp">
 
-            />
+                <EditText
+                    android:id="@+id/edit_profile_Username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="true"
+                    android:hint="@string/Username"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="@color/textColor"
+                    android:textColorHint="@color/colorAccent"
+                    android:textSize="@dimen/text_view_height" />
 
-        <EditText
-            android:id="@+id/edit_profile_about"
-            android:enabled="true"
-            android:layout_below="@id/edit_profile_profile_mail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:scrollbars = "vertical"
-            android:hint="@string/AboutMe"
-            android:textColor="@color/textColor"
-            android:textColorHint="@color/colorAccent"
-            android:textSize="18sp"
-            android:gravity="top"
-            android:maxLength="300"
-            />
-    </RelativeLayout>
-    </LinearLayout>
+                <EditText
+                    android:id="@+id/edit_profile_City"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/edit_profile_Username"
+                    android:enabled="true"
+                    android:hint="@string/City"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="@color/textColor"
+                    android:textColorHint="@color/colorAccent"
+                    android:textSize="@dimen/text_view_height" />
+
+                <EditText
+                    android:id="@+id/edit_profile_mail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/edit_profile_City"
+                    android:enabled="true"
+                    android:hint="@string/Email"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:textColor="@color/textColor"
+                    android:textColorHint="@color/colorAccent"
+                    android:textSize="18sp"
+
+                    />
+
+                <EditText
+                    android:id="@+id/edit_profile_about"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/edit_profile_mail"
+                    android:enabled="true"
+                    android:gravity="top"
+                    android:hint="@string/AboutMe"
+                    android:inputType="textMultiLine"
+                    android:maxLength="300"
+                    android:scrollbars="vertical"
+                    android:textColor="@color/textColor"
+                    android:textColorHint="@color/colorAccent"
+                    android:textSize="18sp" />
+            </RelativeLayout>
+        </LinearLayout>
     </ScrollView>
 </RelativeLayout>

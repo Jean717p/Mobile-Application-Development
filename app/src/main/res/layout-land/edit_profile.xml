@@ -20,15 +20,18 @@
         />
 
 
-    <com.mad18.nullpointerexception.takeabook.RoundedImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/edit_profile_personalPhoto"
-        android:layout_below="@id/edit_profile_toolbar"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:visibility="visible"
-        android:src="@drawable/ic_account_circle_white_48dp"
-        android:background="@color/backgroundPhoto"
-        />
+        android:layout_width="@dimen/profile_photo_height"
+        android:layout_height="@dimen/profile_photo_height"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/userdefault"
+        app:civ_border_color="@color/textColor"
+        app:civ_border_width="0dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="16dp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -45,15 +48,15 @@
 
             <EditText
                 android:id="@+id/edit_profile_Username"
-                android:enabled="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/text_view_height"
+                android:enabled="false"
+                android:hint="@string/profile_name"
                 android:inputType="text"
                 android:maxLines="1"
                 android:textColor="@color/textColor"
-                android:hint="Name"
-                android:textColorHint="@color/colorAccent"/>
+                android:textColorHint="@color/colorAccent"
+                android:textSize="@dimen/text_view_height" />
 
             <EditText
                 android:id="@+id/edit_profile_City"
@@ -65,7 +68,7 @@
                 android:textColorHint="@color/colorAccent"
                 android:enabled="false"
                 android:maxLines="1"
-                android:hint="City"
+                android:hint="@string/City"
                 android:textColor="@color/textColor"
                 />
 
@@ -78,30 +81,30 @@
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:hint="Email"
+                android:hint="@string/Email"
                 android:textSize="@dimen/text_view_height"
                 android:textColor="@color/textColor"
                 android:textColorHint="@color/colorAccent"
                 />
 
             <ScrollView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_below="@id/edit_profile_mail">
+
                 <EditText
                     android:id="@+id/edit_profile_about"
-                    android:enabled="false"
-                    android:layout_below="@id/edit_profile_mail"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:inputType="textMultiLine"
-                    android:scrollbars = "vertical"
-                    android:hint="AboutMe"
+                    android:layout_below="@id/edit_profile_mail"
+                    android:enabled="false"
                     android:gravity="top"
+                    android:hint="@string/AboutMe"
+                    android:inputType="textMultiLine"
+                    android:scrollbars="vertical"
                     android:textColor="@color/textColor"
                     android:textColorHint="@color/colorAccent"
-                    android:textSize="18sp"
-                    />
+                    android:textSize="18sp" />
             </ScrollView>
         </RelativeLayout>
     </LinearLayout>

@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 public class showProfile extends AppCompatActivity {

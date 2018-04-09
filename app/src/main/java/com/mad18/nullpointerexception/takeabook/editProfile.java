@@ -1,7 +1,6 @@
 package com.mad18.nullpointerexception.takeabook;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -33,7 +32,7 @@ import java.io.IOException;
 public class editProfile extends AppCompatActivity {
     private SharedPreferences sharedPref;
     private int editTextBoxesIds[] = new int[]{R.id.edit_profile_Username,R.id.edit_profile_City,
-            R.id.edit_profile_profile_mail,R.id.edit_profile_about};
+            R.id.edit_profile_mail,R.id.edit_profile_about};
     private Menu menu;
     private final int REQUEST_PICK_IMAGE = 1;
     private String profileImgName = "profile.jpg";

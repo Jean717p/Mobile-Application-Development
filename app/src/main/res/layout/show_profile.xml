@@ -42,50 +42,56 @@
             android:id="@+id/show_profile_Username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_view_height"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:maxLines="1"
-            android:textColor="@color/textColor"
             android:text="@string/Username"
-            />
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/text_view_height"
+            android:layout_alignParentLeft="true" />
 
         <TextView
             android:id="@+id/show_profile_City"
-            android:layout_below="@id/show_profile_Username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+
+            android:layout_below="@+id/show_profile_Username"
             android:maxLines="1"
-            android:textColor="@color/textColor"
             android:text="@string/City"
+            android:textColor="@color/textColor"
             android:textSize="18sp"
-
-            />
-
+            android:layout_alignParentLeft="true" />
 
 
         <TextView
             android:id="@+id/show_profile_mail"
-            android:layout_below="@id/show_profile_City"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/show_profile_City"
             android:maxLines="1"
             android:text="@string/Email"
+
             android:textColor="@color/textColor"
             android:textSize="18sp"
+            android:layout_alignParentLeft="true" />
 
-            />
         <ScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_below="@id/show_profile_mail">
-        <TextView
-            android:id="@+id/show_profile_about"
-            android:layout_below="@id/show_profile_mail"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:text="@string/AboutMe"
-            android:textColor="@color/textColor"
-            android:textSize="18sp"
-            />
+            android:layout_below="@id/show_profile_mail"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:id="@+id/show_profile_about"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_below="@id/show_profile_mail"
+                android:layout_margin="2dp"
+                android:text="@string/AboutMe"
+                android:textColor="@color/textColor"
+                android:textSize="18sp" />
         </ScrollView>
     </RelativeLayout>
 
