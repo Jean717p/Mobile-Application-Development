@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -34,7 +35,8 @@ public class editProfile extends AppCompatActivity {
     private int editTextBoxesIds[] = new int[]{R.id.edit_profile_Username,R.id.edit_profile_City,
             R.id.edit_profile_mail,R.id.edit_profile_about};
     private Menu menu;
-    private final int REQUEST_PICK_IMAGE = 1;
+    private final int REQUEST_PICK_IMAGE = 1, REQUEST_IMAGE_CAPTURE = 2;
+    private final int REQUEST_PERMISSION_CAMERA = 2, REQUEST_PERMISSION_GALLERY=1;
     private String profileImgName = "profile.jpg";
     private Bitmap profileImg = null;
 
@@ -53,15 +55,7 @@ public class editProfile extends AppCompatActivity {
         }
         ImageView iw = findViewById(R.id.edit_profile_personalPhoto);
         iw.setClickable(true);
-        iw.setOnClickListener(view ->
-            {
-                if(ActivityCompat.checkSelfPermission(editProfile.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(editProfile.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_PICK_IMAGE);
-                }
-                else {
-                    selectUserImg();
-                }
-            });
+        iw.setOnClickListener(view -> selectUserImg());
     }
 
     @Override
@@ -100,7 +94,9 @@ public class editProfile extends AppCompatActivity {
             text = findViewById(editTextBoxesIds[i++]);
             editor.putString(x,text.getText().toString());
         }
-        editor.putString(profileImgName,saveToInternalStorage(profileImg,profileImgName));
+        if(profileImg!=null){
+            editor.putString(profileImgName,saveToInternalStorage(profileImg,profileImgName));
+        }
         editor.apply();
     }
 
@@ -157,7 +153,6 @@ public class editProfile extends AppCompatActivity {
         ImageView iw;
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-
                 case REQUEST_PICK_IMAGE:
                     if (data != null) {
                         Uri selectedMediaUri = data.getData();
@@ -169,9 +164,18 @@ public class editProfile extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                             iw = findViewById(R.id.edit_profile_personalPhoto);
-                            if(iw!=null) {
+                            if(iw!=null && profileImg != null) {
                                 iw.setImageBitmap(profileImg);
                             }
+                        }
+                    }
+                    break;
+                case REQUEST_IMAGE_CAPTURE:
+                    if (data != null) {
+                        profileImg = (Bitmap) data.getExtras().get("data");
+                        iw = findViewById(R.id.edit_profile_personalPhoto);
+                        if(iw!=null && profileImg != null) {
+                            iw.setImageBitmap(profileImg);
                         }
                     }
                     break;
@@ -180,17 +184,46 @@ public class editProfile extends AppCompatActivity {
     }
 
     private void selectUserImg(){
-//        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-//        getIntent.setType("image/*");
-//        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//        pickIntent.setType("image/*");
-//        Intent chooserIntent = Intent.createChooser(getIntent,"Select Image");
-//        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
-//        startActivityForResult(chooserIntent, PICK_IMAGE);
-        /** Pop up Camera/gallery --> if camera ask permission for camera **/
-        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
+        pictureDialog.setTitle("Select Action");
+        String[] pictureDialogItems = {
+                "Select photo from gallery",
+                "Capture photo from camera" };
+        pictureDialog.setItems(pictureDialogItems,
+                (dialog, which) -> {
+                    switch (which) {
+                        case 0:
+                            choosePhotoFromGallery();
+                            break;
+                        case 1:
+                            choosePhotoFromCamera();
+                            break;
+                    }
+                });
+        pictureDialog.show();
+    }
+
+    public void choosePhotoFromGallery() {
+        if(ActivityCompat.checkSelfPermission(editProfile.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(editProfile.this,new String[]{
+                            Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE }
+                    ,REQUEST_PERMISSION_GALLERY);
+            return;
+        }
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(pickPhoto,REQUEST_PICK_IMAGE);
+        startActivityForResult(galleryIntent, REQUEST_PICK_IMAGE);
+    }
+
+    private void choosePhotoFromCamera() {
+        if(ActivityCompat.checkSelfPermission(editProfile.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(editProfile.this,new String[]{
+                    Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE }
+                    ,REQUEST_PERMISSION_CAMERA);
+            return;
+        }
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
     }
 
     private String saveToInternalStorage(Bitmap bitmapImage,String filename){
@@ -246,10 +279,17 @@ public class editProfile extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode){
-            case REQUEST_PICK_IMAGE:
+            case REQUEST_PERMISSION_GALLERY:
                 if(grantResults.length>0) {
                     if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        selectUserImg();
+                        choosePhotoFromGallery();
+                    }
+                }
+                break;
+            case REQUEST_PERMISSION_CAMERA:
+                if(grantResults.length>0){
+                    if(grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                        choosePhotoFromCamera();
                     }
                 }
                 break;
