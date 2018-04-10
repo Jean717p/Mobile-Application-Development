@@ -32,9 +32,9 @@
 
     <ImageView
         android:id="@+id/personalPhoto"
+        android:layout_below="@id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="56dp"
         android:visibility="visible"
         android:src="@drawable/ic_account_circle_white_48dp"
         android:background="@color/backgroundPhoto"
@@ -45,17 +45,12 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:layout_below="@id/personalPhoto"
-        android:id="@+id/rellayedittexts"
         >
-
-
-
         <EditText
             android:id="@+id/Username"
             android:enabled="false"
-            android:layout_width="100dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/rating"
             android:textSize="@dimen/text_view_height"
             android:inputType="text"
             android:maxLines="1"
@@ -63,20 +58,9 @@
             android:textColor="@color/textColor"
             android:textColorHint="@color/colorAccent"/>
 
-        <RatingBar
-            android:id="@+id/rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/Username"
-            style="?android:attr/ratingBarStyleSmall"
-            android:numStars="5"
-            android:stepSize="0.1"
-            android:rating="5"
-            android:isIndicator="true" />
-
         <EditText
             android:id="@+id/City"
-            android:layout_below="@id/rating"
+            android:layout_below="@id/Username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
@@ -102,6 +86,7 @@
             android:textSize="18sp"
 
             />
+
         <EditText
             android:id="@+id/profile_about"
             android:enabled="false"
@@ -109,9 +94,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
-            android:gravity="top"
-            android:maxLength="20"
-            android:lines="15"
             android:scrollbars = "vertical"
             android:hint="AboutMe"
             android:textColor="@color/textColor"
@@ -121,4 +103,5 @@
     </RelativeLayout>
     </LinearLayout>
     </ScrollView>
+
 </RelativeLayout>
