@@ -156,17 +156,15 @@ public class editProfile extends AppCompatActivity {
                 case REQUEST_PICK_IMAGE:
                     if (data != null) {
                         Uri selectedMediaUri = data.getData();
-                        if (selectedMediaUri.toString().contains("image")) {
-                            try {
-                                profileImg = MediaStore.Images.Media.getBitmap(
-                                        this.getContentResolver(),selectedMediaUri);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            iw = findViewById(R.id.edit_profile_personalPhoto);
-                            if(iw!=null && profileImg != null) {
-                                iw.setImageBitmap(profileImg);
-                            }
+                        try {
+                            profileImg = MediaStore.Images.Media.getBitmap(
+                                    this.getContentResolver(),selectedMediaUri);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        iw = findViewById(R.id.edit_profile_personalPhoto);
+                        if(iw!=null && profileImg != null) {
+                            iw.setImageBitmap(profileImg);
                         }
                     }
                     break;
