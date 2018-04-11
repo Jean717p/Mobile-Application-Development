@@ -23,8 +23,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/edit_profile_toolbar"
-        android:layout_alignParentLeft="true">
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/edit_profile_toolbar">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,9 +36,8 @@
                 android:layout_width="@dimen/profile_photo_height"
                 android:layout_height="@dimen/profile_photo_height"
                 android:layout_below="@id/edit_profile_toolbar"
-                android:layout_centerHorizontal="true"
                 android:layout_margin="@dimen/fab_margin"
-                android:gravity="top|center_horizontal"
+                android:layout_gravity="center"
                 android:src="@drawable/userdefault"
                 app:civ_border_color="@color/textColor"
                 app:civ_border_width="0dp" />

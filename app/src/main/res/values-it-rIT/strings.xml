@@ -11,5 +11,7 @@
     <string name="City">Città</string>
     <string name="Email">mail@mail.com</string>
     <string name="AboutMe">Info</string>
+    <string name="photo_from_gallery">Seleziona una foto dalla galleria</string>
+    <string name="photo_from_camera">Scatta una foto dalla fotocamera</string>
 
 </resources>

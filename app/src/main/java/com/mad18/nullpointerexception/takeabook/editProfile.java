@@ -185,8 +185,8 @@ public class editProfile extends AppCompatActivity {
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
         pictureDialog.setTitle("Select Action");
         String[] pictureDialogItems = {
-                "Select photo from gallery",
-                "Capture photo from camera" };
+                getString(R.string.photo_from_gallery),
+                getString(R.string.photo_from_camera) };
         pictureDialog.setItems(pictureDialogItems,
                 (dialog, which) -> {
                     switch (which) {
