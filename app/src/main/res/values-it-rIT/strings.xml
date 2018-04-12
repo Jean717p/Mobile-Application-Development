@@ -1,15 +1,17 @@
 <resources>
     <string name="app_name">AppName</string>
     <string name="profile_name">Nome</string>
-    <string name="profile_username">NomeUtente</string>
+    <string name="profile_username">Nome Utente</string>
     <string name="profile_city">Torino</string>
     <string name="profile_mail">JerrySiegel@gmail.com</string>
     <string name="profile_about">Info</string>
     <string name="profile_photo">Foto profilo</string>
     <string name="title_activity_edit">Modifica profilo</string>
-    <string name="Username">NomeUtente</string>
+    <string name="Username">Nome Utente</string>
     <string name="City">Città</string>
     <string name="Email">mail@mail.com</string>
     <string name="AboutMe">Info</string>
+    <string name="photo_from_gallery">Seleziona una foto dalla galleria</string>
+    <string name="photo_from_camera">Scatta una foto dalla fotocamera</string>
 
 </resources>

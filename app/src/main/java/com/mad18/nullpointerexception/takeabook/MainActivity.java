@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void goToEditMode(){
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        changeIcon(R.drawable.ic_done_white_48dp);
+        changeIcon(R.drawable.ic_save_white_24dp);
         for(int i: editTextBoxesIds){
             findViewById(i).setEnabled(true);
         }

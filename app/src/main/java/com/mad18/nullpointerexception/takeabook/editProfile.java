@@ -15,6 +15,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -39,7 +42,8 @@ public class editProfile extends AppCompatActivity {
     private int editTextBoxesIds[] = new int[]{R.id.edit_profile_Username,R.id.edit_profile_City,
             R.id.edit_profile_mail,R.id.edit_profile_about};
     private Menu menu;
-    private final int REQUEST_PICK_IMAGE = 1,REQUEST_CROP_IMG=3;
+    private final int REQUEST_PICK_IMAGE = 1, REQUEST_IMAGE_CAPTURE = 2;
+    private final int REQUEST_PERMISSION_CAMERA = 2, REQUEST_PERMISSION_GALLERY=1;
     private String profileImgName = "profile.jpg";
     private Bitmap profileImg = null;
 
@@ -56,6 +60,17 @@ public class editProfile extends AppCompatActivity {
         if(savedInstanceState == null){
             fillUserData();
         }
+        ImageView iw = findViewById(R.id.edit_profile_personalPhoto);
+        iw.setClickable(true);
+        iw.setOnClickListener(view ->
+            {
+                if(ActivityCompat.checkSelfPermission(editProfile.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(editProfile.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_PICK_IMAGE);
+                }
+                else {
+                    selectUserImg();
+                }
+            });
     }
 
     @Override
@@ -72,7 +87,7 @@ public class editProfile extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.edit_profile, menu);
         return true;
-    }
+}
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
@@ -96,7 +111,9 @@ public class editProfile extends AppCompatActivity {
             text = findViewById(editTextBoxesIds[i++]);
             editor.putString(x,text.getText().toString());
         }
-        editor.putString(profileImgName,saveToInternalStorage(profileImg,profileImgName));
+        if(profileImg!=null){
+            editor.putString(profileImgName,saveToInternalStorage(profileImg,profileImgName));
+        }
         editor.apply();
     }
 
@@ -117,7 +134,7 @@ public class editProfile extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         EditText text;
-        String path=savedInstanceState.getString("profileImgPath");
+        String path = savedInstanceState.getString("profileImgPath");
         for(int i: editTextBoxesIds){
             text = findViewById(i);
             text.setText(savedInstanceState.getString(Integer.toString(i),""));
@@ -132,16 +149,18 @@ public class editProfile extends AppCompatActivity {
     }
 
     private void fillUserData(){
-        EditText text;
+        TextView text;
+        String y;
         int i=0;
-        ImageView iw;
         for(String x:showProfile.sharedUserDataKeys){
-            text = findViewById(editTextBoxesIds[i++]);
-            if(sharedPref.contains(x)) {
-                text.setText(sharedPref.getString(x,""));
+            text = (EditText) findViewById(editTextBoxesIds[i++]);
+            y=sharedPref.getString(x,"");
+            if(y.length()>0){
+                text.setText(y);
             }
         }
-        if(sharedPref.contains(profileImgName)){
+        y=sharedPref.getString(profileImgName,"");
+        if(y.length()>0){
             profileImg = loadImageFromStorage(sharedPref.getString(profileImgName,""),R.id.edit_profile_personalPhoto);
         }
     }
@@ -149,97 +168,35 @@ public class editProfile extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
         ImageView iw;
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             switch (requestCode) {
-
                 case REQUEST_PICK_IMAGE:
                     if (data != null) {
                         Uri selectedMediaUri = getPickImageResultUri(data);
-                       // if (selectedMediaUri.toString().contains("image")) {
-
-                            //cropProfileImg(selectedMediaUri);
-                            try {
-                                profileImg = MediaStore.Images.Media.getBitmap(
-                                        this.getContentResolver(),selectedMediaUri);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            iw = findViewById(R.id.edit_profile_personalPhoto);
-                            if(iw!=null) {
-                                iw.setImageBitmap(profileImg);
-                            }
-                            //findViewById(R.id.personalPhoto);
-                            //Bitmap.createScaledBitmap(profileImg,150,150,false);
-                            //profileImg = getCroppedBitmap(profileImg);
-                            //                    try {
-                            //                        profileImg = modifyOrientation(profileImg,selectedMediaUri.getPath());
-                            //                    } catch (IOException e) {
-                            //                        e.printStackTrace();
-                            //                    }
-                       // }
-                    }
-                    break;
-                case REQUEST_CROP_IMG:
-                    if (data != null) {
-                        Uri selectedMediaUri = getPickImageResultUri(data);
-                        if (selectedMediaUri.toString().contains("image")) {
-                            try {
-                                profileImg = MediaStore.Images.Media.getBitmap(
-                                        this.getContentResolver(), selectedMediaUri);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            iw = findViewById(R.id.edit_profile_personalPhoto);
+                        try {
+                            profileImg = MediaStore.Images.Media.getBitmap(
+                                    this.getContentResolver(),selectedMediaUri);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        iw = findViewById(R.id.edit_profile_personalPhoto);
+                        if(iw!=null && profileImg != null) {
                             iw.setImageBitmap(profileImg);
                         }
                     }
+                    break;
+                case REQUEST_IMAGE_CAPTURE:
+                    if (data != null) {
+                        profileImg = (Bitmap) data.getExtras().get("data");
+                        iw = findViewById(R.id.edit_profile_personalPhoto);
+                        if(iw!=null && profileImg != null) {
+                            iw.setImageBitmap(profileImg);
+                        }
+                    }
+                    break;
             }
         }
     }
-
-    private void cropProfileImg(Uri mediaUri){
-        ImageView iw;
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setClassName("con.android.camera",
-                "com.android.camera.CropImage");
-        intent.setType("image/*");
-        intent.setData(mediaUri);
-        intent.putExtra("crop","true");
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", 320);
-        intent.putExtra("outputY", 320);
-//        intent.putExtra("scale", true);
-//        intent.putExtra("scaleUpIfNeeded",true);
-        intent.putExtra("return-data", true);
-//        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-//        intent.putExtra("noFaceDetection",true);
-//        intent.putExtra("circleCrop",true);
-        if(intent.resolveActivity(getPackageManager())!=null){
-            startActivityForResult(intent,REQUEST_CROP_IMG);
-        }
-    }
-
-//    public Bitmap getCroppedBitmap(Bitmap bitmap) {
-//        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
-//                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-//        Canvas canvas = new Canvas(output);
-//        final int color = 0xff424242;
-//        final Paint paint = new Paint();
-//        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-//        paint.setAntiAlias(true);
-//        canvas.drawARGB(0, 0, 0, 0);
-//        paint.setColor(color);
-//        // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-//        canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
-//                bitmap.getWidth() / 2, paint);
-//        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-//        canvas.drawBitmap(bitmap, rect, rect, paint);
-//        //Bitmap _bmp = Bitmap.createScaledBitmap(output, 60, 60, false);
-//        //return _bmp;
-//        return output;
-//    }
-
     private void selectUserImg(){
         startActivityForResult(getPickImageChooserIntent(), REQUEST_PICK_IMAGE);
 
@@ -331,17 +288,6 @@ public class editProfile extends AppCompatActivity {
         return isCamera ? getCaptureImageOutputUri() : data.getData();
     }
 
-    public void choosePhotoFromGallery() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-        startActivityForResult(galleryIntent, REQUEST_PICK_IMAGE);
-    }
-
-    private void takePhotoFromCamera() {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, REQUEST_PICK_IMAGE);
-    }
 
     private String saveToInternalStorage(Bitmap bitmapImage,String filename){
         if(bitmapImage==null){
@@ -392,8 +338,28 @@ public class editProfile extends AppCompatActivity {
         }
         return b;
     }
-
-//    public static Bitmap modifyOrientation(Bitmap bitmap, String image_absolute_path) throws IOException {
+/*
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case REQUEST_PERMISSION_GALLERY:
+                if(grantResults.length>0) {
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        choosePhotoFromGallery();
+                    }
+                }
+                break;
+            case REQUEST_PERMISSION_CAMERA:
+                if(grantResults.length>0){
+                    if(grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                        choosePhotoFromCamera();
+                    }
+                }
+                break;
+        }
+    }
+*/
+    //    public static Bitmap modifyOrientation(Bitmap bitmap, String image_absolute_path) throws IOException {
 //        ExifInterface ei = new ExifInterface(image_absolute_path);
 //        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
 //
