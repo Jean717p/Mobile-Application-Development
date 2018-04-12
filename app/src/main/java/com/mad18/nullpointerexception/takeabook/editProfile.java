@@ -88,6 +88,7 @@ public class editProfile extends AppCompatActivity {
 
     private void storeUserEditData(){
         EditText text;
+        String s; File file;
         SharedPreferences.Editor editor = sharedPref.edit();
         int i=0;
         for(String x: showProfile.sharedUserDataKeys){
@@ -96,6 +97,16 @@ public class editProfile extends AppCompatActivity {
         }
         if(profileImg!=null){
             editor.putString(profileImgName,saveToInternalStorage(profileImg,profileImgName));
+        }
+        else{
+            s = sharedPref.getString(profileImgName,"");
+            if(s.length()>0){
+                file = new File(s);
+                if(file.exists()){
+                    file.delete();
+                }
+            }
+            editor.putString(profileImgName,"");
         }
         editor.apply();
     }
@@ -183,10 +194,11 @@ public class editProfile extends AppCompatActivity {
 
     private void selectUserImg(){
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
-        pictureDialog.setTitle("Select Action");
+        //pictureDialog.setTitle("Select Action");
         String[] pictureDialogItems = {
                 getString(R.string.photo_from_gallery),
-                getString(R.string.photo_from_camera) };
+                getString(R.string.photo_from_camera),
+                getString(R.string.photo_remove) };
         pictureDialog.setItems(pictureDialogItems,
                 (dialog, which) -> {
                     switch (which) {
@@ -196,15 +208,18 @@ public class editProfile extends AppCompatActivity {
                         case 1:
                             choosePhotoFromCamera();
                             break;
+                        case 2:
+                            removeUserImg();
+                            break;
                     }
                 });
         pictureDialog.show();
     }
 
     public void choosePhotoFromGallery() {
-        if(ActivityCompat.checkSelfPermission(editProfile.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+        if(ActivityCompat.checkSelfPermission(editProfile.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(editProfile.this,new String[]{
-                            Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE }
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE }
                     ,REQUEST_PERMISSION_GALLERY);
             return;
         }
@@ -214,14 +229,23 @@ public class editProfile extends AppCompatActivity {
     }
 
     private void choosePhotoFromCamera() {
-        if(ActivityCompat.checkSelfPermission(editProfile.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+        if(ActivityCompat.checkSelfPermission(editProfile.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                ||ActivityCompat.checkSelfPermission(editProfile.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(editProfile.this,new String[]{
-                            Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE }
+                            Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE }
                     ,REQUEST_PERMISSION_CAMERA);
             return;
         }
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+    }
+
+    private void removeUserImg(){
+        ImageView iw = findViewById(R.id.edit_profile_personalPhoto);
+        if(profileImg!=null){
+            iw.setImageResource(R.drawable.ic_account_circle_white_48px);
+            profileImg = null;
+        }
     }
 
     private String saveToInternalStorage(Bitmap bitmapImage,String filename){
@@ -286,7 +310,8 @@ public class editProfile extends AppCompatActivity {
                 break;
             case REQUEST_PERMISSION_CAMERA:
                 if(grantResults.length>0){
-                    if(grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                    if(grantResults[0]==PackageManager.PERMISSION_GRANTED
+                            && grantResults[1]==PackageManager.PERMISSION_GRANTED){
                         choosePhotoFromCamera();
                     }
                 }
@@ -294,42 +319,6 @@ public class editProfile extends AppCompatActivity {
         }
     }
 
-    //    public static Bitmap modifyOrientation(Bitmap bitmap, String image_absolute_path) throws IOException {
-//        ExifInterface ei = new ExifInterface(image_absolute_path);
-//        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-//
-//        switch (orientation) {
-//            case ExifInterface.ORIENTATION_ROTATE_90:
-//                return rotate(bitmap, 90);
-//
-//            case ExifInterface.ORIENTATION_ROTATE_180:
-//                return rotate(bitmap, 180);
-//
-//            case ExifInterface.ORIENTATION_ROTATE_270:
-//                return rotate(bitmap, 270);
-//
-//            case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
-//                return flip(bitmap, true, false);
-//
-//            case ExifInterface.ORIENTATION_FLIP_VERTICAL:
-//                return flip(bitmap, false, true);
-//
-//            default:
-//                return bitmap;
-//        }
-//    }
-//
-//    public static Bitmap rotate(Bitmap bitmap, float degrees) {
-//        Matrix matrix = new Matrix();
-//        matrix.postRotate(degrees);
-//        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-//    }
-//
-//    public static Bitmap flip(Bitmap bitmap, boolean horizontal, boolean vertical) {
-//        Matrix matrix = new Matrix();
-//        matrix.preScale(horizontal ? -1 : 1, vertical ? -1 : 1);
-//        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-//    }
 
 }
 

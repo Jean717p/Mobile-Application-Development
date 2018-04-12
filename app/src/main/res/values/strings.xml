@@ -14,4 +14,5 @@
     <string name="title_activity_show_profile">showProfile</string>
     <string name="photo_from_gallery">Select photo from gallery</string>
     <string name="photo_from_camera">Capture photo from camera</string>
+    <string name="photo_remove">Remove picture</string>
 </resources>

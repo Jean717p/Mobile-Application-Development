@@ -71,16 +71,22 @@ public class showProfile extends AppCompatActivity {
         TextView text;
         String y;
         int i=0;
+        ImageView iw;
         for(String x:sharedUserDataKeys){
-            text = findViewById(textViewIds[i++]);
+            text = findViewById(textViewIds[i]);
             y=sharedPref.getString(x,"");
-            if(y.length()>0){
+            if(y.length()>0 || textViewIds[i] == R.id.show_profile_about){
                 text.setText(y);
             }
+            i++;
         }
         y=sharedPref.getString(profileImgName,"");
         if(y.length()>0){
             loadImageFromStorage(y,R.id.show_profile_personalPhoto);
+        }
+        else{
+            iw = findViewById(R.id.show_profile_personalPhoto);
+            iw.setImageResource(R.drawable.ic_account_circle_white_48px);
         }
     }
 
