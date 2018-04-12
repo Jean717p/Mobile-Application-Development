@@ -31,14 +31,14 @@
 
 
     <ImageView
-        android:id="@+id/personalPhoto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="56dp"
-        android:visibility="visible"
-        android:src="@drawable/ic_account_circle_white_48dp"
-        android:background="@color/backgroundPhoto"
-        />
+            android:id="@+id/personalPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="56dp"
+            android:visibility="visible"
+            android:src="@drawable/ic_account_circle_white_48dp"
+            android:background="@color/backgroundPhoto"
+            />
 
     <RelativeLayout
         android:layout_width="match_parent"

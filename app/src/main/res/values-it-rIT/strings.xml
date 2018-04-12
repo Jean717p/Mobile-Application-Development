@@ -12,5 +12,7 @@
     <string name="Email">Email</string>
     <string name="hint_mail">esempio@dominio.it</string>
     <string name="AboutMe">Bio</string>
+    <string name="photo_from_gallery">Seleziona una foto dalla galleria</string>
+    <string name="photo_from_camera">Scatta una foto dalla fotocamera</string>
 
 </resources>
