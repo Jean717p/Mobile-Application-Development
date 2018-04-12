@@ -1,23 +1,19 @@
 package com.mad18.nullpointerexception.takeabook;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -26,17 +22,13 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.content.DialogInterface;
 import android.widget.TextView;
-
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class editProfile extends AppCompatActivity {
     private SharedPreferences sharedPref;
@@ -63,23 +55,13 @@ public class editProfile extends AppCompatActivity {
         }
         ImageView iw = findViewById(R.id.edit_profile_personalPhoto);
         iw.setClickable(true);
-        iw.setOnClickListener(view ->
-            {
-                if(ActivityCompat.checkSelfPermission(editProfile.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(editProfile.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_PICK_IMAGE);
-                }
-                else {
-                    selectUserImg();
-                }
-            });
+        iw.setOnClickListener(view -> selectUserImg());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        ImageView iw = findViewById(R.id.edit_profile_personalPhoto);
-        iw.setClickable(true);
-        iw.setOnClickListener(view -> editProfile.this.selectUserImg());
+
     }
 
     @Override
@@ -88,7 +70,7 @@ public class editProfile extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.edit_profile_toolbar, menu);
         return true;
-}
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
@@ -169,122 +151,78 @@ public class editProfile extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
         ImageView iw;
-        if (resultCode == Activity.RESULT_OK) {
-            if(getPickImageResultUri(data) != null){
-                Uri selectedMediaUri = getPickImageResultUri(data);
-                try {
-                    profileImg = MediaStore.Images.Media.getBitmap(
-                            this.getContentResolver(),selectedMediaUri);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                iw = findViewById(R.id.edit_profile_personalPhoto);
-                if(iw!=null && profileImg != null) {
-                    iw.setImageBitmap(profileImg);
-                }
-            }
-            else {
-                if (data != null) {
-                    profileImg = (Bitmap) data.getExtras().get("data");
-                    iw = findViewById(R.id.edit_profile_personalPhoto);
-                    if(iw!=null && profileImg != null) {
-                        iw.setImageBitmap(profileImg);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_PICK_IMAGE:
+                    if (data != null) {
+                        Uri selectedMediaUri = data.getData();
+                        try {
+                            profileImg = MediaStore.Images.Media.getBitmap(
+                                    this.getContentResolver(),selectedMediaUri);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        iw = findViewById(R.id.edit_profile_personalPhoto);
+                        if(iw!=null && profileImg != null) {
+                            iw.setImageBitmap(profileImg);
+                        }
                     }
-                }
+                    break;
+                case REQUEST_IMAGE_CAPTURE:
+                    if (data != null) {
+                        profileImg = (Bitmap) data.getExtras().get("data");
+                        iw = findViewById(R.id.edit_profile_personalPhoto);
+                        if(iw!=null && profileImg != null) {
+                            iw.setImageBitmap(profileImg);
+                        }
+                    }
+                    break;
             }
         }
     }
+
     private void selectUserImg(){
-        startActivityForResult(getPickImageChooserIntent(), REQUEST_PICK_IMAGE);
-
+        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
+        pictureDialog.setTitle("Select Action");
+        String[] pictureDialogItems = {
+                getString(R.string.photo_from_gallery),
+                getString(R.string.photo_from_camera) };
+        pictureDialog.setItems(pictureDialogItems,
+                (dialog, which) -> {
+                    switch (which) {
+                        case 0:
+                            choosePhotoFromGallery();
+                            break;
+                        case 1:
+                            choosePhotoFromCamera();
+                            break;
+                    }
+                });
+        pictureDialog.show();
     }
 
-    /**
-     * Create a chooser intent to select the source to get image from.<br/>
-     * The source can be camera's (ACTION_IMAGE_CAPTURE) or gallery's (ACTION_GET_CONTENT).<br/>
-     * All possible sources are added to the intent chooser.
-     */
-    public Intent getPickImageChooserIntent() {
-
-        // Determine Uri of camera image to save.
-        Uri outputFileUri = getCaptureImageOutputUri();
-
-        List<Intent> allIntents = new ArrayList<>();
-        PackageManager packageManager = getPackageManager();
-
-        // collect all camera intents
-        Intent captureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
-        for (ResolveInfo res : listCam) {
-            Intent intent = new Intent(captureIntent);
-            intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-            intent.setPackage(res.activityInfo.packageName);
-            if (outputFileUri != null) {
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-            }
-            allIntents.add(intent);
+    public void choosePhotoFromGallery() {
+        if(ActivityCompat.checkSelfPermission(editProfile.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(editProfile.this,new String[]{
+                            Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE }
+                    ,REQUEST_PERMISSION_GALLERY);
+            return;
         }
-
-        // collect all gallery intents
-        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        galleryIntent.setType("image/*");
-        List<ResolveInfo> listGallery = packageManager.queryIntentActivities(galleryIntent, 0);
-        for (ResolveInfo res : listGallery) {
-            Intent intent = new Intent(galleryIntent);
-            intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-            intent.setPackage(res.activityInfo.packageName);
-            allIntents.add(intent);
-        }
-
-        // the main intent is the last in the list so pickup the useless one
-        Intent mainIntent = allIntents.get(allIntents.size() - 1);
-        for (Intent intent : allIntents) {
-            if (intent.getComponent().getClassName().equals("com.android.documentsui.DocumentsActivity")) {
-                mainIntent = intent;
-                break;
-            }
-        }
-        allIntents.remove(mainIntent);
-
-        // Create a chooser from the main intent
-        Intent chooserIntent = Intent.createChooser(mainIntent, "Select source");
-
-        // Add all other intents
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, allIntents.toArray(new Parcelable[allIntents.size()]));
-
-        return chooserIntent;
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, REQUEST_PICK_IMAGE);
     }
 
-
-    /**
-     * Get URI to image received from capture by camera.
-     */
-    private Uri getCaptureImageOutputUri() {
-        Uri outputFileUri = null;
-        File getImage = getExternalCacheDir();
-        if (getImage != null) {
-            outputFileUri = Uri.fromFile(new File(getImage.getPath(), "profile.png"));
+    private void choosePhotoFromCamera() {
+        if(ActivityCompat.checkSelfPermission(editProfile.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(editProfile.this,new String[]{
+                            Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE }
+                    ,REQUEST_PERMISSION_CAMERA);
+            return;
         }
-        return outputFileUri;
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
     }
-
-    /**
-     * Get the URI of the selected image from {@link #getPickImageChooserIntent()}.<br/>
-     * Will return the correct URI for camera and gallery image.
-     *
-     * @param data the returned data of the activity result
-     */
-    public Uri getPickImageResultUri(Intent data) {
-        boolean isCamera = true;
-        if (data != null) {
-            String action = data.getAction();
-            isCamera = action != null && action.equals(MediaStore.ACTION_IMAGE_CAPTURE);
-        }
-
-
-        return isCamera ? getCaptureImageOutputUri() : data.getData();
-    }
-
 
     private String saveToInternalStorage(Bitmap bitmapImage,String filename){
         if(bitmapImage==null){
@@ -293,7 +231,7 @@ public class editProfile extends AppCompatActivity {
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         // path to /data/data/appname/app_data/imageDir internal
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-                //Environment.getExternalStorageDirectory(); sd
+        //Environment.getExternalStorageDirectory(); sd
         // Create imageDir
         File file = new File(directory,filename);
         FileOutputStream out = null;
@@ -342,14 +280,14 @@ public class editProfile extends AppCompatActivity {
             case REQUEST_PERMISSION_GALLERY:
                 if(grantResults.length>0) {
                     if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        getPickImageChooserIntent();
+                        choosePhotoFromGallery();
                     }
                 }
                 break;
             case REQUEST_PERMISSION_CAMERA:
                 if(grantResults.length>0){
                     if(grantResults[0]==PackageManager.PERMISSION_GRANTED){
-                        getPickImageChooserIntent();
+                        choosePhotoFromCamera();
                     }
                 }
                 break;

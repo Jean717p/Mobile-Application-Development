@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="56dp"
             android:visibility="visible"
-            android:src="@drawable/ic_account_circle_white_48dp"
+            android:src="@drawable/ic_account_circle_white_48px"
             android:background="@color/backgroundPhoto"
             />
 

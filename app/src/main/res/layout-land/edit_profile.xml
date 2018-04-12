@@ -24,13 +24,17 @@
     <!--Questa è la definizione dell'immagine circolare per la foto personale del profilo utente-->
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/edit_profile_personalPhoto"
-        android:src="@drawable/userdefault"
         android:layout_width="@dimen/profile_photo_height"
         android:layout_height="@dimen/profile_photo_height"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_margin="@dimen/layout_margin"
         android:layout_below="@id/edit_profile_toolbar"
+
+        android:layout_centerVertical="true"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/ic_account_circle_white_48px"
+
         app:civ_border_color="@color/textColor"
         app:civ_border_width="@dimen/circle_image_border"
         />

@@ -27,7 +27,10 @@
         android:layout_below="@id/show_profile_toolbar"
         android:layout_centerHorizontal="true"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/userdefault"
+
+
+        android:gravity="center_vertical"
+        android:src="@drawable/ic_account_circle_white_48px"
         app:civ_border_color="@color/textColor"
         app:civ_border_width="@dimen/circle_image_border" />
 

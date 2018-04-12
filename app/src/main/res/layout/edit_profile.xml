@@ -8,131 +8,91 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <!--Questa è la toolbar dove appare appName più l'icona salva o modifica-->
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/edit_profile_toolbar"
-        app:title="@string/app_name"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height"
         android:minHeight="?android:attr/actionBarSize"
-        android:elevation="@dimen/toolbar_elevation"
+        android:elevation="8dp"
         android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:title="@string/app_name"
         />
-    <!--Essendo nella edit profile, la scrollview avvolge anche l'immagine profilo-->
-    <!--al fine di far traslare verso l'alto tutta la schermata tranne la toolbar.-->
-    <!--In questo mdo quando compare la tastiera a video, i campi scorrono verso l'alto-->
-    <!--e si vede cosa si sta scrivendo, senza che la tastiera copra il campo nel quale-->
-    <!--si sta scrivendo-->
-    <!--android:layout_height e' impostato su wrap content e non e' fisso -->
-    <!--volutamente a differenza della show profile che fa scorrere solo la bio-->
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edit_profile_toolbar"
-        >
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/edit_profile_toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/edit_profile_personalPhoto"
+                android:layout_width="@dimen/profile_photo_height"
+                android:layout_height="@dimen/profile_photo_height"
+                android:layout_below="@id/edit_profile_toolbar"
+                android:layout_margin="@dimen/fab_margin"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_account_circle_white_48px"
+                app:civ_border_color="@color/textColor"
+                app:civ_border_width="0dp" />
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/edit_profile_personalPhoto"
                 android:layout_margin="16dp">
 
-                <!--Questa è la definizione dell'immagine circolare per la foto personale del profilo utente-->
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/edit_profile_personalPhoto"
-                    android:layout_width="@dimen/profile_photo_width"
-                    android:layout_height="@dimen/profile_photo_height"
-                    android:layout_centerHorizontal="true"
-                    android:layout_margin="@dimen/fab_margin"
-                    android:src="@drawable/userdefault"
-                    app:civ_border_color="@color/textColor"
-                    app:civ_border_width="@dimen/circle_image_border" />
-                <!--Non ho messo i margin bottom di qui in avanti perchè le edit text sono gia' piu' estese nei margini-->
-                <!--titolo username-->
-                <TextView
-                    android:id="@+id/edit_profile_title_Username"
-                    android:text="@string/Username"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/edit_profile_personalPhoto"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/profile_text_view_title"/>
-                <!-- username-->
                 <EditText
                     android:id="@+id/edit_profile_Username"
-                    android:hint="@string/Username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/edit_profile_title_Username"
                     android:enabled="true"
+                    android:hint="@string/Username"
                     android:inputType="text"
                     android:maxLines="1"
                     android:textColor="@color/textColor"
                     android:textColorHint="@color/colorAccent"
-                    android:textSize="@dimen/profile_edit_text_content"
-                    />
+                    android:textSize="@dimen/text_view_height" />
 
-                <!--titolo city-->
-                <TextView
-                    android:id="@+id/edit_profile_title_City"
-                    android:text="@string/City"
+                <EditText
+                    android:id="@+id/edit_profile_City"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/edit_profile_Username"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/profile_text_view_title"/>
-                <!--city-->
-                <EditText
-                    android:id="@+id/edit_profile_City"
-                    android:hint="@string/City"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/edit_profile_title_City"
                     android:enabled="true"
+                    android:hint="@string/City"
                     android:inputType="text"
                     android:maxLines="1"
                     android:textColor="@color/textColor"
                     android:textColorHint="@color/colorAccent"
-                    android:textSize="@dimen/profile_edit_text_content"
-                    />
+                    android:textSize="@dimen/text_view_height" />
 
-                <!--titolo mail-->
-                <TextView
-                    android:id="@+id/edit_profile_title_mail"
-                    android:text="@string/Email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/edit_profile_City"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/profile_text_view_title"/>
-                <!-- mail-->
                 <EditText
                     android:id="@+id/edit_profile_mail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/edit_profile_title_mail"
+                    android:layout_below="@id/edit_profile_City"
                     android:enabled="true"
                     android:hint="@string/Email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:textColor="@color/textColor"
                     android:textColorHint="@color/colorAccent"
-                    android:textSize="@dimen/profile_edit_text_content"
+                    android:textSize="@dimen/text_view_height"
+
                     />
 
-                <!--titolo about-->
-                <TextView
-                    android:id="@+id/edit_profile_title_about"
-                    android:text="@string/AboutMe"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/edit_profile_mail"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/profile_text_view_title"/>
-                <!--about-->
                 <EditText
                     android:id="@+id/edit_profile_about"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/edit_profile_title_about"
+                    android:layout_below="@id/edit_profile_mail"
                     android:enabled="true"
                     android:gravity="top"
                     android:hint="@string/AboutMe"
@@ -141,8 +101,8 @@
                     android:scrollbars="vertical"
                     android:textColor="@color/textColor"
                     android:textColorHint="@color/colorAccent"
-                    android:textSize="@dimen/profile_edit_text_content"
-                    />
+                    android:textSize="@dimen/text_view_height" />
             </RelativeLayout>
+        </LinearLayout>
     </ScrollView>
 </RelativeLayout>
