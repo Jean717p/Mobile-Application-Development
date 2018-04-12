@@ -1,15 +1,16 @@
 <resources>
     <string name="app_name">AppName</string>
     <string name="profile_name">Nome</string>
-    <string name="profile_username">NomeUtente</string>
+    <string name="profile_username">Nome Utente</string>
     <string name="profile_city">Torino</string>
     <string name="profile_mail">JerrySiegel@gmail.com</string>
-    <string name="profile_about">Info</string>
+    <string name="profile_about">Bio</string>
     <string name="profile_photo">Foto profilo</string>
     <string name="title_activity_edit">Modifica profilo</string>
-    <string name="Username">NomeUtente</string>
+    <string name="Username">Nome Utente</string>
     <string name="City">Città</string>
-    <string name="Email">mail@mail.com</string>
-    <string name="AboutMe">Info</string>
+    <string name="Email">Email</string>
+    <string name="hint_mail">esempio@dominio.it</string>
+    <string name="AboutMe">Bio</string>
 
 </resources>
