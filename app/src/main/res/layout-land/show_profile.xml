@@ -9,106 +9,133 @@
     android:background="@color/white"
     >
 
+    <!--Questa è la toolbar dove appare appName più l'icona salva o modifica-->
     <android.support.v7.widget.Toolbar
         android:id="@+id/show_profile_toolbar"
-        android:minHeight="?android:attr/actionBarSize"
-        android:elevation="8dp"
-        android:background="@color/colorPrimary"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
         app:title="@string/app_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:minHeight="?android:attr/actionBarSize"
+        android:elevation="@dimen/toolbar_elevation"
+        android:background="@color/colorPrimary"
         />
 
-
+    <!--Questa è la definizione dell'immagine circolare per la foto personale del profilo utente-->
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/show_profile_personalPhoto"
-        android:layout_width="@dimen/profile_photo_height"
-        android:layout_height="@dimen/profile_photo_height"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="72dp"
-        android:gravity="center_vertical"
         android:src="@drawable/userdefault"
-        app:civ_border_color="@color/textColor"
-        app:civ_border_width="0dp"
+        android:layout_width="@dimen/profile_photo_width"
+        android:layout_height="@dimen/profile_photo_height"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="16dp" />
-
+        android:layout_alignParentStart="true"
+        android:layout_margin="@dimen/layout_margin"
+        android:layout_below="@id/show_profile_toolbar"
+        app:civ_border_color="@color/textColor"
+        app:civ_border_width="@dimen/circle_image_border"
+        />
+    <!--questa scroll view fa scorrere tutte le info ad eccezione della foto-->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/show_profile_personalPhoto"
+        android:layout_below="@id/show_profile_toolbar">
+    <!--Questo è un wrapper per i fields da Username fino ad About -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_toRightOf="@id/show_profile_personalPhoto"
             android:layout_below="@id/show_profile_toolbar"
-            android:orientation="vertical">
-            <RelativeLayout
+            android:layout_margin="@dimen/layout_margin">
+
+            <!--titolo username-->
+            <TextView
+                android:id="@+id/show_profile_title_Username"
+                android:text="@string/Username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/show_profile_personalPhoto"
-                android:layout_below="@id/show_profile_toolbar"
-                android:layout_margin="16dp">
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/profile_text_view_title"/>
+            <!-- username-->
+            <TextView
+                android:id="@+id/show_profile_Username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/show_profile_title_Username"
+                android:textSize="@dimen/profile_text_view_content"
+                android:maxLines="1"
+                android:textColor="@color/textColor"
+                />
 
+            <!--titolo city-->
+            <TextView
+                android:id="@+id/show_profile_title_City"
+                android:text="@string/City"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/show_profile_Username"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/profile_text_view_title"/>
+            <!--city-->
+            <TextView
+                android:id="@+id/show_profile_City"
+                android:layout_below="@id/show_profile_title_City"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/profile_text_view_content"
+                android:maxLines="1"
+                android:textColor="@color/textColor"
+                />
+
+            <!--titolo mail-->
+            <TextView
+                android:id="@+id/show_profile_title_mail"
+                android:text="@string/Email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/show_profile_City"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/profile_text_view_title"/>
+            <!-- mail-->
+            <TextView
+                android:id="@+id/show_profile_mail"
+                android:enabled="false"
+                android:layout_below="@id/show_profile_title_mail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:textSize="@dimen/profile_text_view_content"
+                android:textColor="@color/textColor"
+                android:textColorHint="@color/colorAccent"
+                />
+
+            <!--titolo about-->
+            <TextView
+                android:id="@+id/show_profile_title_about"
+                android:text="@string/AboutMe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/show_profile_mail"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/profile_text_view_title"/>
+            <!--about-->
                 <TextView
-                    android:id="@+id/show_profile_Username"
-                    android:enabled="false"
+                    android:id="@+id/show_profile_about"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_view_height"
-                    android:inputType="text"
-                    android:maxLines="1"
+                    android:layout_below="@id/show_profile_title_about"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"
+                    android:scrollbars="vertical"
                     android:textColor="@color/textColor"
-                    android:hint="Name"
-                    android:textColorHint="@color/colorAccent"/>
-
-                <TextView
-                    android:id="@+id/show_profile_City"
-                    android:layout_below="@id/show_profile_Username"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:textSize="@dimen/text_view_height"
                     android:textColorHint="@color/colorAccent"
-                    android:enabled="false"
-                    android:maxLines="1"
-                    android:hint="City"
-                    android:textColor="@color/textColor"
-                    />
+                    android:textSize="@dimen/profile_text_view_content" />
 
-
-                <TextView
-                    android:id="@+id/show_profile_mail"
-                    android:enabled="false"
-                    android:layout_below="@id/show_profile_City"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:hint="Email"
-                    android:textSize="@dimen/text_view_height"
-                    android:textColor="@color/textColor"
-                    android:textColorHint="@color/colorAccent"
-                    />
-
-                <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_below="@id/show_profile_mail">
-
-                    <TextView
-                        android:id="@+id/show_profile_about"
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:layout_below="@id/show_profile_mail"
-                        android:enabled="false"
-                        android:gravity="top"
-                        android:hint="AboutMe"
-                        android:inputType="textMultiLine"
-                        android:scrollbars="vertical"
-                        android:textColor="@color/textColor"
-                        android:textColorHint="@color/colorAccent"
-                        android:textSize="18sp" />
-                </ScrollView>
-            </RelativeLayout>
+        </RelativeLayout>
         </LinearLayout>
-
+    </ScrollView>
 </RelativeLayout>

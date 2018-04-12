@@ -8,91 +8,127 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-
+    <!--Questa è la toolbar dove appare appName più l'icona salva o modifica-->
     <android.support.v7.widget.Toolbar
         android:id="@+id/show_profile_toolbar"
-        android:minHeight="?android:attr/actionBarSize"
-        android:elevation="8dp"
-        android:background="@color/colorPrimary"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
         app:title="@string/app_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:minHeight="?android:attr/actionBarSize"
+        android:elevation="@dimen/toolbar_elevation"
+        android:background="@color/colorPrimary"
         />
 
+    <!--Questa è la definizione dell'immagine circolare per la foto personale del profilo utente-->
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/show_profile_personalPhoto"
-        android:layout_width="@dimen/profile_photo_height"
+        android:layout_width="@dimen/profile_photo_width"
         android:layout_height="@dimen/profile_photo_height"
-        android:layout_below="@+id/show_profile_toolbar"
+        android:layout_below="@id/show_profile_toolbar"
         android:layout_centerHorizontal="true"
         android:layout_margin="@dimen/fab_margin"
-        android:gravity="center_vertical"
         android:src="@drawable/userdefault"
         app:civ_border_color="@color/textColor"
-        app:civ_border_width="0dp" />
+        app:civ_border_width="@dimen/circle_image_border" />
 
+    <!--Questo è un wrapper per i fields da Username fino ad About -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/layout_margin"
         android:layout_below="@id/show_profile_personalPhoto"
         >
-
+        <!--titolo username-->
+        <TextView
+            android:id="@+id/show_profile_title_Username"
+            android:text="@string/Username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/profile_text_view_title"/>
+        <!-- username-->
         <TextView
             android:id="@+id/show_profile_Username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
+            android:layout_below="@id/show_profile_title_Username"
             android:maxLines="1"
-            android:text="@string/Username"
             android:textColor="@color/textColor"
-            android:textSize="@dimen/text_view_height"
-            android:layout_alignParentLeft="true" />
+            android:textSize="@dimen/profile_text_view_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="@dimen/profile_bottom_content"/>
 
+        <!--titolo city-->
+        <TextView
+            android:id="@+id/show_profile_title_City"
+            android:text="@string/City"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/show_profile_Username"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/profile_text_view_title"/>
+        <!--city-->
         <TextView
             android:id="@+id/show_profile_City"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-
-            android:layout_below="@+id/show_profile_Username"
+            android:layout_below="@id/show_profile_title_City"
             android:maxLines="1"
-            android:text="@string/City"
             android:textColor="@color/textColor"
-            android:textSize="18sp"
-            android:layout_alignParentLeft="true" />
+            android:textSize="@dimen/profile_text_view_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="@dimen/profile_bottom_content"/>
 
-
+        <!--titolo mail-->
+        <TextView
+            android:id="@+id/show_profile_title_mail"
+            android:text="@string/Email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/show_profile_City"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/profile_text_view_title"/>
+        <!-- mail-->
         <TextView
             android:id="@+id/show_profile_mail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/show_profile_City"
+            android:layout_below="@id/show_profile_title_mail"
             android:maxLines="1"
-            android:text="@string/Email"
-
             android:textColor="@color/textColor"
-            android:textSize="18sp"
-            android:layout_alignParentLeft="true" />
+            android:textSize="@dimen/profile_text_view_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="@dimen/profile_bottom_content"/>
 
-        <ScrollView
+        <!--titolo about-->
+        <TextView
+            android:id="@+id/show_profile_title_about"
+            android:text="@string/AboutMe"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout_below="@id/show_profile_mail"
-            android:layout_marginTop="4dp">
-
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/profile_text_view_title"/>
+        <!--La scroll view è applicata solo sul profile about in questo caso perchè-->
+        <!--non dovendo editare i campi si scorre la biografia senza perdere di vista -->
+        <!--gli altri campi di informazioni sul profilo-->
+        <ScrollView
+            android:id="@+id/scrollview_around_profile_about_show_profile"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/show_profile_about_me_height"
+            android:layout_below="@id/show_profile_title_about"
+            >
+            <!--about-->
             <TextView
                 android:id="@+id/show_profile_about"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_below="@id/show_profile_mail"
-                android:layout_margin="2dp"
-                android:text="@string/AboutMe"
+                android:layout_height="@dimen/show_profile_about_me_height"
+                android:layout_below="@id/show_profile_title_about"
                 android:textColor="@color/textColor"
-                android:textSize="18sp" />
+                android:textSize="@dimen/profile_text_view_content"
+                android:layout_marginBottom="@dimen/profile_bottom_content"/>
         </ScrollView>
     </RelativeLayout>
-
 </RelativeLayout>

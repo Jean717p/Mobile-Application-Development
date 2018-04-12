@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name = "profile_photo_height">170dp</dimen>
+    <dimen name = "profile_photo_width">170dp</dimen>
     <dimen name="edit_text_content_height">18sp</dimen>
-    <dimen name="text_view_height">18sp</dimen>
+    <dimen name="text_view_height">16sp</dimen>
     <dimen name = "text_view_container_height">36dp</dimen>
     <dimen name="profile_height">170dp</dimen>
+    <dimen name="profile_text_view_title">17sp</dimen>
+    <dimen name= "profile_text_view_content">19sp</dimen>
+    <dimen name= "profile_edit_text_content">19sp</dimen>
+    <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="toolbar_elevation">8dp</dimen>
+    <dimen name="circle_image_border">0dp</dimen>
+    <dimen name="layout_margin">16dp</dimen>
+    <dimen name="show_profile_about_me_height">150dp</dimen>
+    <dimen name="profile_bottom_content">8dp</dimen>
+    <dimen name="profile_bottom_title">2dp</dimen>
 </resources>
