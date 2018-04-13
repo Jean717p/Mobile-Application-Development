@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "666855697382",
+    "firebase_url": "https://group2-d2eb4.firebaseio.com",
+    "project_id": "group2-d2eb4",
+    "storage_bucket": "group2-d2eb4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:666855697382:android:e28a644abc9d5aac",
+        "android_client_info": {
+          "package_name": "com.mad18.nullpointerexception.takeabook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "666855697382-nos9ck2a7n5brb5ase5pabldpib206qc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAX0qLWR3K8pCLAv89Yc2wm-Sr_USNn6VM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
