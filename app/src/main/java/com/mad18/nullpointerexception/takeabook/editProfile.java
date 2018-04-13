@@ -56,6 +56,7 @@ public class editProfile extends AppCompatActivity {
         ImageView iw = findViewById(R.id.edit_profile_personalPhoto);
         iw.setClickable(true);
         iw.setOnClickListener(view -> selectUserImg());
+        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
     }
 
     @Override
@@ -78,9 +79,11 @@ public class editProfile extends AppCompatActivity {
             case R.id.edit_profile_action_save:
                 storeUserEditData();
                 finish();
+                overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
                 return true;
             case android.R.id.home:
                 finish();
+                overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -319,7 +322,11 @@ public class editProfile extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+    }
 }
 
 
