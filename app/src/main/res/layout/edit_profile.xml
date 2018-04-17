@@ -26,9 +26,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/edit_profile_toolbar">
+        android:layout_below="@id/edit_profile_toolbar">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -37,49 +37,54 @@
                 android:id="@+id/edit_profile_personalPhoto"
                 android:layout_width="@dimen/profile_photo_height"
                 android:layout_height="@dimen/profile_photo_height"
-                android:layout_below="@id/edit_profile_toolbar"
                 android:layout_margin="@dimen/fab_margin"
-                android:layout_gravity="center"
+                android:layout_gravity="center_vertical"
                 android:src="@drawable/ic_account_circle_white_48px"
                 app:civ_border_color="@color/textColor"
                 app:civ_border_width="0dp" />
 
-
+            <!--titolo username-->
+            <TextView
+                android:id="@+id/edit_profile_title_Username"
+                android:text="@string/Username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/edit_profile_personalPhoto"
+                android:layout_alignRight="@id/edit_profile_personalPhoto"
+                android:layout_below="@id/edit_profile_personalPhoto"
+                android:gravity="center_horizontal"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/profile_text_view_title"/>
+            <!-- username-->
+            <EditText
+                android:id="@+id/edit_profile_Username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/edit_profile_personalPhoto"
+                android:layout_alignRight="@id/edit_profile_personalPhoto"
+                android:gravity="center_horizontal"
+                android:enabled="true"
+                android:hint="@string/Username"
+                android:layout_below="@id/edit_profile_title_Username"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="@color/textColor"
+                android:textColorHint="@color/colorAccent"
+                android:textSize="@dimen/text_view_height" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/edit_profile_personalPhoto"
+                android:layout_toRightOf="@id/edit_profile_personalPhoto"
                 android:layout_margin="16dp">
 
-                <!--titolo username-->
-                <TextView
-                    android:id="@+id/edit_profile_title_Username"
-                    android:text="@string/Username"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/profile_text_view_title"/>
-                <!-- username-->
-                <EditText
-                    android:id="@+id/edit_profile_Username"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:enabled="true"
-                    android:hint="@string/Username"
-                    android:layout_below="@id/edit_profile_title_Username"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:textColor="@color/textColor"
-                    android:textColorHint="@color/colorAccent"
-                    android:textSize="@dimen/text_view_height" />
                 <!--titolo city-->
                 <TextView
                     android:id="@+id/edit_profile_title_City"
                     android:text="@string/City"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/edit_profile_Username"
+                    android:layout_alignLeft="@id/edit_profile_City"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/profile_text_view_title"/>
                 <!--city-->
@@ -87,6 +92,7 @@
                     android:id="@+id/edit_profile_City"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/edit_profile_icon_City"
                     android:layout_below="@id/edit_profile_title_City"
                     android:enabled="true"
                     android:hint="@string/City"
@@ -95,6 +101,17 @@
                     android:textColor="@color/textColor"
                     android:textColorHint="@color/colorAccent"
                     android:textSize="@dimen/text_view_height" />
+                <!--little icon near field city-->
+                <ImageView
+                    android:id="@+id/edit_profile_icon_City"
+                    android:src="@drawable/ic_location_city_black_24px"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_alignBottom="@id/edit_profile_City"
+                    android:layout_alignTop="@id/edit_profile_title_City"
+                    android:layout_below="@id/edit_profile_title_City"
+                    />
 
                 <!--titolo mail-->
                 <TextView
@@ -103,15 +120,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/edit_profile_City"
+                    android:layout_toRightOf="@id/edit_profile_icon_mail"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/profile_text_view_title"/>
-
                 <!-- mail-->
                 <EditText
                     android:id="@+id/edit_profile_mail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/edit_profile_title_mail"
+                    android:layout_toRightOf="@id/edit_profile_icon_mail"
                     android:enabled="true"
                     android:hint="@string/Email"
                     android:inputType="textEmailAddress"
@@ -119,8 +137,19 @@
                     android:textColor="@color/textColor"
                     android:textColorHint="@color/colorAccent"
                     android:textSize="@dimen/text_view_height"
-
                     />
+                <!--little icon near field mail-->
+                <ImageView
+                    android:id="@+id/edit_profile_icon_mail"
+                    android:src="@drawable/ic_email_black_24px"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_alignBottom="@id/edit_profile_mail"
+                    android:layout_alignTop="@id/edit_profile_title_mail"
+                    android:layout_below="@id/edit_profile_title_mail"
+                    />
+
                 <!--titolo about-->
                 <TextView
                     android:id="@+id/edit_profile_title_about"
@@ -146,6 +175,6 @@
                     android:textColorHint="@color/colorAccent"
                     android:textSize="@dimen/text_view_height" />
             </RelativeLayout>
-        </LinearLayout>
+        </RelativeLayout>
     </ScrollView>
 </RelativeLayout>
