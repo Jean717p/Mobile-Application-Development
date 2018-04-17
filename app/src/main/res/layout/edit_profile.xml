@@ -6,18 +6,20 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    >
 
 
-    <android.support.v7.widget.Toolbar
+      <android.support.v7.widget.Toolbar
         android:id="@+id/edit_profile_toolbar"
-        android:minHeight="?android:attr/actionBarSize"
         android:elevation="8dp"
         android:background="@color/colorPrimary"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="?android:attr/actionBarSize"
         app:title="@string/app_name"
-        />
+          app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+          app:theme="@style/ThemeOverlay.AppCompat.Dark"
+
+    />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -42,29 +44,50 @@
                 app:civ_border_color="@color/textColor"
                 app:civ_border_width="0dp" />
 
+
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/edit_profile_personalPhoto"
                 android:layout_margin="16dp">
 
+                <!--titolo username-->
+                <TextView
+                    android:id="@+id/edit_profile_title_Username"
+                    android:text="@string/Username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/profile_text_view_title"/>
+                <!-- username-->
                 <EditText
                     android:id="@+id/edit_profile_Username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:enabled="true"
                     android:hint="@string/Username"
+                    android:layout_below="@id/edit_profile_title_Username"
                     android:inputType="text"
                     android:maxLines="1"
                     android:textColor="@color/textColor"
                     android:textColorHint="@color/colorAccent"
                     android:textSize="@dimen/text_view_height" />
-
+                <!--titolo city-->
+                <TextView
+                    android:id="@+id/edit_profile_title_City"
+                    android:text="@string/City"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/edit_profile_Username"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/profile_text_view_title"/>
+                <!--city-->
                 <EditText
                     android:id="@+id/edit_profile_City"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/edit_profile_Username"
+                    android:layout_below="@id/edit_profile_title_City"
                     android:enabled="true"
                     android:hint="@string/City"
                     android:inputType="text"
@@ -73,11 +96,22 @@
                     android:textColorHint="@color/colorAccent"
                     android:textSize="@dimen/text_view_height" />
 
+                <!--titolo mail-->
+                <TextView
+                    android:id="@+id/edit_profile_title_mail"
+                    android:text="@string/Email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/edit_profile_City"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/profile_text_view_title"/>
+
+                <!-- mail-->
                 <EditText
                     android:id="@+id/edit_profile_mail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/edit_profile_City"
+                    android:layout_below="@id/edit_profile_title_mail"
                     android:enabled="true"
                     android:hint="@string/Email"
                     android:inputType="textEmailAddress"
@@ -87,12 +121,21 @@
                     android:textSize="@dimen/text_view_height"
 
                     />
-
+                <!--titolo about-->
+                <TextView
+                    android:id="@+id/edit_profile_title_about"
+                    android:text="@string/AboutMe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/edit_profile_mail"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/profile_text_view_title"/>
+                <!--about-->
                 <EditText
                     android:id="@+id/edit_profile_about"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/edit_profile_mail"
+                    android:layout_below="@id/edit_profile_title_about"
                     android:enabled="true"
                     android:gravity="top"
                     android:hint="@string/AboutMe"
