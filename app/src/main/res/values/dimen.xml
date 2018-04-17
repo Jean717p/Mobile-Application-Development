@@ -13,7 +13,7 @@
     <dimen name="toolbar_elevation">8dp</dimen>
     <dimen name="circle_image_border">0dp</dimen>
     <dimen name="layout_margin">16dp</dimen>
-    <dimen name="show_profile_about_me_height">150dp</dimen>
+    <dimen name="show_profile_about_me_height">100dp</dimen>
     <dimen name="profile_bottom_content">8dp</dimen>
     <dimen name="profile_bottom_title">2dp</dimen>
 </resources>
