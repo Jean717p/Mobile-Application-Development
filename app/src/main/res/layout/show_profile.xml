@@ -49,6 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimary"
+            android:layout_toRightOf="@id/show_profile_icon_Username"
             android:textSize="@dimen/profile_text_view_title"/>
         <!-- username-->
         <TextView
@@ -58,9 +59,22 @@
             android:layout_below="@id/show_profile_title_Username"
             android:maxLines="1"
             android:textColor="@color/textColor"
+            android:layout_toRightOf="@id/show_profile_icon_Username"
             android:textSize="@dimen/profile_text_view_content"
-            android:layout_alignParentLeft="true"
+
             android:layout_marginBottom="@dimen/profile_bottom_content"/>
+
+        <!--little icon near text field mail-->
+        <ImageView
+            android:id="@+id/show_profile_icon_Username"
+            android:src="@drawable/ic_account_circle_black_24px"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginRight="8dp"
+            android:layout_alignBottom="@id/show_profile_Username"
+            android:layout_alignTop="@id/show_profile_title_Username"
+            android:layout_below="@id/show_profile_title_Username"
+            />
 
         <!--titolo city-->
         <TextView
@@ -69,6 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/show_profile_Username"
+            android:layout_alignLeft="@id/show_profile_City"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/profile_text_view_title"/>
         <!--city-->
@@ -76,13 +91,25 @@
             android:id="@+id/show_profile_City"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:layout_toRightOf="@id/show_profile_icon_City"
             android:layout_below="@id/show_profile_title_City"
             android:maxLines="1"
             android:textColor="@color/textColor"
             android:textSize="@dimen/profile_text_view_content"
-            android:layout_alignParentLeft="true"
+
             android:layout_marginBottom="@dimen/profile_bottom_content"/>
+
+        <!--little icon near text field city-->
+        <ImageView
+            android:id="@+id/show_profile_icon_City"
+            android:src="@drawable/ic_location_city_black_24px"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginRight="8dp"
+            android:layout_alignBottom="@id/show_profile_City"
+            android:layout_alignTop="@id/show_profile_title_City"
+            android:layout_below="@id/show_profile_title_City"
+            />
 
         <!--titolo mail-->
         <TextView
@@ -92,19 +119,32 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/show_profile_City"
             android:textColor="@color/colorPrimary"
+            android:layout_toRightOf="@id/show_profile_icon_mail"
             android:textSize="@dimen/profile_text_view_title"/>
         <!-- mail-->
         <TextView
             android:id="@+id/show_profile_mail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:layout_toRightOf="@id/show_profile_icon_mail"
             android:layout_below="@id/show_profile_title_mail"
             android:maxLines="1"
             android:textColor="@color/textColor"
             android:textSize="@dimen/profile_text_view_content"
-            android:layout_alignParentLeft="true"
+
             android:layout_marginBottom="@dimen/profile_bottom_content"/>
+
+        <!--little icon near text field mail-->
+        <ImageView
+            android:id="@+id/show_profile_icon_mail"
+            android:src="@drawable/ic_email_black_24px"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginRight="8dp"
+            android:layout_alignBottom="@id/show_profile_mail"
+            android:layout_alignTop="@id/show_profile_title_mail"
+            android:layout_below="@id/show_profile_title_mail"
+            />
 
         <!--titolo about-->
         <TextView
