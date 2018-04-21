@@ -1,0 +1,13 @@
+<vector android:height="24dp" android:viewportHeight="330"
+    android:viewportWidth="330" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#FFFFFF" android:pathData="M15,20.02c-8.284,0 -15,6.716 -15,15v259.96c0,8.284 6.716,15 15,15s15,-6.716 15,-15V35.02C30,26.735 23.284,20.02 15,20.02z"/>
+    <path android:fillColor="#FFFFFF" android:pathData="M75,20.02c-8.284,0 -15,6.716 -15,15v169.975c0,8.284 6.716,15 15,15s15,-6.716 15,-15V35.02C90,26.735 83.284,20.02 75,20.02z"/>
+    <path android:fillColor="#FFFFFF" android:pathData="M195,20.02c-8.284,0 -15,6.716 -15,15v169.975c0,8.284 6.716,15 15,15s15,-6.716 15,-15V35.02C210,26.735 203.284,20.02 195,20.02z"/>
+    <path android:fillColor="#FFFFFF" android:pathData="M255,20.02c-8.284,0 -15,6.716 -15,15v161.656c0,8.284 6.716,15 15,15s15,-6.716 15,-15V35.02C270,26.735 263.284,20.02 255,20.02z"/>
+    <path android:fillColor="#FFFFFF" android:pathData="M315,20.02c-8.284,0 -15,6.716 -15,15v259.96c0,8.284 6.716,15 15,15s15,-6.716 15,-15V35.02C330,26.735 323.284,20.02 315,20.02z"/>
+    <path android:fillColor="#FFFFFF" android:pathData="M75,249.994c-8.284,0 -15,6.716 -15,15v29.986c0,8.284 6.716,15 15,15s15,-6.716 15,-15v-29.986C90,256.71 83.284,249.994 75,249.994z"/>
+    <path android:fillColor="#FFFFFF" android:pathData="M135,20.02c-8.284,0 -15,6.716 -15,15v169.975c0,8.284 6.716,15 15,15s15,-6.716 15,-15V35.02C150,26.735 143.284,20.02 135,20.02z"/>
+    <path android:fillColor="#FFFFFF" android:pathData="M135,249.994c-8.284,0 -15,6.716 -15,15v29.986c0,8.284 6.716,15 15,15s15,-6.716 15,-15v-29.986C150,256.71 143.284,249.994 135,249.994z"/>
+    <path android:fillColor="#FFFFFF" android:pathData="M195,249.994c-8.284,0 -15,6.716 -15,15v29.986c0,8.284 6.716,15 15,15s15,-6.716 15,-15v-29.986C210,256.71 203.284,249.994 195,249.994z"/>
+    <path android:fillColor="#FFFFFF" android:pathData="M255,249.994c-8.284,0 -15,6.716 -15,15v29.986c0,8.284 6.716,15 15,15s15,-6.716 15,-15v-29.986C270,256.71 263.284,249.994 255,249.994z"/>
+</vector>

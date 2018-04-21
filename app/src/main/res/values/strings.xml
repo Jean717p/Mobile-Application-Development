@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AppName</string>
+    <string name="app_name">Books Circle</string>
     <string name="profile_name">Name</string>
     <string name="profile_username">Superman</string>
     <string name="profile_city">Turin</string>
@@ -15,4 +15,10 @@
     <string name="photo_from_gallery">Select photo from gallery</string>
     <string name="photo_from_camera">Capture photo from camera</string>
     <string name="photo_remove">Remove picture</string>
+    <string name="top_books">Top</string>
+    <string name="my_library">Library</string>
+    <string name="lent_books">Lent Books</string>
+    <string name="borrowed_books">Borrowed Books</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
