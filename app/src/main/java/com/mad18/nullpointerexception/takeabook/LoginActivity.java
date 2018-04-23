@@ -37,11 +37,11 @@ public class LoginActivity extends AppCompatActivity  {
                     , 1);
         }
         else{
-            start();
+            sign_in();
         }
     }
 
-    private void start(){
+    private void sign_in(){
             startActivityForResult(
                     // Get an instance of AuthUI based on the default app
                     AuthUI.getInstance().createSignInIntentBuilder().build(),
@@ -50,9 +50,10 @@ public class LoginActivity extends AppCompatActivity  {
                     AuthUI.getInstance()
                             .createSignInIntentBuilder()
                             .setAvailableProviders(Arrays.asList(
-                                    new AuthUI.IdpConfig.EmailBuilder().build()//,
-                                    //new AuthUI.IdpConfig.GoogleBuilder().build()
+                                    new AuthUI.IdpConfig.EmailBuilder().build(),
+                                    new AuthUI.IdpConfig.GoogleBuilder().build()
                             ))
+                            .setIsSmartLockEnabled(!BuildConfig.DEBUG /* credentials */, true /* hints */)
                             .build(),
                     RC_SIGN_IN);
         return;
@@ -73,16 +74,12 @@ public class LoginActivity extends AppCompatActivity  {
                 if (response == null) {
                     // User pressed back button
                     Log.d("Debug","cancelled");
-                    return;
                 }
 
                 if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
-                    Log.d("Debug","cancelled");
-                    return;
+                    Log.e("Error", "Sign-in error: ", response.getError());
                 }
-
-
-                Log.e("Error", "Sign-in error: ", response.getError());
+                sign_in();
             }
         }
     }
@@ -93,7 +90,7 @@ public class LoginActivity extends AppCompatActivity  {
                 case 1:
                     if(grantResults.length>0) {
                         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                            this.start();
+                            this.sign_in();
                         }
                         else{
                             finish();

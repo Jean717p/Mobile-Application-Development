@@ -47,11 +47,11 @@ public class showProfile extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        if (auth.getCurrentUser() == null) {
+        //if (auth.getCurrentUser() == null) {
             // Not signed in
             Intent intent = new Intent(this,LoginActivity.class);
             startActivity(intent);
-        }
+        //}
         fillUserData();
     }
 
