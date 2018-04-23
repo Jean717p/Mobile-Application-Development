@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AppName</string>
+    <string name="app_name">Books Circle</string>
     <string name="profile_name">Nome</string>
     <string name="profile_username">Nome Utente</string>
     <string name="profile_city">Torino</string>

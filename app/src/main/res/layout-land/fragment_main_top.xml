@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+
+    >
+
+
+
+
+
+    <com.github.clans.fab.FloatingActionMenu
+
+        android:id="@+id/floating_action_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="9dp"
+        android:layout_marginLeft="11dp"
+        android:layout_marginRight="11dp"
+        fab:menu_animationDelayPerItem="55"
+        fab:menu_backgroundColor="@android:color/transparent"
+        fab:menu_buttonSpacing="0dp"
+        fab:menu_colorNormal="@color/colorAccent"
+        fab:menu_colorPressed="@color/colorAccent"
+        fab:menu_colorRipple="@color/colorAccent"
+        fab:menu_fab_label="Floating Action Menu"
+        fab:menu_fab_size="normal"
+        fab:menu_icon="@drawable/ic_search_white_48px"
+        fab:menu_labels_colorNormal="#FFFFFF"
+        fab:menu_labels_colorPressed="#F8BBD0"
+        fab:menu_labels_colorRipple="@color/colorAccent"
+        fab:menu_labels_cornerRadius="3dp"
+        fab:menu_labels_ellipsize="none"
+        fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+        fab:menu_labels_margin="0dp"
+        fab:menu_labels_maxLines="-1"
+        fab:menu_labels_padding="8dp"
+        fab:menu_labels_position="left"
+        fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+        fab:menu_labels_showShadow="true"
+        fab:menu_labels_singleLine="false"
+        fab:menu_labels_textColor="@android:color/black"
+        fab:menu_labels_textSize="15sp"
+        fab:menu_openDirection="up"
+        fab:menu_shadowColor="#66aff198"
+        fab:menu_showShadow="true">
+
+
+
+
+        <com.github.clans.fab.FloatingActionButton
+
+            fab:fab_colorNormal="@color/colorAccent"
+            fab:fab_colorPressed="#DF3871"
+            android:id="@+id/floating_action_menu_item3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_sign"
+            fab:fab_label="Search by ISBN"
+            fab:fab_size="mini"
+            />
+
+
+        <com.github.clans.fab.FloatingActionButton
+            fab:fab_colorNormal="@color/colorAccent"
+            fab:fab_colorPressed="#DF3871"
+            android:id="@+id/floating_action_menu_item4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_book_white_48px"
+            fab:fab_label="Search by literary genre"
+            fab:fab_size="mini"
+            />
+
+
+
+        <com.github.clans.fab.FloatingActionButton
+            fab:fab_colorNormal="@color/colorAccent"
+            fab:fab_colorPressed="#DF3871"
+            android:id="@+id/floating_action_menu_item2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_person_white_48px"
+            fab:fab_label="Search by author"
+            fab:fab_size="mini"
+            />
+
+        <com.github.clans.fab.FloatingActionButton
+            fab:fab_colorNormal="@color/colorAccent"
+            fab:fab_colorPressed="#DF3871"
+            android:id="@+id/floating_action_menu_item1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_title_white_48px"
+            fab:fab_label="Search by title"
+            fab:fab_size="mini"
+            />
+    </com.github.clans.fab.FloatingActionMenu>
+
+    <!-- <android.support.design.widget.FloatingActionButton
+         android:id="@+id/fab_search"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_gravity="bottom|end"
+         android:layout_margin="16dp"
+         android:clickable="true"
+         android:src="@drawable/ic_search_white_48dp" />-->
+</RelativeLayout>

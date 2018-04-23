@@ -102,16 +102,16 @@
             <!-- mail-->
             <TextView
                 android:id="@+id/show_profile_mail"
-                android:enabled="false"
-                android:layout_below="@id/show_profile_title_mail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:enabled="false"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:textSize="@dimen/profile_text_view_content"
                 android:textColor="@color/textColor"
                 android:textColorHint="@color/colorAccent"
-                />
+                android:textSize="@dimen/profile_text_view_content" />
 
             <!--titolo about-->
             <TextView

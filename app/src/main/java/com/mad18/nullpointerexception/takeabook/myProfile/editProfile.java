@@ -1,4 +1,4 @@
-package com.mad18.nullpointerexception.takeabook;
+package com.mad18.nullpointerexception.takeabook.myProfile;
 
 import android.Manifest;
 import android.content.Context;
@@ -23,6 +23,8 @@ import android.widget.EditText;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.mad18.nullpointerexception.takeabook.R;
 
 import java.io.File;
 import java.io.FileInputStream;

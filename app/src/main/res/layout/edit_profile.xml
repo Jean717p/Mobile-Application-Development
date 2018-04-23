@@ -11,11 +11,9 @@
 
       <android.support.v7.widget.Toolbar
         android:id="@+id/edit_profile_toolbar"
-        android:elevation="8dp"
         android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        app:title="@string/app_name"
           app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
           app:theme="@style/ThemeOverlay.AppCompat.Dark"
 
@@ -26,53 +24,51 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/edit_profile_toolbar">
+        android:layout_below="@id/edit_profile_toolbar">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_margin="16dp"
+           >
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/edit_profile_personalPhoto"
                 android:layout_width="@dimen/profile_photo_height"
                 android:layout_height="@dimen/profile_photo_height"
-                android:layout_below="@id/edit_profile_toolbar"
-                android:layout_margin="@dimen/fab_margin"
-                android:layout_gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_vertical"
                 android:src="@drawable/ic_account_circle_white_48px"
                 app:civ_border_color="@color/textColor"
                 app:civ_border_width="0dp" />
 
-
-
-            <RelativeLayout
+            <!--titolo username-->
+            <TextView
+                android:layout_marginTop="8dp"
+                android:id="@+id/edit_profile_title_Username"
+                android:text="@string/Username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/edit_profile_personalPhoto"
-                android:layout_margin="16dp">
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/profile_text_view_title"/>
+            <!-- username-->
+            <EditText
+                android:id="@+id/edit_profile_Username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="true"
+                android:hint="@string/Username"
+                android:layout_below="@id/edit_profile_title_Username"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="@color/textColor"
+                android:textColorHint="#BDBDBD"
+                android:textSize="@dimen/text_view_height" />
 
-                <!--titolo username-->
-                <TextView
-                    android:id="@+id/edit_profile_title_Username"
-                    android:text="@string/Username"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/profile_text_view_title"/>
-                <!-- username-->
-                <EditText
-                    android:id="@+id/edit_profile_Username"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:enabled="true"
-                    android:hint="@string/Username"
-                    android:layout_below="@id/edit_profile_title_Username"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:textColor="@color/textColor"
-                    android:textColorHint="@color/colorAccent"
-                    android:textSize="@dimen/text_view_height" />
+
+
                 <!--titolo city-->
                 <TextView
                     android:id="@+id/edit_profile_title_City"
@@ -93,8 +89,10 @@
                     android:inputType="text"
                     android:maxLines="1"
                     android:textColor="@color/textColor"
-                    android:textColorHint="@color/colorAccent"
+                    android:textColorHint="#BDBDBD"
                     android:textSize="@dimen/text_view_height" />
+                <!--little icon near field city-->
+
 
                 <!--titolo mail-->
                 <TextView
@@ -105,7 +103,6 @@
                     android:layout_below="@id/edit_profile_City"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/profile_text_view_title"/>
-
                 <!-- mail-->
                 <EditText
                     android:id="@+id/edit_profile_mail"
@@ -117,10 +114,11 @@
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:textColor="@color/textColor"
-                    android:textColorHint="@color/colorAccent"
+                    android:textColorHint="#BDBDBD"
                     android:textSize="@dimen/text_view_height"
-
                     />
+                <!--little icon near field mail-->
+
                 <!--titolo about-->
                 <TextView
                     android:id="@+id/edit_profile_title_about"
@@ -135,17 +133,19 @@
                     android:id="@+id/edit_profile_about"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/edit_profile_title_about"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
                     android:enabled="true"
                     android:gravity="top"
+                    android:layout_below="@id/edit_profile_title_about"
                     android:hint="@string/AboutMe"
                     android:inputType="textMultiLine"
                     android:maxLength="300"
                     android:scrollbars="vertical"
                     android:textColor="@color/textColor"
-                    android:textColorHint="@color/colorAccent"
+                    android:textColorHint="#BDBDBD"
                     android:textSize="@dimen/text_view_height" />
-            </RelativeLayout>
-        </LinearLayout>
+
+      </RelativeLayout>
     </ScrollView>
 </RelativeLayout>
