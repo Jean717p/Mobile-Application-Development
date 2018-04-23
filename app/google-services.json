@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "666855697382-ikcqkeqvp22jfd4dvufkhg1pem7ejs6o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mad18.nullpointerexception.takeabook",
+            "certificate_hash": "ddc9ad0699b843c295981995acb0f8f442ca5a0e"
+          }
+        },
+        {
           "client_id": "666855697382-nos9ck2a7n5brb5ase5pabldpib206qc.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "666855697382-nos9ck2a7n5brb5ase5pabldpib206qc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

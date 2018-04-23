@@ -37,6 +37,7 @@ public class showProfile extends AppCompatActivity {
         setContentView(R.layout.show_profile);
         Toolbar toolbar = findViewById(R.id.show_profile_toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(R.string.app_name);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
@@ -66,6 +67,7 @@ public class showProfile extends AppCompatActivity {
 
             case android.R.id.home:
                 onBackPressed();
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);

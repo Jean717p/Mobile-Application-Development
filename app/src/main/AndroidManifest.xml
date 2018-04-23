@@ -15,16 +15,34 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <activity android:name=".loginActivity.LoginActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mad18.nullpointerexception.takeabook.loginActivity.LoginActivity" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity >
         <activity
-            android:name="com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity">
+            android:name="com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity"
+            android:parentActivityName="com.mad18.nullpointerexception.takeabook.loginActivity.LoginActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme">
-            android:configChanges="orientation|screenSize|locale"
+            android:theme="@style/AppTheme"
+            android:configChanges="orientation|screenSize|locale">
         </activity>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mad18.nullpointerexception.takeabook.loginActivity.LoginActivity"/>
         <activity
             android:name="com.mad18.nullpointerexception.takeabook.myProfile.showProfile"
+            android:parentActivityName="com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"> <!--android:label="@string/title_activity_show_profile"-->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity"/>
         </activity>
         <activity android:name="com.mad18.nullpointerexception.takeabook.myProfile.editProfile"
             android:parentActivityName="com.mad18.nullpointerexception.takeabook.myProfile.showProfile"
@@ -34,14 +52,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mad18.nullpointerexception.takeabook.myProfile.showProfile"/>
         </activity>
-        <activity android:name=".LoginActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.mad18.nullpointerexception.takeabook.LoginActivity" />
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity >
+        <!--<meta-data-->
+            <!--android:name="com.facebook.sdk.ApplicationId"-->
+            <!--android:value="@string/facebook_application_id" />-->
+        <!--<activity-->
+            <!--android:name="com.facebook.FacebookActivity"-->
+            <!--android:label="@string/app_name"-->
+            <!--android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"-->
+            <!--tools:ignore="MissingRegistered" />-->
     </application>
 </manifest>

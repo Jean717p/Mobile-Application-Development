@@ -1,4 +1,4 @@
-package com.mad18.nullpointerexception.takeabook;
+package com.mad18.nullpointerexception.takeabook.loginActivity;
 
 import android.Manifest;
 import android.content.Intent;
@@ -9,32 +9,41 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
+import com.mad18.nullpointerexception.takeabook.R;
 
 import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity  {
+    private static final String TAG = "Login";
     private static final int RC_SIGN_IN = 123;
     private static final int REQUEST_PERMISSION_INTERNET=3;
+    private FirebaseAuth mAuth;
+    private Toolbar toolbar;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
         setContentView(R.layout.activity_login);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        setTitle(R.string.app_name);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        if (auth.getCurrentUser() != null) {
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() != null) {
             Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.class);
             startActivity(intent);
+            finish();
         }
         else {
             if(ActivityCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
@@ -54,7 +63,8 @@ public class LoginActivity extends AppCompatActivity  {
                         .createSignInIntentBuilder()
                         .setAvailableProviders(Arrays.asList(
                                 new AuthUI.IdpConfig.EmailBuilder().build()
-                                //,new AuthUI.IdpConfig.GoogleBuilder().build()
+                                ,new AuthUI.IdpConfig.GoogleBuilder().build()
+                                //,new AuthUI.IdpConfig.FacebookBuilder().build()
                         ))
                         //.setIsSmartLockEnabled(!BuildConfig.DEBUG /* credentials */, true /* hints */)
                         .build(),
