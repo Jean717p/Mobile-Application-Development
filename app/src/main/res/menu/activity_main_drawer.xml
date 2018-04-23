@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_addbook"
+            android:icon="@drawable/ic_add_circle_black_24dp"
+            android:title="@string/nav_element_addbook" />
+        <item
+            android:id="@+id/nav_showprofile"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="@string/nav_element_showprofile" />
+        <item
+            android:id="@+id/nav_mylibrary"
+            android:icon="@drawable/ic_local_library_black_24dp"
+            android:title="@string/nav_element_mylibrary" />
+    </group>
+
+
+</menu>

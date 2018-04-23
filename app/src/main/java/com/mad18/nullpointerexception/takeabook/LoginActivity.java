@@ -68,6 +68,8 @@ public class LoginActivity extends AppCompatActivity  {
             // Successfully signed in
             if (resultCode == RESULT_OK) {
                 IdpResponse idpResponse = IdpResponse.fromResultIntent(data);
+                Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.class);
+                startActivity(intent);
                 finish();
             } else {
                 // Sign in failed
