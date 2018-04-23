@@ -17,7 +17,10 @@ import android.widget.ImageView;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 public class showProfile extends AppCompatActivity {
     private SharedPreferences sharedPref;
@@ -37,11 +40,18 @@ public class showProfile extends AppCompatActivity {
         setTitle(R.string.app_name);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         //overridePendingTransition(R.anim.slide_in_right,R.anim.slide_in_right);
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() == null) {
+            // Not signed in
+            Intent intent = new Intent(this,LoginActivity.class);
+            startActivity(intent);
+        }
         fillUserData();
     }
 
