@@ -14,24 +14,27 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
-        app:title="@string/app_name"
-        android:elevation="@dimen/toolbar_elevation"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     </android.support.v7.widget.Toolbar>
 
-    <!--Questa è la definizione dell'immagine circolare per la foto personale del profilo utente-->
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/show_profile_personalPhoto"
         android:layout_width="@dimen/profile_photo_width"
-        android:layout_height="@dimen/profile_photo_height"
         android:layout_below="@id/show_profile_toolbar"
+        android:layout_height="@dimen/profile_photo_height"
         android:layout_margin="@dimen/fab_margin"
-        android:gravity="center_vertical"
         android:src="@drawable/ic_account_circle_white_48px"
         app:civ_border_color="@color/textColor"
         app:civ_border_width="@dimen/circle_image_border" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp">
+    <!--Questa è la definizione dell'immagine circolare per la foto personale del profilo utente-->
+
 
     <!--titolo username-->
     <TextView
@@ -39,10 +42,8 @@
         android:text="@string/Username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/show_profile_personalPhoto"
-        android:layout_alignRight="@id/show_profile_personalPhoto"
-        android:layout_below="@id/show_profile_personalPhoto"
-        android:gravity="center_horizontal"
+        android:layout_marginTop="160dp"
+        android:layout_alignParentLeft="true"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/profile_text_view_title"/>
     <!-- username-->
@@ -50,30 +51,21 @@
         android:id="@+id/show_profile_Username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/show_profile_personalPhoto"
-        android:layout_alignRight="@id/show_profile_personalPhoto"
         android:layout_below="@id/show_profile_title_Username"
-        android:gravity="center_horizontal"
         android:maxLines="1"
         android:textColor="@color/textColor"
         android:textSize="@dimen/profile_text_view_content"
         android:layout_marginBottom="@dimen/profile_bottom_content"/>
 
     <!--Questo è un wrapper per i fields da city fino ad About -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/layout_margin"
-        android:layout_toRightOf="@id/show_profile_personalPhoto"
-        android:layout_below="@id/show_profile_toolbar"
-        >
+
         <!--titolo city-->
         <TextView
             android:id="@+id/show_profile_title_City"
             android:text="@string/City"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/show_profile_City"
+            android:layout_below="@id/show_profile_Username"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/profile_text_view_title"/>
         <!--city-->
@@ -81,7 +73,6 @@
             android:id="@+id/show_profile_City"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/show_profile_icon_City"
             android:layout_below="@id/show_profile_title_City"
             android:maxLines="1"
             android:textColor="@color/textColor"
@@ -90,16 +81,7 @@
             android:layout_marginBottom="@dimen/profile_bottom_content"/>
 
         <!--little icon near text field city-->
-        <ImageView
-            android:id="@+id/show_profile_icon_City"
-            android:src="@drawable/ic_location_city_black_24px"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginRight="8dp"
-            android:layout_alignBottom="@id/show_profile_City"
-            android:layout_alignTop="@id/show_profile_title_City"
-            android:layout_below="@id/show_profile_title_City"
-            />
+
 
         <!--titolo mail-->
         <TextView
@@ -109,14 +91,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/show_profile_City"
             android:textColor="@color/colorPrimary"
-            android:layout_toRightOf="@id/show_profile_icon_mail"
             android:textSize="@dimen/profile_text_view_title"/>
         <!-- mail-->
         <TextView
             android:id="@+id/show_profile_mail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/show_profile_icon_mail"
             android:layout_below="@id/show_profile_title_mail"
             android:maxLines="1"
             android:textColor="@color/textColor"
@@ -125,16 +105,7 @@
             android:layout_marginBottom="@dimen/profile_bottom_content"/>
 
         <!--little icon near text field mail-->
-        <ImageView
-            android:id="@+id/show_profile_icon_mail"
-            android:src="@drawable/ic_email_black_24px"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginRight="8dp"
-            android:layout_alignBottom="@id/show_profile_mail"
-            android:layout_alignTop="@id/show_profile_title_mail"
-            android:layout_below="@id/show_profile_title_mail"
-            />
+
 
         <!--titolo about-->
         <TextView
