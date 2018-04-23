@@ -1,4 +1,4 @@
-package com.mad18.nullpointerexception.takeabook;
+package com.mad18.nullpointerexception.takeabook.myProfile;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +18,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import android.widget.TextView;
+
+import com.mad18.nullpointerexception.takeabook.R;
 
 
 public class showProfile extends AppCompatActivity {
