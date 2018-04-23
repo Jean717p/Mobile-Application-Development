@@ -39,7 +39,7 @@ public class showProfile extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setTitle(R.string.app_name);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        //overridePendingTransition(R.anim.slide_in_right,R.anim.slide_in_right);
+        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
     }
 
     @Override

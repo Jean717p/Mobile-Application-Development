@@ -33,10 +33,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mad18.nullpointerexception.takeabook.myProfile.showProfile"/>
-            <intent-filter>
-                <action android:name="com.android.camera.action.CROP" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
         </activity>
         <activity android:name=".LoginActivity">
             <meta-data

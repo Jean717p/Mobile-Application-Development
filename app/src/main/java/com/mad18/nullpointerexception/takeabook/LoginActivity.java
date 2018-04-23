@@ -14,48 +14,51 @@ import android.util.Log;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity  {
     private static final int RC_SIGN_IN = 123;
-
+    private static final int REQUEST_PERMISSION_INTERNET=3;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
-        int i=0;
-        i=1;
         setContentView(R.layout.activity_login);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(ActivityCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{
-                            Manifest.permission.INTERNET}
-                    , 1);
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() != null) {
+            Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.class);
+            startActivity(intent);
         }
-        else{
-            sign_in();
+        else {
+            if(ActivityCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(LoginActivity.this, new String[]{
+                                Manifest.permission.INTERNET}
+                        , REQUEST_PERMISSION_INTERNET);
+            }
+            else{
+               sign_in();
+            }
         }
     }
 
     private void sign_in(){
-            startActivityForResult(
-                    // Get an instance of AuthUI based on the default app
-                    AuthUI.getInstance().createSignInIntentBuilder().build(),
-                    RC_SIGN_IN);
-            startActivityForResult(
-                    AuthUI.getInstance()
-                            .createSignInIntentBuilder()
-                            .setAvailableProviders(Arrays.asList(
-                                    new AuthUI.IdpConfig.EmailBuilder().build(),
-                                    new AuthUI.IdpConfig.GoogleBuilder().build()
-                            ))
-                            .setIsSmartLockEnabled(!BuildConfig.DEBUG /* credentials */, true /* hints */)
-                            .build(),
-                    RC_SIGN_IN);
+        startActivityForResult(
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(Arrays.asList(
+                                new AuthUI.IdpConfig.EmailBuilder().build()
+                                //,new AuthUI.IdpConfig.GoogleBuilder().build()
+                        ))
+                        //.setIsSmartLockEnabled(!BuildConfig.DEBUG /* credentials */, true /* hints */)
+                        .build(),
+                RC_SIGN_IN);
         return;
         }
 
@@ -76,29 +79,33 @@ public class LoginActivity extends AppCompatActivity  {
                 if (response == null) {
                     // User pressed back button
                     Log.d("Debug","cancelled");
+                    finish();
                 }
-
-                if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
-                    Log.e("Error", "Sign-in error: ", response.getError());
+                else{
+                    if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
+                        Log.e("Error", "Sign-in error: ", response.getError());
+                    }
+                    sign_in();
                 }
-                sign_in();
             }
         }
     }
 
-        @Override
-        public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-            switch (requestCode){
-                case 1:
-                    if(grantResults.length>0) {
-                        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                            this.sign_in();
-                        }
-                        else{
-                            finish();
-                        }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case REQUEST_PERMISSION_INTERNET:
+                if(grantResults.length>0) {
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        sign_in();
                     }
-                    break;
-            }
+                    else{
+                        ActivityCompat.requestPermissions(LoginActivity.this, new String[]{
+                                        Manifest.permission.INTERNET}
+                                , REQUEST_PERMISSION_INTERNET);
+                    }
+                }
+                break;
         }
+    }
 }
