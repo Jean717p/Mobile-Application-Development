@@ -1,6 +1,9 @@
 package com.mad18.nullpointerexception.takeabook.mainActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -20,12 +23,34 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.loginActivity.LoginActivity;
 import com.mad18.nullpointerexception.takeabook.R;
 
+import java.util.LinkedList;
+import java.util.Map;
+
+import static com.mad18.nullpointerexception.takeabook.myProfile.showProfile.sharedUserDataKeys;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-    Toolbar toolbar;
+    private Toolbar toolbar;
+    private SharedPreferences sharedPref;
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+    private DocumentReference user_doc;
+    private Context context = this;
 
     @Override
     public void onAttachFragment(Fragment fragment) {
@@ -35,6 +60,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
@@ -85,6 +113,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+
+        FirebaseUser user = mAuth.getCurrentUser();
+        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(user.getUid());
+        user_doc = db.collection("users").document(user.getUid());
+        user_doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot doc = task.getResult();
+                SharedPreferences.Editor editor = sharedPref.edit();
+                for(String tmp:sharedUserDataKeys){
+                    editor.putString(tmp,doc.getString(tmp));
+                }
+                editor.apply();
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

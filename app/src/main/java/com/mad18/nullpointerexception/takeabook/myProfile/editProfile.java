@@ -24,6 +24,14 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.mad18.nullpointerexception.takeabook.R;
 
 import java.io.File;
@@ -31,6 +39,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class editProfile extends AppCompatActivity {
     private SharedPreferences sharedPref;
@@ -96,24 +106,45 @@ public class editProfile extends AppCompatActivity {
         String s; File file;
         SharedPreferences.Editor editor = sharedPref.edit();
         int i=0;
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        StorageReference mImageRef = FirebaseStorage.getInstance().getReference().child("users/images/"+user.getUid());
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference users = db.collection("users");
+        String profileImgPath;
+        Map<String,String> user_data = new HashMap<>();
+
         for(String x: showProfile.sharedUserDataKeys){
             text = findViewById(editTextBoxesIds[i++]);
             editor.putString(x,text.getText().toString());
+            if(x.equals(showProfile.sharedUserDataKeys[2])==false){ //Not email
+                user_data.put(x,text.getText().toString());
+            }
         }
         if(profileImg!=null){
-            editor.putString(profileImgName,saveToInternalStorage(profileImg,profileImgName));
+            profileImgPath = saveToInternalStorage(profileImg,profileImgName);
+            if(profileImgPath!=null){
+                editor.putString(profileImgName,profileImgPath);
+                Uri profileImgUri = Uri.fromFile(new File(profileImgPath));
+                mImageRef.putFile(profileImgUri);
+            }
         }
         else{
             s = sharedPref.getString(profileImgName,"");
             if(s.length()>0){
                 file = new File(s);
                 if(file.exists()){
-                    file.delete();
+                    mImageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            file.delete();
+                        }
+                    });
                 }
             }
             editor.putString(profileImgName,"");
         }
         editor.apply();
+        users.document(user.getUid()).set(user_data, SetOptions.merge());
     }
 
     @Override

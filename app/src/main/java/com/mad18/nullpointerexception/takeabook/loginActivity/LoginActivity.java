@@ -15,10 +15,23 @@ import android.util.Log;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseUserMetadata;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.mad18.nullpointerexception.takeabook.R;
 
+import java.nio.file.FileStore;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.mad18.nullpointerexception.takeabook.myProfile.showProfile.sharedUserDataKeys;
 
 public class LoginActivity extends AppCompatActivity  {
     private static final String TAG = "Login";
@@ -81,6 +94,21 @@ public class LoginActivity extends AppCompatActivity  {
             // Successfully signed in
             if (resultCode == RESULT_OK) {
                 IdpResponse idpResponse = IdpResponse.fromResultIntent(data);
+                FirebaseUserMetadata metadata = mAuth.getCurrentUser().getMetadata();
+                if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()) {
+                    // The user is new, show them a fancy intro screen!
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    CollectionReference users = db.collection("users");
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    Map<String,String> user_data = new HashMap<>();
+                    user_data.put("usr_mail",user.getEmail());
+                    user_data.put("usr_name",user.getDisplayName());
+                    user_data.put("usr_city","");
+                    user_data.put("usr_about","");
+                    users.document(user.getUid()).set(user_data);
+                } else {
+                    // This is an existing user, show them a welcome back screen.
+                }
                 Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.class);
                 startActivity(intent);
                 finish();

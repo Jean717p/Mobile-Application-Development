@@ -3,6 +3,8 @@ package com.mad18.nullpointerexception.takeabook.myProfile;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.graphics.Bitmap;
@@ -19,6 +21,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.mad18.nullpointerexception.takeabook.R;
 
 
@@ -26,9 +35,10 @@ public class showProfile extends AppCompatActivity {
     private SharedPreferences sharedPref;
     private int textViewIds[] = new int[]{R.id.show_profile_Username, R.id.show_profile_City,
             R.id.show_profile_mail,R.id.show_profile_about};
-    public static final String sharedUserDataKeys[] = new String[]{"usr_name","usr_city","usr_mail","usr_about"};
     private Menu menu;
-    private String profileImgName = "profile.jpg";
+
+    public static final String sharedUserDataKeys[] = new String[]{"usr_name","usr_city","usr_mail","usr_about"};
+    public static String profileImgName = "profile.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +88,9 @@ public class showProfile extends AppCompatActivity {
         String y;
         int i=0;
         ImageView iw;
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(user.getUid());
+
         for(String x:sharedUserDataKeys){
             text = findViewById(textViewIds[i]);
             y=sharedPref.getString(x,"");
@@ -92,7 +105,18 @@ public class showProfile extends AppCompatActivity {
         }
         else{
             iw = findViewById(R.id.show_profile_personalPhoto);
-            iw.setImageResource(R.drawable.ic_account_circle_white_48px);
+            mImageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Glide.with(getApplicationContext()).load(uri.toString())
+                            .into(iw);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    iw.setImageResource(R.drawable.ic_account_circle_white_48px);
+                }
+            });
         }
     }
 
