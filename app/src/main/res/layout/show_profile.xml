@@ -136,4 +136,8 @@
                 android:layout_marginBottom="@dimen/profile_bottom_content"/>
         </ScrollView>
     </RelativeLayout>
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="25dp"
+        android:text="SCAN"/>
 </RelativeLayout>
