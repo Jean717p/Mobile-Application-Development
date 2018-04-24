@@ -1,10 +1,13 @@
 package com.mad18.nullpointerexception.takeabook.addBook;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.google.zxing.Result;
+import com.mad18.nullpointerexception.takeabook.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,10 +56,13 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
                 JSONObject jsonObject = jsonParser.makeHttpRequest(
                         "https://www.googleapis.com/books/v1/volumes?q=isbn:" + rawResult.getText(),
                         "GET", new HashMap<String, String>());
-
-
-
-                    Log.d("title",jsonObject.getString("items"));
+                String totalItems = jsonObject.getString("totalItems");
+                String id = jsonObject.getJSONArray("items").getJSONObject(0).getString("id");
+                Log.d("title",totalItems);
+                Log.d("title2",id);
+                    final TextView title = (TextView)findViewById(R.id.add_book_title);
+                    title.setText(id);
+                    //Log.d("title",jsonObject.getJSONObject("items").getJSONArray("volumeInfo").getString(0));
 
 
                 }
@@ -69,6 +75,8 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
 
         // If you would like to resume scanning, call this method below:
         //mScannerView.resumeCameraPreview(this);
+        Intent intent = new Intent(ScanBarcode.this, AddBook.class);
+        startActivity(intent);
     }
 
 }
