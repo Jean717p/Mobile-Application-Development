@@ -51,6 +51,7 @@ dependencies {
 
     //barcode
     implementation 'com.google.android.gms:play-services-vision:15.0.0'
+    implementation 'me.dm7.barcodescanner:zxing:1.9.8'
 }
 
 apply plugin: 'com.google.gms.google-services'

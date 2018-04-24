@@ -4,6 +4,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-feature android:name="android.hardware.camera2" android:required="false"/>
     <uses-feature android:name="android.hardware.camera2.autofocus" android:required="false"/>
 
@@ -15,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.mad18.nullpointerexception.takeabook.addBook.add_book">
+            android:name="com.mad18.nullpointerexception.takeabook.addBook.AddBook">
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
             android:configChanges="orientation|screenSize|locale"
@@ -23,6 +24,10 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".addBook.ScanBarcode"
+            android:theme="@style/AppTheme"
+            android:label="@string/app_name">
         </activity>
         <activity
             android:name="com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity">
