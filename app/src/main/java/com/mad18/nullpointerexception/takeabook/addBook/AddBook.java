@@ -10,9 +10,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mad18.nullpointerexception.takeabook.R;
+
+import org.json.JSONObject;
+
+import java.io.Serializable;
 
 public class AddBook extends AppCompatActivity {
     private static final int ZXING_CAMERA_PERMISSION = 1;
@@ -46,7 +51,7 @@ public class AddBook extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if(mClss != null) {
                         Intent intent = new Intent(AddBook.this, ScanBarcode.class);
-                        startActivity(intent);
+                        startActivityForResult(intent, 1);
                     }
                 } else {
                     Toast.makeText(this, "Please grant camera permission to use the QR Scanner", Toast.LENGTH_SHORT).show();
@@ -59,6 +64,17 @@ public class AddBook extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.d("back", "i am back");
+
+        try {
+            Bundle data = getIntent().getExtras();
+            Book bookinfo = (Book)data.getParcelable("bookinfo");
+            Log.d("info", bookinfo.getTotalItems());
+            TextView totalItems = (TextView)findViewById(R.id.add_book_title);
+            totalItems.setText(bookinfo.getTotalItems());
+        }
+        catch(Exception e) {
+            Log.e("error","error in output");
+        }
     }
 
 }

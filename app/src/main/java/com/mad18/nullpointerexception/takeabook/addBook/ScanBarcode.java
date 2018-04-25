@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -46,7 +47,7 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
         //Log.v(TAG, rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
         Log.d("barcode format", rawResult.getBarcodeFormat().toString());
         Log.d("print scan result", rawResult.getText());
-
+        Intent intent = new Intent(this,AddBook.class);
 
         new Thread(new Runnable() {
             @Override
@@ -60,11 +61,13 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
                 String id = jsonObject.getJSONArray("items").getJSONObject(0).getString("id");
                 Log.d("title",totalItems);
                 Log.d("title2",id);
-                    final TextView title = (TextView)findViewById(R.id.add_book_title);
-                    title.setText(id);
                     //Log.d("title",jsonObject.getJSONObject("items").getJSONArray("volumeInfo").getString(0));
-
-
+//                    Intent intent = new Intent();
+//                    intent.putExtra("JSONObject", (Serializable) jsonObject);
+//                    setResult(2,intent);
+//                    finish();
+                    intent.putExtra("bookinfo", new Book(totalItems, id));
+                    startActivity(intent);
                 }
                 catch(JSONException e){
                     e.printStackTrace();
@@ -75,8 +78,10 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
 
         // If you would like to resume scanning, call this method below:
         //mScannerView.resumeCameraPreview(this);
-        Intent intent = new Intent(ScanBarcode.this, AddBook.class);
-        startActivity(intent);
+
+
+
+
     }
 
 }
