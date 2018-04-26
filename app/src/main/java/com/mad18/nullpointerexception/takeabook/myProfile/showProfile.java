@@ -3,11 +3,14 @@ package com.mad18.nullpointerexception.takeabook.myProfile;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,15 +22,25 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.mad18.nullpointerexception.takeabook.R;
 
+
 public class showProfile extends AppCompatActivity {
+    private final String TAG = "showProfile";
     private SharedPreferences sharedPref;
-    private int textViewIds[] = new int[]{R.id.show_profile_Username, R.id.show_profile_City,
+    private final int textViewIds[] = new int[]{R.id.show_profile_Username, R.id.show_profile_City,
             R.id.show_profile_mail,R.id.show_profile_about};
-    public static final String sharedUserDataKeys[] = new String[]{"usr_name","usr_city","usr_mail","usr_about"};
     private Menu menu;
-    private String profileImgName = "profile.jpg";
+
+    public static final String sharedUserDataKeys[] = new String[]{"usr_name","usr_city","usr_mail","usr_about"};
+    public static final String profileImgName = "profile.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +49,10 @@ public class showProfile extends AppCompatActivity {
         setContentView(R.layout.show_profile);
         Toolbar toolbar = findViewById(R.id.show_profile_toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(R.string.app_name);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        //overridePendingTransition(R.anim.slide_in_right,R.anim.slide_in_right);
+        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
     }
 
     @Override
@@ -65,6 +79,7 @@ public class showProfile extends AppCompatActivity {
 
             case android.R.id.home:
                 onBackPressed();
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -75,6 +90,7 @@ public class showProfile extends AppCompatActivity {
         String y;
         int i=0;
         ImageView iw;
+
         for(String x:sharedUserDataKeys){
             text = findViewById(textViewIds[i]);
             y=sharedPref.getString(x,"");
@@ -112,4 +128,14 @@ public class showProfile extends AppCompatActivity {
         return b;
     }
 
+    public static void deleteUserData(SharedPreferences sharedPrefToDel){
+        String profileImgPath = sharedPrefToDel.getString(profileImgName,"");
+        sharedPrefToDel.edit().clear().apply();
+        if(profileImgPath.length()>0){
+            File file = new File(profileImgPath);
+            if(file.exists()){
+                file.delete();
+            }
+        }
+    }
 }
