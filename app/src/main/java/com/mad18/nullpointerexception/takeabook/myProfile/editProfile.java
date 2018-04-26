@@ -43,6 +43,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class editProfile extends AppCompatActivity {
+    private final String TAG = "editProfile";
     private SharedPreferences sharedPref;
     private int editTextBoxesIds[] = new int[]{R.id.edit_profile_Username,R.id.edit_profile_City,
             R.id.edit_profile_mail,R.id.edit_profile_about};
@@ -121,7 +122,7 @@ public class editProfile extends AppCompatActivity {
             }
         }
         if(profileImg!=null){
-            profileImgPath = saveToInternalStorage(profileImg,profileImgName);
+            profileImgPath = saveImageToInternalStorage(profileImg,profileImgName,this);
             if(profileImgPath!=null){
                 editor.putString(profileImgName,profileImgPath);
                 Uri profileImgUri = Uri.fromFile(new File(profileImgPath));
@@ -156,7 +157,7 @@ public class editProfile extends AppCompatActivity {
             outState.putString(Integer.toString(i),text.getText().toString());
         }
         if(profileImg!=null){
-            outState.putString("profileImgPath",saveToInternalStorage(profileImg,"temp_"+profileImgName));
+            outState.putString("profileImgPath", saveImageToInternalStorage(profileImg,"temp_"+profileImgName,this));
         }
     }
 
@@ -284,11 +285,11 @@ public class editProfile extends AppCompatActivity {
         }
     }
 
-    private String saveToInternalStorage(Bitmap bitmapImage,String filename){
+    public static String saveImageToInternalStorage(Bitmap bitmapImage, String filename, Context context){
         if(bitmapImage==null){
             return null;
         }
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        ContextWrapper cw = new ContextWrapper(context);
         // path to /data/data/appname/app_data/imageDir internal
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
         //Environment.getExternalStorageDirectory(); sd

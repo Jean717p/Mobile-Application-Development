@@ -16,10 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".loginActivity.LoginActivity">
+        <activity android:name=".LoginActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.mad18.nullpointerexception.takeabook.loginActivity.LoginActivity" />
+                android:value="com.mad18.nullpointerexception.takeabook.LoginActivity" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -27,14 +27,14 @@
         </activity >
         <activity
             android:name="com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity"
-            android:parentActivityName="com.mad18.nullpointerexception.takeabook.loginActivity.LoginActivity"
+            android:parentActivityName="com.mad18.nullpointerexception.takeabook.LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"
             android:configChanges="orientation|screenSize|locale">
         </activity>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.mad18.nullpointerexception.takeabook.loginActivity.LoginActivity"/>
+                android:value="com.mad18.nullpointerexception.takeabook.LoginActivity"/>
         <activity
             android:name="com.mad18.nullpointerexception.takeabook.myProfile.showProfile"
             android:parentActivityName="com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity"

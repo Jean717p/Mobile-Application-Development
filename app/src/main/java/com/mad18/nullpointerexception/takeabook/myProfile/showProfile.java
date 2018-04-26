@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,13 +33,14 @@ import com.mad18.nullpointerexception.takeabook.R;
 
 
 public class showProfile extends AppCompatActivity {
+    private final String TAG = "showProfile";
     private SharedPreferences sharedPref;
-    private int textViewIds[] = new int[]{R.id.show_profile_Username, R.id.show_profile_City,
+    private final int textViewIds[] = new int[]{R.id.show_profile_Username, R.id.show_profile_City,
             R.id.show_profile_mail,R.id.show_profile_about};
     private Menu menu;
 
     public static final String sharedUserDataKeys[] = new String[]{"usr_name","usr_city","usr_mail","usr_about"};
-    public static String profileImgName = "profile.jpg";
+    public static final String profileImgName = "profile.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +90,6 @@ public class showProfile extends AppCompatActivity {
         String y;
         int i=0;
         ImageView iw;
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(user.getUid());
 
         for(String x:sharedUserDataKeys){
             text = findViewById(textViewIds[i]);
@@ -105,18 +105,7 @@ public class showProfile extends AppCompatActivity {
         }
         else{
             iw = findViewById(R.id.show_profile_personalPhoto);
-            mImageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                    Glide.with(getApplicationContext()).load(uri.toString())
-                            .into(iw);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    iw.setImageResource(R.drawable.ic_account_circle_white_48px);
-                }
-            });
+            iw.setImageResource(R.drawable.ic_account_circle_white_48px);
         }
     }
 
@@ -139,4 +128,14 @@ public class showProfile extends AppCompatActivity {
         return b;
     }
 
+    public static void deleteUserData(SharedPreferences sharedPrefToDel){
+        String profileImgPath = sharedPrefToDel.getString(profileImgName,"");
+        sharedPrefToDel.edit().clear().apply();
+        if(profileImgPath.length()>0){
+            File file = new File(profileImgPath);
+            if(file.exists()){
+                file.delete();
+            }
+        }
+    }
 }

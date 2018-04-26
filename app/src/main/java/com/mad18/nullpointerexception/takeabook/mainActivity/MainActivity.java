@@ -3,10 +3,11 @@ package com.mad18.nullpointerexception.takeabook.mainActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -21,10 +22,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.ImageView;
 
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.FutureTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,25 +38,27 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.mad18.nullpointerexception.takeabook.GlideApp;
-import com.mad18.nullpointerexception.takeabook.loginActivity.LoginActivity;
+import com.google.firebase.storage.UploadTask;
+import com.mad18.nullpointerexception.takeabook.LoginActivity;
 import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
 
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
+import static com.mad18.nullpointerexception.takeabook.myProfile.showProfile.deleteUserData;
+import static com.mad18.nullpointerexception.takeabook.myProfile.showProfile.profileImgName;
 import static com.mad18.nullpointerexception.takeabook.myProfile.showProfile.sharedUserDataKeys;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+    private final String TAG = "MainActivity";
     private Toolbar toolbar;
     private SharedPreferences sharedPref;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private DocumentReference user_doc;
-    private Context context = this;
+    private Context context;
 
     @Override
     public void onAttachFragment(Fragment fragment) {
@@ -61,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        context = this;
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_main);
@@ -113,21 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
-
-        FirebaseUser user = mAuth.getCurrentUser();
-        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(user.getUid());
-        user_doc = db.collection("users").document(user.getUid());
-        user_doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot doc = task.getResult();
-                SharedPreferences.Editor editor = sharedPref.edit();
-                for(String tmp:sharedUserDataKeys){
-                    editor.putString(tmp,doc.getString(tmp));
-                }
-                editor.apply();
-            }
-        });
+        new updateUserData().execute("");
     }
 
     @Override
@@ -156,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .addOnCompleteListener(task -> {
                             // user is now signed out
                             startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                            deleteUserData(sharedPref);
                             finish();
                         });
                 break;
@@ -203,5 +199,50 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    private class updateUserData extends AsyncTask<String,Void,String>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            FirebaseUser user = mAuth.getCurrentUser();
+
+            user_doc = db.collection("users").document(user.getUid());
+            user_doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    DocumentSnapshot doc = task.getResult();
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    for(String tmp:sharedUserDataKeys){
+                        editor.putString(tmp,doc.getString(tmp));
+                    }
+                    editor.apply();
+                    if(sharedPref.getString(profileImgName,"").length()==0){
+                        StorageReference mImageRef = FirebaseStorage.getInstance().getReference("users/images/"+user.getUid());
+                        Glide.with(context).asBitmap().load(mImageRef).into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL) {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                String tmp = editProfile.saveImageToInternalStorage(resource,profileImgName,context);
+                                if(tmp.length()>0){
+                                    editor.putString(profileImgName,tmp);
+                                    editor.apply();
+                                    //Update img drawer
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+            return "ok";
+        }
+    }
 
 }
