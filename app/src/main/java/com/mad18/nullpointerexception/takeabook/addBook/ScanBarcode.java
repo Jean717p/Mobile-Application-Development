@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -67,23 +68,35 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
                 //Log.d("title",totalItems);
                 //Log.d("title2",id);
                 String ISBN = rawResult.getText();
-                String title = jsonObject.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("title");
-                //Log.d("title3",title);
-                //String Jauthors = jsonObject.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getJSONArray("authors").getString(0);
-                JSONArray Jauthors = jsonObject.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getJSONArray("authors");
-               // Log.d("title7", Jauthors);
-                Map<String, Boolean> authors = new HashMap<>();
-                for(int i=0; i<Jauthors.length();i++) {
-                    authors.put(Jauthors.getString(i),true);
+                String title="";
+                List<String> authors=new LinkedList<>();
+                String publisher="";
+                int editionYear=-1;
+                if(jsonObject.has("items")){
+                    JSONObject tmp =  jsonObject.getJSONArray("items").getJSONObject(0);
+                    if(tmp.has("volumeInfo")){
+                        tmp = tmp.getJSONObject("volumeInfo");
+                        if(tmp.has("title")){
+                            title = tmp.getString("title");
+                        }
+                        if(tmp.has("authors")){
+                            JSONArray Jauthors = tmp.getJSONArray("authors");
+                            authors = new LinkedList<>();
+                            for(int i=0; i<Jauthors.length();i++) {
+                                authors.add(Jauthors.getString(i));
+                            }
+
+                        }
+                        if(tmp.has("publisher")){
+                            publisher =tmp.getString("publisher");
+                        }
+                        if(tmp.has("publishedDate")){
+                            String SeditionYear = tmp.getString("publishedDate");
+                            editionYear = Integer.parseInt(SeditionYear);
+                        }
+                    }
                 }
-                String publisher = jsonObject.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("publisher");
-                //Log.d("title4",publisher);
-                String SeditionYear = jsonObject.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("publishedDate");
-                Integer editionYear = Integer.parseInt(SeditionYear);
-                //Log.d("title5",editionYear);
-                //intent.putExtra("bookinfo", new Book(totalItems, id));
-                Book book = new Book(ISBN,title,authors,publisher,editionYear);
-                BookWrapper bookWrapper = new BookWrapper(book);
+                BookWrapper bookWrapper = new BookWrapper(ISBN,title,authors, publisher,editionYear);
                 intent.putExtra("bookinfo", bookWrapper);
                 setResult(RESULT_OK,intent);
                 finish();
@@ -93,56 +106,10 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
                 }
             }
         }).start();
-        //Use JSONParser to download the JSON
 
         // If you would like to resume scanning, call this method below:
         //mScannerView.resumeCameraPreview(this);
-
-
-
-
     }
 
 }
 
-class BookWrapper implements Parcelable{
-    private Book book;
-
-    BookWrapper(Book book){
-        this.book=book;
-    }
-
-    protected BookWrapper(Parcel in) {
-        new BookWrapper(in);
-    }
-
-    public static final Creator<BookWrapper> CREATOR = new Creator<BookWrapper>() {
-        @Override
-        public BookWrapper createFromParcel(Parcel in) {
-            return new BookWrapper(in);
-        }
-
-        @Override
-        public BookWrapper[] newArray(int size) {
-            return new BookWrapper[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeValue(this.book);
-    }
-
-    public Book getBook() {
-        return book;
-    }
-
-    public void setBook(Book book) {
-        this.book = book;
-    }
-}

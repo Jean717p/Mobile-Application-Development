@@ -52,7 +52,7 @@ public class AddBook extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if(mClss != null) {
                         Intent intent = new Intent(AddBook.this, ScanBarcode.class);
-                        startActivityForResult(intent, 1);
+                        startActivityForResult(intent, REQUEST_SCANNER);
                     }
                 } else {
                     Toast.makeText(this, "Please grant camera permission to use the QR Scanner", Toast.LENGTH_SHORT).show();
@@ -76,12 +76,10 @@ public class AddBook extends AppCompatActivity {
             if(requestCode==REQUEST_SCANNER){
                 if(data!=null) {
                     Bundle bundle = data.getExtras();
-                    BookWrapper bookinfo = (BookWrapper) bundle.getParcelable("bookinfo");
-                    Book book = bookinfo.getBook();
-                    Log.d("info", book.getISBN());
-                    //TextView totalItems = (TextView)findViewById(R.id.add_book_title);
-                    //totalItems.setText(book.getTitle());
-                    Log.d("info", book.getTitle());
+                    BookWrapper bookwrap = (BookWrapper) bundle.getParcelable("bookinfo");
+                    TextView titleView = (TextView)findViewById(R.id.add_book_title);
+                    titleView.setText(bookwrap.getTitle());
+
                 }
             }
         }
