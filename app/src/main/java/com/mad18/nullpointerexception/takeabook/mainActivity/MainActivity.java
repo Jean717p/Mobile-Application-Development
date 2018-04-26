@@ -152,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 editor.apply();
             }
         });
+        new updateUserData().doInBackground();
     }
 
     @Override
@@ -212,14 +213,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(img.length() > 0){
             file = new File(img);
             if(file.exists() == false||drawerImg==null){
-                return;
+                drawerImg.setImageResource(R.drawable.ic_account_circle_white_48px);
             }
-            try {
-                b = BitmapFactory.decodeStream(new FileInputStream(file));
-                drawerImg.setImageBitmap(b);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+            else{
+                try {
+                    b = BitmapFactory.decodeStream(new FileInputStream(file));
+                    drawerImg.setImageBitmap(b);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
+        }
+        else{
+            drawerImg.setImageResource(R.drawable.ic_account_circle_white_48px);
         }
 
         // Insert username and email into the drawer
@@ -230,10 +236,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(usr.length() > 0){
             usr_text.setText(usr);
         }
+        else{
+            usr_text.setText(R.string.profile_username);
+        }
         if(mail.length() > 0){
             mail_text.setText(mail);
         }
-
+        else {
+            mail_text.setText(R.string.profile_mail);
+        }
     }
 
     public class PagerAdapter extends FragmentStatePagerAdapter {
@@ -288,6 +299,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     DocumentSnapshot doc = task.getResult();
                     SharedPreferences.Editor editor = sharedPref.edit();
+                    navigationView = (NavigationView) findViewById(R.id.nav_view);
                     //User u = doc.toObject(User.class);
                     for(String tmp:sharedUserDataKeys){
                         editor.putString(tmp,doc.getString(tmp));
@@ -303,6 +315,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     editor.putString(profileImgName,tmp);
                                     editor.apply();
                                     //Update img drawer
+                                    // Add the parameters requested by the NavDrawer (Image, email, username)
+                                    View hview = navigationView.getHeaderView(0);
+                                    setNavDrawerParameters(hview);
                                 }
                             }
                         });

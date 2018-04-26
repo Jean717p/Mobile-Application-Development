@@ -84,7 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/edit_profile_title_City"
-                android:enabled="false"
+                android:enabled="true"
                 android:hint="@string/City"
                 android:inputType="text"
                 android:maxLines="1"
@@ -104,19 +104,18 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/profile_text_view_title"/>
                 <!-- mail-->
-                <EditText
-                    android:id="@+id/edit_profile_mail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/edit_profile_title_mail"
-                    android:enabled="true"
-                    android:hint="@string/Email"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:textColor="@color/textColor"
-                    android:textColorHint="#BDBDBD"
-                    android:textSize="@dimen/text_view_height"
-                    />
+            <EditText
+                android:id="@+id/edit_profile_mail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edit_profile_title_mail"
+                android:enabled="false"
+                android:hint="@string/Email"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:textColor="@color/textColor"
+                android:textColorHint="#BDBDBD"
+                android:textSize="@dimen/text_view_height" />
                 <!--little icon near field mail-->
 
                 <!--titolo about-->
