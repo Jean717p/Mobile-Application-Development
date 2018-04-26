@@ -30,6 +30,7 @@
                 android:padding="32dp"
                 android:layout_below="@id/add_book_toolbar"
                 android:clickable="true"
+                android:id="@+id/add_book_photo"
 
                 />
 
@@ -148,7 +149,8 @@
             app:labelText="ISBN"
             android:paddingBottom="56dp"
             app:panelBackgroundColor="#E0E0E0"
-            app:primaryColor="@color/colorAccent">
+            app:primaryColor="@color/colorAccent"
+            >
 
             <studio.carbonylgroup.textfieldboxes.ExtendedEditText
                 android:id="@+id/add_book_extended_edit_text_ISBN"

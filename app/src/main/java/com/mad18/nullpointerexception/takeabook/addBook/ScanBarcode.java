@@ -63,10 +63,6 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
                 JSONObject jsonObject = jsonParser.makeHttpRequest(
                         "https://www.googleapis.com/books/v1/volumes?q=isbn:" + rawResult.getText(),
                         "GET", new HashMap<String, String>());
-                //String totalItems = jsonObject.getString("totalItems");
-                //String id = jsonObject.getJSONArray("items").getJSONObject(0).getString("id");
-                //Log.d("title",totalItems);
-                //Log.d("title2",id);
                 String ISBN = rawResult.getText();
                 String title="";
                 List<String> authors=new LinkedList<>();
@@ -81,7 +77,6 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
                         }
                         if(tmp.has("authors")){
                             JSONArray Jauthors = tmp.getJSONArray("authors");
-                            authors = new LinkedList<>();
                             for(int i=0; i<Jauthors.length();i++) {
                                 authors.add(Jauthors.getString(i));
                             }
@@ -106,10 +101,6 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
                 }
             }
         }).start();
-
-        // If you would like to resume scanning, call this method below:
-        //mScannerView.resumeCameraPreview(this);
     }
-
 }
 
