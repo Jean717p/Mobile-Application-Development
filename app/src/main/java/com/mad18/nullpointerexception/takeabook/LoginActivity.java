@@ -92,12 +92,8 @@ public class LoginActivity extends AppCompatActivity  {
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     CollectionReference users = db.collection("users");
                     FirebaseUser user = mAuth.getCurrentUser();
-                    Map<String,String> user_data = new HashMap<>();
-                    user_data.put("usr_mail",user.getEmail());
-                    user_data.put("usr_name",user.getDisplayName());
-                    user_data.put("usr_city","");
-                    user_data.put("usr_about","");
-                    users.document(user.getUid()).set(user_data);
+                    User u = new User(user.getEmail(),user.getDisplayName(),"","",new HashMap<String,Boolean>());
+                    users.document(user.getUid()).set(u);
                 } else {
                     //Questo utente è già registrato --> Welcome back Message?
                 }

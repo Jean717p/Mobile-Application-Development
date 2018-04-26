@@ -43,6 +43,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mad18.nullpointerexception.takeabook.LoginActivity;
 import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.User;
 import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
 
 import java.util.concurrent.ExecutionException;
@@ -221,6 +222,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     DocumentSnapshot doc = task.getResult();
                     SharedPreferences.Editor editor = sharedPref.edit();
+                    //User u = doc.toObject(User.class);
                     for(String tmp:sharedUserDataKeys){
                         editor.putString(tmp,doc.getString(tmp));
                     }
