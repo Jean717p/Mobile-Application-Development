@@ -14,7 +14,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
@@ -61,13 +63,20 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
                 String id = jsonObject.getJSONArray("items").getJSONObject(0).getString("id");
                 Log.d("title",totalItems);
                 Log.d("title2",id);
-                    //Log.d("title",jsonObject.getJSONObject("items").getJSONArray("volumeInfo").getString(0));
-//                    Intent intent = new Intent();
-//                    intent.putExtra("JSONObject", (Serializable) jsonObject);
-//                    setResult(2,intent);
-//                    finish();
-                    intent.putExtra("bookinfo", new Book(totalItems, id));
-                    startActivity(intent);
+                String title = jsonObject.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("title");
+                Log.d("title3",title);
+                String publisher = jsonObject.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("publisher");
+                Log.d("title4",publisher);
+                String editionYear = jsonObject.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("publishedDate");
+                Log.d("title5",editionYear);
+                //String Jauthors = jsonObject.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getJSONArray("authors").getString(0);
+                JSONArray Jauthors = jsonObject.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getJSONArray("authors");
+               // Log.d("title7", Jauthors);
+                for(int i=0; i<Jauthors.length();i++) {
+                    String author = Jauthors.getString(i);
+                }
+                intent.putExtra("bookinfo", new Book(totalItems, id));
+                startActivity(intent);
                 }
                 catch(JSONException e){
                     e.printStackTrace();

@@ -14,6 +14,7 @@ public class Book implements Parcelable{
             return new Book[size];
         }
     };
+
     private String totalItems;
     private String id;
 
