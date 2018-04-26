@@ -3,60 +3,62 @@ package com.mad18.nullpointerexception.takeabook.addBook;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Book implements Parcelable{
+import java.util.Map;
 
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public Book createFromParcel(Parcel in) {
-            return new Book(in);
-        }
+public class Book{
 
-        public Book[] newArray(int size) {
-            return new Book[size];
-        }
-    };
-
-    private String totalItems;
-    private String id;
+    private String ISBN;
+    private String title;
+    private Map<String,Boolean> authors;
+    private String publisher;
+    private Integer editionYear;
 
     //Constructor
-    public Book(String totalItems, String id){
-        this.totalItems = totalItems;
-        this.id = id;
+    public Book(String ISBN,String title, Map<String, Boolean> authors, String publisher, Integer editionYear){
+        this.ISBN = ISBN;
+        this.title = title;
+        this.authors = authors;
+        this.publisher = publisher;
+        this.editionYear = editionYear;
     }
 
-    public String getTotalItems(){
-        return totalItems;
+    public String getISBN() {
+        return ISBN;
     }
 
-    public void setTotalItems(String id){
-        this.totalItems = totalItems;
+    public void setISBN(String ISBN) {
+        this.ISBN = ISBN;
     }
 
-    public String getId(){
-        return id;
+    public String getTitle() {
+        return title;
     }
 
-    public void setId(String totalItems){
-        this.id = id;
-    }
-    public Book(Parcel in){
-        this.totalItems = in.readString();
-        this.id = in.readString();
-    }
-    @Override
-    public int describeContents() {
-        return 0;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.totalItems);
-        dest.writeString(this.id);
+    public Map<String, Boolean> getAuthors() {
+        return authors;
     }
-    @Override
-    public String toString() {
-        return "Book{"+"totalItems='"+totalItems+'\''+
-        ", id='" + id + '\'' +
-                '}';
+
+    public void setAuthors(Map<String, Boolean> authors) {
+        this.authors = authors;
+    }
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
+
+    public Integer getEditionYear() {
+        return editionYear;
+    }
+
+    public void setEditionYear(Integer editionYear) {
+        this.editionYear = editionYear;
     }
 }

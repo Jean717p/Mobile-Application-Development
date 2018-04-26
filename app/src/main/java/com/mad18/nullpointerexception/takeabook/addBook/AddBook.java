@@ -22,6 +22,7 @@ import java.io.Serializable;
 public class AddBook extends AppCompatActivity {
     private static final int ZXING_CAMERA_PERMISSION = 1;
     private View mClss;
+    private final int REQUEST_SCANNER=1;
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -38,7 +39,7 @@ public class AddBook extends AppCompatActivity {
                             new String[]{Manifest.permission.CAMERA}, ZXING_CAMERA_PERMISSION);
                 } else {
                     Intent intent = new Intent(AddBook.this, ScanBarcode.class);
-                    startActivity(intent);
+                    startActivityForResult(intent,REQUEST_SCANNER);
                 }
 
             }
@@ -65,16 +66,24 @@ public class AddBook extends AppCompatActivity {
         super.onResume();
         Log.d("back", "i am back");
 
-        try {
-            Bundle data = getIntent().getExtras();
-            Book bookinfo = (Book)data.getParcelable("bookinfo");
-            Log.d("info", bookinfo.getTotalItems());
-            TextView totalItems = (TextView)findViewById(R.id.add_book_title);
-            totalItems.setText(bookinfo.getTotalItems());
-        }
-        catch(Exception e) {
-            Log.e("error","error in output");
-        }
+
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+            if(requestCode==REQUEST_SCANNER){
+                if(data!=null) {
+                    Bundle bundle = data.getExtras();
+                    BookWrapper bookinfo = (BookWrapper) bundle.getParcelable("bookinfo");
+                    Book book = bookinfo.getBook();
+                    Log.d("info", book.getISBN());
+                    //TextView totalItems = (TextView)findViewById(R.id.add_book_title);
+                    //totalItems.setText(book.getTitle());
+                    Log.d("info", book.getTitle());
+                }
+            }
+        }
+    }
 }

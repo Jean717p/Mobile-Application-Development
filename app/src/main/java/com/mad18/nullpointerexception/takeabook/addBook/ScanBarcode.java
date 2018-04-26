@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
@@ -51,7 +52,7 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
         //Log.v(TAG, rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
         Log.d("barcode format", rawResult.getBarcodeFormat().toString());
         Log.d("print scan result", rawResult.getText());
-        Intent intent = new Intent(this,AddBook.class);
+        Intent intent = new Intent();
 
         new Thread(new Runnable() {
             @Override
@@ -61,26 +62,31 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
                 JSONObject jsonObject = jsonParser.makeHttpRequest(
                         "https://www.googleapis.com/books/v1/volumes?q=isbn:" + rawResult.getText(),
                         "GET", new HashMap<String, String>());
-                String totalItems = jsonObject.getString("totalItems");
-                String id = jsonObject.getJSONArray("items").getJSONObject(0).getString("id");
-                Log.d("title",totalItems);
-                Log.d("title2",id);
+                //String totalItems = jsonObject.getString("totalItems");
+                //String id = jsonObject.getJSONArray("items").getJSONObject(0).getString("id");
+                //Log.d("title",totalItems);
+                //Log.d("title2",id);
+                String ISBN = rawResult.getText();
                 String title = jsonObject.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("title");
-                Log.d("title3",title);
-                String publisher = jsonObject.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("publisher");
-                Log.d("title4",publisher);
-                String editionYear = jsonObject.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("publishedDate");
-                Log.d("title5",editionYear);
+                //Log.d("title3",title);
                 //String Jauthors = jsonObject.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getJSONArray("authors").getString(0);
                 JSONArray Jauthors = jsonObject.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getJSONArray("authors");
                // Log.d("title7", Jauthors);
+                Map<String, Boolean> authors = new HashMap<>();
                 for(int i=0; i<Jauthors.length();i++) {
-                    String author = Jauthors.getString(i);
+                    authors.put(Jauthors.getString(i),true);
                 }
-                Book book = new Book(...);
+                String publisher = jsonObject.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("publisher");
+                //Log.d("title4",publisher);
+                String SeditionYear = jsonObject.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("publishedDate");
+                Integer editionYear = Integer.parseInt(SeditionYear);
+                //Log.d("title5",editionYear);
+                //intent.putExtra("bookinfo", new Book(totalItems, id));
+                Book book = new Book(ISBN,title,authors,publisher,editionYear);
                 BookWrapper bookWrapper = new BookWrapper(book);
                 intent.putExtra("bookinfo", bookWrapper);
-                startActivity(intent);
+                setResult(RESULT_OK,intent);
+                finish();
                 }
                 catch(JSONException e){
                     e.printStackTrace();
@@ -105,6 +111,7 @@ class BookWrapper implements Parcelable{
     BookWrapper(Book book){
         this.book=book;
     }
+
     protected BookWrapper(Parcel in) {
         new BookWrapper(in);
     }
@@ -128,6 +135,7 @@ class BookWrapper implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeValue(this.book);
     }
 
     public Book getBook() {
