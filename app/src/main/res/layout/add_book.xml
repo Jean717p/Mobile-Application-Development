@@ -1,118 +1,183 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="16dp">
+    android:fillViewport = "true">
 
-
-    <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
-        android:id="@+id/text_field_boxes4"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="87dp"
-        app:errorColor="#ddaa00"
-        app:hasClearButton="true"
-        app:helperText="write edition year "
-        app:helperTextColor="#795548"
-        app:labelText="Edition year"
-        app:panelBackgroundColor="#E0E0E0"
-        app:primaryColor="@color/colorAccent">
+        android:layout_height="match_parent">
 
-        <studio.carbonylgroup.textfieldboxes.ExtendedEditText
-            android:id="@+id/extended_edit_text4"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/add_book_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@color/colorPrimary"
+            android:minHeight="?android:attr/actionBarSize"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark" />
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_if_internt_web_technology_05_274892"
+                android:background="#BBDEFB"
+                android:layout_margin="16dp"
+                android:padding="32dp"
+                android:layout_below="@id/add_book_toolbar"
+                android:clickable="true"
+
+                />
+
+
+
+        <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+
+            android:id="@+id/add_book_text_field_Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="16dp"
+            android:paddingTop="230dp"
+            app:errorColor="#ddaa00"
+            app:hasClearButton="true"
+            app:helperText="Write the title"
+            app:helperTextColor="#795548"
+            app:labelText="Title"
+            app:panelBackgroundColor="#E0E0E0"
+            app:primaryColor="@color/colorAccent">
+
+            <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+                android:id="@+id/add_book_extended_edit_Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                />
+        </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
+        <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+            android:id="@+id/add_book_text_field_Author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/add_book_text_field_Title"
+            android:layout_margin="16dp"
+            app:errorColor="#ddaa00"
+            app:hasClearButton="true"
+            app:helperText="Write the author"
+            app:helperTextColor="#795548"
+            app:labelText="Author"
+            app:panelBackgroundColor="#E0E0E0"
+            app:primaryColor="@color/colorAccent"
+            tools:layout_marginTop="16dp">
+
+            <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+                android:id="@+id/add_book_extended_edit_Author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                />
+        </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
+
+        <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+            android:id="@+id/add_book_text_field_EditionYear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/add_book_text_field_Author"
+            android:layout_margin="16dp"
+            app:errorColor="#ddaa00"
+            app:hasClearButton="true"
+            app:helperText="write edition year "
+            app:helperTextColor="#795548"
+            app:labelText="Edition year"
+            app:panelBackgroundColor="#E0E0E0"
+            app:primaryColor="@color/colorAccent">
+
+            <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+                android:id="@+id/add_book_extended_edit_text_EditionYear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                />
+        </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
+
+
+        <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+            android:id="@+id/add_book_text_field_Publisher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/add_book_text_field_EditionYear"
+            android:layout_margin="16dp"
+            app:errorColor="#ddaa00"
+            app:hasClearButton="true"
+            app:helperText="Write the Publisher"
+            app:helperTextColor="#795548"
+            app:labelText="Publisher"
+            app:panelBackgroundColor="#E0E0E0"
+            app:primaryColor="@color/colorAccent"
+            tools:layout_marginTop="16dp">
+
+            <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+                android:id="@+id/extended_edit_text7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                />
+        </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
+        <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+            android:id="@+id/add_book_text_field_ISBN"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/add_book_text_field_Publisher"
+            android:layout_margin="16dp"
+            app:errorColor="#ddaa00"
+            app:hasClearButton="true"
+            app:helperText="Write ISBN"
+            app:helperTextColor="#795548"
+            app:labelText="ISBN"
+            android:paddingBottom="56dp"
+            app:panelBackgroundColor="#E0E0E0"
+            app:primaryColor="@color/colorAccent">
+
+            <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+                android:id="@+id/add_book_extended_edit_text_ISBN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+
+                />
+        </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
+
+
+
+
+
+        <Button
+
+            android:id="@+id/read_barcode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            />
-    </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
-
-    <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
-        android:id="@+id/text_field_boxes3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="200dp"
-        app:errorColor="#ddaa00"
-        app:hasClearButton="true"
-        app:helperText="write book's ISBN"
-        app:helperTextColor="#795548"
-        app:labelText="ISBN"
-        app:panelBackgroundColor="#E0E0E0"
-        app:primaryColor="@color/colorAccent">
-
-        <studio.carbonylgroup.textfieldboxes.ExtendedEditText
-            android:id="@+id/extended_edit_text3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            />
-    </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_book_title"
-        android:text="before"
-        android:layout_marginEnd="24dp"/>
-
-    <Button
-        android:id="@+id/read_barcode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="read_barcode" />
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="16dp"
+            android:text="read_barcode" />
 
 
-    <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
-        android:id="@+id/text_field_boxes1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="47dp"
-        app:errorColor="#ddaa00"
-        app:hasClearButton="true"
-        app:helperText="Write the book's title"
-        app:helperTextColor="#795548"
-        app:labelText="Title"
-        app:panelBackgroundColor="#E0E0E0"
-        app:primaryColor="@color/colorAccent">
+    </RelativeLayout>
 
-        <studio.carbonylgroup.textfieldboxes.ExtendedEditText
-            android:id="@+id/extended_edit_text1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
 
-            />
-    </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
 
-    <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
-        android:id="@+id/text_field_boxes2"
-        android:layout_width="match_parent"
-        android:layout_height="93dp"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/text_field_boxes1"
-        app:errorColor="#ddaa00"
-        app:hasClearButton="true"
-        app:helperText="Write the book's author"
-        app:helperTextColor="#795548"
-        app:labelText="Author"
-        app:panelBackgroundColor="#E0E0E0"
-        app:primaryColor="@color/colorAccent">
 
-        <studio.carbonylgroup.textfieldboxes.ExtendedEditText
-            android:id="@+id/extended_edit_text2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            />
-    </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
-
-</RelativeLayout>
+</ScrollView>

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,12 +24,17 @@ public class AddBook extends AppCompatActivity {
     private static final int ZXING_CAMERA_PERMISSION = 1;
     private View mClss;
     private final int REQUEST_SCANNER=1;
+    private Toolbar toolbar;
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
         setContentView(R.layout.add_book);
-
+        toolbar = (Toolbar) findViewById(R.id.add_book_toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("Add a book");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Button scan = (Button)findViewById(R.id.read_barcode);
+        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,11 +83,21 @@ public class AddBook extends AppCompatActivity {
                 if(data!=null) {
                     Bundle bundle = data.getExtras();
                     BookWrapper bookwrap = (BookWrapper) bundle.getParcelable("bookinfo");
-                    TextView titleView = (TextView)findViewById(R.id.add_book_title);
-                    titleView.setText(bookwrap.getTitle());
+                    //TextView titleView = (TextView)findViewById(R.id.add_book_title);
+                   // titleView.setText(bookwrap.getTitle());
 
                 }
             }
         }
+
+
+
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
     }
 }
