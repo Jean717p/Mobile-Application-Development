@@ -2,6 +2,8 @@ package com.mad18.nullpointerexception.takeabook.addBook;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
@@ -75,7 +77,9 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
                 for(int i=0; i<Jauthors.length();i++) {
                     String author = Jauthors.getString(i);
                 }
-                intent.putExtra("bookinfo", new Book(totalItems, id));
+                Book book = new Book(...);
+                BookWrapper bookWrapper = new BookWrapper(book);
+                intent.putExtra("bookinfo", bookWrapper);
                 startActivity(intent);
                 }
                 catch(JSONException e){
@@ -93,4 +97,44 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
 
     }
 
+}
+
+class BookWrapper implements Parcelable{
+    private Book book;
+
+    BookWrapper(Book book){
+        this.book=book;
+    }
+    protected BookWrapper(Parcel in) {
+        new BookWrapper(in);
+    }
+
+    public static final Creator<BookWrapper> CREATOR = new Creator<BookWrapper>() {
+        @Override
+        public BookWrapper createFromParcel(Parcel in) {
+            return new BookWrapper(in);
+        }
+
+        @Override
+        public BookWrapper[] newArray(int size) {
+            return new BookWrapper[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+    }
+
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
 }
