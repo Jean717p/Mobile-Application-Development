@@ -77,11 +77,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         context = this;
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_main);
+        new updateUserData().doInBackground();
+        sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         // Create an instance of the tab layout from the view.
@@ -91,8 +92,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabLayout.addTab(tabLayout.newTab().setText("My Library"));
         tabLayout.addTab(tabLayout.newTab().setText("Lent"));
         tabLayout.addTab(tabLayout.newTab().setText("Borrowed"));
-
-
 
         // Set the tabs to fill the entire layout.
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -151,7 +150,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 editor.apply();
             }
         });
-        new updateUserData().doInBackground();
     }
 
     @Override
@@ -168,12 +166,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        Intent intent;
         switch (id) {
             case R.id.nav_addbook:
+                intent = new Intent(context,com.mad18.nullpointerexception.takeabook.addBook.AddBook.class);
+                startActivity(intent);
                 break;
             case R.id.nav_showprofile:
-                Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.myProfile.showProfile.class);
+                intent = new Intent(this, com.mad18.nullpointerexception.takeabook.myProfile.showProfile.class);
                 startActivity(intent);
                 break;
             case R.id.nav_mylibrary:
