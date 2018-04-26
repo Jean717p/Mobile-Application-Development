@@ -1,4 +1,4 @@
-package com.mad18.nullpointerexception.takeabook.loginActivity;
+package com.mad18.nullpointerexception.takeabook;
 
 import android.Manifest;
 import android.content.Intent;
@@ -16,12 +16,17 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
-import com.mad18.nullpointerexception.takeabook.R;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseUserMetadata;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity  {
-    private static final String TAG = "Login";
+    private static final String TAG = "LoginActivity";
     private static final int RC_SIGN_IN = 123;
     private static final int REQUEST_PERMISSION_INTERNET=3;
     private FirebaseAuth mAuth;
@@ -81,6 +86,17 @@ public class LoginActivity extends AppCompatActivity  {
             // Successfully signed in
             if (resultCode == RESULT_OK) {
                 IdpResponse idpResponse = IdpResponse.fromResultIntent(data);
+                FirebaseUserMetadata metadata = mAuth.getCurrentUser().getMetadata();
+                if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()) {
+                    // Questo utente è nuovo --> schermata introduzione/guida per l'app?
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    CollectionReference users = db.collection("users");
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    User u = new User(user.getEmail(),user.getDisplayName(),"","",new HashMap<String,Boolean>());
+                    users.document(user.getUid()).set(u);
+                } else {
+                    //Questo utente è già registrato --> Welcome back Message?
+                }
                 Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.class);
                 startActivity(intent);
                 finish();

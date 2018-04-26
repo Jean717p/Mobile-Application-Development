@@ -1,9 +1,14 @@
 package com.mad18.nullpointerexception.takeabook.mainActivity;
 
+import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,13 +24,50 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.FutureTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.firebase.ui.auth.AuthUI;
-import com.mad18.nullpointerexception.takeabook.loginActivity.LoginActivity;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.mad18.nullpointerexception.takeabook.LoginActivity;
 import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.User;
+import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.concurrent.ExecutionException;
+
+import static com.mad18.nullpointerexception.takeabook.myProfile.showProfile.deleteUserData;
+import static com.mad18.nullpointerexception.takeabook.myProfile.showProfile.profileImgName;
+import static com.mad18.nullpointerexception.takeabook.myProfile.showProfile.sharedUserDataKeys;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-    Toolbar toolbar;
+    private final String TAG = "MainActivity";
+    private Toolbar toolbar;
+    private SharedPreferences sharedPref;
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+    private DocumentReference user_doc;
+    private Context context = this;
+    NavigationView navigationView;
+
 
     @Override
     public void onAttachFragment(Fragment fragment) {
@@ -35,6 +77,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        context = this;
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
@@ -45,6 +91,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabLayout.addTab(tabLayout.newTab().setText("My Library"));
         tabLayout.addTab(tabLayout.newTab().setText("Lent"));
         tabLayout.addTab(tabLayout.newTab().setText("Borrowed"));
+
+
 
         // Set the tabs to fill the entire layout.
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -81,9 +129,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+
+        // Add the parameters requested by the NavDrawer (Image, email, username)
+        View hview = navigationView.getHeaderView(0);
+        setNavDrawerParameters(hview);
+
+        FirebaseUser user = mAuth.getCurrentUser();
+        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(user.getUid());
+        user_doc = db.collection("users").document(user.getUid());
+        user_doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot doc = task.getResult();
+                SharedPreferences.Editor editor = sharedPref.edit();
+                for(String tmp:sharedUserDataKeys){
+                    editor.putString(tmp,doc.getString(tmp));
+                }
+                editor.apply();
+            }
+        });
+        new updateUserData().doInBackground();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Add the parameters requested by the NavDrawer (Image, email, username)
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View hview = navigationView.getHeaderView(0);
+        setNavDrawerParameters(hview);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -107,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .addOnCompleteListener(task -> {
                             // user is now signed out
                             startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                            deleteUserData(sharedPref);
                             finish();
                         });
                 break;
@@ -122,6 +200,50 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_main, menu); //.xml file name
         return super.onCreateOptionsMenu(menu);
+    }
+
+
+    private void setNavDrawerParameters(View nview){ //Usare poi il metodo loadImageFromStorage della classe editProfile
+        ImageView drawerImg = nview.findViewById(R.id.mainActivity_drawer_profileImg);
+        String img = sharedPref.getString(profileImgName,"");
+        File file = null;
+        Bitmap b = null;
+        // Insert the image into the drawer
+        if(img.length() > 0){
+            file = new File(img);
+            if(file.exists() == false||drawerImg==null){
+                drawerImg.setImageResource(R.drawable.ic_account_circle_white_48px);
+            }
+            else{
+                try {
+                    b = BitmapFactory.decodeStream(new FileInputStream(file));
+                    drawerImg.setImageBitmap(b);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        else{
+            drawerImg.setImageResource(R.drawable.ic_account_circle_white_48px);
+        }
+
+        // Insert username and email into the drawer
+        TextView usr_text = nview.findViewById(R.id.mainActivity_drawer_username);
+        TextView mail_text = nview.findViewById(R.id.mainActivity_drawer_email);
+        String usr = sharedPref.getString("usr_name", "");
+        String mail = sharedPref.getString("usr_mail", "");
+        if(usr.length() > 0){
+            usr_text.setText(usr);
+        }
+        else{
+            usr_text.setText(R.string.profile_username);
+        }
+        if(mail.length() > 0){
+            mail_text.setText(mail);
+        }
+        else {
+            mail_text.setText(R.string.profile_mail);
+        }
     }
 
     public class PagerAdapter extends FragmentStatePagerAdapter {
@@ -154,5 +276,55 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    private class updateUserData extends AsyncTask<String,Void,String>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            FirebaseUser user = mAuth.getCurrentUser();
+
+            user_doc = db.collection("users").document(user.getUid());
+            user_doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    DocumentSnapshot doc = task.getResult();
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    navigationView = (NavigationView) findViewById(R.id.nav_view);
+                    //User u = doc.toObject(User.class);
+                    for(String tmp:sharedUserDataKeys){
+                        editor.putString(tmp,doc.getString(tmp));
+                    }
+                    editor.apply();
+                    if(sharedPref.getString(profileImgName,"").length()==0){
+                        StorageReference mImageRef = FirebaseStorage.getInstance().getReference("users/images/"+user.getUid());
+                        Glide.with(context).asBitmap().load(mImageRef).into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL) {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                String tmp = editProfile.saveImageToInternalStorage(resource,profileImgName,context);
+                                if(tmp.length()>0){
+                                    editor.putString(profileImgName,tmp);
+                                    editor.apply();
+                                    //Update img drawer
+                                    // Add the parameters requested by the NavDrawer (Image, email, username)
+                                    View hview = navigationView.getHeaderView(0);
+                                    setNavDrawerParameters(hview);
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+            return "ok";
+        }
+    }
 
 }
