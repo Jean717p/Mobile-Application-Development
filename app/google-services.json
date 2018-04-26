@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "666855697382-m9gdmv4bf9662gb3btqrdgfrk7q78ju7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mad18.nullpointerexception.takeabook",
+            "certificate_hash": "1122a29960f028db3109187376bf7bef39055d29"
+          }
+        },
+        {
           "client_id": "666855697382-ikcqkeqvp22jfd4dvufkhg1pem7ejs6o.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

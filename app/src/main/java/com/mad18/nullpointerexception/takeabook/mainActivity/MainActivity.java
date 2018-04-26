@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,7 +23,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.FutureTarget;
@@ -46,6 +49,9 @@ import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.User;
 import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.concurrent.ExecutionException;
 
 import static com.mad18.nullpointerexception.takeabook.myProfile.showProfile.deleteUserData;
@@ -59,7 +65,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private DocumentReference user_doc;
-    private Context context;
+    private Context context = this;
+    NavigationView navigationView;
+
 
     @Override
     public void onAttachFragment(Fragment fragment) {
@@ -84,6 +92,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabLayout.addTab(tabLayout.newTab().setText("My Library"));
         tabLayout.addTab(tabLayout.newTab().setText("Lent"));
         tabLayout.addTab(tabLayout.newTab().setText("Borrowed"));
+
+
 
         // Set the tabs to fill the entire layout.
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -120,15 +130,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
-        new updateUserData().execute("");
+
+        // Add the parameters requested by the NavDrawer (Image, email, username)
+        View hview = navigationView.getHeaderView(0);
+        setNavDrawerParameters(hview);
+
+        FirebaseUser user = mAuth.getCurrentUser();
+        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(user.getUid());
+        user_doc = db.collection("users").document(user.getUid());
+        user_doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot doc = task.getResult();
+                SharedPreferences.Editor editor = sharedPref.edit();
+                for(String tmp:sharedUserDataKeys){
+                    editor.putString(tmp,doc.getString(tmp));
+                }
+                editor.apply();
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        // Add the parameters requested by the NavDrawer (Image, email, username)
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View hview = navigationView.getHeaderView(0);
+        setNavDrawerParameters(hview);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -168,6 +200,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_main, menu); //.xml file name
         return super.onCreateOptionsMenu(menu);
+    }
+
+
+    private void setNavDrawerParameters(View nview){ //Usare poi il metodo loadImageFromStorage della classe editProfile
+        ImageView drawerImg = nview.findViewById(R.id.mainActivity_drawer_profileImg);
+        String img = sharedPref.getString(profileImgName,"");
+        File file = null;
+        Bitmap b = null;
+        // Insert the image into the drawer
+        if(img.length() > 0){
+            file = new File(img);
+            if(file.exists() == false||drawerImg==null){
+                return;
+            }
+            try {
+                b = BitmapFactory.decodeStream(new FileInputStream(file));
+                drawerImg.setImageBitmap(b);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Insert username and email into the drawer
+        TextView usr_text = nview.findViewById(R.id.mainActivity_drawer_username);
+        TextView mail_text = nview.findViewById(R.id.mainActivity_drawer_email);
+        String usr = sharedPref.getString("usr_name", "");
+        String mail = sharedPref.getString("usr_mail", "");
+        if(usr.length() > 0){
+            usr_text.setText(usr);
+        }
+        if(mail.length() > 0){
+            mail_text.setText(mail);
+        }
+
     }
 
     public class PagerAdapter extends FragmentStatePagerAdapter {
