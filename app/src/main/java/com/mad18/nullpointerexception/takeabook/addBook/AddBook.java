@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -69,6 +70,7 @@ public class AddBook extends AppCompatActivity {
     private Toolbar toolbar;
     private Menu menu;
     private Bitmap bookImg;
+    private android.support.design.widget.FloatingActionButton img_fab;
 
     @Override
     public void onCreate(Bundle state) {
@@ -80,6 +82,9 @@ public class AddBook extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Button scan = (Button)findViewById(R.id.read_barcode);
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+        img_fab =  findViewById(R.id.add_book_fab_camera);
+        img_fab.setClickable(true);
+        img_fab.setOnClickListener(view -> selectBookImg());
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,7 +106,7 @@ public class AddBook extends AppCompatActivity {
             }
             findViewById(R.id.add_book_text_field_ISBN).setVisibility(View.VISIBLE);
             findViewById(R.id.add_book_picture).setVisibility(View.INVISIBLE);
-            bookImg = null;
+            //bookImg = null;
         }
     }
 
@@ -200,13 +205,13 @@ public class AddBook extends AppCompatActivity {
                 });
             }
         }
-        books.document(user.getUid() + bookToAdd.getBook_ISBN()).set(bookToAdd);
+        books.document(bookToAdd.getBook_ISBN() + user.getUid()).set(bookToAdd);
         //Aggiunta libro all'elenco dell'utente
         users.document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User u = documentSnapshot.toObject(User.class);
-                u.getUsr_books().put(user.getUid() + bookToAdd.getBook_ISBN(),true);
+                u.getUsr_books().put(bookToAdd.getBook_ISBN() + user.getUid(),true);
                 users.document(user.getUid()).set(u);
             }
         });
@@ -239,10 +244,8 @@ public class AddBook extends AppCompatActivity {
                                 bookwrap.getPublisher(),bookwrap.getEditionYear(),0,Mauthors);
                         /**Rendere view cliccabile (imamgine) anche con inserimento isbn manuale)*/
                         fillAddBookViews(bookToAdd);
-                        findViewById(R.id.add_book_picture).setVisibility(View.VISIBLE);
-                        iw = findViewById(R.id.add_book_picture);
-                        iw.setClickable(true);
-                        iw.setOnClickListener(view -> selectBookImg());
+                        //findViewById(R.id.add_book_picture).setVisibility(View.VISIBLE);
+
                     }
                     break;
                 case REQUEST_IMAGE_CAPTURE:
