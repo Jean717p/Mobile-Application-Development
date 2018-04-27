@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport = "true">
+    android:fillViewport="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -21,46 +21,78 @@
             app:theme="@style/ThemeOverlay.AppCompat.Dark" />
 
 
-            <ImageView
-                android:id="@+id/add_book_picture"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_if_internt_web_technology_05_274892"
-                android:background="#FFD180"
-                android:padding="32dp"
-                android:layout_below="@id/add_book_toolbar"
-                android:clickable="true"
-
-
-                />
+        <ImageView
+            android:id="@+id/add_book_picture"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_above="@+id/read_barcode"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="-249dp"
+            android:background="#FFD180"
+            android:clickable="true"
+            android:padding="16dp"
+            android:src="@drawable/ic_if_internt_web_technology_05_274892" />
 
 
         <Button
-
             android:id="@+id/read_barcode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:layout_alignEnd="@+id/add_book_text_field_Title"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="125dp"
-            android:layout_marginTop="227dp"
-
-
+            android:layout_marginTop="260dp"
             android:background="@color/colorAccent"
-            android:paddingTop="16dp"
+            android:padding="16dp"
             android:text="read_barcode"
             android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/add_book_read_ISBN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/add_book_text_field_Title"
+            android:layout_alignTop="@+id/read_barcode"
+            android:background="@color/colorAccent"
+            android:padding="16dp"
+            android:text="Search ISBN details"
+            android:textColor="@android:color/white" />
+
+        <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+            android:id="@+id/add_book_text_field_ISBN"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/read_barcode"
+            android:layout_margin="16dp"
+            android:maxLength="13"
+            app:errorColor="#ddaa00"
+            app:hasClearButton="true"
+            app:helperText="@string/add_book_helper_text_ISBN"
+            app:helperTextColor="@color/colorAccent"
+            app:labelText="@string/add_book_ISBN"
+            app:maxCharacters="13"
+            app:panelBackgroundColor="#E0E0E0"
+            app:primaryColor="@color/colorAccent">
+
+            <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+                android:id="@+id/add_book_extended_edit_text_ISBN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="15"
+                android:inputType="number"
+                android:maxLines="1"
+
+                />
+        </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
 
         <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
 
             android:id="@+id/add_book_text_field_Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:paddingTop="280dp"
-            app:errorColor="#ddaa00"
             android:layout_margin="16dp"
+            android:layout_below="@id/add_book_text_field_ISBN"
+            app:errorColor="#ddaa00"
             app:hasClearButton="true"
             app:labelText="@string/add_book_title"
             app:panelBackgroundColor="#E0E0E0"
@@ -94,7 +126,6 @@
                 android:id="@+id/add_book_extended_edit_Author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 />
         </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
 
@@ -123,7 +154,6 @@
         </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
 
 
-
         <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
             android:id="@+id/add_book_text_field_Publisher"
             android:layout_width="match_parent"
@@ -147,45 +177,14 @@
                 />
         </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
 
-        <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
-            android:id="@+id/add_book_text_field_ISBN"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/add_book_text_field_Publisher"
-            android:layout_margin="16dp"
-            app:errorColor="#ddaa00"
-            app:hasClearButton="true"
-            app:labelText="@string/add_book_ISBN"
-            app:maxCharacters="13"
-            android:maxLength="13"
-            app:helperText="@string/add_book_helper_text_ISBN"
-            app:helperTextColor="@color/colorAccent"
-            android:paddingBottom="56dp"
-            app:panelBackgroundColor="#E0E0E0"
-            app:primaryColor="@color/colorAccent"
-            >
-
-            <studio.carbonylgroup.textfieldboxes.ExtendedEditText
-                android:id="@+id/add_book_extended_edit_text_ISBN"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:ems="15"
-                android:inputType="number"
-
-                />
-        </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
-
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/add_book_fab_camera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
+            android:layout_above="@+id/read_barcode"
             android:layout_gravity="right|bottom"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="192dp"
+            android:layout_marginBottom="-263dp"
+            android:layout_toEndOf="@+id/read_barcode"
             android:clickable="true"
             android:focusable="true"
             android:src="@drawable/ic_photo_camera_white_24px"
@@ -198,8 +197,6 @@
 
 
     </RelativeLayout>
-
-
 
 
 </ScrollView>
