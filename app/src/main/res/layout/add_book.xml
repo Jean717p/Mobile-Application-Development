@@ -22,36 +22,50 @@
 
 
             <ImageView
+                android:id="@+id/add_book_picture"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_if_internt_web_technology_05_274892"
-                android:background="#BBDEFB"
-                android:layout_margin="16dp"
+                android:background="#FFD180"
                 android:padding="32dp"
                 android:layout_below="@id/add_book_toolbar"
                 android:clickable="true"
-                android:id="@+id/add_book_photo"
+
 
                 />
 
 
+        <Button
+
+            android:id="@+id/read_barcode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="125dp"
+            android:layout_marginTop="227dp"
+
+
+            android:background="@color/colorAccent"
+            android:paddingTop="16dp"
+            android:text="read_barcode"
+            android:textColor="@android:color/white" />
 
         <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
 
             android:id="@+id/add_book_text_field_Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_margin="16dp"
-            android:paddingTop="230dp"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="280dp"
             app:errorColor="#ddaa00"
+            android:layout_margin="16dp"
             app:hasClearButton="true"
-            app:helperText="Write the title"
-            app:helperTextColor="#795548"
-            app:labelText="Title"
+            app:labelText="@string/add_book_title"
             app:panelBackgroundColor="#E0E0E0"
             app:primaryColor="@color/colorAccent">
+
 
             <studio.carbonylgroup.textfieldboxes.ExtendedEditText
                 android:id="@+id/add_book_extended_edit_Title"
@@ -59,6 +73,7 @@
                 android:layout_height="wrap_content"
 
                 />
+
         </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
 
         <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
@@ -70,9 +85,7 @@
             android:layout_margin="16dp"
             app:errorColor="#ddaa00"
             app:hasClearButton="true"
-            app:helperText="Write the author"
-            app:helperTextColor="#795548"
-            app:labelText="Author"
+            app:labelText="@string/add_book_author"
             app:panelBackgroundColor="#E0E0E0"
             app:primaryColor="@color/colorAccent"
             tools:layout_marginTop="16dp">
@@ -94,10 +107,9 @@
             android:layout_below="@+id/add_book_text_field_Author"
             android:layout_margin="16dp"
             app:errorColor="#ddaa00"
+
             app:hasClearButton="true"
-            app:helperText="write edition year "
-            app:helperTextColor="#795548"
-            app:labelText="Edition year"
+            app:labelText="@string/add_book_edition_year"
             app:panelBackgroundColor="#E0E0E0"
             app:primaryColor="@color/colorAccent">
 
@@ -105,6 +117,7 @@
                 android:id="@+id/add_book_extended_edit_text_EditionYear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLines="2"
 
                 />
         </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
@@ -120,9 +133,7 @@
             android:layout_margin="16dp"
             app:errorColor="#ddaa00"
             app:hasClearButton="true"
-            app:helperText="Write the Publisher"
-            app:helperTextColor="#795548"
-            app:labelText="Publisher"
+            app:labelText="@string/add_book_publisher"
             app:panelBackgroundColor="#E0E0E0"
             app:primaryColor="@color/colorAccent"
             tools:layout_marginTop="16dp">
@@ -131,6 +142,7 @@
                 android:id="@+id/extended_edit_text7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLines="2"
 
                 />
         </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
@@ -144,9 +156,11 @@
             android:layout_margin="16dp"
             app:errorColor="#ddaa00"
             app:hasClearButton="true"
-            app:helperText="Write ISBN"
-            app:helperTextColor="#795548"
-            app:labelText="ISBN"
+            app:labelText="@string/add_book_ISBN"
+            app:maxCharacters="13"
+            android:maxLength="13"
+            app:helperText="@string/add_book_helper_text_ISBN"
+            app:helperTextColor="@color/colorAccent"
             android:paddingBottom="56dp"
             app:panelBackgroundColor="#E0E0E0"
             app:primaryColor="@color/colorAccent"
@@ -156,25 +170,31 @@
                 android:id="@+id/add_book_extended_edit_text_ISBN"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+                android:maxLines="1"
+                android:ems="15"
+                android:inputType="number"
 
                 />
         </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
 
-
-
-
-
-
-        <Button
-
-            android:id="@+id/read_barcode"
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/add_book_fab_camera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:paddingTop="16dp"
-            android:text="read_barcode" />
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="right|bottom"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="192dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_photo_camera_white_24px"
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            app:fabSize="normal"
+            app:pressedTranslationZ="12dp"
+            app:rippleColor="@color/colorAccent"
+            tools:backgroundTint="@color/colorAccent" />
 
 
     </RelativeLayout>

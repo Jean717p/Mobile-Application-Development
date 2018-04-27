@@ -43,4 +43,12 @@
     <string name="barcode_failure">No barcode captured</string>
     <string name="barcode_error">"Error reading barcode: %1$s"</string>
     <string name="add_a_book">"Add a book"</string>
+    <string name="add_book_title">"Title"</string>
+    <string name="add_book_author">"Author(s)"</string>
+    <string name="add_book_edition_year">"Edition year"</string>
+    <string name="add_book_ISBN">"ISBN"</string>
+    <string name="add_book_publisher">"Publisher"</string>
+    <string name="add_book_helper_text_ISBN">"Write exactly 13 numbers"</string>
+
+
 </resources>

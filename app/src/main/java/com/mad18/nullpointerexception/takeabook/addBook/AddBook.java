@@ -100,7 +100,7 @@ public class AddBook extends AppCompatActivity {
                 findViewById(i).setVisibility(View.INVISIBLE);
             }
             findViewById(R.id.add_book_text_field_ISBN).setVisibility(View.VISIBLE);
-            findViewById(R.id.add_book_photo).setVisibility(View.INVISIBLE);
+            findViewById(R.id.add_book_picture).setVisibility(View.INVISIBLE);
             bookImg = null;
         }
     }
@@ -154,7 +154,7 @@ public class AddBook extends AppCompatActivity {
         if(bookImgPath!=null){
             File file = new File(bookImgPath);
             if(file.exists()){
-                bookImg = editProfile.loadImageFromStorage(bookImgPath,R.id.add_book_photo,this);
+                bookImg = editProfile.loadImageFromStorage(bookImgPath,R.id.add_book_picture,this);
                 file.delete();
             }
         }
@@ -225,7 +225,7 @@ public class AddBook extends AppCompatActivity {
                         for(int i:addBookTextViewIds){
                             findViewById(i).setVisibility(View.VISIBLE);
                         }
-                        findViewById(R.id.add_book_photo).setVisibility(View.VISIBLE);
+                        findViewById(R.id.add_book_picture).setVisibility(View.VISIBLE);
                         Map<String,Boolean> Mauthors = new HashMap<>();
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 //                        Mauthors.putAll(bookwrap.getAuthors().stream().collect(Collectors.toMap((String s)->s,s-> true)));
@@ -237,8 +237,8 @@ public class AddBook extends AppCompatActivity {
                                 bookwrap.getPublisher(),bookwrap.getEditionYear(),0,Mauthors);
                         /**Rendere view cliccabile (imamgine) anche con inserimento isbn manuale)*/
                         fillAddBookViews(bookToAdd);
-                        findViewById(R.id.add_book_photo).setVisibility(View.VISIBLE);
-                        iw = findViewById(R.id.add_book_photo);
+                        findViewById(R.id.add_book_picture).setVisibility(View.VISIBLE);
+                        iw = findViewById(R.id.add_book_picture);
                         iw.setClickable(true);
                         iw.setOnClickListener(view -> selectBookImg());
                     }
@@ -246,7 +246,7 @@ public class AddBook extends AppCompatActivity {
                 case REQUEST_IMAGE_CAPTURE:
                     if (data != null) {
                         bookImg = (Bitmap) data.getExtras().get("data");
-                        iw = findViewById(R.id.add_book_photo);
+                        iw = findViewById(R.id.add_book_picture);
                         if(iw!=null && bookImg != null) {
                             iw.setImageBitmap(bookImg);
                         }
@@ -261,7 +261,7 @@ public class AddBook extends AppCompatActivity {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        iw = findViewById(R.id.add_book_photo);
+                        iw = findViewById(R.id.add_book_picture);
                         if(iw!=null && bookImg != null) {
                             iw.setImageBitmap(bookImg);
                         }
@@ -335,7 +335,7 @@ public class AddBook extends AppCompatActivity {
     private void removeBookImg(){
         ImageView iw;
         if(bookImg!=null){
-            iw = findViewById(R.id.add_book_photo);
+            iw = findViewById(R.id.add_book_picture);
             bookImg = null;
             iw.setImageResource(R.drawable.ic_if_internt_web_technology_05_274892);
         }

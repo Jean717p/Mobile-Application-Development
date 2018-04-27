@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">Books Circle</string>
+    <string name="add_a_book">Aggiungi un libro</string>
+    <string name="add_book_title">"Titolo"</string>
+    <string name="add_book_author">"Autore/i"</string>
+    <string name="add_book_edition_year">"Edizione"</string>
+    <string name="add_book_ISBN">"ISBN"</string>
+    <string name="add_book_publisher">"Editore"</string>
+    <string name="add_book_helper_text_ISBN">"Scrivi esattamente 13 numeri"</string>
+
     <string name="profile_name">Nome</string>
     <string name="profile_username">Nome Utente</string>
     <string name="profile_city">Torino</string>
@@ -15,4 +23,5 @@
     <string name="photo_from_gallery">Seleziona una foto dalla galleria</string>
     <string name="photo_from_camera">Scatta una foto dalla fotocamera</string>
     <string name="photo_remove">Rimuovi foto</string>
+
 </resources>
