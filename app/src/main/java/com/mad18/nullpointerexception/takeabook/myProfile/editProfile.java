@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -62,6 +63,7 @@ public class editProfile extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(R.string.app_name);
+        toolbar.setVisibility(View.VISIBLE);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         if(savedInstanceState == null){
             fillUserData();
@@ -70,12 +72,6 @@ public class editProfile extends AppCompatActivity {
         iw.setClickable(true);
         iw.setOnClickListener(view -> selectUserImg());
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
     }
 
     @Override
@@ -173,7 +169,7 @@ public class editProfile extends AppCompatActivity {
         if(path!=null) {
             File file = new File(path);
             if (file.exists()) {
-                profileImg = loadImageFromStorage(file.getAbsolutePath(), R.id.edit_profile_personalPhoto);
+                profileImg = loadImageFromStorage(file.getAbsolutePath(), R.id.edit_profile_personalPhoto,this);
                 file.delete();
             }
         }
@@ -192,7 +188,7 @@ public class editProfile extends AppCompatActivity {
         }
         y=sharedPref.getString(profileImgName,"");
         if(y.length()>0){
-            profileImg = loadImageFromStorage(sharedPref.getString(profileImgName,""),R.id.edit_profile_personalPhoto);
+            profileImg = loadImageFromStorage(sharedPref.getString(profileImgName,""),R.id.edit_profile_personalPhoto,this);
         }
     }
 
@@ -316,13 +312,13 @@ public class editProfile extends AppCompatActivity {
         return file.getAbsolutePath();
     }
 
-    private Bitmap loadImageFromStorage(String path,int id) {
+    public static Bitmap loadImageFromStorage(String path,int id,AppCompatActivity activity) {
         if(path==null){
             return null;
         }
         Bitmap b = null;
         File file = new File(path);
-        ImageView img = (ImageView) findViewById(id);
+        ImageView img = (ImageView) activity.findViewById(id);
         if(file.exists() == false||img==null){
             return null;
         }

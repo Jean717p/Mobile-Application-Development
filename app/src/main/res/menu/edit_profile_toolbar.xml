@@ -7,7 +7,7 @@
         android:icon="@drawable/ic_save_white_24dp"
         android:orderInCategory="4"
         android:title="Info"
-        app:showAsAction="ifRoom">
+        app:showAsAction="always">
 
         <!--<menu>-->
         <!--<item-->

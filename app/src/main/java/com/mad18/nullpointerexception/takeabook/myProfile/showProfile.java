@@ -3,14 +3,9 @@ package com.mad18.nullpointerexception.takeabook.myProfile;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,17 +13,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.mad18.nullpointerexception.takeabook.R;
 
 
@@ -101,31 +86,12 @@ public class showProfile extends AppCompatActivity {
         }
         y=sharedPref.getString(profileImgName,"");
         if(y.length()>0){
-            loadImageFromStorage(y,R.id.show_profile_personalPhoto);
+            editProfile.loadImageFromStorage(y,R.id.show_profile_personalPhoto,this);
         }
         else{
             iw = findViewById(R.id.show_profile_personalPhoto);
             iw.setImageResource(R.drawable.ic_account_circle_white_48px);
         }
-    }
-
-    private Bitmap loadImageFromStorage(String path,int id) {
-        if(path==null){
-            return null;
-        }
-        Bitmap b = null;
-        File file = new File(path);
-        ImageView img = (ImageView) findViewById(id);
-        if(file.exists() == false||img==null){
-            return null;
-        }
-        try {
-            b = BitmapFactory.decodeStream(new FileInputStream(file));
-            img.setImageBitmap(b);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return b;
     }
 
     public static void deleteUserData(SharedPreferences sharedPrefToDel){

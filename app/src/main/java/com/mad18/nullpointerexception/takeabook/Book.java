@@ -1,12 +1,14 @@
 package com.mad18.nullpointerexception.takeabook;
 
+import android.os.Build;
+
 import java.util.Map;
 
 public class Book {
 
     String book_ISBN;
     String book_title;
-    String book_author;
+    String book_first_author;
     String book_publisher;
     int book_editionYear;
     int book_condition;
@@ -14,10 +16,17 @@ public class Book {
 
     public Book() {}
 
-    public Book(String ISBN, String title, String author, String publisher, int editionYear, int condition,Map<String,Boolean> authors){
+    public Book(String ISBN, String title, String publisher, int editionYear, int condition,Map<String,Boolean> authors){
         book_ISBN = ISBN;
         book_title = title;
-        book_author = author;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            book_first_author = authors.keySet().stream().findFirst().orElse(null);
+        }
+        else{
+            if(authors.size()>0){
+                book_first_author = (String) (authors.keySet().toArray())[0];
+            }
+        }
         book_publisher = publisher;
         book_editionYear = editionYear;
         book_condition = condition;
@@ -40,12 +49,12 @@ public class Book {
         this.book_title = book_title;
     }
 
-    public String getBook_author() {
-        return book_author;
+    public String getBook_first_author() {
+        return book_first_author;
     }
 
-    public void setBook_author(String book_author) {
-        this.book_author = book_author;
+    public void setBook_first_author(String book_first_author) {
+        this.book_first_author = book_first_author;
     }
 
     public String getBook_publisher() {
