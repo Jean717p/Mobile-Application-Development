@@ -8,8 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -72,7 +70,8 @@ public class AddBook extends AppCompatActivity {
     private Toolbar toolbar;
     private Menu menu;
     private Bitmap bookImg;
-
+    private android.support.design.widget.FloatingActionButton img_fab;
+    private FirebaseUser user;
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -87,6 +86,7 @@ public class AddBook extends AppCompatActivity {
         ImageView iw =  findViewById(R.id.add_book_picture);
         iw.setClickable(true);
         iw.setOnClickListener(view -> selectBookImg());
+        user = FirebaseAuth.getInstance().getCurrentUser();
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -203,7 +203,6 @@ public class AddBook extends AppCompatActivity {
     private void storeBookEditData(){
         ExtendedEditText text;
         String s; File file;
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         StorageReference mImageRef;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference books = db.collection("books");
@@ -274,8 +273,13 @@ public class AddBook extends AppCompatActivity {
                             Mauthors.put(key,true);
                         }
                         bookToAdd = new Book(bookwrap.getISBN(),bookwrap.getTitle(),
-                                bookwrap.getPublisher(),bookwrap.getEditionYear(),0,Mauthors);
+                                bookwrap.getPublisher(),bookwrap.getEditionYear(),0,user.getUid(),Mauthors);
                         /**Rendere view cliccabile (imamgine) anche con inserimento isbn manuale)*/
+                        /** Far ritornare tutti i fields visibili e far scomparire i due button*/
+                        for(int i:addBookTextViewIds){
+                            findViewById(i).setVisibility(View.VISIBLE);
+                        }
+                        findViewById(R.id.read_barcode).setVisibility(View.INVISIBLE);
                         fillAddBookViews(bookToAdd);
                         //findViewById(R.id.add_book_picture).setVisibility(View.VISIBLE);
 
