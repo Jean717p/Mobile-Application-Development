@@ -45,14 +45,9 @@ import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
 import studio.carbonylgroup.textfieldboxes.ExtendedEditText;
 
 /** DA aggiungere
- * la possibilità di inserire isbn manualmete e tasto ok per fetchare i dati da json
  * La thumbnail da scaricare come img di default se l'utente non la sceglie
  * Usare:
  * Glide.with(context).load(url).into(findViewById(R.id.add_book_photo)) per scaricare la thumbnail nella view
- *
- * Limitare caratteri manuali isbn a 13, aggiungere tasto conferma per l'isbn manuale
- * Campo testo commento del libro ed opinioni
- * layout da migliorare
  */
 
 public class AddBook extends AppCompatActivity {
