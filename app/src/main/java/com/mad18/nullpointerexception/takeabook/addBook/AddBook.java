@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -17,8 +19,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -36,6 +40,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mad18.nullpointerexception.takeabook.Book;
 import com.mad18.nullpointerexception.takeabook.R;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -70,6 +75,8 @@ public class AddBook extends AppCompatActivity {
     private Toolbar toolbar;
     private Menu menu;
     private Bitmap bookImg;
+    private Spinner staticSpinner;
+
     private android.support.design.widget.FloatingActionButton img_fab;
     private FirebaseUser user;
     @Override
@@ -86,6 +93,18 @@ public class AddBook extends AppCompatActivity {
         ImageView iw =  findViewById(R.id.add_book_picture);
         iw.setClickable(true);
         iw.setOnClickListener(view -> selectBookImg());
+        //get the spinner from the xml.
+        staticSpinner = findViewById(R.id.add_book_spinner_book_cond);
+
+//create a list of items for the spinner.
+        String[] items = new String[]{"condizioni del libro", "Ottime", "Buone", "Scarse"};
+//create an adapter to describe how the items are displayed, adapters are used in several places in android.
+//There are multiple variations of this, but this is the basic variant.
+        ArrayAdapter<CharSequence> staticAdapter = ArrayAdapter
+                .createFromResource(this, R.array.book_conditions,
+                        android.R.layout.simple_dropdown_item_1line);
+
+        staticSpinner.setAdapter(staticAdapter);
         user = FirebaseAuth.getInstance().getCurrentUser();
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,7 +127,7 @@ public class AddBook extends AppCompatActivity {
             }
             findViewById(R.id.add_book_text_field_ISBN).setVisibility(View.VISIBLE);
             findViewById(R.id.add_book_picture).setVisibility(View.INVISIBLE);
-            //bookImg = null;
+            bookImg = null;
         }
 
         search.setOnClickListener(new View.OnClickListener() {   //////////////////////////////////// new search
@@ -142,6 +161,9 @@ public class AddBook extends AppCompatActivity {
             }
         });
     }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -203,6 +225,7 @@ public class AddBook extends AppCompatActivity {
     private void storeBookEditData(){
         ExtendedEditText text;
         String s; File file;
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         StorageReference mImageRef;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference books = db.collection("books");
@@ -406,4 +429,6 @@ public class AddBook extends AppCompatActivity {
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
     }
+
+
 }

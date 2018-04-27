@@ -18,6 +18,12 @@
     <string name="photo_from_gallery">Seleziona una foto dalla galleria</string>
     <string name="photo_from_camera">Scatta una foto dalla fotocamera</string>
     <string name="photo_remove">Rimuovi foto</string>
+    <string-array name="book_conditions">
+        <item>Seleziona condizioni libro </item>
+        <item>Eccellente</item>
+        <item>Buono</item>
+        <item>Scarso</item>
+    </string-array>
 
     <!--Navigation Drawer-->
     <string name="navigation_drawer_open">Apri menu laterale</string>

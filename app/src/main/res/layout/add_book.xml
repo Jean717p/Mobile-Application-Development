@@ -36,14 +36,17 @@
 
         <Button
             android:id="@+id/read_barcode"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_alignEnd="@+id/add_book_text_field_Title"
             android:layout_alignParentTop="true"
+            android:layout_marginEnd="0dp"
             android:layout_marginTop="260dp"
-            android:background="@color/colorAccent"
+            android:background="@drawable/corner_button"
             android:padding="16dp"
+            android:textSize="10sp"
             android:text="read_barcode"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
             android:textColor="@android:color/white" />
 
         <Button
@@ -52,8 +55,11 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/add_book_text_field_Title"
             android:layout_alignTop="@+id/read_barcode"
-            android:background="@color/colorAccent"
+            android:background="@drawable/corner_button"
             android:padding="16dp"
+            android:textSize="10sp"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
+            android:textAlignment="inherit"
             android:text="Search ISBN details"
             android:textColor="@android:color/white" />
 
@@ -70,7 +76,7 @@
             app:helperTextColor="@color/colorAccent"
             app:labelText="@string/add_book_ISBN"
             app:maxCharacters="13"
-            app:panelBackgroundColor="#E0E0E0"
+            app:panelBackgroundColor="#FFF3E0"
             app:primaryColor="@color/colorAccent">
 
             <studio.carbonylgroup.textfieldboxes.ExtendedEditText
@@ -95,7 +101,7 @@
             app:errorColor="#ddaa00"
             app:hasClearButton="true"
             app:labelText="@string/add_book_title"
-            app:panelBackgroundColor="#E0E0E0"
+            app:panelBackgroundColor="#FFF3E0"
             app:primaryColor="@color/colorAccent">
 
 
@@ -118,7 +124,7 @@
             app:errorColor="#ddaa00"
             app:hasClearButton="true"
             app:labelText="@string/add_book_author"
-            app:panelBackgroundColor="#E0E0E0"
+            app:panelBackgroundColor="#FFF3E0"
             app:primaryColor="@color/colorAccent"
             tools:layout_marginTop="16dp">
 
@@ -141,7 +147,7 @@
 
             app:hasClearButton="true"
             app:labelText="@string/add_book_edition_year"
-            app:panelBackgroundColor="#E0E0E0"
+            app:panelBackgroundColor="#FFF3E0"
             app:primaryColor="@color/colorAccent">
 
             <studio.carbonylgroup.textfieldboxes.ExtendedEditText
@@ -164,7 +170,7 @@
             app:errorColor="#ddaa00"
             app:hasClearButton="true"
             app:labelText="@string/add_book_publisher"
-            app:panelBackgroundColor="#E0E0E0"
+            app:panelBackgroundColor="#FFF3E0"
             app:primaryColor="@color/colorAccent"
             tools:layout_marginTop="16dp">
 
@@ -176,6 +182,27 @@
 
                 />
         </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
+
+
+
+            <Spinner
+                android:id="@+id/add_book_spinner_book_cond"
+                android:layout_margin="16dp"
+                android:clickable="true"
+                android:layout_below="@id/add_book_text_field_Publisher"
+                android:spinnerMode="dropdown"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:verticalScrollbarPosition="defaultPosition"
+                android:dropDownSelector="@color/colorAccent"
+                android:backgroundTint="#000000"
+                android:touchscreenBlocksFocus="true"
+                android:focusable="true"
+                />
+
 
 
     </RelativeLayout>
