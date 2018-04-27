@@ -132,6 +132,7 @@ public class AddBook extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        /*
         ExtendedEditText eet;
         for(int i:addBookTextViewIds){
             eet = findViewById(i);
@@ -140,6 +141,7 @@ public class AddBook extends AppCompatActivity {
         if(bookImg!=null){
             outState.putString("bookEditImgPath",editProfile.saveImageToInternalStorage(bookImg,"temp_"+"bookEditImage",this));
         }
+        */
     }
 
     @Override
@@ -198,14 +200,14 @@ public class AddBook extends AppCompatActivity {
                 });
             }
         }
-        books.document(user.getUid()).set(bookToAdd);
+        books.document(user.getUid() + bookToAdd.getBook_ISBN()).set(bookToAdd);
         //Aggiunta libro all'elenco dell'utente
         users.document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User u = documentSnapshot.toObject(User.class);
-                u.getUsr_books().put(bookToAdd.getBook_ISBN()+user.getUid(),true);
-                users.document(user.getUid()).set(u,SetOptions.merge());
+                u.getUsr_books().put(user.getUid() + bookToAdd.getBook_ISBN(),true);
+                users.document(user.getUid()).set(u);
             }
         });
     }
