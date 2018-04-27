@@ -14,6 +14,7 @@ public class Book {
     int book_condition;
     String userid;
     Map<String,Boolean> book_authors;
+    String description;
 
     public Book() {}
 
@@ -25,7 +26,7 @@ public class Book {
         this.userid = userid;
     }
 
-    public Book(String ISBN, String title, String publisher, int editionYear, int condition, String user, Map<String,Boolean> authors){
+    public Book(String ISBN, String title, String publisher, int editionYear, int condition, String user, Map<String,Boolean> authors, String description){
         book_ISBN = ISBN;
         book_title = title;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -41,6 +42,7 @@ public class Book {
         book_condition = condition;
         book_authors = authors;
         userid = user;
+        this.description = description;
 
     }
 
@@ -98,5 +100,13 @@ public class Book {
 
     public void setBook_authors(Map<String, Boolean> book_authors) {
         this.book_authors = book_authors;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

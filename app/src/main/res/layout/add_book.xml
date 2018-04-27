@@ -97,7 +97,6 @@
             android:layout_margin="16dp"
             android:layout_below="@id/add_book_text_field_ISBN"
             app:errorColor="#ddaa00"
-            app:hasClearButton="true"
             app:labelText="@string/add_book_title"
             app:panelBackgroundColor="#FFF3E0"
             app:primaryColor="@color/colorAccent">
@@ -120,7 +119,6 @@
             android:layout_below="@+id/add_book_text_field_Title"
             android:layout_margin="16dp"
             app:errorColor="#ddaa00"
-            app:hasClearButton="true"
             app:labelText="@string/add_book_author"
             app:panelBackgroundColor="#FFF3E0"
             app:primaryColor="@color/colorAccent"
@@ -142,8 +140,6 @@
             android:layout_below="@+id/add_book_text_field_Author"
             android:layout_margin="16dp"
             app:errorColor="#ddaa00"
-
-            app:hasClearButton="true"
             app:labelText="@string/add_book_edition_year"
             app:panelBackgroundColor="#FFF3E0"
             app:primaryColor="@color/colorAccent">
@@ -166,7 +162,6 @@
             android:layout_below="@+id/add_book_text_field_EditionYear"
             android:layout_margin="16dp"
             app:errorColor="#ddaa00"
-            app:hasClearButton="true"
             app:labelText="@string/add_book_publisher"
             app:panelBackgroundColor="#FFF3E0"
             app:primaryColor="@color/colorAccent"
@@ -201,7 +196,7 @@
 
 
         <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
-            android:id="@+id/add_book_text_field_description"
+            android:id="@+id/add_book_text_field_Description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -218,7 +213,7 @@
 
 
             <studio.carbonylgroup.textfieldboxes.ExtendedEditText
-                android:id="@+id/add_book_extended_edit_text_description"
+                android:id="@+id/add_book_extended_edit_text_Description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scrollbars="vertical"

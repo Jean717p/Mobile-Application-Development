@@ -7,9 +7,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -25,16 +22,12 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionButton;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -69,7 +62,7 @@ public class AddBook extends AppCompatActivity {
     private final int REQUEST_PERMISSION_CAMERA = 2, REQUEST_PERMISSION_GALLERY=1;
     private final int addBookTextViewIds[] = {R.id.add_book_text_field_Title,R.id.add_book_text_field_Author,
             R.id.add_book_text_field_EditionYear,R.id.add_book_text_field_Publisher,
-            R.id.add_book_text_field_ISBN};
+            R.id.add_book_text_field_ISBN,R.id.add_book_text_field_Description};
     private Book bookToAdd;
     private View mClss;
     private Toolbar toolbar;
@@ -121,16 +114,16 @@ public class AddBook extends AppCompatActivity {
 
             }
         });
-       /* if(state == null){
-
+       if(state == null){
             for(int i:addBookTextViewIds){
-                findViewById(i).setVisibility(View.INVISIBLE);
+                //(i).setVisibility(View.INVISIBLE);
+                findViewById(i).setEnabled(false);
             }
-            findViewById(R.id.add_book_text_field_ISBN).setVisibility(View.VISIBLE);
-            findViewById(R.id.add_book_picture).setVisibility(View.INVISIBLE);
-
+//            findViewById(R.id.add_book_text_field_ISBN).setVisibility(View.VISIBLE);
+//            findViewById(R.id.add_book_picture).setVisibility(View.INVISIBLE);
+            findViewById(R.id.add_book_text_field_ISBN).setEnabled(true);
             bookImg = null;
-        }*/
+        }
 
         search.setOnClickListener(new View.OnClickListener() {   //////////////////////////////////// new search
             @Override
@@ -241,16 +234,24 @@ public class AddBook extends AppCompatActivity {
         }
         eet = findViewById(R.id.add_book_extended_edit_text_ISBN);
         bookToAdd.setBook_ISBN(eet.getText().toString());
+        eet = findViewById(R.id.add_book_extended_edit_text_Description);
+        bookToAdd.setDescription(eet.getText().toString());
         eet = findViewById(R.id.add_book_extended_edit_Author);
         String tmp[] = eet.getText().toString().split(","); //è la virgola???
         for(int i=0;i<tmp.length;i++){
             authors.put(tmp[i],true);
         }
+        bookToAdd.setBook_condition(staticSpinner.getSelectedItemPosition());
         bookToAdd.setBook_authors(authors);
         eet = findViewById(R.id.add_book_extended_edit_text_EditionYear);
         bookToAdd.setBook_editionYear(Integer.parseInt(eet.getText().toString()));
         eet = findViewById(R.id.add_book_extended_edit_Title);
         bookToAdd.setBook_title(eet.getText().toString());
+        if(bookToAdd.getBook_title().length()==0){
+            return;
+        }
+        eet = findViewById(R.id.add_book_extended_edit_text_Publisher);
+        bookToAdd.setBook_publisher(eet.getText().toString());
         mImageRef = FirebaseStorage.getInstance().getReference().child("images/books/"+bookToAdd.getBook_ISBN()+user.getUid());
         if(bookImg!=null){
             bookImgPath = editProfile.saveImageToInternalStorage(bookImg,"temp_"+"bookEditImage",this);
@@ -300,14 +301,16 @@ public class AddBook extends AppCompatActivity {
                         for (String key: bookwrap.getAuthors()) {
                             Mauthors.put(key,true);
                         }
+
                         bookToAdd = new Book(bookwrap.getISBN(),bookwrap.getTitle(),
-                                bookwrap.getPublisher(),bookwrap.getEditionYear(),0,user.getUid(),Mauthors);
+                                bookwrap.getPublisher(),bookwrap.getEditionYear(),0,user.getUid(),Mauthors,"");
                         /**Rendere view cliccabile (imamgine) anche con inserimento isbn manuale)*/
                         /** Far ritornare tutti i fields visibili e far scomparire i due button*/
-                        for(int i:addBookTextViewIds){
-                            findViewById(i).setVisibility(View.VISIBLE);
-                        }
+//                        for(int i:addBookTextViewIds){
+//                            findViewById(i).setVisibility(View.VISIBLE);
+//                        }
                         fillAddBookViews(bookToAdd);
+                        findViewById(R.id.add_book_text_field_Description).setEnabled(true);
                         //findViewById(R.id.add_book_picture).setVisibility(View.VISIBLE);
 
                     }
@@ -342,16 +345,22 @@ public class AddBook extends AppCompatActivity {
 
     private void fillAddBookViews(Book book){
         ExtendedEditText eet;
+        String tmp;
         eet = findViewById(R.id.add_book_extended_edit_text_ISBN);
         eet.setText(book.getBook_ISBN());
         eet = findViewById(R.id.add_book_extended_edit_Author);
-        eet.setText(book.getBook_authors().keySet().toString());
+        tmp = book.getBook_authors().keySet().toString();
+        if(tmp.length()>2){
+            eet.setText(tmp.substring(1,tmp.length()-1));
+        }
         eet = findViewById(R.id.add_book_extended_edit_text_EditionYear);
         if(book.getBook_editionYear()!=-1){
             eet.setText(String.valueOf(book.getBook_editionYear()));
         }
         eet = findViewById(R.id.add_book_extended_edit_Title);
         eet.setText(book.getBook_title());
+        eet = findViewById(R.id.add_book_extended_edit_text_Publisher);
+        eet.setText(book.getBook_publisher());
     }
     private void selectBookImg(){
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
