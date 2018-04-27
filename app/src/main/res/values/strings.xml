@@ -29,6 +29,7 @@
     <string name="nav_element_addbook">Add new book</string>
     <string name="nav_element_showprofile">Show my profile</string>
     <string name="nav_element_mylibrary">My library</string>
+    <string name="nav_element_logOut">Log out</string>
 
     <!--Fragment Related-->
     <string name="top_books">Top</string>
@@ -38,6 +39,7 @@
 
     <!--Barcode Related-->
     <string name="read_barcode">Read Barcode</string>
+    <string name="add_book_read_ISBN">Search ISBN details</string>
     <string name="add_a_book">Add a book</string>
     <string name="add_book_title">"Title"</string>
     <string name="add_book_author">"Author(s)"</string>
@@ -45,6 +47,7 @@
     <string name="add_book_ISBN">"ISBN"</string>
     <string name="add_book_publisher">"Publisher"</string>
     <string name="add_book_helper_text_ISBN">"Write exactly 13 numbers"</string>
+    <!--Book conditions-->
     <string-array name="book_conditions">
         <item>Select book conditions</item>
         <item>Excellent</item>

@@ -28,10 +28,9 @@
             android:layout_above="@+id/read_barcode"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="-249dp"
-            android:background="#FFD180"
             android:clickable="true"
             android:padding="16dp"
-            android:src="@drawable/ic_if_internt_web_technology_05_274892" />
+            android:src="@drawable/ic_book_cover" />
 
 
         <Button
@@ -45,7 +44,7 @@
             android:background="@drawable/corner_button"
             android:padding="16dp"
             android:textSize="10sp"
-            android:text="read_barcode"
+            android:text="@string/read_barcode"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
             android:textColor="@android:color/white" />
 
@@ -60,7 +59,7 @@
             android:textSize="10sp"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
             android:textAlignment="inherit"
-            android:text="Search ISBN details"
+            android:text="@string/add_book_read_ISBN"
             android:textColor="@android:color/white" />
 
         <studio.carbonylgroup.textfieldboxes.TextFieldBoxes

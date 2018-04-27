@@ -35,6 +35,7 @@
     <string name="nav_element_addbook">Aggiungi un nuovo libro</string>
     <string name="nav_element_showprofile">Il mio profilo</string>
     <string name="nav_element_mylibrary">La mia libreria</string>
+    <string name="nav_element_logOut">Esci</string>
 
     <!--Fragment Related-->
     <string name="top_books">Top</string>
@@ -43,6 +44,7 @@
     <string name="borrowed_books">In prestito</string>
 
     <!--Barcode Related-->
+    <string name="add_book_read_ISBN">Cerca dettagli ISBN</string>
     <string name="read_barcode">Leggi Barcode</string>
     <string name="add_a_book">Aggiungi un libro</string>
     <string name="add_book_title">"Titolo"</string>

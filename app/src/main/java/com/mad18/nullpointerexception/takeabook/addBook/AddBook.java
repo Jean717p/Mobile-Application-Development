@@ -121,14 +121,16 @@ public class AddBook extends AppCompatActivity {
 
             }
         });
-        if(state == null){
+       /* if(state == null){
+
             for(int i:addBookTextViewIds){
                 findViewById(i).setVisibility(View.INVISIBLE);
             }
             findViewById(R.id.add_book_text_field_ISBN).setVisibility(View.VISIBLE);
             findViewById(R.id.add_book_picture).setVisibility(View.INVISIBLE);
+
             bookImg = null;
-        }
+        }*/
 
         search.setOnClickListener(new View.OnClickListener() {   //////////////////////////////////// new search
             @Override
