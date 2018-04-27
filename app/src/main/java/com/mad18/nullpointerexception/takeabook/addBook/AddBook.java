@@ -102,7 +102,7 @@ public class AddBook extends AppCompatActivity {
 
             }
         });
-        if(state != null){
+        if(state == null){
             for(int i:addBookTextViewIds){
                 findViewById(i).setVisibility(View.INVISIBLE);
             }
@@ -211,6 +211,9 @@ public class AddBook extends AppCompatActivity {
         Map<String,Boolean> authors = new HashMap<>();
         ExtendedEditText eet;
         //Aggiunta libro a elenco libri
+        if(bookToAdd==null){
+            bookToAdd = new Book();
+        }
         eet = findViewById(R.id.add_book_extended_edit_text_ISBN);
         bookToAdd.setBook_ISBN(eet.getText().toString());
         eet = findViewById(R.id.add_book_extended_edit_Author);
@@ -279,7 +282,6 @@ public class AddBook extends AppCompatActivity {
                         for(int i:addBookTextViewIds){
                             findViewById(i).setVisibility(View.VISIBLE);
                         }
-                        findViewById(R.id.read_barcode).setVisibility(View.INVISIBLE);
                         fillAddBookViews(bookToAdd);
                         //findViewById(R.id.add_book_picture).setVisibility(View.VISIBLE);
 
