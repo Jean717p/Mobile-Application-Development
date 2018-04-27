@@ -236,13 +236,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             usr_text.setText(usr);
         }
         else{
-            usr_text.setText(R.string.profile_username);
+            usr_text.setText(R.string.Username);
         }
         if(mail.length() > 0){
             mail_text.setText(mail);
         }
         else {
-            mail_text.setText(R.string.profile_mail);
+            mail_text.setText(R.string.Email);
         }
     }
 

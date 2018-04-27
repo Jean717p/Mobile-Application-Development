@@ -177,24 +177,6 @@
                 />
         </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add_book_fab_camera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/read_barcode"
-            android:layout_gravity="right|bottom"
-            android:layout_marginBottom="-263dp"
-            android:layout_toEndOf="@+id/read_barcode"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/ic_photo_camera_white_24px"
-            app:borderWidth="0dp"
-            app:elevation="6dp"
-            app:fabSize="normal"
-            app:pressedTranslationZ="12dp"
-            app:rippleColor="@color/colorAccent"
-            tools:backgroundTint="@color/colorAccent" />
-
 
     </RelativeLayout>
 

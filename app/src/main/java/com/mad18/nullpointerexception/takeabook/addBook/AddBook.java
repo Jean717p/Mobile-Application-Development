@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -70,7 +72,6 @@ public class AddBook extends AppCompatActivity {
     private Toolbar toolbar;
     private Menu menu;
     private Bitmap bookImg;
-    private android.support.design.widget.FloatingActionButton img_fab;
 
     @Override
     public void onCreate(Bundle state) {
@@ -81,10 +82,11 @@ public class AddBook extends AppCompatActivity {
         toolbar.setTitle("Add a book");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Button scan = (Button)findViewById(R.id.read_barcode);
+        Button search = (Button)findViewById(R.id.add_book_read_ISBN); //new search
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
-        img_fab =  findViewById(R.id.add_book_fab_camera);
-        img_fab.setClickable(true);
-        img_fab.setOnClickListener(view -> selectBookImg());
+        ImageView iw =  findViewById(R.id.add_book_picture);
+        iw.setClickable(true);
+        iw.setOnClickListener(view -> selectBookImg());
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,6 +110,37 @@ public class AddBook extends AppCompatActivity {
             findViewById(R.id.add_book_picture).setVisibility(View.INVISIBLE);
             //bookImg = null;
         }
+
+        search.setOnClickListener(new View.OnClickListener() {   //////////////////////////////////// new search
+            @Override
+            public void onClick(View view) {
+                ExtendedEditText isbneditfield = findViewById(R.id.add_book_extended_edit_text_ISBN);
+                boolean valid= true;
+                if(isbneditfield.getText().toString().length()== 13){
+                    for (char x: isbneditfield.getText().toString().toCharArray()) {
+                        if(!Character.isDigit(x)){
+                            valid = false;
+                            break;
+                        }
+                    }
+                    if(valid==false){
+                        Toast toast = Toast.makeText(getApplicationContext(), "Exactly 13 characters for ISBN", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                    else {
+                        //fai la ricerca tramite isbn
+                        Intent searchbarcodeintent = new Intent(AddBook.this, ScanBarcode.class);
+                        searchbarcodeintent.putExtra("toSearch", isbneditfield.getText().toString());
+                        startActivityForResult(searchbarcodeintent, REQUEST_SCANNER);
+                    }
+
+                }
+                else{
+                    Toast toast = Toast.makeText(getApplicationContext(), "Exactly 13 characters for ISBN", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+        });
     }
 
     @Override

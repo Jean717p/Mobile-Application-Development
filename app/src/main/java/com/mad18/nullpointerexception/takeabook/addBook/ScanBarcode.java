@@ -32,19 +32,34 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
-        mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
-        setContentView(mScannerView);                // Set the scanner view as the content view
+        Intent intent = getIntent();
+        String x = intent.getStringExtra("toSearch");
+        if(x==null) {
+            mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
+            setContentView(mScannerView);                // Set the scanner view as the content view
+        }
     }
     @Override
     public void onResume() {
         super.onResume();
-        mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
-        mScannerView.startCamera();          // Start camera on resume
+        Intent intent = getIntent();
+        String x = intent.getStringExtra("toSearch");
+        if (x == null) {
+            mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
+            mScannerView.startCamera();          // Start camera on resume
+        }
+        else{
+            downloadJson(x);
+        }
     }
     @Override
     public void onPause() {
         super.onPause();
-        mScannerView.stopCamera();           // Stop camera on pause
+        Intent intent = getIntent();
+        String x = intent.getStringExtra("toSearch");
+        if (x == null) {
+            mScannerView.stopCamera();           // Stop camera on pause
+        }
     }
     @Override
     public void handleResult(Result rawResult) {
@@ -53,48 +68,51 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
         //Log.v(TAG, rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
         Log.d("barcode format", rawResult.getBarcodeFormat().toString());
         Log.d("print scan result", rawResult.getText());
+        downloadJson(rawResult.getText());
+    }
+
+    private void downloadJson(String ISBN){
         Intent intent = new Intent();
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                JsonParser jsonParser = new JsonParser();
-                JSONObject jsonObject = jsonParser.makeHttpRequest(
-                        "https://www.googleapis.com/books/v1/volumes?q=isbn:" + rawResult.getText(),
-                        "GET", new HashMap<String, String>());
-                String ISBN = rawResult.getText();
-                String title="";
-                List<String> authors=new LinkedList<>();
-                String publisher="";
-                int editionYear=-1;
-                if(jsonObject.has("items")){
-                    JSONObject tmp =  jsonObject.getJSONArray("items").getJSONObject(0);
-                    if(tmp.has("volumeInfo")){
-                        tmp = tmp.getJSONObject("volumeInfo");
-                        if(tmp.has("title")){
-                            title = tmp.getString("title");
-                        }
-                        if(tmp.has("authors")){
-                            JSONArray Jauthors = tmp.getJSONArray("authors");
-                            for(int i=0; i<Jauthors.length();i++) {
-                                authors.add(Jauthors.getString(i));
+                    JsonParser jsonParser = new JsonParser();
+                    JSONObject jsonObject = jsonParser.makeHttpRequest(
+                            "https://www.googleapis.com/books/v1/volumes?q=isbn:" + ISBN,
+                            "GET", new HashMap<String, String>());
+                    String title="";
+                    List<String> authors=new LinkedList<>();
+                    String publisher="";
+                    int editionYear=-1;
+                    if(jsonObject.has("items")){
+                        JSONObject tmp =  jsonObject.getJSONArray("items").getJSONObject(0);
+                        if(tmp.has("volumeInfo")){
+                            tmp = tmp.getJSONObject("volumeInfo");
+                            if(tmp.has("title")){
+                                title = tmp.getString("title");
                             }
+                            if(tmp.has("authors")){
+                                JSONArray Jauthors = tmp.getJSONArray("authors");
+                                for(int i=0; i<Jauthors.length();i++) {
+                                    authors.add(Jauthors.getString(i));
+                                }
 
-                        }
-                        if(tmp.has("publisher")){
-                            publisher =tmp.getString("publisher");
-                        }
-                        if(tmp.has("publishedDate")){
-                            String SeditionYear = tmp.getString("publishedDate");
-                            editionYear = Integer.parseInt(SeditionYear);
+                            }
+                            if(tmp.has("publisher")){
+                                publisher =tmp.getString("publisher");
+                            }
+                            if(tmp.has("publishedDate")){
+                                String SeditionYear = tmp.getString("publishedDate");
+                                editionYear = Integer.parseInt(SeditionYear);
+                            }
                         }
                     }
-                }
-                BookWrapper bookWrapper = new BookWrapper(ISBN,title,authors, publisher,editionYear);
-                intent.putExtra("bookinfo", bookWrapper);
-                setResult(RESULT_OK,intent);
-                finish();
+                    BookWrapper bookWrapper = new BookWrapper(ISBN,title,authors, publisher,editionYear);
+                    intent.putExtra("bookinfo", bookWrapper);
+                    setResult(RESULT_OK,intent);
+                    finish();
                 }
                 catch(JSONException e){
                     e.printStackTrace();
