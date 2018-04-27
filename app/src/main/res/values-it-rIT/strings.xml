@@ -53,6 +53,7 @@
     <string name="add_book_ISBN">"ISBN"</string>
     <string name="add_book_publisher">"Editore"</string>
     <string name="add_book_helper_text_ISBN">"Scrivi esattamente 13 numeri"</string>
+    <string name="add_book_description">"Descrizione"</string>
 
 
 </resources>

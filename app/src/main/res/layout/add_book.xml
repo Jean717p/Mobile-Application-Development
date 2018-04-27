@@ -201,6 +201,7 @@
 
 
         <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+            android:id="@+id/add_book_text_field_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -208,7 +209,7 @@
             app:errorColor="#ddaa00"
             android:layout_below="@id/add_book_spinner_book_cond"
             app:hasClearButton="true"
-            app:labelText="Description"
+            app:labelText="@string/add_book_description"
             app:panelBackgroundColor="#FFF3E0"
             app:maxCharacters="250"
             app:useDenseSpacing="true"
@@ -217,6 +218,7 @@
 
 
             <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+                android:id="@+id/add_book_extended_edit_text_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scrollbars="vertical"

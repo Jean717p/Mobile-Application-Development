@@ -47,6 +47,8 @@
     <string name="add_book_ISBN">"ISBN"</string>
     <string name="add_book_publisher">"Publisher"</string>
     <string name="add_book_helper_text_ISBN">"Write exactly 13 numbers"</string>
+    <string name="add_book_description">"Description"</string>
+
     <!--Book conditions-->
     <string-array name="book_conditions">
         <item>Select book conditions</item>
