@@ -1,18 +1,59 @@
 <resources>
+    <!--Application-->
     <string name="app_name">Books Circle</string>
-    <string name="profile_name">Nome</string>
-    <string name="profile_username">Nome Utente</string>
-    <string name="profile_city">Torino</string>
-    <string name="profile_mail">JerrySiegel@gmail.com</string>
-    <string name="profile_about">Bio</string>
+
+    <!--Profile-->
     <string name="profile_photo">Foto profilo</string>
-    <string name="title_activity_edit">Modifica profilo</string>
     <string name="Username">Nome Utente</string>
     <string name="City">Città</string>
     <string name="Email">Email</string>
-    <string name="hint_mail">esempio@dominio.it</string>
     <string name="AboutMe">Bio</string>
+
+    <!--Activities Title -->
+    <string name="title_activity_edit">Modifica profilo</string>
+    <string name="title_activity_show_profile">Mostra profilo</string>
+    <string name="title_activity_login_activity">Login utente</string>
+
+    <!--Photo-->
     <string name="photo_from_gallery">Seleziona una foto dalla galleria</string>
     <string name="photo_from_camera">Scatta una foto dalla fotocamera</string>
     <string name="photo_remove">Rimuovi foto</string>
+    <string-array name="book_conditions">
+        <item>Seleziona condizioni libro </item>
+        <item>Eccellente</item>
+        <item>Buono</item>
+        <item>Scarso</item>
+    </string-array>
+
+    <!--Navigation Drawer-->
+    <string name="navigation_drawer_open">Apri menu laterale</string>
+    <string name="navigation_drawer_close">Chiudi menu laterale</string>
+    <string name="nav_header_title">Nome Utente</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Intestazione menu laterale</string>
+    <string name="action_settings">Impostazioni</string>
+    <string name="nav_element_addbook">Aggiungi un nuovo libro</string>
+    <string name="nav_element_showprofile">Il mio profilo</string>
+    <string name="nav_element_mylibrary">La mia libreria</string>
+    <string name="nav_element_logOut">Esci</string>
+
+    <!--Fragment Related-->
+    <string name="top_books">Top</string>
+    <string name="my_library">Libreria</string>
+    <string name="lent_books">Prestati</string>
+    <string name="borrowed_books">In prestito</string>
+
+    <!--Barcode Related-->
+    <string name="add_book_read_ISBN">Cerca dettagli ISBN</string>
+    <string name="read_barcode">Leggi Barcode</string>
+    <string name="add_a_book">Aggiungi un libro</string>
+    <string name="add_book_title">"Titolo"</string>
+    <string name="add_book_author">"Autore/i"</string>
+    <string name="add_book_edition_year">"Edizione"</string>
+    <string name="add_book_ISBN">"ISBN"</string>
+    <string name="add_book_publisher">"Editore"</string>
+    <string name="add_book_helper_text_ISBN">"Scrivi esattamente 13 numeri"</string>
+    <string name="add_book_description">"Descrizione"</string>
+
+
 </resources>

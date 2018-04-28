@@ -67,7 +67,7 @@
                 <!-- username-->
                 <EditText
                     android:id="@+id/edit_profile_Username"
-                    android:hint="@string/profile_name"
+                    android:hint="@string/Username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/edit_profile_title_Username"
