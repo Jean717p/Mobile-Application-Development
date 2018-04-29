@@ -83,7 +83,6 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
                             "https://www.googleapis.com/books/v1/volumes?q=isbn:" + ISBN,
                             "GET", new HashMap<String, String>());
                     String title="";
-                    String thumbnail = "";
                     List<String> authors=new LinkedList<>();
                     String publisher="";
                     int editionYear=-1;
@@ -108,15 +107,9 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
                                 String SeditionYear = tmp.getString("publishedDate");
                                 editionYear = Integer.parseInt(SeditionYear);
                             }
-                            if(tmp.has("imageLinks")){
-                                tmp = tmp.getJSONObject("imageLinks");
-                                if(tmp.has("thumbnail")){
-                                    thumbnail = tmp.getString("thumbnail");
-                                }
-                            }
                         }
                     }
-                    BookWrapper bookWrapper = new BookWrapper(ISBN,title,authors, publisher,editionYear,thumbnail);
+                    BookWrapper bookWrapper = new BookWrapper(ISBN,title,authors, publisher,editionYear);
                     intent.putExtra("bookinfo", bookWrapper);
                     setResult(RESULT_OK,intent);
                     finish();

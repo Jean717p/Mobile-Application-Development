@@ -24,17 +24,14 @@ class BookWrapper implements Parcelable {
     private List<String> authors;
     private String publisher;
     private int editionYear;
-    private  String thumbnail_url;
-
 
     //Constructor
-    public BookWrapper(String ISBN,String title,List<String> authors, String publisher, int editionYear, String url){
+    public BookWrapper(String ISBN,String title,List<String> authors, String publisher, int editionYear){
         this.ISBN = ISBN;
         this.title = title;
         this.authors = authors;
         this.publisher = publisher;
         this.editionYear = editionYear;
-        this.thumbnail_url = url;
     }
 
     public String getISBN() {
@@ -60,13 +57,6 @@ class BookWrapper implements Parcelable {
 //    public void setAuthors(Map<String, Boolean> authors) {
 //        this.authors = authors;
 //    }
-    public String getThumbnail_url() {
-        return thumbnail_url;
-    }
-
-    public void setThumbnail_url(String thumbnail_url) {
-            this.thumbnail_url = thumbnail_url;
-        }
 
     public List<String> getAuthors() {
         return authors;
@@ -98,7 +88,6 @@ class BookWrapper implements Parcelable {
         this.authors = in.createStringArrayList();
         this.publisher = in.readString();
         this.editionYear = in.readInt();
-        this.thumbnail_url=in.readString();
     }
     @Override
     public int describeContents() {
@@ -113,7 +102,6 @@ class BookWrapper implements Parcelable {
         dest.writeStringList(this.authors);
         dest.writeString(this.publisher);
         dest.writeInt(this.editionYear);
-        dest.writeString(this.thumbnail_url);
     }
     @Override
     public String toString() {
@@ -130,7 +118,6 @@ class BookWrapper implements Parcelable {
                 Totauthors +
                 ", publisher='" + publisher + '\'' +
                 ", editionYear='" + SeditionYear + '\'' +
-                ", thumbnail_url='" + thumbnail_url + '\'' +
                 '}';
     }
 }
