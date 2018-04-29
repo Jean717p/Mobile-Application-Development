@@ -61,6 +61,12 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
             mScannerView.stopCamera();           // Stop camera on pause
         }
     }
+
+
+    /**
+     * Gestisce il risultato della scansione, chiamando il metodo che permette di scaricare il Json
+     * @param rawResult
+     */
     @Override
     public void handleResult(Result rawResult) {
         // Do something with the result here
@@ -71,6 +77,14 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
         downloadJson(rawResult.getText());
     }
 
+    /**
+     * Metodo che permette di scaricare il JSON che descrive il libro a partire dall'ISBN.
+     * Crea un nuovo thread da cui viene effettuata la chiamata alla URL delle Google API.
+     * Ottenuto il JSON object viene percorso l'albero risultante, controllando l'esistenza di ogni elemento.
+     * I dati ottenuti nel JSON vengono inseriti in un oggetto di tipo Bookwrapper, inserito come Bundle
+     * dell'intent tramite il metodo putExtra().
+     * @param ISBN
+     */
     private void downloadJson(String ISBN){
         Intent intent = new Intent();
 

@@ -44,11 +44,6 @@ import com.mad18.nullpointerexception.takeabook.User;
 import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
 import studio.carbonylgroup.textfieldboxes.ExtendedEditText;
 
-/** DA aggiungere
- * La thumbnail da scaricare come img di default se l'utente non la sceglie
- * Usare:
- * Glide.with(context).load(url).into(findViewById(R.id.add_book_photo)) per scaricare la thumbnail nella view
- */
 
 public class AddBook extends AppCompatActivity {
     private final String TAG = "AddBook";
@@ -83,15 +78,13 @@ public class AddBook extends AppCompatActivity {
         iw.setOnClickListener(view -> selectBookImg());
         //get the spinner from the xml.
         staticSpinner = findViewById(R.id.add_book_spinner_book_cond);
-
-//create a list of items for the spinner.
+        //create a list of items for the spinner.
         String[] items = new String[]{"condizioni del libro", "Ottime", "Buone", "Scarse"};
-//create an adapter to describe how the items are displayed, adapters are used in several places in android.
-//There are multiple variations of this, but this is the basic variant.
+        //create an adapter to describe how the items are displayed, adapters are used in several places in android.
+        //There are multiple variations of this, but this is the basic variant.
         ArrayAdapter<CharSequence> staticAdapter = ArrayAdapter
                 .createFromResource(this, R.array.book_conditions,
                         android.R.layout.simple_dropdown_item_1line);
-
         staticSpinner.setAdapter(staticAdapter);
         user = FirebaseAuth.getInstance().getCurrentUser();
         scan.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +99,6 @@ public class AddBook extends AppCompatActivity {
                     Intent intent = new Intent(AddBook.this, ScanBarcode.class);
                     startActivityForResult(intent,REQUEST_SCANNER);
                 }
-
             }
         });
        if(state == null){
@@ -120,40 +112,40 @@ public class AddBook extends AppCompatActivity {
             bookImg = null;
         }
 
-        search.setOnClickListener(new View.OnClickListener() {   //////////////////////////////////// new search
-            @Override
-            public void onClick(View view) {
-                ExtendedEditText isbneditfield = findViewById(R.id.add_book_extended_edit_text_ISBN);
-                boolean valid= true;
-                if(isbneditfield.getText().toString().length()== 13){
-                    for (char x: isbneditfield.getText().toString().toCharArray()) {
-                        if(!Character.isDigit(x)){
-                            valid = false;
-                            break;
-                        }
+        search.setOnClickListener(view -> { //new search
+            ExtendedEditText isbneditfield = findViewById(R.id.add_book_extended_edit_text_ISBN);
+            boolean valid= true;
+            if(isbneditfield.getText().toString().length()== 13){
+                for (char x: isbneditfield.getText().toString().toCharArray()) {
+                    if(!Character.isDigit(x)){
+                        valid = false;
+                        break;
                     }
-                    if(valid==false){
-                        Toast toast = Toast.makeText(getApplicationContext(), "Exactly 13 characters for ISBN", Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
-                    else {
-                        //fai la ricerca tramite isbn
-                        Intent searchbarcodeintent = new Intent(AddBook.this, ScanBarcode.class);
-                        searchbarcodeintent.putExtra("toSearch", isbneditfield.getText().toString());
-                        startActivityForResult(searchbarcodeintent, REQUEST_SCANNER);
-                    }
-
                 }
-                else{
+                if(valid==false){
                     Toast toast = Toast.makeText(getApplicationContext(), "Exactly 13 characters for ISBN", Toast.LENGTH_SHORT);
                     toast.show();
                 }
+                else {
+                    //fai la ricerca tramite isbn
+                    Intent searchbarcodeintent = new Intent(AddBook.this, ScanBarcode.class);
+                    searchbarcodeintent.putExtra("toSearch", isbneditfield.getText().toString());
+                    startActivityForResult(searchbarcodeintent, REQUEST_SCANNER);
+                }
+            }
+            else{
+                Toast toast = Toast.makeText(getApplicationContext(), "Exactly 13 characters for ISBN", Toast.LENGTH_SHORT);
+                toast.show();
             }
         });
     }
 
 
-
+    /**
+     * Crea il menu (toolbar) partendo dall'xml add_book_menu.xml
+     * @param menu
+     * @return
+     */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -163,6 +155,12 @@ public class AddBook extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Gestisce le opzioni della toolbar, in particolare si occupa di gestire le operazioni necessarie al
+     * salvataggio di un libro.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
@@ -178,6 +176,7 @@ public class AddBook extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -211,6 +210,15 @@ public class AddBook extends AppCompatActivity {
             }
         }
     }
+
+    /**
+     * Metodo che si occupa di inserire nel database Firebase i dati relativi al libro aggiunto dall'utente.
+     * Setta tutti i parametri ricevuti dalle edit text in un oggetto bookToAdd della classe book, che verrà poi inserito
+     * su Firebase.
+     * Viene gestito anche il caricamento dell'immagine su Firebase, inserita nella cartella images/books utilizzando un nome
+     * dato dalla chiave univoca ISBN + userID.
+     * Viene infine aggiornato il campo books dell'oggetto user del database.
+     */
 
     private void storeBookEditData(){
         ExtendedEditText text;
@@ -273,6 +281,18 @@ public class AddBook extends AppCompatActivity {
         });
     }
 
+    /**
+     * Questo metodo si occupa di effettuare le operazioni seguenti al risultato prodotto da un Intent.
+     * Caso 1 REQUEST_SCANNER:
+     *      Si occupa del recupero dei dati dal Bundle fornito dalla classe ScanBarcode.
+     *      All'interno del Bundle è presente un oggetto di tipo BookWrapper, da cui è possibile estrarre le informazioni
+     *      necessarie per la creazione dell'oggetto di tipo Book.
+     * Caso 2 REQUEST_IMAGE_CAPTURE:
+     *      Si occupa di gestire la bitmap dello scatto effettuato tramite fotocamera.
+     * Caso 3 REQUEST_PICK_IMAGE:
+     *      Si occupa di recuperare dalla memoria la Bitmap, tramite la Uri fornita dal metodo getExtra
+     */
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -299,8 +319,6 @@ public class AddBook extends AppCompatActivity {
 
                         bookToAdd = new Book(bookwrap.getISBN(),bookwrap.getTitle(),
                                 bookwrap.getPublisher(),bookwrap.getEditionYear(),0,user.getUid(),Mauthors,"");
-                        /**Rendere view cliccabile (imamgine) anche con inserimento isbn manuale)*/
-                        /** Far ritornare tutti i fields visibili e far scomparire i due button*/
 //                        for(int i:addBookTextViewIds){
 //                            findViewById(i).setVisibility(View.VISIBLE);
 //                        }
@@ -338,6 +356,12 @@ public class AddBook extends AppCompatActivity {
         }
     }
 
+    /**
+     * Questo metodo si occupa di riempire le ExtendedTextView con i dati del libro.
+     * Viene effettuato un controllo sul campo autors per rimuovere le parentesi quadre restituite dal JSON.
+     * @param book
+     */
+
     private void fillAddBookViews(Book book){
         ExtendedEditText eet;
         String tmp;
@@ -357,6 +381,11 @@ public class AddBook extends AppCompatActivity {
         eet = findViewById(R.id.add_book_extended_edit_text_Publisher);
         eet.setText(book.getBook_publisher());
     }
+
+    /**
+     * Metodo che si occupa di generare il menu per poter scegliere tra lo scatto di una foto, la scelta
+     * di un'immagine dalla galleria o la rimozione di un'immagine
+     */
     private void selectBookImg(){
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
         //pictureDialog.setTitle("Select Action");
@@ -381,6 +410,10 @@ public class AddBook extends AppCompatActivity {
         pictureDialog.show();
     }
 
+    /**
+     * Crea l'intent per permettere la scelta di una foto dalla galleria, controllando i permessi necessari.
+     */
+
     public void choosePhotoFromGallery() {
         if(ActivityCompat.checkSelfPermission(AddBook.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(AddBook.this,new String[]{
@@ -393,6 +426,9 @@ public class AddBook extends AppCompatActivity {
         startActivityForResult(galleryIntent, REQUEST_PICK_IMAGE);
     }
 
+    /**
+     * Crea l'intent per lo scatto di un'immagine dalla fotocamera, controllando i permessi necessari
+     */
     private void choosePhotoFromCamera() {
         if(ActivityCompat.checkSelfPermission(AddBook.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
                 ||ActivityCompat.checkSelfPermission(AddBook.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
@@ -405,6 +441,10 @@ public class AddBook extends AppCompatActivity {
         startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
     }
 
+    /**
+     * Si occupa della rimozione dell'immagine dalla ImageView in cui è contenuta.
+     */
+
     private void removeBookImg(){
         ImageView iw;
         if(bookImg!=null){
@@ -413,6 +453,13 @@ public class AddBook extends AppCompatActivity {
             iw.setImageResource(R.drawable.ic_if_internt_web_technology_05_274892);
         }
     }
+
+    /**
+     * Si occupa di gestire il risultato della richiesta dei permessi.
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
 
     @Override
     public void onRequestPermissionsResult(int requestCode,  String permissions[], int[] grantResults) {
