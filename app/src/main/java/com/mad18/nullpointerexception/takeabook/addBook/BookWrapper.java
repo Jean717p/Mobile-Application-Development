@@ -86,7 +86,6 @@ class BookWrapper implements Parcelable {
     public BookWrapper(Parcel in){
         this.ISBN = in.readString();
         this.title = in.readString();
-        //this.authors = (HashMap<String,Boolean>)in.readSerializable();
         this.authors = in.createStringArrayList();
         this.publisher = in.readString();
         this.editionYear = in.readInt();
