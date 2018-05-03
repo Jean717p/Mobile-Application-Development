@@ -26,6 +26,14 @@ public class JsonParser {
     JSONObject jObj = null;
     StringBuilder sbParams;
     String paramsString;
+
+    /**
+     * Metodo utilizzato per effettuare la richiesta http alla url fornita come parametro.
+     * @param url Url della richiesta http
+     * @param method selezione tra POST e GET
+     * @param params
+     * @return
+     */
     public JSONObject makeHttpRequest(String url, String method,
                                       HashMap<String, String> params) {
 

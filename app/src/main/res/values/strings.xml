@@ -9,6 +9,10 @@
     <string name="Email">Email</string>
     <string name="AboutMe">Bio</string>
 
+    <!--Login-->
+    <string name="no_internet">No internet connection</string>
+    <string name="connecting">Connecting...</string>
+
     <!--Activities Title -->
     <string name="title_activity_edit">EditActivity</string>
     <string name="title_activity_show_profile">showProfile</string>

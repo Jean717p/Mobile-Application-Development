@@ -7,8 +7,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * La classe BookWrapper si occupa di creare un oggetto in cui possano essere memorizzati i dati
+ * relativi ad un libro. La classe implementa l'interfaccia Parcelable in quanto è necessario creare
+ * un oggetto di questo tipo affinchè possa essere inserito nel bundle.
+ *
+ */
 class BookWrapper implements Parcelable {
 
+    /**
+     * Si occupa di creare una nuova istanza della classe Parcelable, instanziandola dal Parcel specificato.
+     * Il parcel deve essere precedentemente scritto con il metodo WriteToParcel
+     */
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
         public BookWrapper createFromParcel(Parcel in) {
             return new BookWrapper(in);
@@ -50,14 +60,6 @@ class BookWrapper implements Parcelable {
         this.title = title;
     }
 
-//    public Map<String, Boolean> getAuthors() {
-//        return authors;
-//    }
-
-//    public void setAuthors(Map<String, Boolean> authors) {
-//        this.authors = authors;
-//    }
-
     public List<String> getAuthors() {
         return authors;
     }
@@ -84,7 +86,6 @@ class BookWrapper implements Parcelable {
     public BookWrapper(Parcel in){
         this.ISBN = in.readString();
         this.title = in.readString();
-        //this.authors = (HashMap<String,Boolean>)in.readSerializable();
         this.authors = in.createStringArrayList();
         this.publisher = in.readString();
         this.editionYear = in.readInt();
@@ -93,6 +94,12 @@ class BookWrapper implements Parcelable {
     public int describeContents() {
         return 0;
     }
+
+    /**
+     * Questo metodo si occupa di scrivere nel Parcel di destinazione i dati richiesti.
+     * @param dest
+     * @param flags
+     */
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
