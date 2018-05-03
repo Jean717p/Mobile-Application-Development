@@ -104,7 +104,7 @@ public class editProfile extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPref.edit();
         int i=0;
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        StorageReference mImageRef = FirebaseStorage.getInstance().getReference().child("users/images/"+user.getUid());
+        StorageReference mImageRef = FirebaseStorage.getInstance().getReference().child("images/users/"+user.getUid());
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference users = db.collection("users");
         String profileImgPath;
