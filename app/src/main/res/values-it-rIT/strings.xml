@@ -59,5 +59,8 @@
     <string name="add_book_helper_text_ISBN">"Scrivi esattamente 13 numeri"</string>
     <string name="add_book_description">"Descrizione"</string>
 
+    <!-- Facebook login -->
+    <string name="facebook_application_id" translatable="false">207778776488778</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb207778776488778</string>
 
 </resources>

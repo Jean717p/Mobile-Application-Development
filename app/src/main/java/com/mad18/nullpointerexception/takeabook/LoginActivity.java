@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity  {
                         .setAvailableProviders(Arrays.asList(
                                 new AuthUI.IdpConfig.EmailBuilder().build()
                                 ,new AuthUI.IdpConfig.GoogleBuilder().build()
-                                //,new AuthUI.IdpConfig.FacebookBuilder().build()
+                                ,new AuthUI.IdpConfig.FacebookBuilder().build()
                         ))
                         //.setIsSmartLockEnabled(!BuildConfig.DEBUG /* credentials */, true /* hints */)
                         .build(),
