@@ -61,4 +61,8 @@
         <item>Bad</item>
     </string-array>
 
+    <!-- Facebook login -->
+    <string name="facebook_application_id" translatable="false">207778776488778</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb207778776488778</string>
+
 </resources>
