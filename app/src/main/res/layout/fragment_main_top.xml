@@ -8,10 +8,6 @@
 
    >
 
-
-
-
-
    <com.github.clans.fab.FloatingActionMenu
 
        android:id="@+id/floating_action_menu"
