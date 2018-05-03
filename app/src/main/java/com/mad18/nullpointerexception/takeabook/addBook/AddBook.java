@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -310,15 +311,19 @@ public class AddBook extends AppCompatActivity {
                         }
                         findViewById(R.id.add_book_picture).setVisibility(View.VISIBLE);
                         Map<String,Boolean> Mauthors = new HashMap<>();
+                        Map<String,Boolean> Mcategories = new HashMap<>();
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 //                        Mauthors.putAll(bookwrap.getAuthors().stream().collect(Collectors.toMap((String s)->s,s-> true)));
 //                    }
                         for (String key: bookwrap.getAuthors()) {
                             Mauthors.put(key,true);
                         }
+                        for (String key: bookwrap.getCategories()) {
+                            Mcategories.put(key,true);
+                        }
 
                         bookToAdd = new Book(bookwrap.getISBN(),bookwrap.getTitle(),
-                                bookwrap.getPublisher(),bookwrap.getEditionYear(),0,user.getUid(),Mauthors,"");
+                                bookwrap.getPublisher(),bookwrap.getEditionYear(),0,user.getUid(),Mauthors,"",bookwrap.getThumbnail(), Mcategories);
 //                        for(int i:addBookTextViewIds){
 //                            findViewById(i).setVisibility(View.VISIBLE);
 //                        }

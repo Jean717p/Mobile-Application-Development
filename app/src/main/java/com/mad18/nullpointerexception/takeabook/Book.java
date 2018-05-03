@@ -2,6 +2,7 @@ package com.mad18.nullpointerexception.takeabook;
 
 import android.os.Build;
 
+import java.util.List;
 import java.util.Map;
 
 public class Book {
@@ -10,23 +11,26 @@ public class Book {
     String book_title;
     String book_first_author;
     String book_publisher;
+    String book_thumbnail_url;
     int book_editionYear;
     int book_condition;
-    String userid;
+    String book_userid;
     Map<String,Boolean> book_authors;
-    String description;
+    Map<String,Boolean> book_categories;
+    String book_description;
+
 
     public Book() {}
 
     public String getUserid() {
-        return userid;
+        return book_userid;
     }
 
     public void setUserid(String userid) {
-        this.userid = userid;
+        this.book_userid = userid;
     }
 
-    public Book(String ISBN, String title, String publisher, int editionYear, int condition, String user, Map<String,Boolean> authors, String description){
+    public Book(String ISBN, String title, String publisher, int editionYear, int condition, String user, Map<String,Boolean> authors, String description, String thumbnail, Map<String,Boolean> categories){
         book_ISBN = ISBN;
         book_title = title;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -37,13 +41,15 @@ public class Book {
                 book_first_author = (String) (authors.keySet().toArray())[0];
             }
         }
+
         book_publisher = publisher;
         book_editionYear = editionYear;
         book_condition = condition;
         book_authors = authors;
-        userid = user;
-        this.description = description;
-
+        book_userid = user;
+        book_description = description;
+        book_thumbnail_url = thumbnail;
+        book_categories = categories;
     }
 
     public String getBook_ISBN() {
@@ -103,10 +109,42 @@ public class Book {
     }
 
     public String getDescription() {
-        return description;
+        return book_description;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.book_description = description;
+    }
+
+    public String getBook_thumbnail_url() {
+        return book_thumbnail_url;
+    }
+
+    public void setBook_thumbnail_url(String book_thumbnail_url) {
+        this.book_thumbnail_url = book_thumbnail_url;
+    }
+
+    public Map<String, Boolean> getBook_categories() {
+        return book_categories;
+    }
+
+    public void setBook_categories(Map<String, Boolean> book_categories) {
+        this.book_categories = book_categories;
+    }
+
+    public String getBook_userid() {
+        return book_userid;
+    }
+
+    public void setBook_userid(String book_userid) {
+        this.book_userid = book_userid;
+    }
+
+    public String getBook_description() {
+        return book_description;
+    }
+
+    public void setBook_description(String book_description) {
+        this.book_description = book_description;
     }
 }

@@ -34,14 +34,18 @@ class BookWrapper implements Parcelable {
     private List<String> authors;
     private String publisher;
     private int editionYear;
+    private String thumbnail;
+    private List<String> categories;
 
     //Constructor
-    public BookWrapper(String ISBN,String title,List<String> authors, String publisher, int editionYear){
+    public BookWrapper(String ISBN,String title,List<String> authors, String publisher, int editionYear, String thumbnail, List<String> categories){
         this.ISBN = ISBN;
         this.title = title;
         this.authors = authors;
         this.publisher = publisher;
         this.editionYear = editionYear;
+        this.thumbnail = thumbnail;
+        this.categories = categories;
     }
 
     public String getISBN() {
@@ -83,12 +87,31 @@ class BookWrapper implements Parcelable {
     public void setEditionYear(int editionYear) {
         this.editionYear = editionYear;
     }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    public List<String> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
+    }
+
     public BookWrapper(Parcel in){
         this.ISBN = in.readString();
         this.title = in.readString();
         this.authors = in.createStringArrayList();
         this.publisher = in.readString();
         this.editionYear = in.readInt();
+        this.thumbnail = in.readString();
+        this.categories = in.createStringArrayList();
     }
     @Override
     public int describeContents() {
@@ -109,6 +132,8 @@ class BookWrapper implements Parcelable {
         dest.writeStringList(this.authors);
         dest.writeString(this.publisher);
         dest.writeInt(this.editionYear);
+        dest.writeString(this.thumbnail);
+        dest.writeStringList(this.categories);
     }
     @Override
     public String toString() {
