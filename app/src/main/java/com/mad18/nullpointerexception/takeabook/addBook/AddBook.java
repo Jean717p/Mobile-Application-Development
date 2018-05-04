@@ -239,7 +239,7 @@ public class AddBook extends AppCompatActivity {
         eet = findViewById(R.id.add_book_extended_edit_text_ISBN);
         bookToAdd.setBook_ISBN(eet.getText().toString());
         eet = findViewById(R.id.add_book_extended_edit_text_Description);
-        bookToAdd.setDescription(eet.getText().toString());
+        bookToAdd.setBook_description(eet.getText().toString());
         eet = findViewById(R.id.add_book_extended_edit_Author);
         String tmp[] = eet.getText().toString().split(","); //è la virgola???
         for(int i=0;i<tmp.length;i++){
