@@ -11,131 +11,118 @@
     <!--Questa è la toolbar dove appare appName più l'icona salva o modifica-->
     <android.support.v7.widget.Toolbar
         android:id="@+id/show_profile_toolbar"
-        app:title="@string/app_name"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:background="@color/colorPrimary"
-        android:elevation="@dimen/toolbar_elevation"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark"
         />
-
-    <!--Questa è la definizione dell'immagine circolare per la foto personale del profilo utente-->
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/show_profile_personalPhoto"
-        android:src="@drawable/ic_account_circle_white_48px"
-        android:layout_width="@dimen/profile_photo_width"
-        android:layout_height="@dimen/profile_photo_height"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_margin="@dimen/layout_margin"
-        android:layout_below="@id/show_profile_toolbar"
-        app:civ_border_color="@color/textColor"
-        app:civ_border_width="@dimen/circle_image_border"
-        />
-    <!--questa scroll view fa scorrere tutte le info ad eccezione della foto-->
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/show_profile_personalPhoto"
-        android:layout_below="@id/show_profile_toolbar">
-    <!--Questo è un wrapper per i fields da Username fino ad About -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-        <RelativeLayout
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/show_profile_personalPhoto"
+            android:layout_width="@dimen/profile_photo_width"
+            android:layout_height="@dimen/profile_photo_height"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="64dp"
+            android:src="@drawable/ic_account_circle_white_48px"
+            app:civ_border_color="@color/textColor"
+            app:civ_border_width="@dimen/circle_image_border" />
+
+
+        <TextView
+            android:id="@+id/show_profile_Username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/show_profile_personalPhoto"
-            android:layout_below="@id/show_profile_toolbar"
-            android:layout_margin="@dimen/layout_margin">
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_toEndOf="@id/show_profile_personalPhoto"
+            android:layout_marginStart="65dp"
+            android:maxLines="1"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/textColor"
+            android:layout_below="@id/show_profile_personalPhoto"
+            android:textSize="20sp"/>
 
-            <!--titolo username-->
-            <TextView
-                android:id="@+id/show_profile_title_Username"
-                android:text="@string/Username"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/profile_text_view_title"/>
-            <!-- username-->
-            <TextView
-                android:id="@+id/show_profile_Username"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/show_profile_title_Username"
-                android:textSize="@dimen/profile_text_view_content"
-                android:maxLines="1"
-                android:textColor="@color/textColor"
-                />
+
 
             <!--titolo city-->
-            <TextView
-                android:id="@+id/show_profile_title_City"
-                android:text="@string/City"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/show_profile_Username"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/profile_text_view_title"/>
-            <!--city-->
-            <TextView
-                android:id="@+id/show_profile_City"
-                android:layout_below="@id/show_profile_title_City"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/profile_text_view_content"
-                android:maxLines="1"
-                android:textColor="@color/textColor"
-                />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_toEndOf="@id/show_profile_personalPhoto"
+        android:layout_alignTop="@id/show_profile_personalPhoto"
+        android:layout_margin="16dp"
+        >
 
-            <!--titolo mail-->
-            <TextView
-                android:id="@+id/show_profile_title_mail"
-                android:text="@string/Email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/show_profile_City"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/profile_text_view_title"/>
-            <!-- mail-->
-            <TextView
-                android:id="@+id/show_profile_mail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"
-                android:enabled="false"
-                android:inputType="textEmailAddress"
-                android:maxLines="1"
-                android:textColor="@color/textColor"
-                android:textColorHint="@color/colorAccent"
-                android:textSize="@dimen/profile_text_view_content" />
 
-            <!--titolo about-->
-            <TextView
-                android:id="@+id/show_profile_title_about"
-                android:text="@string/AboutMe"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/show_profile_mail"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/profile_text_view_title"/>
-            <!--about-->
-                <TextView
-                    android:id="@+id/show_profile_about"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/show_profile_title_about"
-                    android:gravity="top"
-                    android:inputType="textMultiLine"
-                    android:scrollbars="vertical"
-                    android:textColor="@color/textColor"
-                    android:textColorHint="@color/colorAccent"
-                    android:textSize="@dimen/profile_text_view_content" />
+        <TextView
+            android:id="@+id/show_profile_City"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/profile_text_view_content" />
 
-        </RelativeLayout>
-        </LinearLayout>
-    </ScrollView>
+
+        <TextView
+            android:id="@+id/show_profile_title_City"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:text="@string/City"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/profile_text_view_title" />
+        <!--city-->
+
+
+        <TextView
+            android:id="@+id/show_profile_mail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:maxLines="1"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/profile_text_view_content" />
+
+
+        <!--titolo mail-->
+        <TextView
+            android:id="@+id/show_profile_title_mail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:text="@string/Email"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/profile_text_view_title" />
+        <!-- mail-->
+
+        <!--titolo about-->
+        <!--about-->
+        <TextView
+            android:id="@+id/show_profile_about"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textColor"
+            android:textColorHint="@color/colorAccent"
+            android:textSize="@dimen/profile_text_view_content" />
+
+        <TextView
+            android:id="@+id/show_profile_title_about"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:text="@string/AboutMe"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/profile_text_view_title" />
+    </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>

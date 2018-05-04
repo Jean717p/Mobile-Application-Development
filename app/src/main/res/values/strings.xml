@@ -18,9 +18,10 @@
     <string name="connecting">Connecting...</string>
 
     <!--Activities Title -->
-    <string name="title_activity_edit">EditActivity</string>
-    <string name="title_activity_show_profile">showProfile</string>
+    <string name="title_activity_edit">Edit Profile</string>
+    <string name="title_activity_show_profile">My Profile</string>
     <string name="title_activity_login_activity">Login_activity</string>
+    <string name="title_activity_search_book">Search a book</string>
 
     <!--Photo-->
     <string name="photo_from_gallery">Select photo from gallery</string>
@@ -45,6 +46,14 @@
     <string name="lent_books">Lent Books</string>
     <string name="borrowed_books">Borrowed Books</string>
 
+    <!--SearchBook Related-->
+    <string name="search_book_text_title">Title</string>
+    <string name="search_book_text_category">Category</string>
+    <string name="search_book_text_ISBN">ISBN</string>
+    <string name="search_book_text_author">Author</string>
+    <string name="search_book_button_text">Search</string>
+
+
     <!--Barcode Related-->
     <string name="read_barcode">Read Barcode</string>
     <string name="add_book_read_ISBN">Search ISBN details</string>
@@ -64,6 +73,15 @@
         <item>Good</item>
         <item>Bad</item>
     </string-array>
+
+    <!--Fragment Top fab menu items -->
+    <string name="top_frag_floating_action_menu_ISBN">Search by ISBN</string>
+    <string name="top_frag_floating_action_menu_category">Search by category</string>
+    <string name="top_frag_floating_action_menu_title">Search by title</string>
+    <string name="top_frag_floating_action_menu_author">Search by author</string>
+    <string name="top_frag_floating_action_menu_search">Back</string>
+    <string name="title">Search</string>
+
 
     <!-- Facebook login -->
     <string name="facebook_application_id" translatable="false">207778776488778</string>

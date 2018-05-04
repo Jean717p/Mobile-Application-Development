@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.mad18.nullpointerexception.takeabook.R;
 
 
+
 public class showProfile extends AppCompatActivity {
     private final String TAG = "showProfile";
     private SharedPreferences sharedPref;
@@ -35,7 +36,7 @@ public class showProfile extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.show_profile_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle(R.string.app_name);
+        setTitle(R.string.title_activity_show_profile);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
     }

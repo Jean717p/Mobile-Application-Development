@@ -22,65 +22,72 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/show_profile_personalPhoto"
         android:layout_width="@dimen/profile_photo_width"
-        android:layout_below="@id/show_profile_toolbar"
         android:layout_height="@dimen/profile_photo_height"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_below="@id/show_profile_toolbar"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_vertical"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_marginLeft="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginBottom="8dp"
         android:src="@drawable/ic_account_circle_white_48px"
         app:civ_border_color="@color/textColor"
         app:civ_border_width="@dimen/circle_image_border" />
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp">
-    <!--Questa è la definizione dell'immagine circolare per la foto personale del profilo utente-->
+        android:layout_below="@id/show_profile_personalPhoto"
+      >
+
+        <TextView
+            android:id="@+id/show_profile_Username"
+            android:fontFamily="sans-serif"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:textColor="@color/textColor"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_marginBottom="16dp"
+            />
 
 
-    <!--titolo username-->
-    <TextView
-        android:id="@+id/show_profile_title_Username"
-        android:text="@string/Username"
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="160dp"
-        android:layout_alignParentLeft="true"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/profile_text_view_title"/>
-    <!-- username-->
-    <TextView
-        android:id="@+id/show_profile_Username"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/show_profile_title_Username"
-        android:maxLines="1"
-        android:textColor="@color/textColor"
-        android:textSize="@dimen/profile_text_view_content"
-        android:layout_marginBottom="@dimen/profile_bottom_content"/>
+        android:layout_margin="16dp"
+        android:layout_below="@id/show_profile_personalPhoto">
+        <!--Questa è la definizione dell'immagine circolare per la foto personale del profilo utente-->
 
-    <!--Questo è un wrapper per i fields da city fino ad About -->
+
+        <!--Questo è un wrapper per i fields da city fino ad About -->
 
         <!--titolo city-->
         <TextView
             android:id="@+id/show_profile_title_City"
             android:text="@string/City"
+            android:fontFamily="sans-serif-light"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/show_profile_Username"
+            android:layout_below="@id/show_profile_City"
             android:textColor="@color/colorPrimary"
+            android:paddingBottom="8dp"
             android:textSize="@dimen/profile_text_view_title"/>
         <!--city-->
         <TextView
             android:id="@+id/show_profile_City"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/show_profile_title_City"
+            android:fontFamily="sans-serif"
             android:maxLines="1"
+            android:paddingTop="32dp"
             android:textColor="@color/textColor"
-            android:textSize="@dimen/profile_text_view_content"
-
-            android:layout_marginBottom="@dimen/profile_bottom_content"/>
+            android:textSize="@dimen/profile_text_view_content" />
 
         <!--little icon near text field city-->
 
@@ -89,22 +96,24 @@
         <TextView
             android:id="@+id/show_profile_title_mail"
             android:text="@string/Email"
+            android:fontFamily="sans-serif-light"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/show_profile_City"
+            android:layout_below="@id/show_profile_mail"
             android:textColor="@color/colorPrimary"
+            android:paddingBottom="8dp"
             android:textSize="@dimen/profile_text_view_title"/>
         <!-- mail-->
         <TextView
             android:id="@+id/show_profile_mail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/show_profile_title_mail"
+            android:layout_below="@id/show_profile_title_City"
             android:maxLines="1"
             android:textColor="@color/textColor"
             android:textSize="@dimen/profile_text_view_content"
-
-            android:layout_marginBottom="@dimen/profile_bottom_content"/>
+            android:fontFamily="sans-serif"
+            />
 
         <!--little icon near text field mail-->
 
@@ -112,30 +121,25 @@
         <!--titolo about-->
         <TextView
             android:id="@+id/show_profile_title_about"
+            android:fontFamily="sans-serif-light"
             android:text="@string/AboutMe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/show_profile_mail"
+            android:paddingBottom="8dp"
+            android:layout_below="@id/show_profile_about"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/profile_text_view_title"/>
-        <!--La scroll view è applicata solo sul profile about in questo caso perchè-->
-        <!--non dovendo editare i campi si scorre la biografia senza perdere di vista -->
-        <!--gli altri campi di informazioni sul profilo-->
-        <ScrollView
-            android:id="@+id/scrollview_around_profile_about_show_profile"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_below="@id/show_profile_title_about"
-            >
+
             <!--about-->
             <TextView
                 android:id="@+id/show_profile_about"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/show_profile_about_me_height"
-                android:layout_below="@id/show_profile_title_about"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/show_profile_title_mail"
                 android:textColor="@color/textColor"
+                android:fontFamily="sans-serif"
                 android:textSize="@dimen/profile_text_view_content"
-                android:layout_marginBottom="@dimen/profile_bottom_content"/>
-        </ScrollView>
+               />
+
     </RelativeLayout>
 </RelativeLayout>
