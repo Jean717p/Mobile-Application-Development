@@ -8,6 +8,10 @@
     <string name="City">City</string>
     <string name="Email">Email</string>
     <string name="AboutMe">Bio</string>
+    <string name="Address">Address</string>
+
+    <!--Login Related-->
+    <string name="login_getposition">Get Position</string>
 
     <!--Activities Title -->
     <string name="title_activity_edit">EditActivity</string>

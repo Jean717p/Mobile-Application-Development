@@ -8,6 +8,10 @@
     <string name="City">Città</string>
     <string name="Email">Email</string>
     <string name="AboutMe">Bio</string>
+    <string name="Address">Indirizzo</string>
+
+    <!--Login Related-->
+    <string name="login_getposition">Trova posizione</string>
 
     <!--Activities Title -->
     <string name="title_activity_edit">Modifica profilo</string>
