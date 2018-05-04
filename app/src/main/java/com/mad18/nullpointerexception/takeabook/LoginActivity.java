@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity  {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        progressBar = (ProgressBar) findViewById(R.id.login_progress_bar);
         toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         setTitle(R.string.app_name);
@@ -60,7 +61,8 @@ public class LoginActivity extends AppCompatActivity  {
     protected void onResume() {
         super.onResume();
         mAuth = FirebaseAuth.getInstance();
-        if (mAuth.getCurrentUser() != null && firstAttempt!=firstAttempt) {
+        //if (mAuth.getCurrentUser() != null && firstAttempt!=firstAttempt) {
+        if (mAuth.getCurrentUser() != null) {
             Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.class);
             startActivity(intent);
             finish();
@@ -185,36 +187,36 @@ public class LoginActivity extends AppCompatActivity  {
      * @param thisActivity
      */
     private void getUserPosition(Activity thisActivity){
-        FirebaseUser user = mAuth.getCurrentUser();
-
-        /* Rende visibili i vari campi*/
-        TextView usr_label = findViewById(R.id.login_title_Username);
-        TextView usr_text = findViewById(R.id.login_Username);
-        TextView addr_label = findViewById(R.id.login_title_Address);
-        TextView addr_text = findViewById(R.id.login_Address);
-        Button getPos_button = findViewById(R.id.login_getPos_button);
-        usr_text.setText(user.getDisplayName());
-        usr_text.setVisibility(View.VISIBLE);
-        usr_label.setVisibility(View.VISIBLE);
-        addr_label.setVisibility(View.VISIBLE);
-        addr_text.setVisibility(View.VISIBLE);
-        getPos_button.setVisibility(View.VISIBLE);
-
-        getPos_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                /* Lanciare l'intent per ottenere la posizione*/
-                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-
-                try {
-                    startActivityForResult(builder.build(thisActivity), PLACE_PICKER_REQUEST);
-                } catch (GooglePlayServicesRepairableException e) {
-                    e.printStackTrace();
-                } catch (GooglePlayServicesNotAvailableException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+//        FirebaseUser user = mAuth.getCurrentUser();
+//
+//        /* Rende visibili i vari campi*/
+//        TextView usr_label = findViewById(R.id.login_title_Username);
+//        TextView usr_text = findViewById(R.id.login_Username);
+//        TextView addr_label = findViewById(R.id.login_title_Address);
+//        TextView addr_text = findViewById(R.id.login_Address);
+//        Button getPos_button = findViewById(R.id.login_getPos_button);
+//        usr_text.setText(user.getDisplayName());
+//        usr_text.setVisibility(View.VISIBLE);
+//        usr_label.setVisibility(View.VISIBLE);
+//        addr_label.setVisibility(View.VISIBLE);
+//        addr_text.setVisibility(View.VISIBLE);
+//        getPos_button.setVisibility(View.VISIBLE);
+//
+//        getPos_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                /* Lanciare l'intent per ottenere la posizione*/
+//                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+//
+//                try {
+//                    startActivityForResult(builder.build(thisActivity), PLACE_PICKER_REQUEST);
+//                } catch (GooglePlayServicesRepairableException e) {
+//                    e.printStackTrace();
+//                } catch (GooglePlayServicesNotAvailableException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
 
 
 

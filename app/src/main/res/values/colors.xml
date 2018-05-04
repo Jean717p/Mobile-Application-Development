@@ -18,5 +18,6 @@
     <color name="grey">#E5E5E5</color>
     <color name="gradEnd">#FFE082</color>
     <color name="gradStart">#FF8F00</color>
+    <color name="indigo">#3F51B5</color>
 
 </resources>
