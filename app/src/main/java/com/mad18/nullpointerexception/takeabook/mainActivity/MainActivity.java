@@ -148,6 +148,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     editor.putString(tmp,doc.getString(tmp));
                 }
                 editor.apply();
+                View hview = navigationView.getHeaderView(0);
+                setNavDrawerParameters(hview);
             }
         });
     }
@@ -211,22 +213,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Insert the image into the drawer
         if(img.length() > 0){
             file = new File(img);
-            if(file.exists() == false||drawerImg==null){
-                drawerImg.setImageResource(R.drawable.ic_account_circle_white_48px);
-            }
-            else{
+            if(file.exists() == true && drawerImg!=null) {
                 try {
                     b = BitmapFactory.decodeStream(new FileInputStream(file));
-                    drawerImg.setImageBitmap(b);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
             }
         }
-        else{
+        if(b==null){
             drawerImg.setImageResource(R.drawable.ic_account_circle_white_48px);
         }
-
+        else{
+            drawerImg.setImageBitmap(b);
+        }
         // Insert username and email into the drawer
         TextView usr_text = nview.findViewById(R.id.mainActivity_drawer_username);
         TextView mail_text = nview.findViewById(R.id.mainActivity_drawer_email);
