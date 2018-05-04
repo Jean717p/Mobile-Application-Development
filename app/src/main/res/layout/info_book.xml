@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <!--Questa è la toolbar dove appare appName più l'icona salva o modifica-->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/info_book_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    </android.support.v7.widget.Toolbar>
+    <!--Thumbnail oppure fote default-->
+    <ImageView
+        android:id="@+id/info_book_main_image"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/info_book_toolbar"
+        />
+
+    <!--etichetta e contenuto title-->
+    <TextView
+        android:id="@+id/info_book_label_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/layout_margin"
+        android:layout_marginTop="@dimen/layout_margin"
+        android:layout_marginRight="@dimen/layout_margin"
+        android:text="Title:"
+        android:textSize="16sp"
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="sans-serif-light"
+        android:layout_alignLeft="@id/info_book_toolbar"
+        android:layout_below="@id/info_book_main_image"
+        />
+    <TextView
+        android:id="@+id/info_book_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/info_book_label_title"
+        android:layout_toRightOf="@id/info_book_label_title"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/profile_text_view_content"
+        android:fontFamily="sans-serif"/>
+
+    <!--etichetta e contenuto author-->
+    <TextView
+    android:id="@+id/info_book_label_author"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/layout_margin"
+    android:text="Author:"
+    android:textSize="16sp"
+    android:textColor="@color/colorPrimary"
+    android:fontFamily="sans-serif-light"
+    android:layout_alignLeft="@id/info_book_toolbar"
+    android:layout_below="@id/info_book_label_title"
+    />
+    <TextView
+        android:id="@+id/info_book_author"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/info_book_label_author"
+        android:layout_toRightOf="@id/info_book_label_author"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/profile_text_view_content"
+        android:fontFamily="sans-serif"/>
+
+    <!--etichetta e contenuto ISBN-->
+    <TextView
+        android:id="@+id/info_book_label_ISBN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_margin"
+        android:text="ISBN:"
+        android:textSize="16sp"
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="sans-serif-light"
+        android:layout_alignLeft="@id/info_book_toolbar"
+        android:layout_below="@id/info_book_author"
+        />
+    <TextView
+        android:id="@+id/info_book_ISBN"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/info_book_label_ISBN"
+        android:layout_toRightOf="@id/info_book_label_ISBN"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/profile_text_view_content"
+        android:fontFamily="sans-serif"/>
+
+    <!--etichetta e contenuto editionYear-->
+    <TextView
+        android:id="@+id/info_book_label_editionYear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_margin"
+        android:text="Edition Year:"
+        android:textSize="16sp"
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="sans-serif-light"
+        android:layout_alignLeft="@id/info_book_toolbar"
+        android:layout_below="@id/info_book_ISBN"
+        />
+    <TextView
+        android:id="@+id/info_book_editionYear"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/info_book_label_editionYear"
+        android:layout_toRightOf="@id/info_book_label_editionYear"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/profile_text_view_content"
+        android:fontFamily="sans-serif"/>
+
+    <!--etichetta e contenuto publisher-->
+    <TextView
+        android:id="@+id/info_book_label_publisher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_margin"
+        android:text="Publisher:"
+        android:textSize="16sp"
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="sans-serif-light"
+        android:layout_alignLeft="@id/info_book_toolbar"
+        android:layout_below="@id/info_book_editionYear"
+        />
+    <TextView
+        android:id="@+id/info_book_publisher"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/info_book_label_publisher"
+        android:layout_toRightOf="@id/info_book_label_publisher"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/profile_text_view_content"
+        android:fontFamily="sans-serif"/>
+
+    <!--etichetta e contenuto categories-->
+    <TextView
+        android:id="@+id/info_book_label_categories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_margin"
+        android:text="Categories:"
+        android:textSize="16sp"
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="sans-serif-light"
+        android:layout_alignLeft="@id/info_book_toolbar"
+        android:layout_below="@id/info_book_publisher"
+        />
+    <TextView
+        android:id="@+id/info_book_categories"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/info_book_label_categories"
+        android:layout_toRightOf="@id/info_book_label_categories"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/profile_text_view_content"
+        android:fontFamily="sans-serif"/>
+
+    <!--etichetta e contenuto Descrition-->
+
+    <TextView
+        android:id="@+id/info_book_label_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_margin"
+        android:text="Description:"
+        android:textSize="16sp"
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="sans-serif-light"
+        android:layout_alignLeft="@id/info_book_toolbar"
+        android:layout_below="@id/info_book_categories"
+        />
+    <TextView
+        android:id="@+id/info_book_description"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/info_book_label_description"
+        android:layout_toRightOf="@id/info_book_label_description"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/profile_text_view_content"
+        android:fontFamily="sans-serif"/>
+
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/info_book_horizontalScrollView_photos"
+        android:layout_below="@id/info_book_description"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/info_book_list_photo_container"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!--etichetta e contenuto owner-->
+
+    <TextView
+        android:id="@+id/info_book_label_owner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_margin"
+        android:text="Owner:"
+        android:textSize="16sp"
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="sans-serif-light"
+        android:layout_alignLeft="@id/info_book_toolbar"
+        android:layout_below="@id/info_book_horizontalScrollView_photos"
+        />
+    <TextView
+        android:id="@+id/info_book_owner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/info_book_label_owner"
+        android:layout_toRightOf="@id/info_book_label_owner"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/profile_text_view_content"
+        android:fontFamily="sans-serif"/>
+</RelativeLayout>

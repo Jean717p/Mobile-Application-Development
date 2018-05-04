@@ -13,7 +13,7 @@ import java.util.Map;
  * un oggetto di questo tipo affinchè possa essere inserito nel bundle.
  *
  */
-class BookWrapper implements Parcelable {
+public class BookWrapper implements Parcelable {
 
     /**
      * Si occupa di creare una nuova istanza della classe Parcelable, instanziandola dal Parcel specificato.

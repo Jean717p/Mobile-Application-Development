@@ -76,5 +76,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mad18.nullpointerexception.takeabook.myProfile.showProfile"/>
         </activity>
+        <activity
+            android:name=".InfoBook"
+            android:configChanges="orientation|screenSize|locale"
+            android:label="InfoBook"
+            android:parentActivityName=".mainActivity.MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity" />
+        </activity>
     </application>
 </manifest>

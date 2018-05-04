@@ -19,6 +19,7 @@ import com.mad18.nullpointerexception.takeabook.R;
 
 
 public class showProfile extends AppCompatActivity {
+    //gran parte del codice simile alla editprofile e' commentato nella editProfile
     private final String TAG = "showProfile";
     private SharedPreferences sharedPref;
     private final int textViewIds[] = new int[]{R.id.show_profile_Username, R.id.show_profile_City,
