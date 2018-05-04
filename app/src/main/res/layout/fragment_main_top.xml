@@ -10,7 +10,7 @@
 
    <com.github.clans.fab.FloatingActionMenu
 
-       android:id="@+id/floating_action_menu"
+       android:id="@+id/top_floating_action_menu"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:layout_alignParentEnd="true"
@@ -22,13 +22,12 @@
        fab:menu_backgroundColor="@android:color/transparent"
        fab:menu_buttonSpacing="0dp"
        fab:menu_colorNormal="@color/colorAccent"
-       fab:menu_colorPressed="@color/colorAccent"
+       fab:menu_colorPressed="#FF9100"
        fab:menu_colorRipple="@color/colorAccent"
-       fab:menu_fab_label="Floating Action Menu"
        fab:menu_fab_size="normal"
        fab:menu_icon="@drawable/ic_search_white_48px"
        fab:menu_labels_colorNormal="#FFFFFF"
-       fab:menu_labels_colorPressed="#F8BBD0"
+       fab:menu_labels_colorPressed="#FF9100"
        fab:menu_labels_colorRipple="@color/colorAccent"
        fab:menu_labels_cornerRadius="3dp"
        fab:menu_labels_ellipsize="none"
@@ -43,33 +42,34 @@
        fab:menu_labels_textColor="@android:color/black"
        fab:menu_labels_textSize="15sp"
        fab:menu_openDirection="up"
-       fab:menu_shadowColor="#66aff198"
+       fab:menu_shadowColor="#9E9E9E"
        fab:menu_showShadow="true">
+        <!--fab:menu_fab_label="@string/top_frag_floating_action_menu_search"-->
+
 
 
 
 
       <com.github.clans.fab.FloatingActionButton
-
           fab:fab_colorNormal="@color/colorAccent"
-          fab:fab_colorPressed="#DF3871"
-          android:id="@+id/floating_action_menu_item3"
+          fab:fab_colorPressed="#FF9100"
+          android:id="@+id/top_floating_action_menu_ISBN"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:src="@drawable/ic_sign"
-          fab:fab_label="Search by ISBN"
+          fab:fab_label="@string/top_frag_floating_action_menu_ISBN"
           fab:fab_size="mini"
           />
 
 
        <com.github.clans.fab.FloatingActionButton
            fab:fab_colorNormal="@color/colorAccent"
-           fab:fab_colorPressed="#DF3871"
-           android:id="@+id/floating_action_menu_item4"
+           fab:fab_colorPressed="#FF9100"
+           android:id="@+id/top_floating_action_menu_category"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:src="@drawable/ic_book_white_48px"
-           fab:fab_label="Search by literary genre"
+           fab:fab_label="@string/top_frag_floating_action_menu_category"
            fab:fab_size="mini"
            />
 
@@ -77,23 +77,23 @@
 
        <com.github.clans.fab.FloatingActionButton
           fab:fab_colorNormal="@color/colorAccent"
-          fab:fab_colorPressed="#DF3871"
-          android:id="@+id/floating_action_menu_item2"
+          fab:fab_colorPressed="#FF9100"
+          android:id="@+id/top_floating_action_menu_author"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:src="@drawable/ic_person_white_48px"
-          fab:fab_label="Search by author"
+          fab:fab_label="@string/top_frag_floating_action_menu_author"
           fab:fab_size="mini"
           />
 
       <com.github.clans.fab.FloatingActionButton
           fab:fab_colorNormal="@color/colorAccent"
-          fab:fab_colorPressed="#DF3871"
-          android:id="@+id/floating_action_menu_item1"
+          fab:fab_colorPressed="#FF9100"
+          android:id="@+id/top_floating_action_menu_title"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:src="@drawable/ic_title_white_48px"
-          fab:fab_label="Search by title"
+          fab:fab_label="@string/top_frag_floating_action_menu_title"
           fab:fab_size="mini"
           />
    </com.github.clans.fab.FloatingActionMenu>

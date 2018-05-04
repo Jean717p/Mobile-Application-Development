@@ -13,4 +13,10 @@
     <color name="material_green_a200">#69F0AE</color>
     <color name="material_lime_a700">#AEEA00</color>
     <color name="material_purple_a700">#AA00FF</color>
+    <color name="solidCircle">#AAFFFFFF</color>
+    <color name="circleBorder">#50FFFFFF</color>
+    <color name="grey">#E5E5E5</color>
+    <color name="gradEnd">#FFE082</color>
+    <color name="gradStart">#FF8F00</color>
+
 </resources>

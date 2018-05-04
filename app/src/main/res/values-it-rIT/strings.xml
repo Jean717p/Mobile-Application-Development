@@ -4,7 +4,7 @@
 
     <!--Profile-->
     <string name="profile_photo">Foto profilo</string>
-    <string name="Username">Nome Utente</string>
+    <string name="Username">Nome</string>
     <string name="City">Città</string>
     <string name="Email">Email</string>
     <string name="AboutMe">Bio</string>
@@ -15,13 +15,16 @@
 
     <!--Activities Title -->
     <string name="title_activity_edit">Modifica profilo</string>
-    <string name="title_activity_show_profile">Mostra profilo</string>
+    <string name="title_activity_show_profile">Il mio profilo</string>
     <string name="title_activity_login_activity">Login utente</string>
+    <string name="title_activity_search_book">Cerca un libro</string>
 
     <!--Photo-->
     <string name="photo_from_gallery">Seleziona una foto dalla galleria</string>
     <string name="photo_from_camera">Scatta una foto dalla fotocamera</string>
     <string name="photo_remove">Rimuovi foto</string>
+
+    <!--Book condition-->
     <string-array name="book_conditions">
         <item>Seleziona condizioni libro </item>
         <item>Eccellente</item>
@@ -42,10 +45,17 @@
     <string name="nav_element_logOut">Esci</string>
 
     <!--Fragment Related-->
-    <string name="top_books">Top</string>
+    <string name="top_books">Home</string>
     <string name="my_library">Libreria</string>
     <string name="lent_books">Prestati</string>
     <string name="borrowed_books">In prestito</string>
+
+    <!--SearchBook Related-->
+    <string name="search_book_text_title">Titolo</string>
+    <string name="search_book_text_category">Categoria</string>
+    <string name="search_book_text_ISBN">ISBN</string>
+    <string name="search_book_text_author">Autore</string>
+    <string name="search_book_button_text">Cerca</string>
 
     <!--Barcode Related-->
     <string name="add_book_read_ISBN">Cerca dettagli ISBN</string>
@@ -62,5 +72,14 @@
     <!-- Facebook login -->
     <string name="facebook_application_id" translatable="false">207778776488778</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb207778776488778</string>
+    <!--Fragment Top fab menu items -->
+    <string name="top_frag_floating_action_menu_ISBN">Ricerca per ISBN</string>
+    <string name="top_frag_floating_action_menu_category">Ricerca per categoria</string>
+    <string name="top_frag_floating_action_menu_title">Ricerca per titolo</string>
+    <string name="top_frag_floating_action_menu_author">Ricerca per autore</string>
+    <string name="top_frag_floating_action_menu_search">Indietro</string>
+    <string name="title">Cerca</string>
+
+
 
 </resources>
