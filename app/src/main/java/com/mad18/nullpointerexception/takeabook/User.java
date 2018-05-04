@@ -1,5 +1,9 @@
 package com.mad18.nullpointerexception.takeabook;
 
+
+
+import com.google.firebase.firestore.GeoPoint;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,15 +14,17 @@ public class User {
     String usr_mail;
     String usr_about;
     Map<String,Boolean> usr_books;
+    GeoPoint usr_geoPoint;
 
     public User(){}
 
-    public User(String email, String displayName, String s, String s1, HashMap<String, Boolean> stringBooleanHashMap) {
+    public User(String email, String displayName, String s, String s1, HashMap<String, Boolean> stringBooleanHashMap, GeoPoint geoPoint) {
         usr_mail = email;
         usr_name = displayName;
         usr_city = s;
         usr_about = s1;
         usr_books = stringBooleanHashMap;
+        usr_geoPoint = geoPoint;
     }
 
     public String getUsr_name() {
@@ -59,5 +65,13 @@ public class User {
 
     public void setUsr_books(Map<String, Boolean> usr_books) {
         this.usr_books = usr_books;
+    }
+
+    public GeoPoint getUsr_geoPoint() {
+        return usr_geoPoint;
+    }
+
+    public void setUsr_geoPoint(GeoPoint usr_geoPoint) {
+        this.usr_geoPoint = usr_geoPoint;
     }
 }
