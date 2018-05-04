@@ -108,14 +108,6 @@ public class Book {
         this.book_authors = book_authors;
     }
 
-    public String getDescription() {
-        return book_description;
-    }
-
-    public void setDescription(String description) {
-        this.book_description = description;
-    }
-
     public String getBook_thumbnail_url() {
         return book_thumbnail_url;
     }
