@@ -16,11 +16,85 @@
         tools:layout_editor_absoluteY="223dp" />
 
     <TextView
+        android:id="@+id/login_progress_bar_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/login_progress_bar"
         android:layout_centerHorizontal="true"
         android:padding="16dp"
         android:text="@string/connecting" />
+
+    <!--titolo username-->
+    <TextView
+        android:layout_marginTop="8dp"
+        android:id="@+id/login_title_Username"
+        android:text="@string/Username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/profile_text_view_title"
+        android:enabled="false"
+        android:visibility="invisible"/>
+    <!-- username-->
+    <EditText
+        android:id="@+id/login_Username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:hint="@string/Username"
+        android:layout_below="@id/login_title_Username"
+        android:inputType="text"
+        android:maxLines="1"
+        android:textColor="@color/textColor"
+        android:textColorHint="#BDBDBD"
+        android:textSize="@dimen/text_view_height"
+        android:visibility="invisible"/>
+
+
+    <!--titolo address-->
+    <TextView
+        android:id="@+id/login_title_Address"
+        android:text="@string/Address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/login_Username"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/profile_text_view_title"
+        android:enabled="false"
+        android:visibility="invisible"/>
+    <!--address-->
+    <EditText
+        android:id="@+id/login_Address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/login_title_Address"
+        android:enabled="false"
+        android:hint="@string/Address"
+        android:inputType="text"
+        android:maxLines="1"
+        android:textColor="@color/textColor"
+        android:textColorHint="#BDBDBD"
+        android:textSize="@dimen/text_view_height"
+        android:visibility="invisible"/>
+
+
+    <Button
+        android:id="@+id/login_getPos_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_progress_bar"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/corner_button"
+        android:padding="16dp"
+        android:text="@string/login_getposition"
+        android:textAlignment="inherit"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
+        android:textColor="@android:color/white"
+        android:textSize="10sp"
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="143dp"
+        tools:layout_editor_absoluteY="330dp" />
+
+
 
 </android.widget.RelativeLayout>

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,6 +32,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -44,6 +46,7 @@ public class LoginActivity extends AppCompatActivity  {
     private FirebaseAuth mAuth;
     private Toolbar toolbar;
     private ProgressBar progressBar;
+    private TextView progressBarTextView;
     private boolean firstAttempt;
 
     @Override
@@ -51,7 +54,9 @@ public class LoginActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         progressBar = (ProgressBar) findViewById(R.id.login_progress_bar);
+        progressBarTextView = findViewById(R.id.login_progress_bar_text);
         toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+
         setSupportActionBar(toolbar);
         setTitle(R.string.app_name);
         firstAttempt = true;
@@ -61,21 +66,31 @@ public class LoginActivity extends AppCompatActivity  {
     protected void onResume() {
         super.onResume();
         mAuth = FirebaseAuth.getInstance();
-        //if (mAuth.getCurrentUser() != null && firstAttempt!=firstAttempt) {
         if (mAuth.getCurrentUser() != null) {
-            Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.class);
-            startActivity(intent);
-            finish();
+                FirebaseUserMetadata metadata = mAuth.getCurrentUser().getMetadata();
+                if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()) {
+                    TextView tw = findViewById(R.id.login_Address);
+                    if(tw.getText().toString().length() > 0) {
+                        //Nel caso serva inserire tasto ok su toolbar
+                        Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+                else {
+                    Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
         }
         else {
-            if(ActivityCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(LoginActivity.this, new String[]{
                                 Manifest.permission.INTERNET}
                         , REQUEST_PERMISSION_INTERNET);
-            }
-            else if(firstAttempt){
-               sign_in();
-               firstAttempt = !firstAttempt;
+            } else if (firstAttempt) {
+                sign_in();
+                firstAttempt = !firstAttempt;
             }
         }
     }
@@ -102,11 +117,19 @@ public class LoginActivity extends AppCompatActivity  {
                 if (resultCode == RESULT_OK) {
                     Place place = PlacePicker.getPlace(this, data);
                     String placeName = String.format("Place: %s", place.getName());
-                    double latitude = place.getLatLng().latitude;
-                    double longitude = place.getLatLng().longitude;
-                    Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                    GeoPoint gp = new GeoPoint(place.getLatLng().latitude,place.getLatLng().longitude);
+                    TextView addr_text = findViewById(R.id.login_Address);
+                    addr_text.setText(place.getAddress().toString());
+
+                    /* Inserimento dati su Firebase */
+
+
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    CollectionReference users = db.collection("users");
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    User u = new User(user.getEmail(), user.getDisplayName(), "", "", new HashMap<String, Boolean>(),gp);
+                    users.document(user.getUid()).set(u);
+
                 } else {
                     //Place picking fallito
                 }
@@ -120,21 +143,9 @@ public class LoginActivity extends AppCompatActivity  {
                     // Successfully signed in
                     if (resultCode == RESULT_OK) {
                         IdpResponse idpResponse = IdpResponse.fromResultIntent(data);
-                        FirebaseUserMetadata metadata = mAuth.getCurrentUser().getMetadata();
-                        if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()) {
-                            // Questo utente è nuovo --> schermata introduzione/guida per l'app?
-                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                            CollectionReference users = db.collection("users");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            User u = new User(user.getEmail(), user.getDisplayName(), "", "", new HashMap<String, Boolean>());
-                            users.document(user.getUid()).set(u);
-                        } else {
-                            //Questo utente è già registrato --> Welcome back Message?
-                        }
                         progressBar.setVisibility(View.INVISIBLE);
-                        Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.class);
-                        startActivity(intent);
-                        finish();
+                        findViewById(R.id.login_progress_bar_text).setVisibility(View.INVISIBLE);
+                        getUserPosition(this);
                     } else {
                         // Sign in failed
                         if (response == null) {
@@ -187,36 +198,37 @@ public class LoginActivity extends AppCompatActivity  {
      * @param thisActivity
      */
     private void getUserPosition(Activity thisActivity){
-//        FirebaseUser user = mAuth.getCurrentUser();
-//
-//        /* Rende visibili i vari campi*/
-//        TextView usr_label = findViewById(R.id.login_title_Username);
-//        TextView usr_text = findViewById(R.id.login_Username);
-//        TextView addr_label = findViewById(R.id.login_title_Address);
-//        TextView addr_text = findViewById(R.id.login_Address);
-//        Button getPos_button = findViewById(R.id.login_getPos_button);
-//        usr_text.setText(user.getDisplayName());
-//        usr_text.setVisibility(View.VISIBLE);
-//        usr_label.setVisibility(View.VISIBLE);
-//        addr_label.setVisibility(View.VISIBLE);
-//        addr_text.setVisibility(View.VISIBLE);
-//        getPos_button.setVisibility(View.VISIBLE);
-//
-//        getPos_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                /* Lanciare l'intent per ottenere la posizione*/
-//                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-//
-//                try {
-//                    startActivityForResult(builder.build(thisActivity), PLACE_PICKER_REQUEST);
-//                } catch (GooglePlayServicesRepairableException e) {
-//                    e.printStackTrace();
-//                } catch (GooglePlayServicesNotAvailableException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        /* Rende visibili i vari campi*/
+        TextView usr_label = findViewById(R.id.login_title_Username);
+        TextView usr_text = findViewById(R.id.login_Username);
+        TextView addr_label = findViewById(R.id.login_title_Address);
+        TextView addr_text = findViewById(R.id.login_Address);
+        Button getPos_button = findViewById(R.id.login_getPos_button);
+        usr_text.setText(user.getDisplayName());
+        usr_text.setVisibility(View.VISIBLE);
+        usr_label.setVisibility(View.VISIBLE);
+        addr_label.setVisibility(View.VISIBLE);
+        addr_text.setVisibility(View.VISIBLE);
+        getPos_button.setVisibility(View.VISIBLE);
+
+
+        getPos_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /* Lanciare l'intent per ottenere la posizione*/
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+
+                try {
+                    startActivityForResult(builder.build(thisActivity), PLACE_PICKER_REQUEST);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
 
 
