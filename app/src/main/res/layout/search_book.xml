@@ -15,7 +15,7 @@
         android:minHeight="?attr/actionBarSize"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark"
-       />
+        />
 
     <LinearLayout
 
@@ -27,28 +27,28 @@
         android:id="@+id/search_book_text">
 
 
-    <android.support.design.widget.TextInputLayout
+        <android.support.design.widget.TextInputLayout
 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        >
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            >
 
-    <EditText
-        android:id="@+id/search_book_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:layout_margin="16dp"
-        android:inputType="textCapSentences|textAutoComplete|textAutoCorrect"
+            <EditText
+                android:id="@+id/search_book_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:layout_margin="16dp"
+                android:inputType="textCapSentences|textAutoComplete|textAutoCorrect"
 
-        />
-    </android.support.design.widget.TextInputLayout>
-
-
+                />
+        </android.support.design.widget.TextInputLayout>
 
 
-   </LinearLayout>
+
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/search_button"
@@ -65,6 +65,6 @@
         android:layout_below="@id/search_book_text"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
         android:textColor="@android:color/white"
-       />
+        />
 
 </RelativeLayout>
