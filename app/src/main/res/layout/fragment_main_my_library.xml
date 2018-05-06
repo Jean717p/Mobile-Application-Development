@@ -7,7 +7,6 @@
     tools:context=".mainActivity.MainActivity"
     android:paddingRight="8dp"
     android:paddingLeft="8dp"
-    android:paddingTop="112dp"
     >
 
     <!--<android.support.design.widget.FloatingActionButton

@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -96,6 +97,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
+        CollapsingToolbarLayout collapsingToolbar =
+                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar.setTitle("Books Circle");
         // Create an instance of the tab layout from the view.
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         // Set the text for each tab.
@@ -121,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+
 
             }
             @Override
