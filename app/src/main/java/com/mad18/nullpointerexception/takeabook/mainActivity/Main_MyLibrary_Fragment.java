@@ -81,46 +81,14 @@ public class Main_MyLibrary_Fragment extends Fragment {
                 new RecyclerViewAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(Book item) {
-//                        List<String> listAuthors = new ArrayList<String>(item.getBook_authors().keySet());
-//                        List<String> listCategories = new ArrayList<String>(item.getBook_authors().keySet());
-                        Toast.makeText(getContext(), "Item Clicked", Toast.LENGTH_LONG).show();
-
-//                        BookWrapper bw = new BookWrapper(item.getBook_ISBN(),item.getBook_title(),
-//                                listAuthors, item.getBook_publisher(), item.getBook_editionYear(),
-//                                item.getBook_thumbnail_url(), listCategories, item.getBook_description());
-
-
                         Intent intent = new Intent(getActivity(), InfoBook.class);
                         intent.putExtra("bookToShow",new BookWrapper(item));
                         startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
                     }
                 });
         rec.setLayoutManager(new GridLayoutManager(getActivity(),3));
         rec.setAdapter(myAdapter);
-
-
-//        l.add(R.drawable.themartian);
-//        l.add(R.drawable.thevigitarian);
-//        l.add(R.drawable.thewildrobot);
-//        l.add(R.drawable.mariasemples);
-//        l.add(R.drawable.thevigitarian);
-//        l.add(R.drawable.thewildrobot);
-//        l.add(R.drawable.themartian);
-//        l.add(R.drawable.thevigitarian);
-//        l.add(R.drawable.privacy);
-//        l.add(R.drawable.hediedwith);
-//        l.add(R.drawable.mariasemples);
-//        l.add(R.drawable.thewildrobot);
-//        l.add(R.drawable.privacy);
-//        l.add(R.drawable.thevigitarian);
-//        l.add(R.drawable.thewildrobot);
-//        l.add(R.drawable.themartian);
-//        l.add(R.drawable.thevigitarian);
-//        l.add(R.drawable.mariasemples);
-//        l.add(R.drawable.themartian);
-//        l.add(R.drawable.thevigitarian);
-//        l.add(R.drawable.thewildrobot);
-
         return myFragmentView;
     }
 

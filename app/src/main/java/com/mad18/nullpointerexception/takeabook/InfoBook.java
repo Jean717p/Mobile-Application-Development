@@ -1,11 +1,15 @@
 package com.mad18.nullpointerexception.takeabook;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -24,6 +28,7 @@ public class InfoBook extends AppCompatActivity {
     private int ibTextViewIds[] = new int[]{R.id.info_book_title,R.id.info_book_author, R.id.info_book_ISBN,
         R.id.info_book_editionYear,R.id.info_book_publisher, R.id.info_book_categories, R.id.info_book_description};
     private FirebaseUser user;
+    private Menu menu;
     BookWrapper bookToShowInfoOf ;
 
     @Override
@@ -135,5 +140,23 @@ public class InfoBook extends AppCompatActivity {
         /**
          * da implementare per le immagini
          */
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                finish();
+                overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

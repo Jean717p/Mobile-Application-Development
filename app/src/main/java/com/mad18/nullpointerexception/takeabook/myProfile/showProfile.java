@@ -67,6 +67,7 @@ public class showProfile extends AppCompatActivity {
             case android.R.id.home:
                 onBackPressed();
                 finish();
+                overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
                 return true;
         }
         return super.onOptionsItemSelected(item);
