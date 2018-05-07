@@ -8,8 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.mad18.nullpointerexception.takeabook.addBook.BookWrapper;
@@ -22,6 +24,7 @@ public class InfoBook extends AppCompatActivity {
     private int ibTextViewIds[] = new int[]{R.id.info_book_title,R.id.info_book_author, R.id.info_book_ISBN,
         R.id.info_book_editionYear,R.id.info_book_publisher, R.id.info_book_categories, R.id.info_book_description};
     private FirebaseUser user;
+    BookWrapper bookToShowInfoOf ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,6 +39,7 @@ public class InfoBook extends AppCompatActivity {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         user = FirebaseAuth.getInstance().getCurrentUser();
 
+
         /**
          * valeria deve inserire questo nel suo codice
          * Intent intent = new Intent(getBaseContext(), NextActivity.class);
@@ -48,8 +52,8 @@ public class InfoBook extends AppCompatActivity {
          * io invece:
          * Foo foo = getIntent().getExtras().getParcelable("foo");
          */
-        Book bookToShowInfoOf =  getIntent().getExtras().getParcelable("bookToShow");
-        fillInfoBookViews(bookToShowInfoOf);
+        bookToShowInfoOf =  getIntent().getExtras().getParcelable("bookToShow");
+        fillInfoBookViews();
 
         //        ....To do later......
 //        LinearLayout layout = (LinearLayout) view.findViewById(R.id.image_container)
@@ -71,36 +75,41 @@ public class InfoBook extends AppCompatActivity {
 
     }
 
-    private void fillInfoBookViews(Book bookToShowInfoOf) {
-        /**
-         * da fare con book e non bookwrapper
-         */
+    private void fillInfoBookViews() {
 
         TextView tv;
         tv = findViewById(R.id.info_book_title);
-        tv.setText(bookToShowInfoOf.getBook_title().toString());
+        tv.setText(bookToShowInfoOf.getTitle());
         tv = findViewById(R.id.info_book_author);
         String tmp;
-        tmp = bookToShowInfoOf.getBook_authors().keySet().toString();
+        tmp = bookToShowInfoOf.getAuthors().toString();
         if(tmp.length()>2){
             tv.setText(tmp.substring(1,tmp.length()-1));
         }
-        tv.findViewById(R.id.info_book_ISBN);
-        tv.setText(bookToShowInfoOf.getBook_ISBN().toString());
-        tv.findViewById(R.id.info_book_editionYear);
-        tv.setText(bookToShowInfoOf.getBook_editionYear());
-        tv.findViewById(R.id.info_book_publisher);
-        tv.setText(bookToShowInfoOf.getBook_publisher().toString());
-        tv.findViewById(R.id.info_book_categories);
-        tmp = bookToShowInfoOf.getBook_categories().keySet().toString();
+        tv = findViewById(R.id.info_book_ISBN);
+        tv.setText(bookToShowInfoOf.getISBN());
+        tv = findViewById(R.id.info_book_editionYear);
+        tv.setText(Integer.toString(bookToShowInfoOf.getEditionYear()));
+        tv = findViewById(R.id.info_book_publisher);
+        tv.setText(bookToShowInfoOf.getPublisher());
+        tv = findViewById(R.id.info_book_categories);
+        tmp = bookToShowInfoOf.getCategories().toString();
         if(tmp.length()>2){
             tv.setText(tmp.substring(1,tmp.length()-1));
         }
-        tv = findViewById(R.id.info_book_description);
-        tv.setText(bookToShowInfoOf.getBook_description().toString());
+       tv = findViewById(R.id.info_book_description);
+       tv.setText(bookToShowInfoOf.getDescription());
 
+        ImageView iw = findViewById(R.id.info_book_main_image);
+        Book book = new Book(bookToShowInfoOf);
+        Glide.with(this).load(book.getBook_thumbnail_url()).into(iw);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fillInfoBookViews();
+    }
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);

@@ -2,6 +2,7 @@ package com.mad18.nullpointerexception.takeabook.mainActivity;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,12 +15,15 @@ import com.github.clans.fab.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mad18.nullpointerexception.takeabook.Book;
+import com.mad18.nullpointerexception.takeabook.InfoBook;
 import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.addBook.BookWrapper;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import android.support.v7.widget.GridLayoutManager;
+import android.widget.Toast;
 
 import static com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.thisUser;
 
@@ -73,9 +77,27 @@ public class Main_MyLibrary_Fragment extends Fragment {
                 }
             }
         });*/
-        RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(getActivity(),MainActivity.myBooks);
+        RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(getActivity(), MainActivity.myBooks,
+                new RecyclerViewAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Book item) {
+//                        List<String> listAuthors = new ArrayList<String>(item.getBook_authors().keySet());
+//                        List<String> listCategories = new ArrayList<String>(item.getBook_authors().keySet());
+                        Toast.makeText(getContext(), "Item Clicked", Toast.LENGTH_LONG).show();
+
+//                        BookWrapper bw = new BookWrapper(item.getBook_ISBN(),item.getBook_title(),
+//                                listAuthors, item.getBook_publisher(), item.getBook_editionYear(),
+//                                item.getBook_thumbnail_url(), listCategories, item.getBook_description());
+
+
+                        Intent intent = new Intent(getActivity(), InfoBook.class);
+                        intent.putExtra("bookToShow",new BookWrapper(item));
+                        startActivity(intent);
+                    }
+                });
         rec.setLayoutManager(new GridLayoutManager(getActivity(),3));
         rec.setAdapter(myAdapter);
+
 
 //        l.add(R.drawable.themartian);
 //        l.add(R.drawable.thevigitarian);

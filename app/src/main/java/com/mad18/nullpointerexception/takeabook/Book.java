@@ -2,8 +2,11 @@ package com.mad18.nullpointerexception.takeabook;
 
 import android.os.Build;
 
+import com.mad18.nullpointerexception.takeabook.addBook.BookWrapper;
 import com.google.firebase.firestore.GeoPoint;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -55,6 +58,28 @@ public class Book {
         book_categories = categories;
         book_location = geoPoint;
 
+    }
+
+    public Book (BookWrapper bw){
+        book_ISBN = bw.getISBN();
+        book_title = bw.getTitle();
+        book_publisher = bw.getPublisher();
+        book_editionYear = bw.getEditionYear();
+        List<String> bwAuthors = bw.getAuthors();
+        book_authors = new HashMap<>();
+        book_categories = new HashMap<>();
+        for (String x : bwAuthors) {
+            book_authors.put(x, true);
+        }
+        book_description = bw.getDescription();
+        book_thumbnail_url = bw.getThumbnail();
+        List<String> bwCategories = bw.getCategories();
+        for (String y : bwCategories) {
+            book_categories.put(y, true);
+        }
+        book_userid = bw.getBook_userid();
+        book_first_author = bw.getBook_first_author();
+        book_condition = bw.getBook_condition();
     }
 
     public String getBook_ISBN() {

@@ -23,12 +23,21 @@ import static com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>{
     private Context myContext;
     private List<Book> mData;
+    private final OnItemClickListener listener;
 
-
-    public RecyclerViewAdapter(Context myContext, List<Book> mData) {
+    public RecyclerViewAdapter(Context myContext, List<Book> mData, OnItemClickListener listener ) {
         this.myContext = myContext;
         this.mData = mData;
+        this.listener = listener;
     }
+
+    //inizio simo
+    public interface OnItemClickListener {
+        void onItemClick(Book item);
+    }
+
+
+    //fine simo
 
     @NonNull
     @Override
@@ -45,6 +54,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.tv_book_title.setText(mData.get(position).getBook_title());
        //holder.iv_book_thumbnail.setImageResource(mData.get(position));
        Glide.with(myContext).load(mData.get(position).getBook_thumbnail_url()).into(holder.iv_book_thumbnail);
+        holder.bind(mData.get(position), listener);
     }
 
     @Override
@@ -52,22 +62,32 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return mData.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView tv_book_title;
         ImageView iv_book_thumbnail;
-        CardView cardView ;
+        CardView cardView;
 
 
-        public MyViewHolder(View itemView){
+        public MyViewHolder(View itemView) {
             super(itemView);
-            tv_book_title = (TextView)  itemView.findViewById(R.id.my_library_book_title);
+            tv_book_title = (TextView) itemView.findViewById(R.id.my_library_book_title);
             iv_book_thumbnail = (ImageView) itemView.findViewById(R.id.my_library_book_picture);
             cardView = (CardView) itemView.findViewById(R.id.my_library_card_view);
         }
 
+        public void bind(final Book item, final OnItemClickListener listener) {
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(item);
+
+                }
+            });
+
+
+        }
 
     }
-
-
 }

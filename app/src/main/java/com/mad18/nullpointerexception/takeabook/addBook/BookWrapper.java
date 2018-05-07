@@ -3,7 +3,11 @@ package com.mad18.nullpointerexception.takeabook.addBook;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.mad18.nullpointerexception.takeabook.Book;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +17,7 @@ import java.util.Map;
  * un oggetto di questo tipo affinchè possa essere inserito nel bundle.
  *
  */
-public class BookWrapper implements Parcelable {
+public class BookWrapper extends Book implements Parcelable {
 
     /**
      * Si occupa di creare una nuova istanza della classe Parcelable, instanziandola dal Parcel specificato.
@@ -37,8 +41,18 @@ public class BookWrapper implements Parcelable {
     private String thumbnail;
     private List<String> categories;
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    private String description;
+
     //Constructor
-    public BookWrapper(String ISBN,String title,List<String> authors, String publisher, int editionYear, String thumbnail, List<String> categories){
+    public BookWrapper(String ISBN,String title,List<String> authors, String publisher, int editionYear, String thumbnail, List<String> categories, String description){
         this.ISBN = ISBN;
         this.title = title;
         this.authors = authors;
@@ -46,6 +60,19 @@ public class BookWrapper implements Parcelable {
         this.editionYear = editionYear;
         this.thumbnail = thumbnail;
         this.categories = categories;
+        this.description = description;
+    }
+
+    public BookWrapper(Book book){
+        this.ISBN = book.getBook_ISBN();
+        this.title = book.getBook_title();
+        this.authors = new LinkedList<>(book.getBook_authors().keySet());
+        this.publisher = book.getBook_publisher();
+        this.editionYear = book.getBook_editionYear();
+        this.thumbnail = book.getBook_thumbnail_url();
+        this.categories = new LinkedList<>(book.getBook_categories().keySet());
+        this.description = book.getBook_description();
+
     }
 
     public String getISBN() {
@@ -112,6 +139,7 @@ public class BookWrapper implements Parcelable {
         this.editionYear = in.readInt();
         this.thumbnail = in.readString();
         this.categories = in.createStringArrayList();
+        this.description = in.readString();
     }
     @Override
     public int describeContents() {
@@ -134,6 +162,7 @@ public class BookWrapper implements Parcelable {
         dest.writeInt(this.editionYear);
         dest.writeString(this.thumbnail);
         dest.writeStringList(this.categories);
+        dest.writeString(this.description);
     }
     @Override
     public String toString() {
@@ -150,6 +179,7 @@ public class BookWrapper implements Parcelable {
                 Totauthors +
                 ", publisher='" + publisher + '\'' +
                 ", editionYear='" + SeditionYear + '\'' +
+                ", description='" + description + '\'' +
                 '}';
     }
 }
