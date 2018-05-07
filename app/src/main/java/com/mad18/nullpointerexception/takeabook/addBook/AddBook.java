@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -61,6 +62,7 @@ public class AddBook extends AppCompatActivity {
     private Bitmap bookImg;
     private Spinner staticSpinner;
 
+
     private android.support.design.widget.FloatingActionButton img_fab;
     private FirebaseUser user;
     @Override
@@ -81,6 +83,7 @@ public class AddBook extends AppCompatActivity {
         staticSpinner = findViewById(R.id.add_book_spinner_book_cond);
         //create a list of items for the spinner.
         String[] items = new String[]{"condizioni del libro", "Ottime", "Buone", "Scarse"};
+
         //create an adapter to describe how the items are displayed, adapters are used in several places in android.
         //There are multiple variations of this, but this is the basic variant.
         ArrayAdapter<CharSequence> staticAdapter = ArrayAdapter
@@ -277,6 +280,7 @@ public class AddBook extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User u = documentSnapshot.toObject(User.class);
                 u.getUsr_books().put(bookToAdd.getBook_ISBN() + user.getUid(),true);
+
                 users.document(user.getUid()).set(u);
             }
         });
@@ -323,7 +327,7 @@ public class AddBook extends AppCompatActivity {
                         }
 
                         bookToAdd = new Book(bookwrap.getISBN(),bookwrap.getTitle(),
-                                bookwrap.getPublisher(),bookwrap.getEditionYear(),0,user.getUid(),Mauthors,"",bookwrap.getThumbnail(), Mcategories);
+                                bookwrap.getPublisher(),bookwrap.getEditionYear(),0,user.getUid(),Mauthors,"",bookwrap.getThumbnail(), Mcategories, MainActivity.thisUser.getUsr_geoPoint());
 //                        for(int i:addBookTextViewIds){
 //                            findViewById(i).setVisibility(View.VISIBLE);
 //                        }
@@ -366,6 +370,7 @@ public class AddBook extends AppCompatActivity {
      * Viene effettuato un controllo sul campo autors per rimuovere le parentesi quadre restituite dal JSON.
      * @param book
      */
+
 
     private void fillAddBookViews(Book book){
         ExtendedEditText eet;
@@ -487,6 +492,5 @@ public class AddBook extends AppCompatActivity {
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
     }
-
 
 }

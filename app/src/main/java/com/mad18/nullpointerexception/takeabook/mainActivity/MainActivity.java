@@ -75,9 +75,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static List<Book> myBooks = new LinkedList<>();
 
     NavigationView navigationView;
-//   Called when a fragment is attached as a child of this fragment.
+    //Called when a fragment is attached as a child of this fragment.
 
-    //
     @Override
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
@@ -90,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //getInstance() : we reference ,by a URL, a single sub-object of the complete data store and we
         //encapsulate it in a FirebaseDatabase instance
         db = FirebaseFirestore.getInstance();
-
         mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_main);
         new updateUserData().doInBackground();
@@ -125,7 +123,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-
 
             }
             @Override
@@ -265,7 +262,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public class PagerAdapter extends FragmentStatePagerAdapter {
-
         int mNumOfTabs;
         public PagerAdapter(FragmentManager fm, int NumOfTabs) {
             super(fm);
@@ -292,8 +288,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public int getCount() {
             return mNumOfTabs;
         }
-
     }
+
     private class updateUserData extends AsyncTask<String,Void,String>{
 
         @Override
@@ -355,9 +351,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
             return "ok";
         }
-
-
     }
+
     public List<Book> getMyBooks() {
         return myBooks;
     }
