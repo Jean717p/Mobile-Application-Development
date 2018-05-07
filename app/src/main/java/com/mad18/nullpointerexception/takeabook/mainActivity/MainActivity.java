@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -44,6 +45,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.mad18.nullpointerexception.takeabook.Book;
 import com.mad18.nullpointerexception.takeabook.LoginActivity;
 import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.User;
@@ -52,6 +54,8 @@ import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static com.mad18.nullpointerexception.takeabook.myProfile.showProfile.deleteUserData;
@@ -66,32 +70,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseAuth mAuth;
     private DocumentReference user_doc;
     private Context context = this;
+     public static  User thisUser;
+
+    public static List<Book> myBooks = new LinkedList<>();
+
     NavigationView navigationView;
+//   Called when a fragment is attached as a child of this fragment.
 
-
+    //
     @Override
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
     }
-
+    //    has not yet had a previous call to onCreate.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
+        //getInstance() : we reference ,by a URL, a single sub-object of the complete data store and we
+        //encapsulate it in a FirebaseDatabase instance
         db = FirebaseFirestore.getInstance();
+
         mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_main);
         new updateUserData().doInBackground();
         sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
+        CollapsingToolbarLayout collapsingToolbar =
+                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar.setTitle("Books Circle");
         // Create an instance of the tab layout from the view.
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         // Set the text for each tab.
-        tabLayout.addTab(tabLayout.newTab().setText("Top"));
-        tabLayout.addTab(tabLayout.newTab().setText("My Library"));
-        tabLayout.addTab(tabLayout.newTab().setText("Lent"));
-        tabLayout.addTab(tabLayout.newTab().setText("Borrowed"));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.top_books));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.my_library));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.lent_books));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.borrowed_books));
 
         // Set the tabs to fill the entire layout.
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -110,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+
 
             }
             @Override
@@ -154,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+    //    This is called after the attached fragment's onAttach and before the attached fragment's onCreate if the fragment
     @Override
     protected void onResume() {
         super.onResume();
@@ -187,6 +204,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             // user is now signed out
                             startActivity(new Intent(MainActivity.this, LoginActivity.class));
                             deleteUserData(sharedPref);
+                            myBooks.clear();
                             finish();
                         });
                 break;
@@ -247,13 +265,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public class PagerAdapter extends FragmentStatePagerAdapter {
+
         int mNumOfTabs;
         public PagerAdapter(FragmentManager fm, int NumOfTabs) {
             super(fm);
             this.mNumOfTabs = 4;
 
         }
-
         @Override
         public Fragment getItem(int position) {
             switch (position){
@@ -274,8 +292,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public int getCount() {
             return mNumOfTabs;
         }
-    }
 
+    }
     private class updateUserData extends AsyncTask<String,Void,String>{
 
         @Override
@@ -299,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     DocumentSnapshot doc = task.getResult();
                     SharedPreferences.Editor editor = sharedPref.edit();
                     navigationView = (NavigationView) findViewById(R.id.nav_view);
-                    //User u = doc.toObject(User.class);
+                    thisUser = doc.toObject(User.class);
                     for(String tmp:sharedUserDataKeys){
                         editor.putString(tmp,doc.getString(tmp));
                     }
@@ -321,10 +339,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             }
                         });
                     }
+
+                        for (String x : thisUser.getUsr_books().keySet()) {
+                            db.collection("books").document(x).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    DocumentSnapshot bookDoc = task.getResult();
+                                    myBooks.add(bookDoc.toObject(Book.class));
+                                }
+                            });
+                        }
+
+
                 }
             });
             return "ok";
         }
-    }
 
+
+    }
+    public List<Book> getMyBooks() {
+        return myBooks;
+    }
 }

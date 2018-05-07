@@ -74,7 +74,15 @@
             ><!--android:label="@string/title_activity_edit"-->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.mad18.nullpointerexception.takeabook.myProfile.showProfile"/>
+                android:value="com.mad18.nullpointerexception.takeabook.myProfile.showProfile" />
+        </activity>
+        <activity
+            android:name=".SearchBook"
+            android:parentActivityName=".mainActivity.MainActivity"
+            android:theme="@style/AppTheme"> <!-- android:label="@string/title_activity_show_profile" -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity" />
         </activity>
         <activity
             android:name=".InfoBook"
