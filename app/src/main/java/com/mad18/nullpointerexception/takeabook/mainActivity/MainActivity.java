@@ -11,6 +11,7 @@ import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -77,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DocumentReference user_doc;
     private Context context = this;
     public static User thisUser;
+    private FloatingActionButton fab_my_lib;
     public static List<Book> myBooks = new LinkedList<>();
 
     NavigationView navigationView;
@@ -91,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
+        fab_my_lib = findViewById(R.id.fab_add);
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_main);
@@ -153,6 +156,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+               /* if(tab.getPosition() == 0){
+                    FloatingActionButton fabSearch= (FloatingActionButton) findViewById(R.id.top_floating_action_menu);
+                    fabSearch.show();
+                }
+                else
+                {
+                    FloatingActionButton fabSearch = (FloatingActionButton) findViewById(R.id.top_floating_action_menu);
+                    fabSearch.hide();
+                }*/
+                /*if (tab.getPosition() == 1) {
+                    FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab_add);
+                    floatingActionButton.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab_add);
+                    floatingActionButton.setVisibility(View.GONE);
+                }*/
+
+
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {

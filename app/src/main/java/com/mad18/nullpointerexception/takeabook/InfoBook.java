@@ -39,7 +39,7 @@ public class InfoBook extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.info_book_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("Info Book");
+        setTitle(R.string.title_activity_info_book);
         toolbar.setVisibility(View.VISIBLE);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         user = FirebaseAuth.getInstance().getCurrentUser();

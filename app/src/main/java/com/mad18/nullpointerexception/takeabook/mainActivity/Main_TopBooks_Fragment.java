@@ -48,7 +48,6 @@ public class Main_TopBooks_Fragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_main_top, container, false);
             fabTitle = v.findViewById(R.id.top_floating_action_menu_title);
             fabAuthor =  v.findViewById(R.id.top_floating_action_menu_author);
-            fabCategory = v.findViewById(R.id.top_floating_action_menu_category);
             fabIsbn = v.findViewById(R.id.top_floating_action_menu_ISBN);
             fam = v.findViewById(R.id.top_floating_action_menu);
 

@@ -47,10 +47,6 @@ public class SearchBook extends AppCompatActivity {
             case "Author":
                 text.setHint(getString(R.string.search_book_text_author));
                 break;
-            case "Category":
-                text.setHint(getString(R.string.search_book_text_category));
-                break;
-
             case "ISBN":
                 text.setHint(getString(R.string.search_book_text_ISBN));
                 text.setInputType(InputType.TYPE_CLASS_NUMBER);

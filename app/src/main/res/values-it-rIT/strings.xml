@@ -22,6 +22,7 @@
     <string name="title_activity_show_profile">Il mio profilo</string>
     <string name="title_activity_login_activity">Login utente</string>
     <string name="title_activity_search_book">Cerca un libro</string>
+    <string name="title_activity_info_book">Dettagli libro</string>
 
     <!--Photo-->
     <string name="photo_from_gallery">Seleziona una foto dalla galleria</string>
@@ -61,13 +62,25 @@
     <string name="search_book_text_author">Autore</string>
     <string name="search_book_button_text">Cerca</string>
 
+
+    <!--InfoBook Related-->
+    <string name="info_book_label_title">Titolo:</string>
+    <string name="info_book_label_category">Categoria:</string>
+    <string name="info_book_label_ISBN">Isbn:</string>
+    <string name="info_book_label_author">Autore:</string>
+    <string name="info_book_label_edition_year"> Anno edizione:</string>
+    <string name="info_book_label_publisher">Editore:</string>
+    <string name="info_book_label_description">Descrizione:</string>
+    <string name="info_book_label_owner">Appartiene a:</string>
+    <string name="info_book_label_book_conditions">Condizioni libro:</string>
+
     <!--Barcode Related-->
     <string name="add_book_read_ISBN">Cerca dettagli ISBN</string>
     <string name="read_barcode">Leggi Barcode</string>
     <string name="add_a_book">Aggiungi un libro</string>
     <string name="add_book_title">"Titolo"</string>
     <string name="add_book_author">"Autore/i"</string>
-    <string name="add_book_edition_year">"Edizione"</string>
+    <string name="add_book_edition_year">"Anno edizione"</string>
     <string name="add_book_ISBN">"ISBN"</string>
     <string name="add_book_publisher">"Editore"</string>
     <string name="add_book_helper_text_ISBN">"Scrivi esattamente 13 numeri"</string>
