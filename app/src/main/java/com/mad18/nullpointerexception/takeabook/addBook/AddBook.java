@@ -54,7 +54,7 @@ public class AddBook extends AppCompatActivity {
     private final int REQUEST_PERMISSION_CAMERA = 2, REQUEST_PERMISSION_GALLERY=1;
     private final int addBookTextViewIds[] = {R.id.add_book_text_field_Title,R.id.add_book_text_field_Author,
             R.id.add_book_text_field_EditionYear,R.id.add_book_text_field_Publisher,
-            R.id.add_book_text_field_ISBN,R.id.add_book_text_field_Description};
+            R.id.add_book_text_field_ISBN,R.id.add_book_text_field_Description,R.id.add_book_text_field_Category};
     private Book bookToAdd;
     private View mClss;
     private Toolbar toolbar;
@@ -390,6 +390,11 @@ public class AddBook extends AppCompatActivity {
         eet.setText(book.getBook_title());
         eet = findViewById(R.id.add_book_extended_edit_text_Publisher);
         eet.setText(book.getBook_publisher());
+        eet = findViewById(R.id.add_book_extended_edit_Category);
+        tmp = book.getBook_categories().keySet().toString();
+        if(tmp.length()>2){
+            eet.setText(tmp.substring(1,tmp.length()-1));
+        }
     }
 
     /**
@@ -460,7 +465,7 @@ public class AddBook extends AppCompatActivity {
         if(bookImg!=null){
             iw = findViewById(R.id.add_book_picture);
             bookImg = null;
-            iw.setImageResource(R.drawable.ic_if_internt_web_technology_05_274892);
+            iw.setImageResource(R.drawable.ic_addbook);
         }
     }
 

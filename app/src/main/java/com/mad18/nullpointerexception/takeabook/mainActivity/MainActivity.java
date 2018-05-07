@@ -48,6 +48,7 @@ import com.google.firebase.storage.UploadTask;
 import com.mad18.nullpointerexception.takeabook.Book;
 import com.mad18.nullpointerexception.takeabook.LoginActivity;
 import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.SplashScreenActivity;
 import com.mad18.nullpointerexception.takeabook.User;
 import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
 
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseAuth mAuth;
     private DocumentReference user_doc;
     private Context context = this;
-     public static  User thisUser;
+    public static  User thisUser;
 
     public static List<Book> myBooks = new LinkedList<>();
 
@@ -165,6 +166,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 setNavDrawerParameters(hview);
             }
         });
+        Intent intent = new Intent(this,SplashScreenActivity.class);
+        startActivity(intent);
     }
 
     //    This is called after the attached fragment's onAttach and before the attached fragment's onCreate if the fragment
@@ -336,15 +339,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         });
                     }
 
-                        for (String x : thisUser.getUsr_books().keySet()) {
-                            db.collection("books").document(x).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    DocumentSnapshot bookDoc = task.getResult();
-                                    myBooks.add(bookDoc.toObject(Book.class));
-                                }
-                            });
-                        }
+                    for (String x : thisUser.getUsr_books().keySet()) {
+                        db.collection("books").document(x).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                DocumentSnapshot bookDoc = task.getResult();
+                                myBooks.add(bookDoc.toObject(Book.class));
+                            }
+                        });
+                    }
 
 
                 }
