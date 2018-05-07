@@ -40,6 +40,7 @@ public class BookWrapper extends Book implements Parcelable {
     private int editionYear;
     private String thumbnail;
     private List<String> categories;
+    private String user_id;
 
     public String getDescription() {
         return description;
@@ -61,7 +62,9 @@ public class BookWrapper extends Book implements Parcelable {
         this.thumbnail = thumbnail;
         this.categories = categories;
         this.description = description;
+        this.user_id = "";
     }
+
 
     public BookWrapper(Book book){
         this.ISBN = book.getBook_ISBN();
@@ -72,7 +75,7 @@ public class BookWrapper extends Book implements Parcelable {
         this.thumbnail = book.getBook_thumbnail_url();
         this.categories = new LinkedList<>(book.getBook_categories().keySet());
         this.description = book.getBook_description();
-
+        this.user_id = book.getBook_userid();
     }
 
     public String getISBN() {
@@ -131,6 +134,14 @@ public class BookWrapper extends Book implements Parcelable {
         this.categories = categories;
     }
 
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
     public BookWrapper(Parcel in){
         this.ISBN = in.readString();
         this.title = in.readString();
@@ -140,6 +151,7 @@ public class BookWrapper extends Book implements Parcelable {
         this.thumbnail = in.readString();
         this.categories = in.createStringArrayList();
         this.description = in.readString();
+        this.user_id = in.readString();
     }
     @Override
     public int describeContents() {
@@ -163,6 +175,7 @@ public class BookWrapper extends Book implements Parcelable {
         dest.writeString(this.thumbnail);
         dest.writeStringList(this.categories);
         dest.writeString(this.description);
+        dest.writeString(this.user_id);
     }
     @Override
     public String toString() {
@@ -180,6 +193,7 @@ public class BookWrapper extends Book implements Parcelable {
                 ", publisher='" + publisher + '\'' +
                 ", editionYear='" + SeditionYear + '\'' +
                 ", description='" + description + '\'' +
+                ", user_id='" + user_id + '\'' +
                 '}';
     }
 }

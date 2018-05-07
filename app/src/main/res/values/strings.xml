@@ -22,6 +22,7 @@
     <string name="title_activity_show_profile">My Profile</string>
     <string name="title_activity_login_activity">Login_activity</string>
     <string name="title_activity_search_book">Search a book</string>
+    <string name="title_activity_info_book">Info book</string>
 
     <!--Photo-->
     <string name="photo_from_gallery">Select photo from gallery</string>
@@ -89,4 +90,7 @@
     <string name="facebook_application_id" translatable="false">207778776488778</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb207778776488778</string>
 
+    <!--Info Book Related-->
+    <string name="info_book_owner_label"> Owner:</string>
+    <string name="info_book_owner"> owner </string>
 </resources>

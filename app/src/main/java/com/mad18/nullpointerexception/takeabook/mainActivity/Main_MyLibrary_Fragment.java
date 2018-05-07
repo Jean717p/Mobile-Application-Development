@@ -83,15 +83,16 @@ public class Main_MyLibrary_Fragment extends Fragment {
                     public void onItemClick(Book item) {
 //                        List<String> listAuthors = new ArrayList<String>(item.getBook_authors().keySet());
 //                        List<String> listCategories = new ArrayList<String>(item.getBook_authors().keySet());
-                        Toast.makeText(getContext(), "Item Clicked", Toast.LENGTH_LONG).show();
-
+//                        Toast.makeText(getContext(), "Item Clicked", Toast.LENGTH_LONG).show();
 //                        BookWrapper bw = new BookWrapper(item.getBook_ISBN(),item.getBook_title(),
 //                                listAuthors, item.getBook_publisher(), item.getBook_editionYear(),
 //                                item.getBook_thumbnail_url(), listCategories, item.getBook_description());
 
 
                         Intent intent = new Intent(getActivity(), InfoBook.class);
-                        intent.putExtra("bookToShow",new BookWrapper(item));
+                        BookWrapper bw = new BookWrapper(item);
+                        bw.setBook_userid(item.getBook_userid());
+                        intent.putExtra("bookToShow",bw);
                         startActivity(intent);
                     }
                 });

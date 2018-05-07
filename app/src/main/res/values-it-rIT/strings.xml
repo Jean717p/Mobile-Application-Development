@@ -22,6 +22,7 @@
     <string name="title_activity_show_profile">Il mio profilo</string>
     <string name="title_activity_login_activity">Login utente</string>
     <string name="title_activity_search_book">Cerca un libro</string>
+    <string name="title_activity_info_book">Info libro</string>
 
     <!--Photo-->
     <string name="photo_from_gallery">Seleziona una foto dalla galleria</string>
@@ -85,6 +86,9 @@
     <string name="top_frag_floating_action_menu_search">Indietro</string>
     <string name="title">Cerca</string>
 
+    <!--Info Book Related-->
+    <string name="info_book_owner_label"> Proprietario:</string>
+    <string name="info_book_owner"> Proprietario </string>
 
 
 </resources>

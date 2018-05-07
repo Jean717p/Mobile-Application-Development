@@ -206,6 +206,7 @@
         android:layout_toRightOf="@id/info_book_label_owner"
         android:textColor="@color/textColor"
         android:textSize="@dimen/profile_text_view_content"
+        android:text="Owner"
         android:fontFamily="sans-serif"/>
 
     <!--etichetta e contenuto Descrition-->
