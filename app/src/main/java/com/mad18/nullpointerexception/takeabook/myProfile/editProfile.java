@@ -335,6 +335,7 @@ public class editProfile extends AppCompatActivity {
         pictureDialog.show();
     }
 
+
     public void choosePhotoFromGallery() {
         //bisogna fare un check sui permessi forniti dall'utente alla nostra app
         if(ActivityCompat.checkSelfPermission(editProfile.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){

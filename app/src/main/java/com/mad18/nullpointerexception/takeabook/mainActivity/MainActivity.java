@@ -48,6 +48,7 @@ import com.google.firebase.storage.UploadTask;
 import com.mad18.nullpointerexception.takeabook.Book;
 import com.mad18.nullpointerexception.takeabook.LoginActivity;
 import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.SplashScreenActivity;
 import com.mad18.nullpointerexception.takeabook.User;
 import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
 
@@ -70,14 +71,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseAuth mAuth;
     private DocumentReference user_doc;
     private Context context = this;
-     public static  User thisUser;
+    public static  User thisUser;
 
     public static List<Book> myBooks = new LinkedList<>();
 
     NavigationView navigationView;
-//   Called when a fragment is attached as a child of this fragment.
+    //Called when a fragment is attached as a child of this fragment.
 
-    //
     @Override
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //getInstance() : we reference ,by a URL, a single sub-object of the complete data store and we
         //encapsulate it in a FirebaseDatabase instance
         db = FirebaseFirestore.getInstance();
-
         mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_main);
         new updateUserData().doInBackground();
@@ -125,7 +124,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-
 
             }
             @Override
@@ -168,6 +166,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 setNavDrawerParameters(hview);
             }
         });
+        Intent intent = new Intent(this,SplashScreenActivity.class);
+        startActivity(intent);
     }
 
     //    This is called after the attached fragment's onAttach and before the attached fragment's onCreate if the fragment
@@ -265,7 +265,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public class PagerAdapter extends FragmentStatePagerAdapter {
-
         int mNumOfTabs;
         public PagerAdapter(FragmentManager fm, int NumOfTabs) {
             super(fm);
@@ -292,8 +291,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public int getCount() {
             return mNumOfTabs;
         }
-
     }
+
     private class updateUserData extends AsyncTask<String,Void,String>{
 
         @Override
@@ -340,24 +339,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         });
                     }
 
-                        for (String x : thisUser.getUsr_books().keySet()) {
-                            db.collection("books").document(x).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    DocumentSnapshot bookDoc = task.getResult();
-                                    myBooks.add(bookDoc.toObject(Book.class));
-                                }
-                            });
-                        }
+                    for (String x : thisUser.getUsr_books().keySet()) {
+                        db.collection("books").document(x).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                DocumentSnapshot bookDoc = task.getResult();
+                                myBooks.add(bookDoc.toObject(Book.class));
+                            }
+                        });
+                    }
 
 
                 }
             });
             return "ok";
         }
-
-
     }
+
     public List<Book> getMyBooks() {
         return myBooks;
     }

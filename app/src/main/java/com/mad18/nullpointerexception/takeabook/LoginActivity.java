@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,7 +15,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -36,7 +34,6 @@ import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity  {
     private static final String TAG = "LoginActivity";
@@ -48,6 +45,9 @@ public class LoginActivity extends AppCompatActivity  {
     private ProgressBar progressBar;
     private TextView progressBarTextView;
     private boolean firstAttempt;
+    private boolean newUser;
+    public static final String usr_lat = "usr_lat";
+    public static final String usr_long = "usr_lat";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,10 +56,10 @@ public class LoginActivity extends AppCompatActivity  {
         progressBar = (ProgressBar) findViewById(R.id.login_progress_bar);
         progressBarTextView = findViewById(R.id.login_progress_bar_text);
         toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-
         setSupportActionBar(toolbar);
         setTitle(R.string.app_name);
         firstAttempt = true;
+        newUser = false;
     }
 
     @Override
@@ -67,8 +67,7 @@ public class LoginActivity extends AppCompatActivity  {
         super.onResume();
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) {
-                FirebaseUserMetadata metadata = mAuth.getCurrentUser().getMetadata();
-                if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()) {
+                if (newUser) {
                     TextView tw = findViewById(R.id.login_Address);
                     if(tw.getText().toString().length() > 0) {
                         //Nel caso serva inserire tasto ok su toolbar
@@ -123,12 +122,12 @@ public class LoginActivity extends AppCompatActivity  {
 
                     /* Inserimento dati su Firebase */
 
-
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     CollectionReference users = db.collection("users");
                     FirebaseUser user = mAuth.getCurrentUser();
                     User u = new User(user.getEmail(), user.getDisplayName(), "", "", new HashMap<String, Boolean>(),gp);
                     users.document(user.getUid()).set(u);
+
 
                 } else {
                     //Place picking fallito
@@ -143,9 +142,11 @@ public class LoginActivity extends AppCompatActivity  {
                     // Successfully signed in
                     if (resultCode == RESULT_OK) {
                         IdpResponse idpResponse = IdpResponse.fromResultIntent(data);
-                        progressBar.setVisibility(View.INVISIBLE);
-                        findViewById(R.id.login_progress_bar_text).setVisibility(View.INVISIBLE);
-                        getUserPosition(this);
+                        FirebaseUserMetadata metadata = mAuth.getCurrentUser().getMetadata();
+                        newUser = metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp();
+                        if (newUser) {
+                            getUserPosition(this);
+                        }
                     } else {
                         // Sign in failed
                         if (response == null) {
@@ -201,6 +202,8 @@ public class LoginActivity extends AppCompatActivity  {
         FirebaseUser user = mAuth.getCurrentUser();
 
         /* Rende visibili i vari campi*/
+        progressBar.setVisibility(View.INVISIBLE);
+        findViewById(R.id.login_progress_bar_text).setVisibility(View.INVISIBLE);
         TextView usr_label = findViewById(R.id.login_title_Username);
         TextView usr_text = findViewById(R.id.login_Username);
         TextView addr_label = findViewById(R.id.login_title_Address);

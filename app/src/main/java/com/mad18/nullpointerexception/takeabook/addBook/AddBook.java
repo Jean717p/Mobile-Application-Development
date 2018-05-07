@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -53,13 +54,14 @@ public class AddBook extends AppCompatActivity {
     private final int REQUEST_PERMISSION_CAMERA = 2, REQUEST_PERMISSION_GALLERY=1;
     private final int addBookTextViewIds[] = {R.id.add_book_text_field_Title,R.id.add_book_text_field_Author,
             R.id.add_book_text_field_EditionYear,R.id.add_book_text_field_Publisher,
-            R.id.add_book_text_field_ISBN,R.id.add_book_text_field_Description};
+            R.id.add_book_text_field_ISBN,R.id.add_book_text_field_Description,R.id.add_book_text_field_Category};
     private Book bookToAdd;
     private View mClss;
     private Toolbar toolbar;
     private Menu menu;
     private Bitmap bookImg;
     private Spinner staticSpinner;
+
 
     private android.support.design.widget.FloatingActionButton img_fab;
     private FirebaseUser user;
@@ -81,6 +83,7 @@ public class AddBook extends AppCompatActivity {
         staticSpinner = findViewById(R.id.add_book_spinner_book_cond);
         //create a list of items for the spinner.
         String[] items = new String[]{"condizioni del libro", "Ottime", "Buone", "Scarse"};
+
         //create an adapter to describe how the items are displayed, adapters are used in several places in android.
         //There are multiple variations of this, but this is the basic variant.
         ArrayAdapter<CharSequence> staticAdapter = ArrayAdapter
@@ -277,6 +280,7 @@ public class AddBook extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User u = documentSnapshot.toObject(User.class);
                 u.getUsr_books().put(bookToAdd.getBook_ISBN() + user.getUid(),true);
+
                 users.document(user.getUid()).set(u);
             }
         });
@@ -323,7 +327,7 @@ public class AddBook extends AppCompatActivity {
                         }
 
                         bookToAdd = new Book(bookwrap.getISBN(),bookwrap.getTitle(),
-                                bookwrap.getPublisher(),bookwrap.getEditionYear(),0,user.getUid(),Mauthors,"",bookwrap.getThumbnail(), Mcategories);
+                                bookwrap.getPublisher(),bookwrap.getEditionYear(),0,user.getUid(),Mauthors,"",bookwrap.getThumbnail(), Mcategories, MainActivity.thisUser.getUsr_geoPoint());
 //                        for(int i:addBookTextViewIds){
 //                            findViewById(i).setVisibility(View.VISIBLE);
 //                        }
@@ -367,6 +371,7 @@ public class AddBook extends AppCompatActivity {
      * @param book
      */
 
+
     private void fillAddBookViews(Book book){
         ExtendedEditText eet;
         String tmp;
@@ -385,6 +390,11 @@ public class AddBook extends AppCompatActivity {
         eet.setText(book.getBook_title());
         eet = findViewById(R.id.add_book_extended_edit_text_Publisher);
         eet.setText(book.getBook_publisher());
+        eet = findViewById(R.id.add_book_extended_edit_Category);
+        tmp = book.getBook_categories().keySet().toString();
+        if(tmp.length()>2){
+            eet.setText(tmp.substring(1,tmp.length()-1));
+        }
     }
 
     /**
@@ -455,7 +465,7 @@ public class AddBook extends AppCompatActivity {
         if(bookImg!=null){
             iw = findViewById(R.id.add_book_picture);
             bookImg = null;
-            iw.setImageResource(R.drawable.ic_if_internt_web_technology_05_274892);
+            iw.setImageResource(R.drawable.ic_addbook);
         }
     }
 
@@ -487,6 +497,5 @@ public class AddBook extends AppCompatActivity {
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
     }
-
 
 }

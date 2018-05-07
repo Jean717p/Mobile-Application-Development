@@ -29,41 +29,36 @@
             android:layout_marginBottom="-249dp"
             android:clickable="true"
             android:padding="16dp"
-            android:src="@drawable/ic_book_cover" />
+            android:src="@drawable/ic_addbook" />
 
 
         <Button
             android:id="@+id/read_barcode"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/add_book_text_field_Title"
             android:layout_alignParentTop="true"
-            android:layout_marginEnd="0dp"
-            android:layout_marginTop="260dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="256dp"
             android:background="@drawable/corner_button"
             android:padding="16dp"
-            android:textSize="10sp"
             android:text="@string/read_barcode"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:textSize="10sp" />
 
         <Button
             android:id="@+id/add_book_read_ISBN"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/add_book_text_field_Title"
-            android:layout_alignTop="@+id/read_barcode"
+            android:layout_width="67dp"
+            android:layout_height="31dp"
+            android:layout_alignEnd="@+id/add_book_text_field_Title"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="330dp"
             android:background="@drawable/corner_button"
-            android:padding="16dp"
-            android:textSize="10sp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
-            android:textAlignment="inherit"
-            android:text="@string/add_book_read_ISBN"
-            android:textColor="@android:color/white" />
+            android:drawableTop="@drawable/ic_search_white_48px" />
 
         <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
             android:id="@+id/add_book_text_field_ISBN"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/read_barcode"
             android:layout_margin="16dp"
@@ -74,7 +69,7 @@
             app:helperTextColor="@color/colorAccent"
             app:labelText="@string/add_book_ISBN"
             app:maxCharacters="13"
-            app:panelBackgroundColor="#FFF3E0"
+            app:panelBackgroundColor="@android:color/transparent"
             app:primaryColor="@color/colorAccent">
 
             <studio.carbonylgroup.textfieldboxes.ExtendedEditText
@@ -98,7 +93,7 @@
             android:layout_below="@id/add_book_text_field_ISBN"
             app:errorColor="#ddaa00"
             app:labelText="@string/add_book_title"
-            app:panelBackgroundColor="#FFF3E0"
+            app:panelBackgroundColor="@android:color/transparent"
             app:primaryColor="@color/colorAccent">
 
 
@@ -120,7 +115,7 @@
             android:layout_margin="16dp"
             app:errorColor="#ddaa00"
             app:labelText="@string/add_book_author"
-            app:panelBackgroundColor="#FFF3E0"
+            app:panelBackgroundColor="@android:color/transparent"
             app:primaryColor="@color/colorAccent"
             tools:layout_marginTop="16dp">
 
@@ -133,15 +128,38 @@
 
 
         <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+            android:id="@+id/add_book_text_field_Category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/add_book_text_field_Author"
+            android:layout_margin="16dp"
+            app:errorColor="#ddaa00"
+            app:labelText="@string/add_book_category"
+            app:panelBackgroundColor="@android:color/transparent"
+            android:enabled="false"
+            app:primaryColor="@color/colorAccent"
+            tools:layout_marginTop="16dp">
+
+            <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+                android:id="@+id/add_book_extended_edit_Category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                />
+        </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
+
+        <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
             android:id="@+id/add_book_text_field_EditionYear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/add_book_text_field_Author"
+            android:layout_below="@+id/add_book_text_field_Category"
             android:layout_margin="16dp"
             app:errorColor="#ddaa00"
             app:labelText="@string/add_book_edition_year"
-            app:panelBackgroundColor="#FFF3E0"
+            app:panelBackgroundColor="@android:color/transparent"
             app:primaryColor="@color/colorAccent">
 
             <studio.carbonylgroup.textfieldboxes.ExtendedEditText
@@ -163,7 +181,7 @@
             android:layout_margin="16dp"
             app:errorColor="#ddaa00"
             app:labelText="@string/add_book_publisher"
-            app:panelBackgroundColor="#FFF3E0"
+            app:panelBackgroundColor="@android:color/transparent"
             app:primaryColor="@color/colorAccent"
             tools:layout_marginTop="16dp">
 
@@ -205,7 +223,7 @@
             android:layout_below="@id/add_book_spinner_book_cond"
             app:hasClearButton="true"
             app:labelText="@string/add_book_description"
-            app:panelBackgroundColor="#FFF3E0"
+            app:panelBackgroundColor="@android:color/transparent"
             app:maxCharacters="250"
             app:useDenseSpacing="true"
             app:primaryColor="@color/colorAccent"
