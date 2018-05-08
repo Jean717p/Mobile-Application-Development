@@ -94,7 +94,11 @@ public class InfoBook extends AppCompatActivity {
         tv = findViewById(R.id.info_book_ISBN);
         tv.setText(bookToShowInfoOf.getISBN());
         tv = findViewById(R.id.info_book_editionYear);
-
+        if(bookToShowInfoOf.getEditionYear() == 0){
+            tv.setText(R.string.add_book_info_not_available);
+        }else{
+            tv.setText(Integer.toString(bookToShowInfoOf.getEditionYear()));
+        }
 
         tv = findViewById(R.id.info_book_description);
         if(bookToShowInfoOf.getDescription().length() == 0){
@@ -110,7 +114,7 @@ public class InfoBook extends AppCompatActivity {
         else{
             tv.setText(bookToShowInfoOf.getPublisher());
         }
-        tv.setText(Integer.toString(bookToShowInfoOf.getEditionYear()));
+
 
         tv = findViewById(R.id.info_book_categories);
         tmp = bookToShowInfoOf.getCategories().toString();
