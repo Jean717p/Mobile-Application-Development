@@ -72,7 +72,7 @@
     <string name="info_book_label_publisher">Editore:</string>
     <string name="info_book_label_description">Descrizione:</string>
     <string name="info_book_label_owner">Appartiene a:</string>
-    <string name="info_book_label_book_conditions">Condizioni libro:</string>
+    <string name="info_book_label_book_conditions">Condizioni:</string>
 
     <!--Barcode Related-->
     <string name="add_book_read_ISBN">Cerca dettagli ISBN</string>
@@ -86,6 +86,9 @@
     <string name="add_book_helper_text_ISBN">"Scrivi esattamente 13 numeri"</string>
     <string name="add_book_description">"Descrizione"</string>
     <string name="add_book_category">"Categoria"</string>
+    <string name="add_book_info_not_available">"Informazione non disponibile"</string>
+    <string name="add_book_no_description">"Nessuna descrizione"</string>
+
 
     <!-- Facebook login -->
     <string name="facebook_application_id" translatable="false">207778776488778</string>

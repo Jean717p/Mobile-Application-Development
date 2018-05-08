@@ -4,9 +4,9 @@ package com.mad18.nullpointerexception.takeabook.mainActivity;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -27,8 +27,6 @@ import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.addBook.AddBook;
 import com.mad18.nullpointerexception.takeabook.addBook.BookWrapper;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.animation.Animation;
@@ -51,7 +49,7 @@ public class Main_MyLibrary_Fragment extends Fragment {
     boolean mIsHiding = false;
     private FloatingActionButton floatingActionButton;
     private int viewSize;
-    RecyclerViewAdapter myAdapter;
+    MyLibraryRecyclerViewAdapter myAdapter;
 
     public static Main_MyLibrary_Fragment newInstance(int page,String title) {
         Bundle args = new Bundle();
@@ -78,8 +76,8 @@ public class Main_MyLibrary_Fragment extends Fragment {
         mainContent = (CoordinatorLayout) myFragmentView.findViewById(R.id.main_library_coordinator_layout);
         floatingActionButton = (FloatingActionButton) myFragmentView.findViewById(R.id.fab_add);
 
-        myAdapter = new RecyclerViewAdapter(getActivity(), MainActivity.myBooks,
-                new RecyclerViewAdapter.OnItemClickListener() {
+        myAdapter = new MyLibraryRecyclerViewAdapter(getActivity(), MainActivity.myBooks,
+                new MyLibraryRecyclerViewAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(Book item) {
                         Intent intent = new Intent(getActivity(), InfoBook.class);

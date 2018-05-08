@@ -93,7 +93,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity" />
         </activity>
-        <activity android:name=".SplashScreenActivity"
+        <activity
+            android:name=".SplashScreenActivity"
             android:parentActivityName=".mainActivity.MainActivity"
             android:theme="@style/AppTheme"> <!-- android:label="@string/title_activity_show_profile" -->
             <meta-data
@@ -104,7 +105,8 @@
             android:name=".InfoBook"
             android:configChanges="orientation|screenSize|locale"
             android:label="InfoBook"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme" />
+        <activity android:name=".BookFound">
         </activity>
     </application>
 

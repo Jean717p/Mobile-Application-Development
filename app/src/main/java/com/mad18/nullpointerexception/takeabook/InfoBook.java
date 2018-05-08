@@ -94,19 +94,48 @@ public class InfoBook extends AppCompatActivity {
         tv = findViewById(R.id.info_book_ISBN);
         tv.setText(bookToShowInfoOf.getISBN());
         tv = findViewById(R.id.info_book_editionYear);
-        tv.setText(Integer.toString(bookToShowInfoOf.getEditionYear()));
+
+
+        tv = findViewById(R.id.info_book_description);
+        if(bookToShowInfoOf.getDescription().length() == 0){
+            tv.setText(getString(R.string.add_book_no_description));
+        }else{
+            tv.setText(bookToShowInfoOf.getDescription());
+        }
+
         tv = findViewById(R.id.info_book_publisher);
-        tv.setText(bookToShowInfoOf.getPublisher());
+        if(bookToShowInfoOf.getPublisher().length() == 0){
+            tv.setText(getString(R.string.add_book_info_not_available));
+        }
+        else{
+            tv.setText(bookToShowInfoOf.getPublisher());
+        }
+        tv.setText(Integer.toString(bookToShowInfoOf.getEditionYear()));
+
         tv = findViewById(R.id.info_book_categories);
         tmp = bookToShowInfoOf.getCategories().toString();
         if(tmp.length()>2){
             tv.setText(tmp.substring(1,tmp.length()-1));
         }
-       tv = findViewById(R.id.info_book_description);
-       tv.setText(bookToShowInfoOf.getDescription());
+
+
 
         ImageView iw = findViewById(R.id.info_book_main_image);
         Book book = new Book(bookToShowInfoOf);
+        tv = findViewById(R.id.info_book_book_conditions);
+        switch (book.getBook_condition()){
+
+            case 0:
+               tv.setText(getString(R.string.add_book_info_not_available));
+                break;
+            case 1:
+                tv.setText(getResources().getStringArray(R.array.book_conditions)[1]);
+                break;
+            case 2:
+                tv.setText(getResources().getStringArray(R.array.book_conditions)[2]);
+            case 3:
+                tv.setText(getResources().getStringArray(R.array.book_conditions)[3]);
+        }
         Glide.with(this).load(book.getBook_thumbnail_url()).into(iw);
     }
 
