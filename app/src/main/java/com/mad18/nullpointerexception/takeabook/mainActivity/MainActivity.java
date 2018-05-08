@@ -60,7 +60,7 @@ import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.SplashScreenActivity;
 import com.mad18.nullpointerexception.takeabook.User;
 import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
-
+import  com.github.clans.fab.FloatingActionMenu;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -170,8 +170,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
                 MyPagerAdapter adapter = (MyPagerAdapter) viewPager.getAdapter();
+                com.github.clans.fab.FloatingActionMenu fabSearch= (FloatingActionMenu) findViewById(R.id.top_floating_action_menu);
+                FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab_add);
                 switch (tab.getPosition()){
+                    case 0:
+                        fabSearch.setVisibility(View.VISIBLE);
+                        floatingActionButton.setVisibility(View.GONE);
+                        break;
                     case 1:
+                        fabSearch.setVisibility(View.GONE);
+                        floatingActionButton.setVisibility(View.VISIBLE);
                         Main_MyLibrary_Fragment f = (Main_MyLibrary_Fragment) adapter.getRegisteredFragment(viewPager.getCurrentItem());
                         if(f!=null){
                             if(isMyBooksSorted==false){
@@ -194,6 +202,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             }
                         }
                         break;
+                    case 2:
+                        floatingActionButton.setVisibility(View.GONE);
+                        break;
+
                 }
                 /* if(tab.getPosition() == 0){
                     FloatingActionButton fabSearch= (FloatingActionButton) findViewById(R.id.top_floating_action_menu);
