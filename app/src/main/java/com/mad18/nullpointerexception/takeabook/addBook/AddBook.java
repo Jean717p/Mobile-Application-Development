@@ -242,6 +242,7 @@ public class AddBook extends AppCompatActivity {
         eet = findViewById(R.id.add_book_extended_edit_text_ISBN);
         bookToAdd.setBook_ISBN(eet.getText().toString());
         eet = findViewById(R.id.add_book_extended_edit_text_Description);
+
         bookToAdd.setBook_description(eet.getText().toString());
         eet = findViewById(R.id.add_book_extended_edit_Author);
         String tmp[] = eet.getText().toString().split(","); //è la virgola???
@@ -251,14 +252,19 @@ public class AddBook extends AppCompatActivity {
         bookToAdd.setBook_condition(staticSpinner.getSelectedItemPosition());
         bookToAdd.setBook_authors(authors);
         eet = findViewById(R.id.add_book_extended_edit_text_EditionYear);
-        bookToAdd.setBook_editionYear(Integer.parseInt(eet.getText().toString()));
+
+            bookToAdd.setBook_editionYear(Integer.parseInt(eet.getText().toString()));
+
+
         eet = findViewById(R.id.add_book_extended_edit_Title);
         bookToAdd.setBook_title(eet.getText().toString());
         if(bookToAdd.getBook_title().length()==0){
             return;
         }
         eet = findViewById(R.id.add_book_extended_edit_text_Publisher);
-        bookToAdd.setBook_publisher(eet.getText().toString());
+
+            bookToAdd.setBook_publisher(eet.getText().toString());
+
         mImageRef = FirebaseStorage.getInstance().getReference().child("images/books/"+bookToAdd.getBook_ISBN()+user.getUid());
         if(bookImg!=null){
             bookImgPath = editProfile.saveImageToInternalStorage(bookImg,"temp_"+"bookEditImage",this);
@@ -273,6 +279,10 @@ public class AddBook extends AppCompatActivity {
                 });
             }
         }
+
+
+
+
         books.document(bookToAdd.getBook_ISBN() + user.getUid()).set(bookToAdd);
         //Aggiunta libro all'elenco dell'utente
         users.document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

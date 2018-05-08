@@ -105,7 +105,8 @@
             android:name=".InfoBook"
             android:configChanges="orientation|screenSize|locale"
             android:label="InfoBook"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme" />
+        <activity android:name=".BookFound">
         </activity>
         <activity android:name=".InfoUser"></activity>
     </application>

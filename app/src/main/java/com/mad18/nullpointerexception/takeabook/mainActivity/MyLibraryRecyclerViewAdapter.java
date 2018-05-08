@@ -1,8 +1,6 @@
 package com.mad18.nullpointerexception.takeabook.mainActivity;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,14 +16,12 @@ import com.mad18.nullpointerexception.takeabook.R;
 
 import java.util.List;
 
-import static com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.thisUser;
-
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>{
+public class MyLibraryRecyclerViewAdapter extends RecyclerView.Adapter<MyLibraryRecyclerViewAdapter.MyViewHolder>{
     private Context myContext;
     private List<Book> mData;
     private final OnItemClickListener listener;
 
-    public RecyclerViewAdapter(Context myContext, List<Book> mData, OnItemClickListener listener ) {
+    public MyLibraryRecyclerViewAdapter(Context myContext, List<Book> mData, OnItemClickListener listener ) {
         this.myContext = myContext;
         this.mData = mData;
         this.listener = listener;

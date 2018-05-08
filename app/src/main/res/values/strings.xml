@@ -63,7 +63,7 @@
     <string name="info_book_label_publisher">Publisher:</string>
     <string name="info_book_label_description">Description:</string>
     <string name="info_book_label_owner">Owner:</string>
-    <string name="info_book_label_book_conditions">Book conditions:</string>
+    <string name="info_book_label_book_conditions">Conditions:</string>
 
 
     <!--Barcode Related-->
@@ -78,6 +78,9 @@
     <string name="add_book_helper_text_ISBN">"Write exactly 13 numbers"</string>
     <string name="add_book_description">"Description"</string>
     <string name="add_book_category">"Category"</string>
+    <string name="add_book_info_not_available">"Information not available"</string>
+    <string name="add_book_no_description">"No description"</string>
+
 
 
     <!--Book conditions-->
@@ -100,5 +103,6 @@
     <!-- Facebook login -->
     <string name="facebook_application_id" translatable="false">207778776488778</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb207778776488778</string>
+    <string name="title_activity_book_found">BookFoundActivity</string>
 
 </resources>
