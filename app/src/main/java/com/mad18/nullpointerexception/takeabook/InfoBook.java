@@ -116,9 +116,6 @@ public class InfoBook extends AppCompatActivity {
             tv.setText(tmp.substring(1,tmp.length()-1));
         }
 
-
-        tv = findViewById(R.id.info_book_description);
-        tv.setText(bookToShowInfoOf.getDescription());
         ImageView iw = findViewById(R.id.info_book_main_image);
         Book book = new Book(bookToShowInfoOf);
         tv = findViewById(R.id.info_book_book_conditions);

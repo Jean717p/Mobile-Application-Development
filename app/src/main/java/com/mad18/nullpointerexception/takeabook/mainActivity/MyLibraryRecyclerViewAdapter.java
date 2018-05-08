@@ -50,7 +50,14 @@ public class MyLibraryRecyclerViewAdapter extends RecyclerView.Adapter<MyLibrary
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        String title;
+        String[] parts;
         holder.tv_book_title.setText(mData.get(position).getBook_title());
+        title = (mData.get(position).getBook_title());
+        if(title.contains(".")) {
+            parts = title.split("[.]",2);
+            holder.tv_book_title.setText(parts[0]);
+        }
        //holder.iv_book_thumbnail.setImageResource(mData.get(position));
        Glide.with(myContext).load(mData.get(position).getBook_thumbnail_url()).into(holder.iv_book_thumbnail);
         holder.bind(mData.get(position), listener);
@@ -66,6 +73,7 @@ public class MyLibraryRecyclerViewAdapter extends RecyclerView.Adapter<MyLibrary
         TextView tv_book_title;
         ImageView iv_book_thumbnail;
         CardView cardView;
+
 
 
         public MyViewHolder(View itemView) {
