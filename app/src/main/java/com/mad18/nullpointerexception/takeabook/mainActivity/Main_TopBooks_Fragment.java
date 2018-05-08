@@ -113,4 +113,12 @@ public class Main_TopBooks_Fragment extends Fragment {
     }
 
 
+    public static Fragment newInstance(int page, String title) {
+        Main_TopBooks_Fragment main_topBooks_fragment = new Main_TopBooks_Fragment();
+        Bundle args = new Bundle();
+        args.putInt("pageID", page);
+        args.putString("pageTitle", title);
+        main_topBooks_fragment.setArguments(args);
+        return main_topBooks_fragment;
+    }
 }

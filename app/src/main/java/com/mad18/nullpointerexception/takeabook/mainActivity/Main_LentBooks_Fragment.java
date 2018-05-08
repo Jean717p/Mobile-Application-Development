@@ -41,4 +41,12 @@ public class Main_LentBooks_Fragment extends Fragment {
         return inflater.inflate(R.layout.fragment_main_lent_books, container, false);
     }
 
+    public static Fragment newInstance(int page, String title) {
+        Main_LentBooks_Fragment fragment = new Main_LentBooks_Fragment();
+        Bundle args = new Bundle();
+        args.putInt("pageID", page);
+        args.putString("pageTitle", title);
+        fragment.setArguments(args);
+        return fragment;
+    }
 }

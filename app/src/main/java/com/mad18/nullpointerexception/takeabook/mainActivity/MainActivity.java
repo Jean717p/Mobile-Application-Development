@@ -16,6 +16,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -25,10 +26,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -61,13 +64,17 @@ import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 import static com.mad18.nullpointerexception.takeabook.myProfile.showProfile.deleteUserData;
 import static com.mad18.nullpointerexception.takeabook.myProfile.showProfile.profileImgName;
 import static com.mad18.nullpointerexception.takeabook.myProfile.showProfile.sharedUserDataKeys;
+import static java.util.stream.Collectors.toList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private final String TAG = "MainActivity";
@@ -79,7 +86,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Context context = this;
     public static User thisUser;
     private FloatingActionButton fab_my_lib;
-    public static List<Book> myBooks = new LinkedList<>();
+    public static List<Book> myBooks;
+    private boolean isMyBooksSorted;
+    private ViewPager viewPager;
+    private MyPagerAdapter myPagerAdapter;
 
     NavigationView navigationView;
     //Called when a fragment is attached as a child of this fragment.
@@ -88,22 +98,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
     }
-    //    has not yet had a previous call to onCreate.
+    //has not yet had a previous call to onCreate.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
-        fab_my_lib = findViewById(R.id.fab_add);
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+        isMyBooksSorted = true;
+        myBooks = new LinkedList<>();
         setContentView(R.layout.activity_main);
+        myOnCreateLayout();
         if(savedInstanceState==null){
             //Download userData & books
             new updateUserData().doInBackground();
             Intent intent = new Intent(this,SplashScreenActivity.class);
             startActivity(intent);
         }
-        myOnCreateLayout();
         sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         // Add the parameters requested by the NavDrawer (Image, email, username)
         View hview = navigationView.getHeaderView(0);
@@ -126,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void myOnCreateLayout(){
+        fab_my_lib = findViewById(R.id.fab_add);
         toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         CollapsingToolbarLayout collapsingToolbar =
@@ -144,11 +156,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //
         // Using PagerAdapter to manage page views in fragments.
         // Each page is represented by its own fragment.
-        // This is another example of the adapter pattern.
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        final PagerAdapter adapter = new PagerAdapter
-                (getSupportFragmentManager(), tabLayout.getTabCount());
-        viewPager.setAdapter(adapter);
+        // This is another example of the MyPagerAdapter pattern.
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        myPagerAdapter = new MyPagerAdapter(
+                getSupportFragmentManager(), tabLayout.getTabCount());
+        viewPager.setAdapter(myPagerAdapter);
+        viewPager.setOffscreenPageLimit(2);
         // Setting a listener for clicks.
         viewPager.addOnPageChangeListener(new
                 TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -156,7 +169,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-               /* if(tab.getPosition() == 0){
+                MyPagerAdapter adapter = (MyPagerAdapter) viewPager.getAdapter();
+                switch (tab.getPosition()){
+                    case 1:
+                        Main_MyLibrary_Fragment f = (Main_MyLibrary_Fragment) adapter.getRegisteredFragment(viewPager.getCurrentItem());
+                        if(f!=null){
+                            if(isMyBooksSorted==false){
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                    Comparator<Book> byTitle = Comparator.comparing(b->b.getBook_title());
+                                    Comparator<Book> byAuthor = Comparator.comparing(b->b.getBook_first_author());
+                                    myBooks = myBooks.stream().sorted(byAuthor.thenComparing(byTitle)).collect(toList());
+                                }
+                                else{
+                                    Collections.sort(myBooks, (a, b) -> {
+                                        if(a.getBook_first_author().equals(b.getBook_first_author())){
+                                            return a.getBook_title().compareTo(b.getBook_title());
+                                        }
+                                        else{
+                                            return a.getBook_first_author().compareTo(b.getBook_first_author());
+                                        }
+                                    });
+                                }
+                                f.updateView(myBooks);
+                            }
+                        }
+                        break;
+                }
+                /* if(tab.getPosition() == 0){
                     FloatingActionButton fabSearch= (FloatingActionButton) findViewById(R.id.top_floating_action_menu);
                     fabSearch.show();
                 }
@@ -174,8 +213,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab_add);
                     floatingActionButton.setVisibility(View.GONE);
                 }*/
-
-
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
@@ -194,12 +231,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
     }
 
-    //    This is called after the attached fragment's onAttach and before the attached fragment's onCreate if the fragment
     @Override
     protected void onResume() {
         super.onResume();
-        // Add the parameters requested by the NavDrawer (Image, email, username)
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
         View hview = navigationView.getHeaderView(0);
         setNavDrawerParameters(hview);
     }
@@ -245,7 +279,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onCreateOptionsMenu(menu);
     }
 
-
     private void setNavDrawerParameters(View nview){ //Usare poi il metodo loadImageFromStorage della classe editProfile
         ImageView drawerImg = nview.findViewById(R.id.mainActivity_drawer_profileImg);
         String imgPath = sharedPref.getString(profileImgName,"");
@@ -284,35 +317,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else {
             mail_text.setText(R.string.Email);
-        }
-    }
-
-    public class PagerAdapter extends FragmentStatePagerAdapter {
-        int mNumOfTabs;
-        public PagerAdapter(FragmentManager fm, int NumOfTabs) {
-            super(fm);
-            this.mNumOfTabs = 4;
-
-        }
-        @Override
-        public Fragment getItem(int position) {
-            switch (position){
-                case 0:
-                    return new Main_TopBooks_Fragment();
-                case 1:
-                    return new Main_MyLibrary_Fragment();
-                case 2:
-                    return  new Main_LentBooks_Fragment();
-                case 3:
-                    return new Main_BorrowedBooks_Fragment();
-                default:
-                    return null;
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return mNumOfTabs;
         }
     }
 
@@ -370,6 +374,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                     if(myBooks.stream().filter(b->b.getBook_ISBN().equals(book.getBook_ISBN())).count()==0){
                                         myBooks.add(bookDoc.toObject(Book.class));
+                                        isMyBooksSorted = false;
                                     }
                                 }
                                 else{
@@ -382,6 +387,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     }
                                     if(bookNotPresent){
                                         myBooks.add(book);
+                                        isMyBooksSorted = false;
                                     }
                                 }
                             }
@@ -396,4 +402,59 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public List<Book> getMyBooks() {
         return myBooks;
     }
+
+    public static class MyPagerAdapter extends FragmentStatePagerAdapter {
+        SparseArray<Fragment> registeredFragments = new SparseArray<>();
+        private int NUM_ITEMS;
+
+        public MyPagerAdapter(FragmentManager fragmentManager,int pageCount) {
+            super(fragmentManager);
+            NUM_ITEMS = pageCount > 0 ? pageCount : 1;
+        }
+        // Returns total number of pages
+        @Override
+        public int getCount() {
+            return NUM_ITEMS;
+        }
+        // Returns the fragment to display for that page
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0: // Fragment # 0 - This will show FirstFragment
+                    return Main_TopBooks_Fragment.newInstance(0, "Page #"+position);
+                case 1: // Fragment # 0 - This will show FirstFragment different title
+                    return Main_MyLibrary_Fragment.newInstance(1, "Page #"+position);
+                case 2: // Fragment # 1 - This will show SecondFragment
+                    return Main_LentBooks_Fragment.newInstance(2, "Page #"+position);
+                case 3:
+                    return Main_BorrowedBooks_Fragment.newInstance(3,"Page #"+position);
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            Fragment fragment = (Fragment) super.instantiateItem(container, position);
+            registeredFragments.put(position,fragment);
+            return fragment;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            registeredFragments.remove(position);
+            super.destroyItem(container, position, object);
+        }
+
+        public Fragment getRegisteredFragment(int position){
+            return registeredFragments.get(position);
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return "Page "+position;
+        }
+    }
+
 }

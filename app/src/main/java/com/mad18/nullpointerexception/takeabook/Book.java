@@ -25,7 +25,6 @@ public class Book {
     String book_description;
     GeoPoint book_location;
 
-
     public Book() {}
 
     public String getUserid() {
@@ -46,8 +45,10 @@ public class Book {
             if(authors.size()>0){
                 book_first_author = (String) (authors.keySet().toArray())[0];
             }
+            else{
+                book_first_author = new String("");
+            }
         }
-
         book_publisher = publisher;
         book_editionYear = editionYear;
         book_condition = condition;
@@ -57,7 +58,6 @@ public class Book {
         book_thumbnail_url = thumbnail;
         book_categories = categories;
         book_location = geoPoint;
-
     }
 
     public Book (BookWrapper bw){
