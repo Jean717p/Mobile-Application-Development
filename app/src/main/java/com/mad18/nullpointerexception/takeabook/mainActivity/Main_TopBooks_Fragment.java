@@ -97,21 +97,19 @@ public class Main_TopBooks_Fragment extends Fragment {
                 fabIsbn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        MainActivity mainActivity = (MainActivity) getActivity();
                         Intent search = new Intent(getActivity(), SearchBook.class);
                         search.putExtra("action", "ISBN");
+                        if(mainActivity.thisUser!=null){
+                            search.putExtra("user_long",mainActivity.thisUser.getUsr_geoPoint().getLongitude());
+                            search.putExtra("user_lat",mainActivity.thisUser.getUsr_geoPoint().getLatitude());
+                        }
                         startActivity(search);
                     }
                 });
-
-
             }
-
-
         return v;
-
     }
-
 
     public static Fragment newInstance(int page, String title) {
         Main_TopBooks_Fragment main_topBooks_fragment = new Main_TopBooks_Fragment();

@@ -1,6 +1,8 @@
 package com.mad18.nullpointerexception.takeabook;
 
 import android.content.Intent;
+import android.location.Location;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -35,10 +37,32 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.mad18.nullpointerexception.takeabook.addBook.JsonParser;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 public class SearchBook extends AppCompatActivity {
+    private final String TAG="SearchBook";
     private Toolbar toolbar;
     private String searchBase;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,37 +92,118 @@ public class SearchBook extends AppCompatActivity {
         }
     }
 
-    /**
-     * Metodo per ottenere i libri corrispondenti agli autori dal database
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                finish();
+                overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /* Metodo per ottenere i libri corrispondenti agli autori dal database
      */
 
-    private List<String> getBooksFromAuthors(String text){
-        List list = new LinkedList();
-        list = getFromGoogleApi("Author", text);
+    private LinkedList getBooksFromAuthors(String text){
+        LinkedList list = new LinkedList();
+        list = (LinkedList) getFromGoogleApi("Author", text);
         return list;
     }
 
-    /**
-     * Metodo per ottenere i libri corrispondenti al titolo dal database
+    /* Metodo per ottenere i libri corrispondenti al titolo dal database
      */
 
-    private List<String> getBooksFromTitle(String text){
-        List list = new LinkedList();
-        list = getFromGoogleApi("Title", text);
+    private LinkedList getBooksFromTitle(String text){
+        LinkedList list = new LinkedList();
+        list = (LinkedList) getFromGoogleApi("Title", text);
         return list;
     }
 
-
-    /**
-     * Metodo per ottenere i libri corrispondenti all'ISBN dal database
-     */
-
-    private List<String> getBooksFromISBN(String text){
-        List list = new LinkedList();
-        list = getFromGoogleApi("ISBN", text);
+    private LinkedList getBooksFromISBN(String text){
+        LinkedList list = new LinkedList();
+        list = (LinkedList) getFromGoogleApi("ISBN", text);
         return list;
     }
 
+    private List<Book> searchBooksOnFireStore(String flag,List<String> inputList){
+        List<Book> booksFound = new LinkedList<>();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Query query = null;
+        double user_lat=0,user_long=0;
+        Location user_loc;
+        if(inputList.size()==0){
+            return booksFound;
+        }
+        CollectionReference booksRef = db.collection("books");
+        for(String x : inputList){
+            switch(flag){
+                case "Title":
+                    query = booksRef.whereEqualTo("book_title",x);
+                    break;
+                case "Author":
+                    query = booksRef.whereEqualTo("book_authors."+x,true);
+                    break;
+                case "ISBN":
+                    query = booksRef.whereEqualTo("book_ISBN",x);
+                    break;
+                default:
+                    return booksFound;
+            }
+        }
+        if(query==null){
+            return booksFound;
+        }
+        final Task<QuerySnapshot> task = query.get();
+        final QuerySnapshot snapshots = task.getResult();
+        final List<DocumentSnapshot> documents = snapshots.getDocuments();
+        for(DocumentSnapshot documentSnapshot:documents){
+            if(documentSnapshot!=null){
+                if(documentSnapshot.exists()){
+                    booksFound.add(documentSnapshot.toObject(Book.class));
+                }
+            }
+        }
+        Bundle intentExtras = getIntent().getExtras();
+        if(intentExtras!=null){
+            user_lat = intentExtras.getDouble("user_lat");
+            user_long = intentExtras.getDouble("user_long");
+        }
+        user_loc = new Location("Provider");
+        user_loc.setLatitude(user_lat);
+        user_loc.setLongitude(user_long);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            booksFound = booksFound.stream().sorted((a,b)->{
+                Location book_loc_a = new Location("Provider");
+                Location book_loc_b = new Location("Provider");
+                book_loc_b.setLatitude(b.getBook_location().getLatitude());
+                book_loc_b.setLongitude(b.getBook_location().getLongitude());
+                book_loc_a.setLatitude(a.getBook_location().getLatitude());
+                book_loc_a.setLongitude(a.getBook_location().getLongitude());
+                return Float.compare(book_loc_a.distanceTo(user_loc),book_loc_b.distanceTo(user_loc));
+            }).collect(Collectors.toList());
+        }
+        else{
+            Collections.sort(booksFound, (a, b) -> {
+                Location book_loc_b = new Location("Provider");
+                Location book_loc_a = new Location("Provider");
+                book_loc_b.setLatitude(b.getBook_location().getLatitude());
+                book_loc_b.setLongitude(b.getBook_location().getLongitude());
+                book_loc_a.setLatitude(a.getBook_location().getLatitude());
+                book_loc_a.setLongitude(a.getBook_location().getLongitude());
+                return Float.compare(book_loc_a.distanceTo(user_loc),book_loc_b.distanceTo(user_loc));
+            });
+        }
+        return booksFound;
+    }
     /**
      * Metodo utilizzato per ricavare le liste dalle googleAPI
      */
@@ -137,22 +242,21 @@ public class SearchBook extends AppCompatActivity {
                                     }
                                 }
                             }
+                            searchBooksOnFireStore(flag,list);
                         }
                         catch(JSONException e){
                             e.printStackTrace();
                         }
                     }
                 }).start();
-
-            break;
+                break;
             case "Author":
-            break;
+                break;
             case "ISBN":
-            break;
+                break;
         }
         return list;
-
-        }
+    }
 
     private int getNumItemsFromApi(String text) {
         int totItems = 0;
@@ -171,11 +275,5 @@ public class SearchBook extends AppCompatActivity {
         return totItems;
     }
 
-
-
-
-
-
-
-
 }
+
