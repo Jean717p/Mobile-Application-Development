@@ -2,7 +2,6 @@ package com.mad18.nullpointerexception.takeabook;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -31,20 +30,7 @@ public class InfoBook extends AppCompatActivity {
     private int ibTextViewIds[] = new int[]{R.id.info_book_title,R.id.info_book_author, R.id.info_book_ISBN,
         R.id.info_book_editionYear,R.id.info_book_publisher, R.id.info_book_categories, R.id.info_book_description};
 
-//        /**
-//         * valeria deve inserire questo nel suo codice
-//         * Intent intent = new Intent(getBaseContext(), NextActivity.class);
-//         * Foo foo = new Foo();
-//         * intent.putExtra("foo ", foo);
-//         * startActivity(intent);
-//         */
-//
-//        /**
-//         * io invece:
-//         * Foo foo = getIntent().getExtras().getParcelable("foo");
-//         */
-
-    BookWrapper bookToShowInfoOf = Objects.requireNonNull(getIntent().getExtras()).getParcelable("bookToShow");
+    BookWrapper bookToShowInfoOf;
     private String usr_name;
     private String usr_city;
     private String usr_about;
@@ -63,7 +49,7 @@ public class InfoBook extends AppCompatActivity {
         setTitle(R.string.title_activity_info_book);
         toolbar.setVisibility(View.VISIBLE);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
+        bookToShowInfoOf = getIntent().getExtras().getParcelable("bookToShow");
         fillInfoBookViews();
 
 
