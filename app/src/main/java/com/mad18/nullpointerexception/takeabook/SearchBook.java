@@ -3,6 +3,7 @@ package com.mad18.nullpointerexception.takeabook;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -26,6 +27,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.Continuation;
 import com.mad18.nullpointerexception.takeabook.addBook.JsonParser;
 
 import org.json.JSONArray;
@@ -78,7 +80,7 @@ public class SearchBook extends AppCompatActivity {
         switch (searchBase){
             case "Title":
                 text.setHint(getString(R.string.search_book_text_title));
-                text.setText("Harry Potter");
+                text.setText("Harry Potter e la pietra filosofale");
                 //LinkedList title = (LinkedList) getBooksFromTitle(text.getText().toString());
                 break;
             case "Author":
@@ -137,7 +139,6 @@ public class SearchBook extends AppCompatActivity {
     private List<Book> searchBooksOnFireStore(String flag,List<String> inputList){
         List<Book> booksFound = new LinkedList<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Query query = null;
         double user_lat=0,user_long=0;
         Location user_loc;
         if(inputList.size()==0){
@@ -147,7 +148,24 @@ public class SearchBook extends AppCompatActivity {
         for(String x : inputList){
             switch(flag){
                 case "Title":
-                    query = booksRef.whereEqualTo("book_title",x);
+                    Query query = booksRef.whereEqualTo("book_title",x);
+                    Task<QuerySnapshot> task = query.get().continueWithTask(new Continuation<QuerySnapshot, Task<QuerySnapshot>>() {
+                        @Override
+                        public Task<QuerySnapshot> then(@NonNull Task<QuerySnapshot> task) throws Exception {
+                            QuerySnapshot snapshots = task.getResult();
+                            List<DocumentSnapshot> documents = snapshots.getDocuments();
+                            for(DocumentSnapshot documentSnapshot:documents){
+                                if(documentSnapshot!=null){
+                                    if(documentSnapshot.exists()){
+                                        booksFound.add(documentSnapshot.toObject(Book.class));
+                                        break;
+                                    }
+                                }
+                            }
+                            return null;
+                        }
+                    });
+
                     break;
                 case "Author":
                     query = booksRef.whereEqualTo("book_authors."+x,true);
@@ -159,19 +177,7 @@ public class SearchBook extends AppCompatActivity {
                     return booksFound;
             }
         }
-        if(query==null){
-            return booksFound;
-        }
-        final Task<QuerySnapshot> task = query.get();
-        final QuerySnapshot snapshots = task.getResult();
-        final List<DocumentSnapshot> documents = snapshots.getDocuments();
-        for(DocumentSnapshot documentSnapshot:documents){
-            if(documentSnapshot!=null){
-                if(documentSnapshot.exists()){
-                    booksFound.add(documentSnapshot.toObject(Book.class));
-                }
-            }
-        }
+        /*
         Bundle intentExtras = getIntent().getExtras();
         if(intentExtras!=null){
             user_lat = intentExtras.getDouble("user_lat");
@@ -202,6 +208,7 @@ public class SearchBook extends AppCompatActivity {
                 return Float.compare(book_loc_a.distanceTo(user_loc),book_loc_b.distanceTo(user_loc));
             });
         }
+        */
         return booksFound;
     }
     /**
@@ -221,8 +228,50 @@ public class SearchBook extends AppCompatActivity {
                             if((numItems%40) != 0) {
                                 maxCycle++;
                             }
+                            JsonParser jsonParser = new JsonParser();
                             for(int i = 0; i < maxCycle; i++) {
-                                JsonParser jsonParser = new JsonParser();
+                                String url = "https://www.googleapis.com/books/v1/volumes?maxResults=40&orderBy=relevance&q=" +
+                                        text +
+                                        "&fields=items(volumeInfo/title)&startIndex=" + Integer.toString(i*40);
+                                JSONObject jsonObject = jsonParser.makeHttpRequest(url,
+                                        "GET", new HashMap<String, String>());
+                                if(jsonObject.has("items")){
+                                    JSONArray tmp =  jsonObject.getJSONArray("items");
+                                    for(int j = 0; j < tmp.length(); j++) {
+                                        JSONObject item = tmp.getJSONObject(j);
+                                        if(item.has("volumeInfo")){
+                                            JSONObject vol = item.getJSONObject("volumeInfo");
+                                            if(vol.has("title")){
+                                                String info = vol.getString("title");
+                                                if(list.contains(info) == false) {
+                                                    list.add(info);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }
+                            searchBooksOnFireStore(flag,list);
+                        }
+                        catch(JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+                break;
+            case "Author":
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            int numItems = getNumItemsFromApi(flag);
+                            int maxCycle = numItems / 40; //Posso prendere solo 40 item alla volta dal json
+                            if((numItems%40) != 0) {
+                                maxCycle++;
+                            }
+                            JsonParser jsonParser = new JsonParser();
+                            for(int i = 0; i < maxCycle; i++) {
                                 JSONObject jsonObject = jsonParser.makeHttpRequest(
                                         "https://www.googleapis.com/books/v1/volumes?maxResults=40&orderBy=relevance&q=" +
                                                 text +
@@ -249,10 +298,10 @@ public class SearchBook extends AppCompatActivity {
                         }
                     }
                 }).start();
-                break;
-            case "Author":
-                break;
+            break;
             case "ISBN":
+                list.add(text);
+                searchBooksOnFireStore(flag,list);
                 break;
         }
         return list;
@@ -270,6 +319,8 @@ public class SearchBook extends AppCompatActivity {
             }
 
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (Exception e){
             e.printStackTrace();
         }
         return totItems;
