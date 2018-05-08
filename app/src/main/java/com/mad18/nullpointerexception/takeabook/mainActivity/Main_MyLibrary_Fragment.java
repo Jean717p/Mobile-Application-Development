@@ -1,28 +1,39 @@
 package com.mad18.nullpointerexception.takeabook.mainActivity;
 
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.clans.fab.FloatingActionButton;
+//import com.github.clans.fab.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mad18.nullpointerexception.takeabook.Book;
 import com.mad18.nullpointerexception.takeabook.InfoBook;
 import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.addBook.AddBook;
 import com.mad18.nullpointerexception.takeabook.addBook.BookWrapper;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import android.support.v7.widget.GridLayoutManager;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.OvershootInterpolator;
+import android.widget.Scroller;
 import android.widget.Toast;
 
 import static com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.thisUser;
@@ -34,7 +45,9 @@ public class Main_MyLibrary_Fragment extends Fragment {
 
     List<Book> lstBook ;
     private View myFragmentView;
-    private FloatingActionButton fab;
+    CoordinatorLayout mainContent;
+    boolean mIsHiding = false;
+    private FloatingActionButton floatingActionButton;
     private int viewSize;
 
 
@@ -58,70 +71,66 @@ public class Main_MyLibrary_Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         myFragmentView = inflater.inflate(R.layout.fragment_main_my_library, container, false);
         // Inflate the layout for this fragment
-
-       // viewSize = 3 > MainActivity.myBooks.size() ? MainActivity.myBooks.size() : 3;
-        //viewSize = 1> viewSize ? 1 : viewSize;
         RecyclerView rec = myFragmentView.findViewById(R.id.my_library_recycle_view);
-       /* fab = (FloatingActionButton) myFragmentView.findViewById(R.id.fab_add);
-        rec.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if(dy >0 && fab.getVisibility() == View.VISIBLE){
-                    fab.hide(true);
-                }else if(dy < 0 && fab.getVisibility() != View.VISIBLE){
+        mainContent = (CoordinatorLayout) myFragmentView.findViewById(R.id.main_library_coordinator_layout);
+        floatingActionButton = (FloatingActionButton) myFragmentView.findViewById(R.id.fab_add);
 
-                    fab.show(true);
-                }
-            }
-        });*/
         RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(getActivity(), MainActivity.myBooks,
                 new RecyclerViewAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(Book item) {
-//                        List<String> listAuthors = new ArrayList<String>(item.getBook_authors().keySet());
-//                        List<String> listCategories = new ArrayList<String>(item.getBook_authors().keySet());
-//                        Toast.makeText(getContext(), "Item Clicked", Toast.LENGTH_LONG).show();
-//                        BookWrapper bw = new BookWrapper(item.getBook_ISBN(),item.getBook_title(),
-//                                listAuthors, item.getBook_publisher(), item.getBook_editionYear(),
-//                                item.getBook_thumbnail_url(), listCategories, item.getBook_description());
-
-
                         Intent intent = new Intent(getActivity(), InfoBook.class);
                         BookWrapper bw = new BookWrapper(item);
                         bw.setBook_userid(item.getBook_userid());
                         intent.putExtra("bookToShow",bw);
                         startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
                     }
                 });
-        rec.setLayoutManager(new GridLayoutManager(getActivity(),3));
+
+        rec.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        rec.setScrollContainer(true);
+        rec.setVerticalScrollBarEnabled(true);
         rec.setAdapter(myAdapter);
+       rec.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+
+                // While RecyclerView enters dragging state
+                // (scroll, fling) we want our FAB to disappear.
+                // Similarly when it enters idle state we want
+                // our FAB to appear back.
+
+                // (Just uncomment corresponding hide-show methods
+                // which you want to use)
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    // Hiding FAB
+                    hideFabWithObjectAnimator();
+                    // ...
+                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    // Showing FAB
+                    // ...
+                    showFabWithObjectAnimator();
+                }
+            }
+        });
 
 
-//        l.add(R.drawable.themartian);
-//        l.add(R.drawable.thevigitarian);
-//        l.add(R.drawable.thewildrobot);
-//        l.add(R.drawable.mariasemples);
-//        l.add(R.drawable.thevigitarian);
-//        l.add(R.drawable.thewildrobot);
-//        l.add(R.drawable.themartian);
-//        l.add(R.drawable.thevigitarian);
-//        l.add(R.drawable.privacy);
-//        l.add(R.drawable.hediedwith);
-//        l.add(R.drawable.mariasemples);
-//        l.add(R.drawable.thewildrobot);
-//        l.add(R.drawable.privacy);
-//        l.add(R.drawable.thevigitarian);
-//        l.add(R.drawable.thewildrobot);
-//        l.add(R.drawable.themartian);
-//        l.add(R.drawable.thevigitarian);
-//        l.add(R.drawable.mariasemples);
-//        l.add(R.drawable.themartian);
-//        l.add(R.drawable.thevigitarian);
-//        l.add(R.drawable.thewildrobot);
+        if(floatingActionButton!=null){
 
+            floatingActionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent addbook = new Intent(getActivity(), AddBook.class);
+                    startActivity(addbook);
+                }
+            });;
+
+        }
         return myFragmentView;
     }
 
@@ -130,4 +139,34 @@ public class Main_MyLibrary_Fragment extends Fragment {
         super.onResume();
 
     }
+
+   public void hideFabWithObjectAnimator(){
+        AnimatorSet scaleSet = new AnimatorSet();
+
+        ObjectAnimator xScaleAnimator = ObjectAnimator.ofFloat(floatingActionButton, View.SCALE_X, 0);
+        ObjectAnimator yScaleAnimator = ObjectAnimator.ofFloat(floatingActionButton, View.SCALE_Y, 0);
+
+        scaleSet.setDuration(200);
+        scaleSet.setInterpolator(new LinearInterpolator());
+
+        scaleSet.playTogether(xScaleAnimator, yScaleAnimator);
+        scaleSet.start();
+    }
+
+    public void showFabWithObjectAnimator(){
+        AnimatorSet scaleSet = new AnimatorSet();
+
+        ObjectAnimator xScaleAnimator = ObjectAnimator.ofFloat(floatingActionButton, View.SCALE_X, 1);
+        ObjectAnimator yScaleAnimator = ObjectAnimator.ofFloat(floatingActionButton, View.SCALE_Y, 1);
+
+        scaleSet.setDuration(400);
+        scaleSet.setInterpolator(new OvershootInterpolator());
+
+        scaleSet.playTogether(xScaleAnimator, yScaleAnimator);
+        scaleSet.start();
+    }
+
+
+
+
 }

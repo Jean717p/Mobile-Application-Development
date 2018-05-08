@@ -6,9 +6,12 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -21,6 +24,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -41,7 +45,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -71,8 +77,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseAuth mAuth;
     private DocumentReference user_doc;
     private Context context = this;
-    public static  User thisUser;
-
+    public static User thisUser;
+    private FloatingActionButton fab_my_lib;
     public static List<Book> myBooks = new LinkedList<>();
 
     NavigationView navigationView;
@@ -87,13 +93,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
-        //getInstance() : we reference ,by a URL, a single sub-object of the complete data store and we
-        //encapsulate it in a FirebaseDatabase instance
+        fab_my_lib = findViewById(R.id.fab_add);
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_main);
-        new updateUserData().doInBackground();
+        if(savedInstanceState==null){
+            //Download userData & books
+            new updateUserData().doInBackground();
+            Intent intent = new Intent(this,SplashScreenActivity.class);
+            startActivity(intent);
+        }
+        myOnCreateLayout();
         sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        // Add the parameters requested by the NavDrawer (Image, email, username)
+        View hview = navigationView.getHeaderView(0);
+        setNavDrawerParameters(hview);
+        DocumentReference userDocRef = db.collection("users").document(mAuth.getCurrentUser().getUid());
+        userDocRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if(e!=null){
+                    Log.e(TAG,"Error listen failed userDocRef@MainActivity");
+                    return;
+                }
+                if(documentSnapshot!=null){
+                    if(documentSnapshot.exists()){
+                        new updateUserData().doInBackground();
+                    }
+                }
+            }
+        });
+    }
+
+    private void myOnCreateLayout(){
         toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         CollapsingToolbarLayout collapsingToolbar =
@@ -124,6 +156,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+               /* if(tab.getPosition() == 0){
+                    FloatingActionButton fabSearch= (FloatingActionButton) findViewById(R.id.top_floating_action_menu);
+                    fabSearch.show();
+                }
+                else
+                {
+                    FloatingActionButton fabSearch = (FloatingActionButton) findViewById(R.id.top_floating_action_menu);
+                    fabSearch.hide();
+                }*/
+                /*if (tab.getPosition() == 1) {
+                    FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab_add);
+                    floatingActionButton.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab_add);
+                    floatingActionButton.setVisibility(View.GONE);
+                }*/
+
 
             }
             @Override
@@ -133,41 +184,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-
-
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
-
-        // Add the parameters requested by the NavDrawer (Image, email, username)
-        View hview = navigationView.getHeaderView(0);
-        setNavDrawerParameters(hview);
-
-        FirebaseUser user = mAuth.getCurrentUser();
-        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(user.getUid());
-        user_doc = db.collection("users").document(user.getUid());
-        user_doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot doc = task.getResult();
-                SharedPreferences.Editor editor = sharedPref.edit();
-                for(String tmp:sharedUserDataKeys){
-                    editor.putString(tmp,doc.getString(tmp));
-                }
-                editor.apply();
-                View hview = navigationView.getHeaderView(0);
-                setNavDrawerParameters(hview);
-            }
-        });
-        Intent intent = new Intent(this,SplashScreenActivity.class);
-        startActivity(intent);
     }
 
     //    This is called after the attached fragment's onAttach and before the attached fragment's onCreate if the fragment
@@ -214,7 +238,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -225,13 +248,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void setNavDrawerParameters(View nview){ //Usare poi il metodo loadImageFromStorage della classe editProfile
         ImageView drawerImg = nview.findViewById(R.id.mainActivity_drawer_profileImg);
-        String img = sharedPref.getString(profileImgName,"");
+        String imgPath = sharedPref.getString(profileImgName,"");
         File file = null;
         Bitmap b = null;
         // Insert the image into the drawer
-        if(img.length() > 0){
-            file = new File(img);
-            if(file.exists() == true && drawerImg!=null) {
+        if(imgPath.length() > 0){
+            file = new File(imgPath);
+            if(file.exists() == true && drawerImg!=null){
                 try {
                     b = BitmapFactory.decodeStream(new FileInputStream(file));
                 } catch (FileNotFoundException e) {
@@ -321,6 +344,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         editor.putString(tmp,doc.getString(tmp));
                     }
                     editor.apply();
+                    View hview = navigationView.getHeaderView(0);
+                    setNavDrawerParameters(hview);
                     if(sharedPref.getString(profileImgName,"").length()==0){
                         StorageReference mImageRef = FirebaseStorage.getInstance().getReference("users/images/"+user.getUid());
                         Glide.with(context).asBitmap().load(mImageRef).into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL) {
@@ -331,25 +356,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     editor.putString(profileImgName,tmp);
                                     editor.apply();
                                     //Update img drawer
-                                    // Add the parameters requested by the NavDrawer (Image, email, username)
-                                    View hview = navigationView.getHeaderView(0);
                                     setNavDrawerParameters(hview);
                                 }
                             }
                         });
                     }
-
                     for (String x : thisUser.getUsr_books().keySet()) {
                         db.collection("books").document(x).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                 DocumentSnapshot bookDoc = task.getResult();
-                                myBooks.add(bookDoc.toObject(Book.class));
+                                Book book = bookDoc.toObject(Book.class);
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                    if(myBooks.stream().filter(b->b.getBook_ISBN().equals(book.getBook_ISBN())).count()==0){
+                                        myBooks.add(bookDoc.toObject(Book.class));
+                                    }
+                                }
+                                else{
+                                    boolean bookNotPresent = true;
+                                    for(Book b:myBooks){
+                                        if(b.getBook_ISBN().equals(book.getBook_ISBN())){
+                                            bookNotPresent = false;
+                                            break;
+                                        }
+                                    }
+                                    if(bookNotPresent){
+                                        myBooks.add(book);
+                                    }
+                                }
                             }
                         });
                     }
-
-
                 }
             });
             return "ok";

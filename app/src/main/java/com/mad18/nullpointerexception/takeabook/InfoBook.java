@@ -1,12 +1,16 @@
 package com.mad18.nullpointerexception.takeabook;
 
-
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -14,14 +18,14 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mad18.nullpointerexception.takeabook.addBook.BookWrapper;
 
+import studio.carbonylgroup.textfieldboxes.ExtendedEditText;
 import java.util.Objects;
-
-
 public class InfoBook extends AppCompatActivity {
 
     private int ibTextViewIds[] = new int[]{R.id.info_book_title,R.id.info_book_author, R.id.info_book_ISBN,
@@ -44,6 +48,8 @@ public class InfoBook extends AppCompatActivity {
     private String usr_name;
     private String usr_city;
     private String usr_about;
+    private FirebaseUser user;
+    private Menu menu;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,6 +58,8 @@ public class InfoBook extends AppCompatActivity {
         setContentView(R.layout.info_book);
         Toolbar toolbar = findViewById(R.id.info_book_toolbar);
         setSupportActionBar(toolbar);
+        setTitle(R.string.title_activity_info_book);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(R.string.title_activity_info_book);
         toolbar.setVisibility(View.VISIBLE);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -169,5 +177,23 @@ public class InfoBook extends AppCompatActivity {
 //        /**
 //         * da implementare per le immagini
 //         */
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                finish();
+                overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
