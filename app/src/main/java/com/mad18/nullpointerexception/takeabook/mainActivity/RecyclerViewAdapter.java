@@ -36,6 +36,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         void onItemClick(Book item);
     }
 
+    public void setData(List<Book> mData){
+        this.mData = mData;
+    }
 
     //fine simo
 

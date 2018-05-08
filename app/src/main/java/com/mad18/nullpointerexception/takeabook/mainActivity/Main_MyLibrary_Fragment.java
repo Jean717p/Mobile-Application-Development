@@ -4,6 +4,7 @@ package com.mad18.nullpointerexception.takeabook.mainActivity;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -43,42 +44,41 @@ import static com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity
  */
 public class Main_MyLibrary_Fragment extends Fragment {
 
-    List<Book> lstBook ;
+    private String title;
+    private int page;
     private View myFragmentView;
     CoordinatorLayout mainContent;
     boolean mIsHiding = false;
     private FloatingActionButton floatingActionButton;
     private int viewSize;
+    RecyclerViewAdapter myAdapter;
 
-
-    public Main_MyLibrary_Fragment() {
-        // Required empty public constructor
+    public static Main_MyLibrary_Fragment newInstance(int page,String title) {
+        Bundle args = new Bundle();
+        Main_MyLibrary_Fragment fragment = new Main_MyLibrary_Fragment();
+        args.putInt("pageID",page);
+        args.putString("pageTitle",title);
+        fragment.setArguments(args);
+        return fragment;
     }
 
-
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-
-        super.onActivityCreated(savedInstanceState);
-
-
-    }
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        page = getArguments().getInt("pageID");
+        title = getArguments().getString("pageTitle");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         myFragmentView = inflater.inflate(R.layout.fragment_main_my_library, container, false);
         // Inflate the layout for this fragment
         RecyclerView rec = myFragmentView.findViewById(R.id.my_library_recycle_view);
         mainContent = (CoordinatorLayout) myFragmentView.findViewById(R.id.main_library_coordinator_layout);
         floatingActionButton = (FloatingActionButton) myFragmentView.findViewById(R.id.fab_add);
 
-        RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(getActivity(), MainActivity.myBooks,
+        myAdapter = new RecyclerViewAdapter(getActivity(), MainActivity.myBooks,
                 new RecyclerViewAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(Book item) {
@@ -95,10 +95,9 @@ public class Main_MyLibrary_Fragment extends Fragment {
         rec.setScrollContainer(true);
         rec.setVerticalScrollBarEnabled(true);
         rec.setAdapter(myAdapter);
-       rec.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        rec.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-
                 // While RecyclerView enters dragging state
                 // (scroll, fling) we want our FAB to disappear.
                 // Similarly when it enters idle state we want
@@ -118,55 +117,43 @@ public class Main_MyLibrary_Fragment extends Fragment {
             }
         });
 
-
         if(floatingActionButton!=null){
-
             floatingActionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     Intent addbook = new Intent(getActivity(), AddBook.class);
                     startActivity(addbook);
                 }
-            });;
-
+            });
         }
         return myFragmentView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
+    public void updateView(List<Book> books){
+        if(myAdapter==null){
+            return;
+        }
+        myAdapter.setData(books);
+        myAdapter.notifyDataSetChanged();
     }
 
    public void hideFabWithObjectAnimator(){
         AnimatorSet scaleSet = new AnimatorSet();
-
         ObjectAnimator xScaleAnimator = ObjectAnimator.ofFloat(floatingActionButton, View.SCALE_X, 0);
         ObjectAnimator yScaleAnimator = ObjectAnimator.ofFloat(floatingActionButton, View.SCALE_Y, 0);
-
         scaleSet.setDuration(200);
         scaleSet.setInterpolator(new LinearInterpolator());
-
         scaleSet.playTogether(xScaleAnimator, yScaleAnimator);
         scaleSet.start();
     }
 
     public void showFabWithObjectAnimator(){
         AnimatorSet scaleSet = new AnimatorSet();
-
         ObjectAnimator xScaleAnimator = ObjectAnimator.ofFloat(floatingActionButton, View.SCALE_X, 1);
         ObjectAnimator yScaleAnimator = ObjectAnimator.ofFloat(floatingActionButton, View.SCALE_Y, 1);
-
         scaleSet.setDuration(400);
         scaleSet.setInterpolator(new OvershootInterpolator());
-
         scaleSet.playTogether(xScaleAnimator, yScaleAnimator);
         scaleSet.start();
     }
-
-
-
-
 }
