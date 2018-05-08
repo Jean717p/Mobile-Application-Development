@@ -12,15 +12,18 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
@@ -79,6 +82,19 @@ public class AddBook extends AppCompatActivity {
         ImageView iw =  findViewById(R.id.add_book_picture);
         iw.setClickable(true);
         iw.setOnClickListener(view -> selectBookImg());
+
+        ExtendedEditText eetS;
+        eetS = findViewById(R.id.add_book_extended_edit_text_ISBN);
+        eetS.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionID, KeyEvent keyEvent) {
+               if(actionID == EditorInfo.IME_ACTION_SEARCH){
+                   searchAfterISBNInsertion();
+               }
+                return false;
+            }
+        });
+
         //get the spinner from the xml.
         staticSpinner = findViewById(R.id.add_book_spinner_book_cond);
         //create a list of items for the spinner.
@@ -117,40 +133,43 @@ public class AddBook extends AppCompatActivity {
         }
 
         search.setOnClickListener(view -> { //new search
-            ExtendedEditText isbneditfield = findViewById(R.id.add_book_extended_edit_text_ISBN);
-            boolean valid= true;
-            if(isbneditfield.getText().toString().length()== 13){
-                for (char x: isbneditfield.getText().toString().toCharArray()) {
-                    if(!Character.isDigit(x)){
-                        valid = false;
-                        break;
-                    }
-                }
-                if(valid==false){
-                    Toast toast = Toast.makeText(getApplicationContext(), "Exactly 13 characters for ISBN", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-                else {
-                    //fai la ricerca tramite isbn
-                    Intent searchbarcodeintent = new Intent(AddBook.this, ScanBarcode.class);
-                    searchbarcodeintent.putExtra("toSearch", isbneditfield.getText().toString());
-                    startActivityForResult(searchbarcodeintent, REQUEST_SCANNER);
-                }
-            }
-            else{
-                Toast toast = Toast.makeText(getApplicationContext(), "Exactly 13 characters for ISBN", Toast.LENGTH_SHORT);
-                toast.show();
-            }
+            searchAfterISBNInsertion();
         });
     }
 
 
-    /**
-     * Crea il menu (toolbar) partendo dall'xml add_book_menu.xml
-     * @param menu
-     * @return
-     */
+//    /**
+//     * Crea il menu (toolbar) partendo dall'xml add_book_menu.xml
+//     * @param menu
+//     * @return
+//     */
 
+    public void searchAfterISBNInsertion(){
+        ExtendedEditText isbneditfield = findViewById(R.id.add_book_extended_edit_text_ISBN);
+        boolean valid= true;
+        if(isbneditfield.getText().toString().length()== 13){
+            for (char x: isbneditfield.getText().toString().toCharArray()) {
+                if(!Character.isDigit(x)){
+                    valid = false;
+                    break;
+                }
+            }
+            if(valid==false){
+                Toast toast = Toast.makeText(getApplicationContext(), "Exactly 13 characters for ISBN", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+            else {
+                //fai la ricerca tramite isbn
+                Intent searchbarcodeintent = new Intent(AddBook.this, ScanBarcode.class);
+                searchbarcodeintent.putExtra("toSearch", isbneditfield.getText().toString());
+                startActivityForResult(searchbarcodeintent, REQUEST_SCANNER);
+            }
+        }
+        else{
+            Toast toast = Toast.makeText(getApplicationContext(), "Exactly 13 characters for ISBN", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
