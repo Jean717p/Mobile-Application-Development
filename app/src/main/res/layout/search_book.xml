@@ -10,9 +10,9 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/search_book_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="?android:attr/actionBarSize"
         android:background="@color/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
+        android:minHeight="?android:attr/actionBarSize"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark"
         />
@@ -22,8 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:minHeight="?attr/actionBarSize"
+        android:layout_marginTop="?android:attr/actionBarSize"
+        android:minHeight="?android:attr/actionBarSize"
         app:tabTextAppearance="@style/MineCustomTabText"
         android:background="@color/colorPrimary"
         app:theme="@style/ThemeOverlay.AppCompat.Dark" />
@@ -31,7 +31,7 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/search_book_view_pager"
         android:layout_width="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginTop="?android:attr/actionBarSize"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_below="@id/tab_layout" />

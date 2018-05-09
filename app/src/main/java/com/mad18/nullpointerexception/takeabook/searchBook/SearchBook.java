@@ -103,7 +103,6 @@ public class SearchBook extends AppCompatActivity {
                 SearchBookPagerAdapter adapter = (SearchBookPagerAdapter) viewPager.getAdapter();
                 switch (tab.getPosition()){
                     case 0:
-                        booksFound.clear();
                         break;
                     case 1:
                         if(resultFragmentChanged){
@@ -175,7 +174,6 @@ public class SearchBook extends AppCompatActivity {
     public void searchForBook(String flag){
         EditText text = findViewById(R.id.search_book_edit_text);
         String to_find;
-        List<String> result_book = new LinkedList();
         to_find = text.getText().toString();
         getFromGoogleApi(flag,to_find);
         //Startare l'intent della nuova activity o riempire fragment con i risultati
@@ -262,6 +260,7 @@ public class SearchBook extends AppCompatActivity {
     private void getFromGoogleApi(String flag, String text){
         List list = new LinkedList();
         list.add(text);
+        booksFound.clear();
         switch (flag){
             case "Title":
                 new Thread(new Runnable() {
