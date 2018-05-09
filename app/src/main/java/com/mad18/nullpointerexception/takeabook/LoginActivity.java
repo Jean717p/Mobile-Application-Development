@@ -7,11 +7,15 @@ import android.content.pm.PackageManager;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -31,6 +35,9 @@ import com.google.firebase.auth.FirebaseUserMetadata;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
+
+import org.w3c.dom.Text;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -48,18 +55,64 @@ public class LoginActivity extends AppCompatActivity  {
     private boolean newUser;
     public static final String usr_lat = "usr_lat";
     public static final String usr_long = "usr_lat";
-
+    private Menu menu;
+    GeoPoint gp;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         progressBar = (ProgressBar) findViewById(R.id.login_progress_bar);
         progressBarTextView = findViewById(R.id.login_progress_bar_text);
-        toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        toolbar = (Toolbar) findViewById(R.id.login_toolbar);
         setSupportActionBar(toolbar);
-        setTitle(R.string.app_name);
+        toolbar.setTitle(R.string.insert_location);
         firstAttempt = true;
         newUser = false;
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.add_book_menu, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        String s;
+
+        switch (item.getItemId()){
+            case R.id.add_book_done:
+                TextView tw = findViewById(R.id.login_Address);
+                if(tw.getText().toString().length() > 0) {
+
+                    /* Inserimento dati su Firebase */
+
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    CollectionReference users = db.collection("users");
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    User u = new User(user.getEmail(), user.getDisplayName(), "", "", new HashMap<String, Boolean>(),gp);
+                    users.document(user.getUid()).set(u);
+                    //Nel caso serva inserire tasto ok su toolbar
+                    Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+                    finish();
+                    return true;
+                }else{
+
+                    Snackbar snackbar = Snackbar
+                            .make(findViewById(R.id.relativeLayout),getText(R.string.Error_position), Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    return false;
+                }
+
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -67,16 +120,7 @@ public class LoginActivity extends AppCompatActivity  {
         super.onResume();
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) {
-                if (newUser) {
-                    TextView tw = findViewById(R.id.login_Address);
-                    if(tw.getText().toString().length() > 0) {
-                        //Nel caso serva inserire tasto ok su toolbar
-                        Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                }
-                else {
+                if (!newUser) {
                     Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.class);
                     startActivity(intent);
                     finish();
@@ -116,17 +160,11 @@ public class LoginActivity extends AppCompatActivity  {
                 if (resultCode == RESULT_OK) {
                     Place place = PlacePicker.getPlace(this, data);
                     String placeName = String.format("Place: %s", place.getName());
-                    GeoPoint gp = new GeoPoint(place.getLatLng().latitude,place.getLatLng().longitude);
+                    gp = new GeoPoint(place.getLatLng().latitude,place.getLatLng().longitude);
                     TextView addr_text = findViewById(R.id.login_Address);
-                    addr_text.setText(place.getAddress().toString());
+                    addr_text.setVisibility(View.VISIBLE);
+                    addr_text.setText(place.getName().toString());
 
-                    /* Inserimento dati su Firebase */
-
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    CollectionReference users = db.collection("users");
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    User u = new User(user.getEmail(), user.getDisplayName(), "", "", new HashMap<String, Boolean>(),gp);
-                    users.document(user.getUid()).set(u);
 
 
                 } else {
@@ -204,16 +242,9 @@ public class LoginActivity extends AppCompatActivity  {
         /* Rende visibili i vari campi*/
         progressBar.setVisibility(View.INVISIBLE);
         findViewById(R.id.login_progress_bar_text).setVisibility(View.INVISIBLE);
-        TextView usr_label = findViewById(R.id.login_title_Username);
-        TextView usr_text = findViewById(R.id.login_Username);
-        TextView addr_label = findViewById(R.id.login_title_Address);
         TextView addr_text = findViewById(R.id.login_Address);
         Button getPos_button = findViewById(R.id.login_getPos_button);
-        usr_text.setText(user.getDisplayName());
-        usr_text.setVisibility(View.VISIBLE);
-        usr_label.setVisibility(View.VISIBLE);
-        addr_label.setVisibility(View.VISIBLE);
-        addr_text.setVisibility(View.VISIBLE);
+        addr_text.setVisibility(View.INVISIBLE);
         getPos_button.setVisibility(View.VISIBLE);
 
 

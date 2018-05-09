@@ -3,8 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/relativeLayout"
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/login_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        app:title="@string/insert_location"
+        app:titleTextColor="@android:color/white"
+        android:background="@color/colorPrimary"
+        android:layout_marginBottom="24dp"
+        android:minHeight="?android:attr/actionBarSize"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark" />
 
     <ProgressBar
         android:id="@+id/login_progress_bar"
@@ -24,66 +38,52 @@
         android:padding="16dp"
         android:text="@string/connecting" />
 
-    <!--titolo username-->
-    <TextView
-        android:layout_marginTop="8dp"
-        android:id="@+id/login_title_Username"
-        android:text="@string/Username"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/profile_text_view_title"
-        android:enabled="false"
-        android:visibility="invisible"/>
-    <!-- username-->
-    <EditText
-        android:id="@+id/login_Username"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-        android:hint="@string/Username"
-        android:layout_below="@id/login_title_Username"
-        android:inputType="text"
-        android:maxLines="1"
-        android:textColor="@color/textColor"
-        android:textColorHint="#BDBDBD"
-        android:textSize="@dimen/text_view_height"
-        android:visibility="invisible"/>
+
 
 
     <!--titolo address-->
-    <TextView
+    <!--<TextView
+        android:layout_centerInParent="true"
+        android:layout_marginTop="48dp"
         android:id="@+id/login_title_Address"
-        android:text="@string/Address"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/login_Username"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/profile_text_view_title"
+        android:layout_below="@id/login_toolbar"
         android:enabled="false"
-        android:visibility="invisible"/>
+        android:text="@string/Location_label"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="normal|bold"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        />-->
     <!--address-->
     <EditText
         android:id="@+id/login_Address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/login_title_Address"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/login_toolbar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
         android:enabled="false"
-        android:hint="@string/Address"
+        android:hint="@string/Location"
         android:inputType="text"
         android:maxLines="1"
         android:textColor="@color/textColor"
         android:textColorHint="#BDBDBD"
         android:textSize="@dimen/text_view_height"
-        android:visibility="invisible"/>
+        android:visibility="invisible" />
 
 
     <Button
         android:id="@+id/login_getPos_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/login_progress_bar"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="160dp"
         android:background="@drawable/corner_button"
         android:padding="16dp"
         android:text="@string/login_getposition"
@@ -94,6 +94,7 @@
         android:visibility="invisible"
         tools:layout_editor_absoluteX="143dp"
         tools:layout_editor_absoluteY="330dp" />
+
 
 
 

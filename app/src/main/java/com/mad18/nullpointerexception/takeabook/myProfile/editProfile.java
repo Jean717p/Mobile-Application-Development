@@ -388,7 +388,7 @@ public class editProfile extends AppCompatActivity {
         try {
             out = new FileOutputStream(file);
             // Use the compress method on the BitMap object to write image to the OutputStream
-            if(bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, out)==false){
+            if(bitmapImage.compress(Bitmap.CompressFormat.JPEG, 15, out)==false){
                 //decrementare secondo parametro per compressare
                 out.close();
                 return null;

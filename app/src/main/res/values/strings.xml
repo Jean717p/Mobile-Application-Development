@@ -11,11 +11,17 @@
     <string name="Address">Address</string>
 
     <!--Login Related-->
-    <string name="login_getposition">Get Position</string>
+    <string name="login_getposition">Get</string>
 
     <!--Login-->
     <string name="no_internet">No internet connection</string>
     <string name="connecting">Connecting...</string>
+    <string name="insert_location">Insert your location</string>
+    <string name="Location">Location</string>
+    <string name="Location_label">Get your position</string>
+    <string name="Error_position">Please, get your position</string>
+
+
 
     <!--Activities Title -->
     <string name="title_activity_edit">Edit Profile</string>
@@ -80,6 +86,7 @@
     <string name="add_book_category">"Category"</string>
     <string name="add_book_info_not_available">"Information not available"</string>
     <string name="add_book_no_description">"No description"</string>
+    <string name="add_book_error">"Any book has been inserted"</string>
 
 
 

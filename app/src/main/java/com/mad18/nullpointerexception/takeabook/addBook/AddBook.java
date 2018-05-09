@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -188,10 +189,20 @@ public class AddBook extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.add_book_done:
-                storeBookEditData();
-                finish();
-                overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
-                return true;
+                ExtendedEditText eet;
+                eet = findViewById(R.id.add_book_extended_edit_text_ISBN);
+                if(eet.getText().toString().length()>0) {
+                    storeBookEditData();
+                    finish();
+                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                    return true;
+                }else{
+                    Snackbar snackbar = Snackbar
+                            .make(findViewById(R.id.add_book_layout),getText(R.string.add_book_error), Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    return false;
+                }
+
             case android.R.id.home:
                 finish();
                 overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);

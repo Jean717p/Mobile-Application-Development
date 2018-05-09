@@ -11,11 +11,15 @@
     <string name="Address">Indirizzo</string>
 
     <!--Login Related-->
-    <string name="login_getposition">Trova posizione</string>
+    <string name="login_getposition">Ottieni</string>
 
     <!--Login-->
     <string name="no_internet">Nessuna connessione ad internet</string>
     <string name="connecting">Connessione in corso...</string>
+    <string name="insert_location">Inserisci la tua posizione</string>
+    <string name="Location_label">Ottieni la tua posizione</string>
+    <string name="Location">Posizione</string>
+    <string name="Error_position">Nessuna posizione inserita</string>
 
     <!--Activities Title -->
     <string name="title_activity_edit">Modifica profilo</string>
@@ -88,6 +92,7 @@
     <string name="add_book_category">"Categoria"</string>
     <string name="add_book_info_not_available">"Informazione non disponibile"</string>
     <string name="add_book_no_description">"Nessuna descrizione"</string>
+    <string name="add_book_error">"Nessun libro è stato inserito"</string>
 
 
     <!-- Facebook login -->

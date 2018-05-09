@@ -1,5 +1,6 @@
 package com.mad18.nullpointerexception.takeabook.mainActivity;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -68,6 +69,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import com.mad18.nullpointerexception.takeabook.mainActivity.LocalHelper;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
@@ -134,7 +136,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         });
+
+
+
     }
+
 
     private void myOnCreateLayout(){
         fab_my_lib = findViewById(R.id.fab_add);
@@ -468,5 +474,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return "Page "+position;
         }
     }
+
 
 }
