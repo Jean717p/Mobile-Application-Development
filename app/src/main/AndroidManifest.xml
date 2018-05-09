@@ -85,7 +85,7 @@
                 android:value="com.mad18.nullpointerexception.takeabook.myProfile.showProfile" />
         </activity>
         <activity
-            android:name=".SearchBook"
+            android:name=".searchBook.SearchBook"
             android:parentActivityName=".mainActivity.MainActivity"
             android:theme="@style/AppTheme"> <!-- android:label="@string/title_activity_show_profile" -->
             <meta-data

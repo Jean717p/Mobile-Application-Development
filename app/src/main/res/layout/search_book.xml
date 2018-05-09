@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchBook">
+    tools:context=".searchBook.SearchBook">
 
 
     <android.support.v7.widget.Toolbar
@@ -17,54 +17,23 @@
         app:theme="@style/ThemeOverlay.AppCompat.Dark"
         />
 
-    <LinearLayout
-
+    <android.support.design.widget.TabLayout
+        android:id="@+id/search_book_tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_margin="20dp"
-        android:orientation="vertical"
-        android:id="@+id/search_book_text">
+        android:layout_gravity="bottom"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:minHeight="?attr/actionBarSize"
+        app:tabTextAppearance="@style/MineCustomTabText"
+        android:background="@color/colorPrimary"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark" />
 
-
-        <android.support.design.widget.TextInputLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
-            >
-
-            <EditText
-                android:id="@+id/search_book_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:layout_margin="16dp"
-                android:inputType="textCapSentences|textAutoComplete|textAutoCorrect"
-
-                />
-        </android.support.design.widget.TextInputLayout>
-
-
-
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/search_button"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/corner_button"
-        android:textSize="13sp"
-        android:text="@string/search_book_button_text"
-        android:clickable="true"
-        android:focusable="true"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="16dp"
-        android:layout_below="@id/search_book_text"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
-        android:textColor="@android:color/white"
-        />
+    <android.support.v4.view.ViewPager
+        android:id="@+id/search_book_view_pager"
+        android:layout_width="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_below="@id/tab_layout" />
 
 </RelativeLayout>

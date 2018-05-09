@@ -69,7 +69,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import com.mad18.nullpointerexception.takeabook.mainActivity.LocalHelper;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
