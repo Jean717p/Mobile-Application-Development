@@ -260,7 +260,6 @@ public class SearchBook extends AppCompatActivity {
     private void getFromGoogleApi(String flag, String text){
         List list = new LinkedList();
         list.add(text);
-        booksFound.clear();
         switch (flag){
             case "Title":
                 new Thread(new Runnable() {
