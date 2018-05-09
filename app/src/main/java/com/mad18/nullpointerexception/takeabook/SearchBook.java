@@ -1,62 +1,35 @@
 package com.mad18.nullpointerexception.takeabook;
 
-import android.content.Intent;
 import android.location.Location;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.mad18.nullpointerexception.takeabook.addBook.JsonParser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.mad18.nullpointerexception.takeabook.addBook.JsonParser;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 
@@ -65,6 +38,8 @@ public class SearchBook extends AppCompatActivity {
     private Toolbar toolbar;
     private String searchBase;
     private Menu menu;
+    private MyAtomicCounter booksFoundCounter;
+    private List<Book> booksFound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +52,57 @@ public class SearchBook extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+        booksFound = new LinkedList<>();
+        booksFoundCounter = new MyAtomicCounter(0);
+        booksFoundCounter.setListener(new OnCounterChangeListener() {
+            @Override
+            public void onCounterReachZero() {
+                double user_lat=0,user_long=0;
+                Location user_loc;
+                //Log.d(TAG,"Reached 0");
+                Bundle intentExtras = getIntent().getExtras();
+                if(booksFound.size()==0){
+                    /** change UI - NO books found **/
+                    //Call anothre activity/fragment to show books
+                }
+                else if(booksFound.size()==1){
+                    /** change UI **/
+                    //Call anothre activity/fragment to show books
+                    return;
+                }
+                if(intentExtras!=null){
+                    user_lat = intentExtras.getDouble("user_lat");
+                    user_long = intentExtras.getDouble("user_long");
+                }
+                user_loc = new Location("Provider");
+                user_loc.setLatitude(user_lat);
+                user_loc.setLongitude(user_long);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    booksFound = booksFound.stream().sorted((a,b)->{
+                        Location book_loc_a = new Location("Provider");
+                        Location book_loc_b = new Location("Provider");
+                        book_loc_b.setLatitude(b.getBook_location().getLatitude());
+                        book_loc_b.setLongitude(b.getBook_location().getLongitude());
+                        book_loc_a.setLatitude(a.getBook_location().getLatitude());
+                        book_loc_a.setLongitude(a.getBook_location().getLongitude());
+                        return Float.compare(book_loc_a.distanceTo(user_loc),book_loc_b.distanceTo(user_loc));
+                    }).collect(Collectors.toList());
+                }
+                else{
+                    Collections.sort(booksFound, (a, b) -> {
+                        Location book_loc_b = new Location("Provider");
+                        Location book_loc_a = new Location("Provider");
+                        book_loc_b.setLatitude(b.getBook_location().getLatitude());
+                        book_loc_b.setLongitude(b.getBook_location().getLongitude());
+                        book_loc_a.setLatitude(a.getBook_location().getLatitude());
+                        book_loc_a.setLongitude(a.getBook_location().getLongitude());
+                        return Float.compare(book_loc_a.distanceTo(user_loc),book_loc_b.distanceTo(user_loc));
+                    });
+                }
+                /** Change UI **/
+                //Call anothre activity/fragment to show books
+            }
+        });
         switch (searchBase){
             case "Title":
                 text.setHint(getString(R.string.search_book_text_title));
@@ -136,23 +162,22 @@ public class SearchBook extends AppCompatActivity {
         return list;
     }
 
-    private List<Book> searchBooksOnFireStore(String flag,List<String> inputList){
-        List<Book> booksFound = new LinkedList<>();
+    private void searchBooksOnFireStore(String flag, List<String> inputList){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        double user_lat=0,user_long=0;
-        Location user_loc;
         if(inputList.size()==0){
-            return booksFound;
+            booksFoundCounter.getListener().onCounterReachZero();
+            return;
         }
         CollectionReference booksRef = db.collection("books");
+        booksFoundCounter.set(1);
         for(String x : inputList){
             switch(flag){
                 case "Title":
-                    Query query = booksRef.whereEqualTo("book_title",x);
-                    Task<QuerySnapshot> task = query.get().continueWithTask(new Continuation<QuerySnapshot, Task<QuerySnapshot>>() {
+                    Query query_t = booksRef.whereEqualTo("book_title",x);
+                    booksFoundCounter.increment();
+                    query_t.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
-                        public Task<QuerySnapshot> then(@NonNull Task<QuerySnapshot> task) throws Exception {
-                            QuerySnapshot snapshots = task.getResult();
+                        public void onSuccess(QuerySnapshot snapshots) {
                             List<DocumentSnapshot> documents = snapshots.getDocuments();
                             for(DocumentSnapshot documentSnapshot:documents){
                                 if(documentSnapshot!=null){
@@ -162,54 +187,54 @@ public class SearchBook extends AppCompatActivity {
                                     }
                                 }
                             }
-                            return null;
+                            booksFoundCounter.decrement();
                         }
                     });
-
                     break;
                 case "Author":
-                    query = booksRef.whereEqualTo("book_authors."+x,true);
+                    Query query_a = booksRef.whereEqualTo("book_authors."+x,true);
+                    booksFoundCounter.increment();
+                    query_a.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot snapshots) {
+                            List<DocumentSnapshot> documents = snapshots.getDocuments();
+                            for(DocumentSnapshot documentSnapshot:documents){
+                                if(documentSnapshot!=null){
+                                    if(documentSnapshot.exists()){
+                                        booksFound.add(documentSnapshot.toObject(Book.class));
+                                        break;
+                                    }
+                                }
+                            }
+                            booksFoundCounter.decrement();
+                        }
+                    });
                     break;
                 case "ISBN":
-                    query = booksRef.whereEqualTo("book_ISBN",x);
+                    Query query_i = booksRef.whereEqualTo("book_ISBN",x);
+                    booksFoundCounter.increment();
+                    query_i.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot snapshots) {
+                            List<DocumentSnapshot> documents = snapshots.getDocuments();
+                            for(DocumentSnapshot documentSnapshot:documents){
+                                if(documentSnapshot!=null){
+                                    if(documentSnapshot.exists()){
+                                        booksFound.add(documentSnapshot.toObject(Book.class));
+                                        break;
+                                    }
+                                }
+                            }
+                            booksFoundCounter.decrement();
+                        }
+                    });
                     break;
                 default:
-                    return booksFound;
+                    return;
             }
         }
-        /*
-        Bundle intentExtras = getIntent().getExtras();
-        if(intentExtras!=null){
-            user_lat = intentExtras.getDouble("user_lat");
-            user_long = intentExtras.getDouble("user_long");
-        }
-        user_loc = new Location("Provider");
-        user_loc.setLatitude(user_lat);
-        user_loc.setLongitude(user_long);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            booksFound = booksFound.stream().sorted((a,b)->{
-                Location book_loc_a = new Location("Provider");
-                Location book_loc_b = new Location("Provider");
-                book_loc_b.setLatitude(b.getBook_location().getLatitude());
-                book_loc_b.setLongitude(b.getBook_location().getLongitude());
-                book_loc_a.setLatitude(a.getBook_location().getLatitude());
-                book_loc_a.setLongitude(a.getBook_location().getLongitude());
-                return Float.compare(book_loc_a.distanceTo(user_loc),book_loc_b.distanceTo(user_loc));
-            }).collect(Collectors.toList());
-        }
-        else{
-            Collections.sort(booksFound, (a, b) -> {
-                Location book_loc_b = new Location("Provider");
-                Location book_loc_a = new Location("Provider");
-                book_loc_b.setLatitude(b.getBook_location().getLatitude());
-                book_loc_b.setLongitude(b.getBook_location().getLongitude());
-                book_loc_a.setLatitude(a.getBook_location().getLatitude());
-                book_loc_a.setLongitude(a.getBook_location().getLongitude());
-                return Float.compare(book_loc_a.distanceTo(user_loc),book_loc_b.distanceTo(user_loc));
-            });
-        }
-        */
-        return booksFound;
+        booksFoundCounter.decrement();
+        return;
     }
     /**
      * Metodo utilizzato per ricavare le liste dalle googleAPI
@@ -324,6 +349,52 @@ public class SearchBook extends AppCompatActivity {
             e.printStackTrace();
         }
         return totItems;
+    }
+
+    private interface OnCounterChangeListener{
+        public void onCounterReachZero();
+    }
+
+    private class MyAtomicCounter{
+        private OnCounterChangeListener listener;
+        private AtomicInteger atomicInteger;
+
+        public MyAtomicCounter(int initialValue){
+            atomicInteger = new AtomicInteger(initialValue);
+        }
+
+        public OnCounterChangeListener getListener() {
+            return listener;
+        }
+
+        public void setListener(OnCounterChangeListener listener) {
+            this.listener = listener;
+        }
+
+        public void decrement(){
+            int value = atomicInteger.decrementAndGet();
+            if(listener!=null){
+                if(value ==0){
+                    listener.onCounterReachZero();
+                }
+            }
+        }
+        public void increment(){
+            int value = atomicInteger.incrementAndGet();
+            if(listener!=null){
+                if(value ==0){
+                    listener.onCounterReachZero();
+                }
+            }
+        }
+        public void set(int value){
+            atomicInteger.set(value);
+            if(listener!=null){
+                if(value ==0){
+                    listener.onCounterReachZero();
+                }
+            }
+        }
     }
 
 }
