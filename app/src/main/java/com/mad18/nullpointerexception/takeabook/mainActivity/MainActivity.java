@@ -271,8 +271,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 intent = new Intent(this, com.mad18.nullpointerexception.takeabook.myProfile.showProfile.class);
                 startActivity(intent);
                 break;
-            case R.id.nav_mylibrary:
-                break;
             case R.id.nav_logout:
                 AuthUI.getInstance()
                         .signOut(this)
@@ -290,12 +288,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    @Override
+  /*  @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_main, menu); //.xml file name
         return super.onCreateOptionsMenu(menu);
-    }
+    }*/
 
     private void setNavDrawerParameters(View nview){ //Usare poi il metodo loadImageFromStorage della classe editProfile
         ImageView drawerImg = nview.findViewById(R.id.mainActivity_drawer_profileImg);
