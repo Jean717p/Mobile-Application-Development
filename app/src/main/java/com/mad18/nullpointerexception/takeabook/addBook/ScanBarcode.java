@@ -140,7 +140,7 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
                         }
                     }
                     BookWrapper bookWrapper = new BookWrapper(ISBN,title,authors, publisher,editionYear,
-                            thumbnail, categories,"");
+                            thumbnail, categories,"",0,0);
                     intent.putExtra("bookinfo", bookWrapper);
                     setResult(RESULT_OK,intent);
                     finish();

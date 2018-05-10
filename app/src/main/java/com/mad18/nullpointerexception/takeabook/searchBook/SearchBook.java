@@ -165,6 +165,9 @@ public class SearchBook extends AppCompatActivity {
                     }
                     Collections.sort(booksFound, (a, b) -> a.getBook_title().compareTo(b.getBook_title()));
                 }
+
+
+
                 tabLayout.getTabAt(1).select();
             }
         });

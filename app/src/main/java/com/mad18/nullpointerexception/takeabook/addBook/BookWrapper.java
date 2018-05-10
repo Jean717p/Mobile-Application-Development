@@ -3,6 +3,7 @@ package com.mad18.nullpointerexception.takeabook.addBook;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.firestore.GeoPoint;
 import com.mad18.nullpointerexception.takeabook.Book;
 
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class BookWrapper extends Book implements Parcelable {
     private String thumbnail;
     private List<String> categories;
     private String user_id;
+    private double lat, longitude;
 
     public String getDescription() {
         return description;
@@ -53,7 +55,7 @@ public class BookWrapper extends Book implements Parcelable {
     private String description;
 
     //Constructor
-    public BookWrapper(String ISBN,String title,List<String> authors, String publisher, int editionYear, String thumbnail, List<String> categories, String description){
+    public BookWrapper(String ISBN,String title,List<String> authors, String publisher, int editionYear, String thumbnail, List<String> categories, String description, double lat, double longitude){
         this.ISBN = ISBN;
         this.title = title;
         this.authors = authors;
@@ -63,6 +65,8 @@ public class BookWrapper extends Book implements Parcelable {
         this.categories = categories;
         this.description = description;
         this.user_id = "";
+        this.lat = lat;
+        this.longitude = longitude;
     }
 
 
@@ -76,6 +80,8 @@ public class BookWrapper extends Book implements Parcelable {
         this.categories = new LinkedList<>(book.getBook_categories().keySet());
         this.description = book.getBook_description();
         this.user_id = book.getBook_userid();
+        this.lat = book.getBook_location().getLatitude();
+        this.longitude = book.getBook_location().getLongitude();
     }
 
     public String getISBN() {
@@ -138,6 +144,22 @@ public class BookWrapper extends Book implements Parcelable {
         return user_id;
     }
 
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
     public void setUser_id(String user_id) {
         this.user_id = user_id;
     }
@@ -152,6 +174,8 @@ public class BookWrapper extends Book implements Parcelable {
         this.categories = in.createStringArrayList();
         this.description = in.readString();
         this.user_id = in.readString();
+        this.longitude = in.readDouble();
+        this.lat = in.readDouble();
     }
     @Override
     public int describeContents() {
@@ -176,6 +200,8 @@ public class BookWrapper extends Book implements Parcelable {
         dest.writeStringList(this.categories);
         dest.writeString(this.description);
         dest.writeString(this.user_id);
+        dest.writeDouble(this.lat);
+        dest.writeDouble(this.longitude);
     }
     @Override
     public String toString() {

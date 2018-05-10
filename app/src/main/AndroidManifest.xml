@@ -2,10 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mad18.nullpointerexception.takeabook">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="ACCESS_FINE_LOCATION"></uses-permission>
 
     <uses-feature
         android:name="android.hardware.camera2"
@@ -24,6 +27,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAX0qLWR3K8pCLAv89Yc2wm-Sr_USNn6VM" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <activity
             android:name=".LoginActivity"
@@ -105,9 +111,9 @@
             android:configChanges="orientation|screenSize|locale"
             android:label="InfoBook"
             android:theme="@style/AppTheme" />
-        <activity android:name=".BookFound">
-        </activity>
-        <activity android:name=".InfoUser"></activity>
+        <activity android:name=".BookFound"></activity>
+        <activity android:name=".InfoUser" />
+        <activity android:name=".displaySearchOnMap.DisplaySearchOnMap"></activity>
     </application>
 
 </manifest>
