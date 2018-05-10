@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -35,10 +36,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -57,6 +60,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 
 public class SearchBook extends AppCompatActivity {
@@ -126,14 +130,11 @@ public class SearchBook extends AppCompatActivity {
         booksFoundCounter.setListener(new OnCounterChangeListener() {
             @Override
             public void onCounterReachZero() {
-                double user_lat=0,user_long=0;
-                Location user_loc;
                 resultFragmentChanged=true;
-                //Log.d(TAG,"Reached 0");
                 Bundle intentExtras = getIntent().getExtras();
                 if(booksFound.size()==0){
                     /** change UI - NO books found **/
-                    //Call anothre activity/fragment to show books
+
                 }
                 else if(booksFound.size()==1){
                     /** change UI **/
@@ -142,8 +143,29 @@ public class SearchBook extends AppCompatActivity {
                 }
                 //Sort alfabelito booksfound
                 /** Change UI **/
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    booksFound = booksFound.stream()
+                            .collect(toMap(Book::getBook_ISBN, b->b))
+                            .values()
+                            .stream()
+                            .sorted((a,b)->a.getBook_title().compareTo(b.getBook_title()))
+                            .collect(toList());
+                }
+                else{
+                    for(int i=0;i<booksFound.size();i++){
+                        Book b = booksFound.get(i);
+                        for(int j=i+1;j<booksFound.size();){
+                            if(b.getBook_ISBN().equals(booksFound.get(j).getBook_ISBN())){
+                                booksFound.remove(j);
+                            }
+                            else{
+                                j++;
+                            }
+                        }
+                    }
+                    Collections.sort(booksFound, (a, b) -> a.getBook_title().compareTo(b.getBook_title()));
+                }
                 tabLayout.getTabAt(1).select();
-                //Call anothre activity/fragment to show books
             }
         });
     }
@@ -175,6 +197,7 @@ public class SearchBook extends AppCompatActivity {
         EditText text = findViewById(R.id.search_book_edit_text);
         String to_find;
         to_find = text.getText().toString();
+        booksFound.clear();
         getFromGoogleApi(flag,to_find);
         //Startare l'intent della nuova activity o riempire fragment con i risultati
 
@@ -189,6 +212,16 @@ public class SearchBook extends AppCompatActivity {
         CollectionReference booksRef = db.collection("books");
         booksFoundCounter.set(1);
         for(String x : inputList){
+            if(x.length()==0){
+                continue;
+            }
+            else if(x.contains("*")||x.contains("~")||x.contains("/")||x.contains("[")||x.contains("]")
+                ||x.contains("..")){
+                continue;
+            }
+            else if(x.startsWith(".")||x.endsWith(".")){
+                continue;
+            }
             switch(flag){
                 case "Title":
                     Query query_t = booksRef.whereEqualTo("book_title",x);
@@ -210,8 +243,8 @@ public class SearchBook extends AppCompatActivity {
                     });
                     break;
                 case "Author":
-                    Query query_a = booksRef.whereEqualTo("book_authors."+x,true);
                     booksFoundCounter.increment();
+                    Query query_a = booksRef.whereEqualTo("book_authors."+x,true);
                     query_a.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -267,7 +300,6 @@ public class SearchBook extends AppCompatActivity {
                     public void run() {
                         try {
                             int numItems = getNumItemsFromApi(text,flag);
-
                             int maxCycle = numItems / 40; //Posso prendere solo 40 item alla volta dal json
                             if((numItems%40) != 0) {
                                 maxCycle++;
@@ -277,8 +309,15 @@ public class SearchBook extends AppCompatActivity {
                                 String url = "https://www.googleapis.com/books/v1/volumes?maxResults=40&orderBy=relevance&q=intitle:" +
                                         text +
                                         "&fields=items(volumeInfo/title)&startIndex=" + Integer.toString(i*40);
-                                JSONObject jsonObject = jsonParser.makeHttpRequest(url,
-                                        "GET", new HashMap<String, String>());
+                                JSONObject jsonObject;
+                                try{
+                                    jsonObject = jsonParser.makeHttpRequest(url,
+                                            "GET", new HashMap<String, String>());
+                                }
+                                catch (Exception e){
+                                    e.printStackTrace();
+                                    continue;
+                                }
                                 if(jsonObject.has("items")){
                                     JSONArray tmp =  jsonObject.getJSONArray("items");
                                     for(int j = 0; j < tmp.length(); j++) {
@@ -294,7 +333,6 @@ public class SearchBook extends AppCompatActivity {
                                         }
                                     }
                                 }
-
                             }
                             searchBooksOnFireStore(flag,list);
                         }
@@ -309,6 +347,7 @@ public class SearchBook extends AppCompatActivity {
                     @Override
                     public void run() {
                         try {
+                            list.remove(text);
                             int numItems = getNumItemsFromApi(text,flag);
                             int maxCycle = numItems / 40; //Posso prendere solo 40 item alla volta dal json
                             if((numItems%40) != 0) {
@@ -316,26 +355,73 @@ public class SearchBook extends AppCompatActivity {
                             }
                             JsonParser jsonParser = new JsonParser();
                             for(int i = 0; i < maxCycle; i++) {
-                                JSONObject jsonObject = jsonParser.makeHttpRequest(
-                                        "https://www.googleapis.com/books/v1/volumes?maxResults=40&orderBy=relevance&q=inauthor:" +
-                                                text +
-                                                "&fields=items(volumeInfo/title)&startIndex=" + Integer.toString(i*40) ,
-                                        "GET", new HashMap<String, String>());
-                                JSONArray tmp =  jsonObject.getJSONArray("items");
-                                for(int j = 0; j < tmp.length(); j++) {
-                                    JSONObject item = tmp.getJSONObject(j);
-                                    if(item.has("volumeInfo")){
-                                        JSONObject vol = item.getJSONObject("volumeInfo");
-                                        if(vol.has("title")){
-                                            String info = vol.getString("title");
-                                            if(list.contains(info) == false) {
-                                                list.add(info);
+                                String url = "https://www.googleapis.com/books/v1/volumes?maxResults=40&orderBy=relevance&q=inauthor:" +
+                                        text +
+                                        "&fields=items(volumeInfo/title)&startIndex=" + Integer.toString(i*40);
+                                JSONObject jsonObject;
+                                try{
+                                    jsonObject = jsonParser.makeHttpRequest(url,
+                                            "GET", new HashMap<String, String>());
+                                }
+                                catch (Exception e){
+                                    e.printStackTrace();
+                                    continue;
+                                }
+                                if(jsonObject.has("items")){
+                                    JSONArray tmp =  jsonObject.getJSONArray("items");
+                                    for(int j = 0; j < tmp.length(); j++) {
+                                        JSONObject item = tmp.getJSONObject(j);
+                                        if(item.has("volumeInfo")){
+                                            JSONObject vol = item.getJSONObject("volumeInfo");
+                                            if(vol.has("title")){
+                                                String info = vol.getString("title");
+                                                if(list.contains(info) == false) {
+                                                    list.add(info);
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
-                            searchBooksOnFireStore(flag,list);
+//                            for(int i = 0; i < maxCycle; i++) {
+//                                String url = "https://www.googleapis.com/books/v1/volumes?maxResults=40&orderBy=relevance&q=inauthor:" +
+//                                        text +
+//                                        "&fields=items(volumeInfo/industryIdentifiers)&startIndex=" +
+//                                        Integer.toString(i*40);
+//                                JSONObject jsonObject;
+//                                try{
+//                                    jsonObject = jsonParser.makeHttpRequest(url,
+//                                            "GET", new HashMap<String, String>());
+//                                }
+//                                catch (Exception e){
+//                                    continue;
+//                                }
+//                                if(jsonObject.has("items")){
+//                                    JSONArray tmp =  jsonObject.getJSONArray("items");
+//                                    for(int j = 0; j < tmp.length(); j++) {
+//                                        JSONObject item = tmp.getJSONObject(j);
+//                                        if(item.has("volumeInfo")){
+//                                            JSONObject vol = item.getJSONObject("volumeInfo");
+//                                            if(vol.has("industryIdentifiers")){
+//                                                JSONArray industryIdentifiers = vol.getJSONArray("industryIdentifiers");
+//                                                for(int k=0; k< industryIdentifiers.length(); k++){
+//                                                    JSONObject id = industryIdentifiers.getJSONObject(k);
+//                                                    if(id.has("type") && id.has("identifiers")){
+//                                                        if(id.getString("type").equals("ISBN_13")){
+//                                                            String isbna = id.getString("identifiers");
+//                                                            if(list.contains(isbna)==false){
+//                                                                list.add(isbna);
+//                                                                break;
+//                                                            }
+//                                                        }
+//                                                    }
+//                                                }
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            }
+                            searchBooksOnFireStore("Title",list);
                         }
                         catch(JSONException e){
                             e.printStackTrace();
@@ -344,7 +430,6 @@ public class SearchBook extends AppCompatActivity {
                 }).start();
             break;
             case "ISBN":
-
                 searchBooksOnFireStore(flag,list);
                 break;
         }
@@ -353,12 +438,14 @@ public class SearchBook extends AppCompatActivity {
 
     private int getNumItemsFromApi(String text, String flag) {
         int totItems = 0;
+        String url;
+        JsonParser jsonParser = new JsonParser();
         switch (flag){
             case "Title":
                 try {
-                    JsonParser jsonParser = new JsonParser();
+                    url = "https://www.googleapis.com/books/v1/volumes?q=intitle:" + text + "&fields=totalItems";
                     JSONObject jsonObject = jsonParser.makeHttpRequest(
-                            "https://www.googleapis.com/books/v1/volumes?q=intitle:" + text + "&fields=totalItems",
+                            url,
                             "GET", new HashMap<String, String>());
                     if (jsonObject.has("totalItems")) {
                         totItems = jsonObject.getInt("totalItems");
@@ -373,20 +460,18 @@ public class SearchBook extends AppCompatActivity {
                 break;
             case "Author":
                 try {
-                    JsonParser jsonParser = new JsonParser();
+                    url = "https://www.googleapis.com/books/v1/volumes?q=inauthor:" + text + "&fields=totalItems";
                     JSONObject jsonObject = jsonParser.makeHttpRequest(
-                            "https://www.googleapis.com/books/v1/volumes?q=inauthor:" + text + "&fields=totalItems",
+                            url,
                             "GET", new HashMap<String, String>());
                     if (jsonObject.has("totalItems")) {
                         totItems = jsonObject.getInt("totalItems");
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (Exception e){
                     e.printStackTrace();
                 }
-
                 break;
         }
         return totItems;
