@@ -121,8 +121,14 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
                                 publisher =tmp.getString("publisher");
                             }
                             if(tmp.has("publishedDate")){
-                                String SeditionYear = tmp.getString("publishedDate");
-                                editionYear = Integer.parseInt(SeditionYear);
+                                try{
+                                    String SeditionYear = tmp.getString("publishedDate");
+                                    editionYear = Integer.parseInt(SeditionYear);
+                                }
+                                catch (Exception e){
+                                    editionYear = 0;
+                                }
+
                             }
                             if(tmp.has("categories")){
                                 JSONArray Jcategories = tmp.getJSONArray("categories");

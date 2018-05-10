@@ -20,12 +20,26 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:theme="@style/ThemeOverlay.AppCompat.Dark" />
 
+        <HorizontalScrollView android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/add_book_text_field_Description"
+            android:id="@+id/add_book_horizontal_scroll_view">
+
+            <LinearLayout android:id="@+id/horizontal_photo_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
 
         <ImageView
             android:id="@+id/add_book_picture"
             android:layout_width="180dp"
             android:layout_height="180dp"
-            android:layout_above="@+id/read_barcode"
+            android:layout_above="@id/read_barcode"
+            android:layout_below="@id/add_book_toolbar"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="-249dp"
             android:clickable="true"
@@ -93,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_margin="16dp"
-            android:layout_below="@id/add_book_text_field_ISBN"
+            android:layout_below="@id/add_book_text_field_Publisher"
             app:errorColor="#ddaa00"
             app:labelText="@string/add_book_title"
             app:panelBackgroundColor="@android:color/transparent"
@@ -180,7 +194,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/add_book_text_field_EditionYear"
+            android:layout_below="@+id/add_book_horizontal_scroll_view"
             android:layout_margin="16dp"
             app:errorColor="#ddaa00"
             app:labelText="@string/add_book_publisher"
@@ -192,6 +206,7 @@
                 android:id="@+id/add_book_extended_edit_text_Publisher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:inputType="number"
                 android:maxLines="2"
 
                 />
@@ -201,7 +216,7 @@
             android:id="@+id/add_book_spinner_book_cond"
             android:layout_margin="16dp"
             android:clickable="true"
-            android:layout_below="@id/add_book_text_field_Publisher"
+            android:layout_below="@id/add_book_text_field_ISBN"
             android:spinnerMode="dropdown"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

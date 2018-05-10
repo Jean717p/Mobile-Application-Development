@@ -3,24 +3,30 @@ package com.mad18.nullpointerexception.takeabook;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.mad18.nullpointerexception.takeabook.addBook.BookWrapper;
 
 import studio.carbonylgroup.textfieldboxes.ExtendedEditText;
@@ -36,6 +42,9 @@ public class InfoBook extends AppCompatActivity {
     private String usr_about;
     private FirebaseUser user;
     private Menu menu;
+    private int img_not_found = 0;
+    private LinearLayout horizontal_photo_list;
+    private View horizontal_photo_list_element;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,24 +62,9 @@ public class InfoBook extends AppCompatActivity {
         fillInfoBookViews();
 
 
+        //simo start
 
-        //        ....To do later......
-//        LinearLayout layout = (LinearLayout) view.findViewById(R.id.image_container)
-//        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//
 //// Add 4 images
-//
-//        for (int i = 0; i < 4; i++) {
-//            layoutParams.setMargins(20, 20, 20, 20);
-//            layoutParams.gravity = Gravity.CENTER;
-//            ImageView imageView = new ImageView(getActivity());
-//            imageView.setImageResource(R.drawable.image);
-//            imageView.setOnClickListener(documentImageListener);
-//            imageView.setLayoutParams(layoutParams);
-//
-//            layout.addView(imageView);
-//
-//        }
 
     }
 
@@ -134,6 +128,30 @@ public class InfoBook extends AppCompatActivity {
         }
         Glide.with(this).load(book.getBook_thumbnail_url()).into(iw);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        //simo inizio
+        horizontal_photo_list = (LinearLayout) findViewById(R.id.info_book_list_photo_container);
+
+
+        for (int i = 0; i < 4; i++) {
+            horizontal_photo_list_element = getLayoutInflater().inflate(R.layout.cell_in_image_list, null);
+            final ImageView imageView = (ImageView) horizontal_photo_list_element.findViewById(R.id.image_in_horizontal_list_cell);
+            imageView.setImageResource(R.drawable.ic_addbook);
+            horizontal_photo_list.addView(horizontal_photo_list_element);
+
+            try {
+                StorageReference  mImageRef = FirebaseStorage.getInstance().getReference().child("photo_conditions_by_user/books/" + book.getBook_ISBN() + bookToShowInfoOf.getUser_id() + i);
+                mImageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Glide.with(getApplicationContext()).load(uri).into(imageView);
+                    }
+                });
+            } catch (Exception e) {
+                img_not_found = 1;
+            }
+        }
+        //simo fine
+
         DocumentReference user_doc;
 
         user_doc = db.collection("users").document(bookToShowInfoOf.getUser_id());
@@ -165,7 +183,7 @@ public class InfoBook extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        fillInfoBookViews();
+        //fillInfoBookViews();
     }
     @Override
     protected void onSaveInstanceState(Bundle outState) {

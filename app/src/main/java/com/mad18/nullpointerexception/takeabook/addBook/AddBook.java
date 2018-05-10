@@ -18,15 +18,17 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -63,12 +65,28 @@ public class AddBook extends AppCompatActivity {
     private View mClss;
     private Toolbar toolbar;
     private Menu menu;
-    private Bitmap bookImg;
     private Spinner staticSpinner;
 
 
     private android.support.design.widget.FloatingActionButton img_fab;
     private FirebaseUser user;
+
+    //simo inizio
+    private Bitmap bookImg;
+    private HashMap<Integer,Bitmap> bookImgMap = new HashMap<>();
+    // horizontal_photo_list is the child of the HorizontalScrollView ...
+    private LinearLayout horizontal_photo_list;
+
+    // this is an array that holds the IDs of the drawables ...
+    private int[] photo_conditions_by_user = {R.drawable.ic_book_cover, R.drawable.ic_book_cover, R.drawable.ic_book_cover,
+            R.drawable.ic_book_cover};
+
+    private View horizontal_photo_list_element;
+    private TextView text;
+
+    private ImageView globalViewImgElement;
+    private int globalImgPos = 0 ;
+    //simo fine
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -77,12 +95,11 @@ public class AddBook extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitle("Add a book");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         Button scan = (Button)findViewById(R.id.read_barcode);
         Button search = (Button)findViewById(R.id.add_book_read_ISBN); //new search
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
-        ImageView iw =  findViewById(R.id.add_book_picture);
-        iw.setClickable(true);
-        iw.setOnClickListener(view -> selectBookImg());
+
 
         ExtendedEditText eetS;
         eetS = findViewById(R.id.add_book_extended_edit_text_ISBN);
@@ -95,6 +112,40 @@ public class AddBook extends AppCompatActivity {
                 return false;
             }
         });
+
+        //simo inizio
+
+
+        horizontal_photo_list = (LinearLayout) findViewById(R.id.horizontal_photo_layout);
+
+        for (int i = 0; i < 4; i++) {
+
+            horizontal_photo_list_element = getLayoutInflater().inflate(R.layout.cell_in_image_list, null);
+
+            final ImageView imageView = (ImageView) horizontal_photo_list_element.findViewById(R.id.image_in_horizontal_list_cell);
+            imageView.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    // do whatever you want ...
+                    globalImgPos = Integer.parseInt(imageView.getTag().toString());
+                    globalViewImgElement = imageView;
+                   selectBookImg();
+
+                    //Toast.makeText(AddBook.this,
+                      //      (CharSequence) imageView.getTag(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            imageView.setTag(i);
+            imageView.setImageResource(R.drawable.ic_addbook);
+
+            horizontal_photo_list.addView(horizontal_photo_list_element);
+        }
+
+
+        //simo fine
+
 
         //get the spinner from the xml.
         staticSpinner = findViewById(R.id.add_book_spinner_book_cond);
@@ -129,7 +180,9 @@ public class AddBook extends AppCompatActivity {
             }
 //            findViewById(R.id.add_book_text_field_ISBN).setVisibility(View.VISIBLE);
 //            findViewById(R.id.add_book_picture).setVisibility(View.INVISIBLE);
-            findViewById(R.id.add_book_text_field_ISBN).setEnabled(true);
+           findViewById(R.id.add_book_text_field_ISBN).setEnabled(true);
+           findViewById(R.id.add_book_text_field_Description).setEnabled(true);
+           findViewById(R.id.add_book_text_field_Publisher).setEnabled(true);
             bookImg = null;
         }
 
@@ -249,7 +302,7 @@ public class AddBook extends AppCompatActivity {
      * Metodo che si occupa di inserire nel database Firebase i dati relativi al libro aggiunto dall'utente.
      * Setta tutti i parametri ricevuti dalle edit text in un oggetto bookToAdd della classe book, che verrà poi inserito
      * su Firebase.
-     * Viene gestito anche il caricamento dell'immagine su Firebase, inserita nella cartella images/books utilizzando un nome
+     * Viene gestito anche il caricamento dell'immagine su Firebase, inserita nella cartella photo_conditions_by_user/books utilizzando un nome
      * dato dalla chiave univoca ISBN + userID.
      * Viene infine aggiornato il campo books dell'oggetto user del database.
      */
@@ -295,18 +348,20 @@ public class AddBook extends AppCompatActivity {
 
             bookToAdd.setBook_publisher(eet.getText().toString());
 
-        mImageRef = FirebaseStorage.getInstance().getReference().child("images/books/"+bookToAdd.getBook_ISBN()+user.getUid());
-        if(bookImg!=null){
-            bookImgPath = editProfile.saveImageToInternalStorage(bookImg,"temp_"+"bookEditImage",this);
-            if(bookImgPath!=null) {
-                file = new File(bookImgPath);
-                Uri profileImgUri = Uri.fromFile(file);
-                mImageRef.putFile(profileImgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        file.delete();
-                    }
-                });
+        for(int j= 0; j<bookImgMap.size();j++ ) {
+            mImageRef = FirebaseStorage.getInstance().getReference().child("photo_conditions_by_user/books/" + bookToAdd.getBook_ISBN() + user.getUid() + j);
+            if (bookImgMap.get(j) != null) {
+                bookImgPath = editProfile.saveImageToInternalStorage(bookImgMap.get(j), "temp_" + "bookEditImage"+ j, this);
+                if (bookImgPath != null) {
+                    File file1 = new File(bookImgPath);
+                    Uri profileImgUri = Uri.fromFile(file1);
+                    mImageRef.putFile(profileImgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            file1.delete();
+                        }
+                    });
+                }
             }
         }
 
@@ -372,7 +427,7 @@ public class AddBook extends AppCompatActivity {
 //                            findViewById(i).setVisibility(View.VISIBLE);
 //                        }
                         fillAddBookViews(bookToAdd);
-                        findViewById(R.id.add_book_text_field_Description).setEnabled(true);
+
                         //findViewById(R.id.add_book_picture).setVisibility(View.VISIBLE);
 
                     }
@@ -380,9 +435,10 @@ public class AddBook extends AppCompatActivity {
                 case REQUEST_IMAGE_CAPTURE:
                     if (data != null) {
                         bookImg = (Bitmap) data.getExtras().get("data");
-                        iw = findViewById(R.id.add_book_picture);
+                        iw = globalViewImgElement;
                         if(iw!=null && bookImg != null) {
                             iw.setImageBitmap(bookImg);
+                            bookImgMap.put(globalImgPos,bookImg);
                         }
                     }
                     break;
@@ -395,9 +451,10 @@ public class AddBook extends AppCompatActivity {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        iw = findViewById(R.id.add_book_picture);
+                        iw = globalViewImgElement;
                         if(iw!=null && bookImg != null) {
                             iw.setImageBitmap(bookImg);
+                            bookImgMap.put(globalImgPos,bookImg);
                         }
                     }
                     break;
@@ -415,6 +472,7 @@ public class AddBook extends AppCompatActivity {
     private void fillAddBookViews(Book book){
         ExtendedEditText eet;
         String tmp;
+        ImageView iw;
         eet = findViewById(R.id.add_book_extended_edit_text_ISBN);
         eet.setText(book.getBook_ISBN());
         eet = findViewById(R.id.add_book_extended_edit_Author);
@@ -429,12 +487,18 @@ public class AddBook extends AppCompatActivity {
         eet = findViewById(R.id.add_book_extended_edit_Title);
         eet.setText(book.getBook_title());
         eet = findViewById(R.id.add_book_extended_edit_text_Publisher);
-        eet.setText(book.getBook_publisher());
+        if(book.getBook_publisher().length()>2){
+            eet.setText(book.getBook_publisher());
+        }
+
         eet = findViewById(R.id.add_book_extended_edit_Category);
         tmp = book.getBook_categories().keySet().toString();
         if(tmp.length()>2){
             eet.setText(tmp.substring(1,tmp.length()-1));
         }
+
+        iw = findViewById(R.id.add_book_picture);
+        Glide.with(this).load(book.getBook_thumbnail_url()).into(iw);
     }
 
     /**
@@ -502,9 +566,11 @@ public class AddBook extends AppCompatActivity {
 
     private void removeBookImg(){
         ImageView iw;
-        if(bookImg!=null){
-            iw = findViewById(R.id.add_book_picture);
-            bookImg = null;
+        if(bookImgMap.isEmpty()==false){
+            iw = globalViewImgElement;
+            //bookImg = null;
+            //bookImgMap.remove(bookImg);
+            bookImgMap.remove(globalImgPos);
             iw.setImageResource(R.drawable.ic_addbook);
         }
     }

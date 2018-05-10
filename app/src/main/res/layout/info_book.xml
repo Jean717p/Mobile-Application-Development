@@ -199,11 +199,11 @@
         android:textSize="14sp"
        />
 
-    <!--<HorizontalScrollView
+    <HorizontalScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/info_book_horizontalScrollView_photos"
-        android:layout_below="@id/info_book_owner"
+        android:layout_below="@id/info_book_description"
         >
         <LinearLayout
             android:layout_width="wrap_content"
@@ -212,7 +212,7 @@
             android:orientation="horizontal">
 
         </LinearLayout>
-    </HorizontalScrollView>-->
+    </HorizontalScrollView>
 
     <!--etichetta e contenuto owner-->
 
