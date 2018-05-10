@@ -19,17 +19,22 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/info_user_photo_profile"
         android:layout_width="@dimen/profile_photo_width"
         android:layout_height="@dimen/profile_photo_height"
+        android:layout_below="@id/info_user_toolbar"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_vertical"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:src="@drawable/ic_account_circle_white_48px"
+        app:civ_border_color="@color/textColor"
+        app:civ_border_width="@dimen/circle_image_border"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/info_user_toolbar"
-        app:srcCompat="@drawable/account_circle" />
+        app:layout_constraintTop_toBottomOf="@+id/info_user_toolbar" />
 
     <TextView
         android:id="@+id/info_user_username"
