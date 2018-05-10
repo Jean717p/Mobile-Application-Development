@@ -12,10 +12,10 @@
             android:id="@+id/nav_showprofile"
             android:icon="@drawable/ic_person_black_24dp"
             android:title="@string/nav_element_showprofile" />
-        <item
+        <!--<item
             android:id="@+id/nav_mylibrary"
             android:icon="@drawable/ic_local_library_black_24dp"
-            android:title="@string/nav_element_mylibrary" />
+            android:title="@string/nav_element_mylibrary" />-->
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_exit_to_app_black_24px"

@@ -1,0 +1,109 @@
+package com.mad18.nullpointerexception.takeabook.searchBook;
+
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.OvershootInterpolator;
+
+import com.mad18.nullpointerexception.takeabook.Book;
+import com.mad18.nullpointerexception.takeabook.InfoBook;
+import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.addBook.AddBook;
+import com.mad18.nullpointerexception.takeabook.addBook.BookWrapper;
+import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
+import com.mad18.nullpointerexception.takeabook.mainActivity.Main_MyLibrary_Fragment;
+import com.mad18.nullpointerexception.takeabook.mainActivity.MyLibraryRecyclerViewAdapter;
+
+import java.util.LinkedList;
+import java.util.List;
+
+
+public class SearchBook_found extends Fragment {
+    private String title;
+    private int page;
+    private View myFragmentView;
+    CoordinatorLayout mainContent;
+    private int viewSize;
+    SearchBookRecyclerViewAdapter myAdapter;
+
+    public static SearchBook_found newInstance(int page, String title) {
+        Bundle args = new Bundle();
+        SearchBook_found fragment = new SearchBook_found();
+        args.putInt("pageID",page);
+        args.putString("pageTitle",title);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        page = getArguments().getInt("pageID");
+        title = getArguments().getString("pageTitle");
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        myFragmentView = inflater.inflate(R.layout.fragment_search_book_found, container, false);
+        // Inflate the layout for this fragment
+        RecyclerView rec = myFragmentView.findViewById(R.id.search_book_recycler_view);
+        mainContent = (CoordinatorLayout) myFragmentView.findViewById(R.id.search_book_found_coordinator_layout);
+
+        myAdapter = new SearchBookRecyclerViewAdapter(getActivity(), new LinkedList<Book>(),
+                new SearchBookRecyclerViewAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Book item) {
+                        Intent intent = new Intent(getActivity(), InfoBook.class);
+                        BookWrapper bw = new BookWrapper(item);
+                        bw.setBook_userid(item.getBook_userid());
+                        intent.putExtra("bookToShow",bw);
+                        startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                    }
+                });
+        rec.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        rec.setScrollContainer(true);
+        rec.setVerticalScrollBarEnabled(true);
+        rec.setAdapter(myAdapter);
+        rec.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                // While RecyclerView enters dragging state
+                // (scroll, fling) we want our FAB to disappear.
+                // Similarly when it enters idle state we want
+                // our FAB to appear back.
+
+                // (Just uncomment corresponding hide-show methods
+                // which you want to use)
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    // ...
+                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    // ...
+                }
+            }
+        });
+        return myFragmentView;
+    }
+
+    public void updateView(List<Book> books){
+        if(myAdapter==null){
+            return;
+        }
+        myAdapter.setData(books);
+        myAdapter.notifyDataSetChanged();
+    }
+}
