@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -212,8 +213,8 @@ public class DisplaySearchOnMap_map extends Fragment implements GoogleApiClient.
 
                     for (BookWrapper i: bookList){
                         Marker marker = bookMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(i.getBookwrapper_longitude(),i.getBookwrapper_lat()))
-                                .title(i.getBookwrapper_title())
+                                .position(new LatLng(i.getLongitude(),i.getLat()))
+                                .title(i.getTitle())
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
                         );
                         marker.setTag(i);

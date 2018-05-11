@@ -8,6 +8,7 @@
         <ImageView android:id="@+id/image_in_horizontal_list_cell"
             android:layout_width="150dp"
             android:layout_height="150dp"
+            android:src="@drawable/ic_addbook"
             android:layout_margin="8dp"/>
 
         <!--<TextView android:id="@+id/_imageName"-->

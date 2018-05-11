@@ -1,5 +1,6 @@
 package com.mad18.nullpointerexception.takeabook;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -7,7 +8,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -26,6 +30,12 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.mad18.nullpointerexception.takeabook.addBook.BookWrapper;
 
+import studio.carbonylgroup.textfieldboxes.ExtendedEditText;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 public class InfoBook extends AppCompatActivity {
 
     private int ibTextViewIds[] = new int[]{R.id.info_book_title,R.id.info_book_author, R.id.info_book_ISBN,
@@ -40,6 +50,7 @@ public class InfoBook extends AppCompatActivity {
     private int img_not_found = 0;
     private LinearLayout horizontal_photo_list;
     private View horizontal_photo_list_element;
+    private List<String> for_me;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,40 +78,44 @@ public class InfoBook extends AppCompatActivity {
 
         TextView tv;
         tv = findViewById(R.id.info_book_title);
-        tv.setText(bookToShowInfoOf.getBookwrapper_title());
+        tv.setText(bookToShowInfoOf.getTitle());
         tv = findViewById(R.id.info_book_author);
         String tmp;
-        tmp = bookToShowInfoOf.getBookwrapper_authors().toString();
+        tmp = bookToShowInfoOf.getAuthors().toString();
         if(tmp.length()>2){
             tv.setText(tmp.substring(1,tmp.length()-1));
         }
         tv = findViewById(R.id.info_book_ISBN);
-        tv.setText(bookToShowInfoOf.getBookwrapper_ISBN());
+        tv.setText(bookToShowInfoOf.getISBN());
+
+//        tv = findViewById(R.id.info_book_pages);
+//        tv.setText(Integer.toString(bookToShowInfoOf.getPages()));
+
         tv = findViewById(R.id.info_book_editionYear);
-        if(bookToShowInfoOf.getBookwrapper_editionYear() == 0){
+        if(bookToShowInfoOf.getEditionYear() == 0){
             tv.setText(R.string.add_book_info_not_available);
         }else{
-            tv.setText(Integer.toString(bookToShowInfoOf.getBookwrapper_editionYear()));
+            tv.setText(Integer.toString(bookToShowInfoOf.getEditionYear()));
         }
 
         tv = findViewById(R.id.info_book_description);
-        if(bookToShowInfoOf.getBookwrapper_description().length() == 0){
+        if(bookToShowInfoOf.getDescription().length() == 0){
             tv.setText(getString(R.string.add_book_no_description));
         }else{
-            tv.setText(bookToShowInfoOf.getBookwrapper_description());
+            tv.setText(bookToShowInfoOf.getDescription());
         }
 
         tv = findViewById(R.id.info_book_publisher);
-        if(bookToShowInfoOf.getBookwrapper_publisher().length() == 0){
+        if(bookToShowInfoOf.getPublisher().length() == 0){
             tv.setText(getString(R.string.add_book_info_not_available));
         }
         else{
-            tv.setText(bookToShowInfoOf.getBookwrapper_publisher());
+            tv.setText(bookToShowInfoOf.getPublisher());
         }
 
 
         tv = findViewById(R.id.info_book_categories);
-        tmp = bookToShowInfoOf.getBookwrapper_categories().toString();
+        tmp = bookToShowInfoOf.getCategories().toString();
         if(tmp.length()>2){
             tv.setText(tmp.substring(1,tmp.length()-1));
         }
@@ -123,34 +138,27 @@ public class InfoBook extends AppCompatActivity {
         }
         Glide.with(this).load(book.getBook_thumbnail_url()).into(iw);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        List<String> prova = new LinkedList<>();
+//        db.collection("books").document((bookToShowInfoOf.getBook_ISBN() + bookToShowInfoOf.getBook_userid())).get().addOnCompleteListener(task -> {
+//            DocumentSnapshot books_doc = task.getResult();
+//            Book bookforphoto = books_doc.toObject(Book.class);
+//        });
         //simo inizio
         horizontal_photo_list = (LinearLayout) findViewById(R.id.info_book_list_photo_container);
 
-
-        for (int i = 0; i < 4; i++) {
+        for_me = new LinkedList<>(book.getBook_photo_list().keySet());
+        for (int i = 0; i < book.getBook_photo_list().size(); i++) {
             horizontal_photo_list_element = getLayoutInflater().inflate(R.layout.cell_in_image_list, null);
-            final ImageView imageView = (ImageView) horizontal_photo_list_element.findViewById(R.id.image_in_horizontal_list_cell);
-            imageView.setImageResource(R.drawable.ic_addbook);
+            ImageView imageView = (ImageView) horizontal_photo_list_element.findViewById(R.id.image_in_horizontal_list_cell);
             horizontal_photo_list.addView(horizontal_photo_list_element);
-
-            try {
-                StorageReference  mImageRef = FirebaseStorage.getInstance().getReference().child("photo_conditions_by_user/books/" + book.getBook_ISBN() + bookToShowInfoOf.getBookwrapper_user_id() + i);
-                mImageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Glide.with(getApplicationContext()).load(uri).into(imageView);
-                    }
-                });
-            } catch (Exception e) {
-                img_not_found = 1;
-
-            }
+            StorageReference mImageRef = FirebaseStorage.getInstance().getReference(for_me.get(i));
+            Glide.with(getApplicationContext()).load(mImageRef).into(imageView);
         }
         //simo fine
 
         DocumentReference user_doc;
 
-        user_doc = db.collection("users").document(bookToShowInfoOf.getBookwrapper_user_id());
+        user_doc = db.collection("users").document(bookToShowInfoOf.getUser_id());
         user_doc.get().addOnCompleteListener(task -> {
             DocumentSnapshot doc = task.getResult();
             //thisUser = doc.toObject(User.class);
@@ -163,7 +171,7 @@ public class InfoBook extends AppCompatActivity {
             tv2.setClickable(true);
             tv2.setOnClickListener(view -> {
                 Intent toInfoUser = new Intent(getApplicationContext() , InfoUser.class);
-                toInfoUser.putExtra("usr_id", bookToShowInfoOf.getBookwrapper_user_id());
+                toInfoUser.putExtra("usr_id", bookToShowInfoOf.getUser_id());
                 toInfoUser.putExtra("usr_name",usr_name);
                 toInfoUser.putExtra("usr_city", usr_city);
                 toInfoUser.putExtra("usr_bio", usr_about);

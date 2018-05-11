@@ -102,6 +102,7 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
                     String publisher="";
                     String thumbnail = "";
                     String category = "";
+                    int pages= 0;
                     int editionYear=-1;
                     if(jsonObject.has("items")){
                         JSONObject tmp =  jsonObject.getJSONArray("items").getJSONObject(0);
@@ -109,6 +110,9 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
                             tmp = tmp.getJSONObject("volumeInfo");
                             if(tmp.has("title")){
                                 title = tmp.getString("title");
+                            }
+                            if(tmp.has("pageCount")){
+                                pages = tmp.getInt("pageCount");
                             }
                             if(tmp.has("authors")){
                                 JSONArray Jauthors = tmp.getJSONArray("authors");
@@ -146,7 +150,7 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
                         }
                     }
                     BookWrapper bookWrapper = new BookWrapper(ISBN,title,authors, publisher,editionYear,
-                            thumbnail, categories,"",0,0);
+                            thumbnail, categories,"",0,0, pages);
                     intent.putExtra("bookinfo", bookWrapper);
                     setResult(RESULT_OK,intent);
                     finish();

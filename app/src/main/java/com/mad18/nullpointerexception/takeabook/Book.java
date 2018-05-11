@@ -25,7 +25,26 @@ public class Book {
     String book_description;
     GeoPoint book_location;
 
-    private List<String> book_photos_of_book_from_user_url = new LinkedList<>();
+    public int getBook_pages() {
+        return book_pages;
+    }
+
+    public void setBook_pages(int book_pages) {
+        this.book_pages = book_pages;
+    }
+
+    private int book_pages=0;
+
+    public Map<String, Boolean> getBook_photo_list() {
+        return book_photo_list;
+    }
+
+    public void setBook_photo_list(Map<String, Boolean> book_photo_list) {
+        this.book_photo_list = book_photo_list;
+    }
+
+    Map<String,Boolean> book_photo_list= new HashMap<>();
+
 
     public Book() {}
 
@@ -37,7 +56,7 @@ public class Book {
         this.book_userid = userid;
     }
 
-    public Book(String ISBN, String title, String publisher, int editionYear, int condition, String user, Map<String,Boolean> authors, String description, String thumbnail, Map<String,Boolean> categories, GeoPoint geoPoint){
+    public Book(String ISBN, String title, String publisher, int editionYear, int condition, String user, Map<String,Boolean> authors, String description, String thumbnail, Map<String,Boolean> categories, GeoPoint geoPoint, int book_pages){
         book_ISBN = ISBN;
         book_title = title;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -60,22 +79,23 @@ public class Book {
         book_thumbnail_url = thumbnail;
         book_categories = categories;
         book_location = geoPoint;
+        this.book_pages = book_pages;
     }
 
     public Book (BookWrapper bw){
-        book_ISBN = bw.getBookwrapper_ISBN();
-        book_title = bw.getBookwrapper_title();
-        book_publisher = bw.getBookwrapper_publisher();
-        book_editionYear = bw.getBookwrapper_editionYear();
-        List<String> bwAuthors = bw.getBookwrapper_authors();
+        book_ISBN = bw.getISBN();
+        book_title = bw.getTitle();
+        book_publisher = bw.getPublisher();
+        book_editionYear = bw.getEditionYear();
+        List<String> bwAuthors = bw.getAuthors();
         book_authors = new HashMap<>();
         book_categories = new HashMap<>();
         for (String x : bwAuthors) {
             book_authors.put(x, true);
         }
-        book_description = bw.getBookwrapper_description();
-        book_thumbnail_url = bw.getBookwrapper_thumbnail_url();
-        List<String> bwCategories = bw.getBookwrapper_categories();
+        book_description = bw.getDescription();
+        book_thumbnail_url = bw.getThumbnail();
+        List<String> bwCategories = bw.getCategories();
         for (String y : bwCategories) {
             book_categories.put(y, true);
         }
@@ -88,15 +108,12 @@ public class Book {
         }
         book_condition = bw.getBook_condition();
         setBook_location(new GeoPoint(bw.getLat(),bw.getLongitude()));
-    }
+        List<String> allphotolist = bw.getPhoto_list();
+        for (String x : allphotolist) {
+            book_photo_list.put(x, true);
 
-
-    public List<String> getBook_photos_of_book_from_user_url() {
-        return book_photos_of_book_from_user_url;
-    }
-
-    public void setBook_photos_of_book_from_user_url(List<String> book_photos_of_book_from_user_url) {
-        this.book_photos_of_book_from_user_url = book_photos_of_book_from_user_url;
+        }
+        book_pages = bw.getPages();
     }
 
     public String getBook_ISBN() {

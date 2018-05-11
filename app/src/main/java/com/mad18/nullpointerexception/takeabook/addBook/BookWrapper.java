@@ -3,10 +3,14 @@ package com.mad18.nullpointerexception.takeabook.addBook;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.firestore.GeoPoint;
 import com.mad18.nullpointerexception.takeabook.Book;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * La classe BookWrapper si occupa di creare un oggetto in cui possano essere memorizzati i dati
@@ -24,165 +28,181 @@ public class BookWrapper extends Book implements Parcelable {
         public BookWrapper createFromParcel(Parcel in) {
             return new BookWrapper(in);
         }
+
         public BookWrapper[] newArray(int size) {
             return new BookWrapper[size];
         }
     };
-    private String bookwrapper_ISBN;
-    private String bookwrapper_title;
-    //first author qui assente
-    private String bookwrapper_publisher;
-    private String bookwrapper_thumbnail_url;
-    private int bookwrapper_editionYear;
-    //book_condition qui assente
-    private String bookwrapper_user_id;
-    // private Map<String,Boolean> bookwrapper_authors;
-    private List<String> bookwrapper_authors; //in book map
-    private List<String> bookwrapper_categories; // in book map
-    private String bookwrapper_description;
-    private double bookwrapper_lat, bookwrapper_longitude; //in book abbiamo geopoint
+    private String ISBN;
+    private String title;
+   // private Map<String,Boolean> authors;
+    private List<String> authors;
+    private String publisher;
+    private int editionYear;
+    private String thumbnail;
+    private List<String> categories;
+    private String user_id;
+    private double lat, longitude;
 
-
-    private List<String> bookwrapper_photos_of_book_from_user_url = new LinkedList<>();
-
-    //Constructor a partire dai campi inseriti per la creazione di bookwrapper senza partire da un Book
-    public BookWrapper(String bookwrapper_ISBN, String bookwrapper_title, List<String> bookwrapper_authors, String bookwrapper_publisher, int bookwrapper_editionYear, String bookwrapper_thumbnail_url, List<String> bookwrapper_categories, String bookwrapper_description, double bookwrapper_lat, double bookwrapper_longitude){
-        this.bookwrapper_ISBN = bookwrapper_ISBN;
-        this.bookwrapper_title = bookwrapper_title;
-        this.bookwrapper_authors = bookwrapper_authors;
-        this.bookwrapper_publisher = bookwrapper_publisher;
-        this.bookwrapper_editionYear = bookwrapper_editionYear;
-        this.bookwrapper_thumbnail_url = bookwrapper_thumbnail_url;
-        this.bookwrapper_categories = bookwrapper_categories;
-        this.bookwrapper_description = bookwrapper_description;
-        this.bookwrapper_user_id = "";
-        this.bookwrapper_lat = bookwrapper_lat;
-        this.bookwrapper_longitude = bookwrapper_longitude;
+    public int getPages() {
+        return pages;
     }
 
-    //Costruttore per creare un Bookwrapper a partire da un Book già esistente
+    public void setPages(int pages) {
+        this.pages = pages;
+    }
+
+    private int pages=0;
+
+    public List<String> getPhoto_list() {
+        return photo_list;
+    }
+
+    public void setPhoto_list(List<String> photo_list) {
+        this.photo_list = photo_list;
+    }
+
+    private List<String> photo_list;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    private String description;
+
+    //Constructor
+    public BookWrapper(String ISBN,String title,List<String> authors, String publisher, int editionYear, String thumbnail,
+                       List<String> categories, String description, double lat, double longitude, int pages){
+        this.ISBN = ISBN;
+        this.title = title;
+        this.authors = authors;
+        this.publisher = publisher;
+        this.editionYear = editionYear;
+        this.thumbnail = thumbnail;
+        this.categories = categories;
+        this.description = description;
+        this.user_id = "";
+        this.lat = lat;
+        this.longitude = longitude;
+        photo_list = new LinkedList<>();
+        this.pages=pages;
+    }
+
+
     public BookWrapper(Book book){
-        this.bookwrapper_ISBN = book.getBook_ISBN();
-        this.bookwrapper_title = book.getBook_title();
-        this.bookwrapper_authors = new LinkedList<>(book.getBook_authors().keySet());
-        this.bookwrapper_publisher = book.getBook_publisher();
-        this.bookwrapper_editionYear = book.getBook_editionYear();
-        this.bookwrapper_thumbnail_url = book.getBook_thumbnail_url();
-        this.bookwrapper_categories = new LinkedList<>(book.getBook_categories().keySet());
-        this.bookwrapper_description = book.getBook_description();
-        this.bookwrapper_user_id = book.getBook_userid();
-        this.bookwrapper_lat = book.getBook_location().getLatitude();
-        this.bookwrapper_longitude = book.getBook_location().getLongitude();
+        this.ISBN = book.getBook_ISBN();
+        this.title = book.getBook_title();
+        this.authors = new LinkedList<>(book.getBook_authors().keySet());
+        this.publisher = book.getBook_publisher();
+        this.editionYear = book.getBook_editionYear();
+        this.thumbnail = book.getBook_thumbnail_url();
+        this.categories = new LinkedList<>(book.getBook_categories().keySet());
+        this.description = book.getBook_description();
+        this.user_id = book.getBook_userid();
+        this.lat = book.getBook_location().getLatitude();
+        this.longitude = book.getBook_location().getLongitude();
+        this.photo_list = new LinkedList<>(book.getBook_photo_list().keySet());
+        this.pages= book.getBook_pages();
     }
 
-    public List<String> getPhotos_of_book_from_user_url() {
-        return bookwrapper_photos_of_book_from_user_url;
+    public String getISBN() {
+        return ISBN;
     }
 
-    public void setPhotos_of_book_from_user_url(List<String> photos_of_book_from_user_url) {
-        this.bookwrapper_photos_of_book_from_user_url = photos_of_book_from_user_url;
+    public void setISBN(String ISBN) {
+        this.ISBN = ISBN;
     }
 
-    public String getBookwrapper_description() {
-        return bookwrapper_description;
+    public String getTitle() {
+        return title;
     }
 
-    public void setBookwrapper_description(String bookwrapper_description) {
-        this.bookwrapper_description = bookwrapper_description;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getBookwrapper_ISBN() {
-        return bookwrapper_ISBN;
+    public List<String> getAuthors() {
+        return authors;
     }
 
-    public void setBookwrapper_ISBN(String bookwrapper_ISBN) {
-        this.bookwrapper_ISBN = bookwrapper_ISBN;
+    public void setAuthors(List<String> authors) {
+        this.authors = authors;
     }
 
-    public String getBookwrapper_title() {
-        return bookwrapper_title;
+    public String getPublisher() {
+        return publisher;
     }
 
-    public void setBookwrapper_title(String bookwrapper_title) {
-        this.bookwrapper_title = bookwrapper_title;
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
     }
 
-    public List<String> getBookwrapper_authors() {
-        return bookwrapper_authors;
+    public int getEditionYear() {
+        return editionYear;
     }
 
-    public void setBookwrapper_authors(List<String> bookwrapper_authors) {
-        this.bookwrapper_authors = bookwrapper_authors;
+    public void setEditionYear(int editionYear) {
+        this.editionYear = editionYear;
     }
 
-    public String getBookwrapper_publisher() {
-        return bookwrapper_publisher;
+    public String getThumbnail() {
+        return thumbnail;
     }
 
-    public void setBookwrapper_publisher(String bookwrapper_publisher) {
-        this.bookwrapper_publisher = bookwrapper_publisher;
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
-    public int getBookwrapper_editionYear() {
-        return bookwrapper_editionYear;
+    public List<String> getCategories() {
+        return categories;
     }
 
-    public void setBookwrapper_editionYear(int bookwrapper_editionYear) {
-        this.bookwrapper_editionYear = bookwrapper_editionYear;
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
     }
 
-    public String getBookwrapper_thumbnail_url() {
-        return bookwrapper_thumbnail_url;
+    public String getUser_id() {
+        return user_id;
     }
 
-    public void setBookwrapper_thumbnail_url(String bookwrapper_thumbnail_url) {
-        this.bookwrapper_thumbnail_url = bookwrapper_thumbnail_url;
+    public double getLat() {
+        return lat;
     }
 
-    public List<String> getBookwrapper_categories() {
-        return bookwrapper_categories;
+    public void setLat(double lat) {
+        this.lat = lat;
     }
 
-    public void setBookwrapper_categories(List<String> bookwrapper_categories) {
-        this.bookwrapper_categories = bookwrapper_categories;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public String getBookwrapper_user_id() {
-        return bookwrapper_user_id;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
-    public double getBookwrapper_lat() {
-        return bookwrapper_lat;
-    }
-
-    public void setBookwrapper_lat(double bookwrapper_lat) {
-        this.bookwrapper_lat = bookwrapper_lat;
-    }
-
-    public double getBookwrapper_longitude() {
-        return bookwrapper_longitude;
-    }
-
-    public void setBookwrapper_longitude(double bookwrapper_longitude) {
-        this.bookwrapper_longitude = bookwrapper_longitude;
-    }
-
-    public void setBookwrapper_user_id(String bookwrapper_user_id) {
-        this.bookwrapper_user_id = bookwrapper_user_id;
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 
     public BookWrapper(Parcel in){
-        this.bookwrapper_ISBN = in.readString();
-        this.bookwrapper_title = in.readString();
-        this.bookwrapper_authors = in.createStringArrayList();
-        this.bookwrapper_publisher = in.readString();
-        this.bookwrapper_editionYear = in.readInt();
-        this.bookwrapper_thumbnail_url = in.readString();
-        this.bookwrapper_categories = in.createStringArrayList();
-        this.bookwrapper_description = in.readString();
-        this.bookwrapper_user_id = in.readString();
-        this.bookwrapper_longitude = in.readDouble();
-        this.bookwrapper_lat = in.readDouble();
+        this.ISBN = in.readString();
+        this.title = in.readString();
+        this.authors = in.createStringArrayList();
+        this.publisher = in.readString();
+        this.editionYear = in.readInt();
+        this.thumbnail = in.readString();
+        this.categories = in.createStringArrayList();
+        this.description = in.readString();
+        this.user_id = in.readString();
+        this.longitude = in.readDouble();
+        this.lat = in.readDouble();
+        this.photo_list = in.createStringArrayList();
+        this.pages = in.readInt();
     }
     @Override
     public int describeContents() {
@@ -197,36 +217,43 @@ public class BookWrapper extends Book implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.bookwrapper_ISBN);
-        dest.writeString(this.bookwrapper_title);
-        //dest.writeMap(this.bookwrapper_authors);
-        dest.writeStringList(this.bookwrapper_authors);
-        dest.writeString(this.bookwrapper_publisher);
-        dest.writeInt(this.bookwrapper_editionYear);
-        dest.writeString(this.bookwrapper_thumbnail_url);
-        dest.writeStringList(this.bookwrapper_categories);
-        dest.writeString(this.bookwrapper_description);
-        dest.writeString(this.bookwrapper_user_id);
-        dest.writeDouble(this.bookwrapper_lat);
-        dest.writeDouble(this.bookwrapper_longitude);
+        dest.writeString(this.ISBN);
+        dest.writeString(this.title);
+        //dest.writeMap(this.authors);
+        dest.writeStringList(this.authors);
+        dest.writeString(this.publisher);
+        dest.writeInt(this.editionYear);
+        dest.writeString(this.thumbnail);
+        dest.writeStringList(this.categories);
+        dest.writeString(this.description);
+        dest.writeString(this.user_id);
+        dest.writeDouble(this.lat);
+        dest.writeDouble(this.longitude);
+        dest.writeStringList(this.photo_list);
+        dest.writeInt(this.pages);
     }
     @Override
     public String toString() {
-        String Totauthors= ", bookwrapper_authors='";
-//        for (String key : bookwrapper_authors.keySet()) {
+        String Totauthors= ", authors='";
+//        for (String key : authors.keySet()) {
 //            Totauthors = Totauthors + key + '\'';
 //        }
-        Totauthors = Totauthors +this.bookwrapper_authors.toString()+'\'';
+        Totauthors = Totauthors +this.authors.toString()+'\'';
+        String allphotolist=", photolist='";
+        allphotolist = allphotolist +this.photo_list.toString()+'\'';
 
-        String SeditionYear = Integer.toString(bookwrapper_editionYear);
+        String SeditionYear = Integer.toString(editionYear);
+        String Spages = Integer.toString(this.pages);
 
-        return "BookWrapper{"+"bookwrapper_ISBN='"+ bookwrapper_ISBN +'\''+
-                ", bookwrapper_title='" + bookwrapper_title + '\'' +
+        return "BookWrapper{"+"ISBN='"+ISBN+'\''+
+                ", title='" + title + '\'' +
                 Totauthors +
-                ", bookwrapper_publisher='" + bookwrapper_publisher + '\'' +
-                ", bookwrapper_editionYear='" + SeditionYear + '\'' +
-                ", bookwrapper_description='" + bookwrapper_description + '\'' +
-                ", bookwrapper_user_id='" + bookwrapper_user_id + '\'' +
+                ", publisher='" + publisher + '\'' +
+                ", editionYear='" + SeditionYear + '\'' +
+                ", description='" + description + '\'' +
+                ", user_id='" + user_id + '\'' +
+                allphotolist+
+                ", pages='" + Spages + '\'' +
                 '}';
     }
 }

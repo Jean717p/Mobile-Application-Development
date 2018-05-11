@@ -59,7 +59,7 @@
     <!--SearchBook Related-->
     <string name="search_book_text_title">Title</string>
     <string name="search_book_text_category">Category</string>
-    <string name="search_book_text_ISBN">bookwrapper_ISBN</string>
+    <string name="search_book_text_ISBN">ISBN</string>
     <string name="search_book_text_author">Author</string>
     <string name="search_book_button_text">Search</string>
     <string name="search_book_progress_bar_text">Searching...</string>
@@ -72,7 +72,7 @@
     <string name="info_book_label_author">Author:</string>
     <string name="info_book_label_edition_year">Edition year:</string>
     <string name="info_book_label_publisher">Publisher:</string>
-    <string name="info_book_label_description">Description</string>
+    <string name="info_book_label_description">Description:</string>
     <string name="info_book_label_owner">Owner:</string>
     <string name="info_book_label_book_conditions">Conditions:</string>
     <string name="info_book_label_book_num_pages">N. pages:</string>
@@ -80,18 +80,18 @@
 
     <!--Barcode Related-->
     <string name="read_barcode">Read Barcode</string>
-    <string name="add_book_read_ISBN">Search bookwrapper_ISBN details</string>
+    <string name="add_book_read_ISBN">Search ISBN details</string>
     <string name="add_a_book">Add a book</string>
     <string name="add_book_title">"Title"</string>
     <string name="add_book_author">"Author(s)"</string>
     <string name="add_book_edition_year">"Edition year"</string>
-    <string name="add_book_ISBN">"bookwrapper_ISBN"</string>
+    <string name="add_book_ISBN">"ISBN"</string>
     <string name="add_book_publisher">"Publisher"</string>
     <string name="add_book_helper_text_ISBN">"Write exactly 13 numbers"</string>
     <string name="add_book_description">"Description"</string>
     <string name="add_book_category">"Category"</string>
     <string name="add_book_info_not_available">"Information not available"</string>
-    <string name="add_book_no_description">"No bookwrapper_description"</string>
+    <string name="add_book_no_description">"No description"</string>
     <string name="add_book_error">"Any book has been inserted"</string>
 
 
@@ -104,12 +104,12 @@
     </string-array>
 
     <!--Fragment Top fab menu items -->
-    <string name="top_frag_floating_action_menu_ISBN">Search by bookwrapper_ISBN</string>
+    <string name="top_frag_floating_action_menu_ISBN">Search by ISBN</string>
     <string name="top_frag_floating_action_menu_category">Search by category</string>
-    <string name="top_frag_floating_action_menu_title">Search by bookwrapper_title</string>
+    <string name="top_frag_floating_action_menu_title">Search by title</string>
     <string name="top_frag_floating_action_menu_author">Search by author</string>
     <string name="top_frag_floating_action_menu_search">Back</string>
-    <string name="bookwrapper_title">Search</string>
+    <string name="title">Search</string>
 
 
     <!-- Facebook login -->

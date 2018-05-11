@@ -45,6 +45,7 @@ import java.util.Map;
 
 public class editProfile extends AppCompatActivity {
     private final String TAG = "editProfile";
+    private static final int JPEG_COMPRESSION_QUALITY = 40;
     private SharedPreferences sharedPref;
     //    SharedPreferences is an object point to a file of key-value pairs, it works for small amount of data or settings
 //    that need to be shared inside activities in a project, it is managed by the framework and can be private or shared
@@ -312,7 +313,7 @@ public class editProfile extends AppCompatActivity {
     private void selectUserImg(){
         //dialog box che compare quando vogliamo inserire l'immagine profilo
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
-        //pictureDialog.setBookwrapper_title("Select Action");
+        //pictureDialog.setTitle("Select Action");
         String[] pictureDialogItems = {
                 getString(R.string.photo_from_gallery),
                 getString(R.string.photo_from_camera),
@@ -388,7 +389,7 @@ public class editProfile extends AppCompatActivity {
         try {
             out = new FileOutputStream(file);
             // Use the compress method on the BitMap object to write image to the OutputStream
-            if(bitmapImage.compress(Bitmap.CompressFormat.JPEG, 15, out)==false){
+            if(bitmapImage.compress(Bitmap.CompressFormat.JPEG, JPEG_COMPRESSION_QUALITY, out)==false){
                 //decrementare secondo parametro per compressare
                 out.close();
                 return null;
