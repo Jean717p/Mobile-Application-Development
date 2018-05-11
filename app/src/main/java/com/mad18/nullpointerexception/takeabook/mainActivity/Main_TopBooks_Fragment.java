@@ -97,8 +97,10 @@ public class Main_TopBooks_Fragment extends Fragment {
                         Intent search = new Intent(getActivity(), SearchBook.class);
                         search.putExtra("action", "ISBN");
                         if(mainActivity.thisUser!=null){
-                            search.putExtra("user_long",mainActivity.thisUser.getUsr_geoPoint().getLongitude());
-                            search.putExtra("user_lat",mainActivity.thisUser.getUsr_geoPoint().getLatitude());
+                            if(mainActivity.thisUser.getUsr_geoPoint()!=null){
+                                search.putExtra("user_long",mainActivity.thisUser.getUsr_geoPoint().getLongitude());
+                                search.putExtra("user_lat",mainActivity.thisUser.getUsr_geoPoint().getLatitude());
+                            }
                         }
                         startActivity(search);
                     }

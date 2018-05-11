@@ -60,6 +60,7 @@ import com.mad18.nullpointerexception.takeabook.LoginActivity;
 import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.SplashScreenActivity;
 import com.mad18.nullpointerexception.takeabook.User;
+import com.mad18.nullpointerexception.takeabook.addBook.BookWrapper;
 import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
 import  com.github.clans.fab.FloatingActionMenu;
 import java.io.File;
@@ -79,6 +80,7 @@ import static java.util.stream.Collectors.toList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private final String TAG = "MainActivity";
+    private final int REQUEST_ADDBOOK = 3;
     private Toolbar toolbar;
     private SharedPreferences sharedPref;
     private FirebaseFirestore db;
@@ -91,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean isMyBooksSorted;
     private ViewPager viewPager;
     private MyPagerAdapter myPagerAdapter;
+    private TabLayout tabLayout;
 
     NavigationView navigationView;
     //Called when a fragment is attached as a child of this fragment.
@@ -149,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle("Books Circle");
         // Create an instance of the tab layout from the view.
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         // Set the text for each tab.
         tabLayout.addTab(tabLayout.newTab().setText(R.string.top_books));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.my_library));
@@ -264,6 +267,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (id) {
             case R.id.nav_addbook:
                 intent = new Intent(context,com.mad18.nullpointerexception.takeabook.addBook.AddBook.class);
+                //startActivityForResult(intent,REQUEST_ADDBOOK);
                 startActivity(intent);
                 break;
             case R.id.nav_showprofile:
@@ -417,6 +421,57 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public List<Book> getMyBooks() {
         return myBooks;
     }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        switch (requestCode){
+//            case REQUEST_ADDBOOK:
+//                if(resultCode == RESULT_OK){
+//                    isMyBooksSorted = false;
+//                    TabLayout.Tab t = tabLayout.getTabAt(1);
+//                    if(data!=null){
+//                        Bundle extras = data.getExtras();
+//                        if(extras!=null){
+//                            BookWrapper bookWrapper = extras.getParcelable("newbook");
+//                            if(bookWrapper!=null){
+//                                myBooks.add(new Book(bookWrapper));
+//                            }
+//                        }
+//                    }
+//                    if(t!=null){
+//                        if(t.isSelected()){
+//                            MyPagerAdapter adapter = (MyPagerAdapter) viewPager.getAdapter();
+//                            Main_MyLibrary_Fragment fragment = (Main_MyLibrary_Fragment) adapter.getItem(viewPager.getCurrentItem());
+//                            if(fragment!=null){
+//                                if(isMyBooksSorted==false){
+////                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+////                                        Comparator<Book> byTitle = Comparator.comparing(b->b.getBook_title());
+////                                        Comparator<Book> byAuthor = Comparator.comparing(b->b.getBook_first_author());
+////                                        myBooks = myBooks.stream().sorted(byAuthor.thenComparing(byTitle)).collect(toList());
+////                                    }
+////                                    else{
+////                                        Collections.sort(myBooks, (a, b) -> {
+////                                            if(a.getBook_first_author().equals(b.getBook_first_author())){
+////                                                return a.getBook_title().compareTo(b.getBook_title());
+////                                            }
+////                                            else{
+////                                                return a.getBook_first_author().compareTo(b.getBook_first_author());
+////                                            }
+////                                        });
+////                                    }
+//                                    fragment.updateView(myBooks);
+//                                }
+//                            }
+//                        }
+//                        else{
+//                            t.select();
+//                        }
+//                    }
+//                }
+//                break;
+//        }
+//    }
 
     public static class MyPagerAdapter extends FragmentStatePagerAdapter {
         SparseArray<Fragment> registeredFragments = new SparseArray<>();

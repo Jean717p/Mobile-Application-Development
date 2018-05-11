@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.mad18.nullpointerexception.takeabook.R;
 
@@ -20,7 +22,9 @@ public class SearchBook_search extends Fragment {
     private View myFragmentView;
     private int mParam1;
     private String mParam2;
-
+    private Button search;
+    private ProgressBar progressBar;
+    private TextView progressBarText;
     public SearchBook_search() {
         // Required empty public constructor
     }
@@ -50,7 +54,10 @@ public class SearchBook_search extends Fragment {
         myFragmentView = inflater.inflate(R.layout.fragment_search_book_search, container, false);
         String searchBase = getActivity().getIntent().getStringExtra("action");
         EditText text = myFragmentView.findViewById(R.id.search_book_edit_text);
-        Button searchButton = myFragmentView.findViewById(R.id.search_book_button);
+        progressBar = (ProgressBar) myFragmentView.findViewById(R.id.search_progress_bar);
+        search = (Button) myFragmentView.findViewById(R.id.search_book_button);
+        progressBarText = myFragmentView.findViewById(R.id.search_book_progress_bar_text);
+        ProgressBarVisibility(View.INVISIBLE);
         switch (searchBase){
             case "Title":
                 text.setHint(getString(R.string.search_book_text_title));
@@ -65,11 +72,24 @@ public class SearchBook_search extends Fragment {
                 text.setInputType(InputType.TYPE_CLASS_NUMBER);
                 break;
         }
-        searchButton.setOnClickListener(view -> {
+        search.setOnClickListener(view -> {
+            //progress bar visible and button search invisible
+
+            ProgressBarVisibility(View.VISIBLE);
+            search.setVisibility(View.INVISIBLE);
             SearchBook s = (SearchBook) getActivity();
             s.searchForBook(searchBase);});
 
         return myFragmentView;
     }
 
+
+    void ProgressBarVisibility(int v){
+        progressBar.setVisibility(v);
+        progressBarText.setVisibility(v);
+    }
+
+    void ButtonSearchVisibility(int v){
+        search.setVisibility(v);
+    }
 }

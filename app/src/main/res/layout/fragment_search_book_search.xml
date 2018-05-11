@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".searchBook.SearchBook">
 
-    <LinearLayout
-
-        android:id="@+id/search_book_text"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="166dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="76dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+       android:layout_gravity="center">
+
+
 
 
         <android.support.design.widget.TextInputLayout
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="64dp">
+            android:layout_marginTop="64dp"/>
 
             <EditText
                 android:id="@+id/search_book_edit_text"
@@ -32,16 +29,28 @@
                 android:maxLines="1"
 
                 />
-        </android.support.design.widget.TextInputLayout>
+            <ProgressBar
+                android:id="@+id/search_progress_bar"
+                android:layout_below="@id/search_book_edit_text"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerInParent="true"
+                android:indeterminate="true"
+                 tools:layout_editor_absoluteX="132dp"
+                tools:layout_editor_absoluteY="223dp" />
 
-
-    </LinearLayout>
-
+        <TextView
+            android:id="@+id/search_book_progress_bar_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/search_progress_bar"
+            android:layout_centerHorizontal="true"
+            android:padding="16dp"
+            android:text="@string/search_book_progress_bar_text" />
     <Button
         android:id="@+id/search_book_button"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/search_book_text"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_margin="16dp"
@@ -52,5 +61,5 @@
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
         android:textColor="@android:color/white"
         android:textSize="13sp" />
-
-</RelativeLayout>
+    </RelativeLayout>
+</android.support.v4.widget.NestedScrollView>

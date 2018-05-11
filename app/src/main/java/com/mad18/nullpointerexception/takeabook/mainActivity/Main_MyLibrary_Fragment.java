@@ -5,7 +5,9 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -27,6 +29,8 @@ import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.addBook.AddBook;
 import com.mad18.nullpointerexception.takeabook.addBook.BookWrapper;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.animation.Animation;
@@ -35,7 +39,9 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.Scroller;
 import android.widget.Toast;
 
+import static android.app.Activity.RESULT_OK;
 import static com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.thisUser;
+import static java.util.stream.Collectors.toList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +49,7 @@ import static com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity
 public class Main_MyLibrary_Fragment extends Fragment {
 
     private String title;
+    private final int REQUEST_ADDBOOK = 3;
     private int page;
     private View myFragmentView;
     CoordinatorLayout mainContent;
@@ -120,6 +127,7 @@ public class Main_MyLibrary_Fragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent addbook = new Intent(getActivity(), AddBook.class);
+                    //startActivityForResult(addbook,REQUEST_ADDBOOK);
                     startActivity(addbook);
                 }
             });
@@ -154,4 +162,26 @@ public class Main_MyLibrary_Fragment extends Fragment {
         scaleSet.playTogether(xScaleAnimator, yScaleAnimator);
         scaleSet.start();
     }
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        List<Book> books = myAdapter.getData();
+//        switch (requestCode){
+//            case REQUEST_ADDBOOK:
+//                if(resultCode == RESULT_OK){
+//                    if(data!=null){
+//                        Bundle extras = data.getExtras();
+//                        if(extras!=null){
+//                            BookWrapper bookWrapper = extras.getParcelable("newbook");
+//                            if(bookWrapper!=null){
+//                                books.add(new Book(bookWrapper));
+//                                updateView(books);
+//                            }
+//                        }
+//                    }
+//                }
+//                break;
+//        }
+//    }
 }

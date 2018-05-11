@@ -148,6 +148,7 @@ public class InfoBook extends AppCompatActivity {
                 });
             } catch (Exception e) {
                 img_not_found = 1;
+
             }
         }
         //simo fine

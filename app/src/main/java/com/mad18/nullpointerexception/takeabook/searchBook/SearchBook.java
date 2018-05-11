@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -74,10 +75,12 @@ public class SearchBook extends AppCompatActivity {
     private SearchBookPagerAdapter myAdapter;
     private TabLayout tabLayout;
     private Boolean resultFragmentChanged;
+    private Boolean Issearching;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Issearching = false;
         setContentView(R.layout.search_book);
         setTitle(R.string.title_activity_search_book);
         searchBase = getIntent().getStringExtra("action");
@@ -107,9 +110,19 @@ public class SearchBook extends AppCompatActivity {
                 SearchBookPagerAdapter adapter = (SearchBookPagerAdapter) viewPager.getAdapter();
                 switch (tab.getPosition()){
                     case 0:
+                        if(Issearching==false){
+                            SearchBook_search search_f = (SearchBook_search) adapter.getRegisteredFragment(viewPager.getCurrentItem());
+                            if(search_f!=null){
+                                search_f.ProgressBarVisibility(View.INVISIBLE);
+                                search_f.ButtonSearchVisibility(View.VISIBLE);
+                            }
+                            //chiamiamo un metodo del fragment che mette il bottone visibile e la progress
+                            //bar invisibile
+                        }
                         break;
                     case 1:
                         if(resultFragmentChanged){
+                            Issearching=false;
                             SearchBook_found f = (SearchBook_found) adapter.getRegisteredFragment(viewPager.getCurrentItem());
                             if(f!=null){
                                 f.updateView(booksFound);
@@ -197,6 +210,7 @@ public class SearchBook extends AppCompatActivity {
     }
 
     public void searchForBook(String flag){
+        Issearching = true;
         EditText text = findViewById(R.id.search_book_edit_text);
         String to_find;
         to_find = text.getText().toString();

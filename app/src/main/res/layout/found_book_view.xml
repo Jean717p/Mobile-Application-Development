@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="wrap_content" android:layout_height="wrap_content"
+    app:cardElevation="5dp"
+    android:id="@+id/found_book_card_view"
+    android:layout_margin="7dp">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/found_book_picture"
+            android:layout_width="match_parent"
+            android:layout_height="210dp"
+            android:scaleType="fitXY" />
+        <View android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/found_book_picture" android:background="@android:color/darker_gray"/>
+        <TextView android:id="@+id/found_book_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/divider"
+            android:layout_toLeftOf="@+id/image_overflow"
+            android:maxLines="2"
+            android:padding="10dp"
+            android:text="Empty for now"
+            android:textSize="13sp"/>
+        <ImageView android:id="@+id/image_overflow"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/found_book_title"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/divider"
+            android:layout_marginRight="7dp"
+            android:src="@drawable/ic_baseline_more_vert_24px"/>
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

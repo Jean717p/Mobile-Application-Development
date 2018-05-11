@@ -106,7 +106,7 @@ public class SearchBook_found extends Fragment {
                         });
                     }
                 });
-        rec.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        rec.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         rec.setScrollContainer(true);
         rec.setVerticalScrollBarEnabled(true);
         rec.setAdapter(myAdapter);

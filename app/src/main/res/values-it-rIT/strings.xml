@@ -4,7 +4,7 @@
 
     <!--Profile-->
     <string name="profile_photo">Foto profilo</string>
-    <string name="Username">Nome</string>
+    <string name="Username">Nome utente</string>
     <string name="City">Città</string>
     <string name="Email">Email</string>
     <string name="AboutMe">Bio</string>
@@ -27,6 +27,7 @@
     <string name="title_activity_login_activity">Login utente</string>
     <string name="title_activity_search_book">Cerca un libro</string>
     <string name="title_activity_info_book">Dettagli libro</string>
+    <string name="title_activity_info_user">Informazioni utente</string>
 
     <!--Photo-->
     <string name="photo_from_gallery">Seleziona una foto dalla galleria</string>
@@ -65,6 +66,7 @@
     <string name="search_book_text_ISBN">ISBN</string>
     <string name="search_book_text_author">Autore</string>
     <string name="search_book_button_text">Cerca</string>
+    <string name="search_book_progress_bar_text">Sto cercando...</string>
 
 
     <!--InfoBook Related-->
@@ -74,7 +76,7 @@
     <string name="info_book_label_author">Autore:</string>
     <string name="info_book_label_edition_year"> Anno edizione:</string>
     <string name="info_book_label_publisher">Editore:</string>
-    <string name="info_book_label_description">Descrizione:</string>
+    <string name="info_book_label_description">Descrizione</string>
     <string name="info_book_label_owner">Appartiene a:</string>
     <string name="info_book_label_book_conditions">Condizioni:</string>
 

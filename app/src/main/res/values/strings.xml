@@ -28,6 +28,7 @@
     <string name="title_activity_login_activity">Login_activity</string>
     <string name="title_activity_search_book">Search a book</string>
     <string name="title_activity_info_book">Book details</string>
+    <string name="title_activity_info_user">Info user</string>
 
     <!--Photo-->
     <string name="photo_from_gallery">Select photo from gallery</string>
@@ -58,6 +59,7 @@
     <string name="search_book_text_ISBN">ISBN</string>
     <string name="search_book_text_author">Author</string>
     <string name="search_book_button_text">Search</string>
+    <string name="search_book_progress_bar_text">Searching...</string>
 
     <!--InfoBook Related-->
     <string name="info_book_label_title">Title:</string>
@@ -66,7 +68,7 @@
     <string name="info_book_label_author">Author:</string>
     <string name="info_book_label_edition_year">Edition year:</string>
     <string name="info_book_label_publisher">Publisher:</string>
-    <string name="info_book_label_description">Description:</string>
+    <string name="info_book_label_description">Description</string>
     <string name="info_book_label_owner">Owner:</string>
     <string name="info_book_label_book_conditions">Conditions:</string>
 

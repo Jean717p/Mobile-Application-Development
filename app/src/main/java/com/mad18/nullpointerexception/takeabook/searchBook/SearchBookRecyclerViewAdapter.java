@@ -40,7 +40,7 @@ class SearchBookRecyclerViewAdapter extends RecyclerView.Adapter<SearchBookRecyc
     public SearchBookRecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         LayoutInflater minflater = LayoutInflater.from(myContext);
-        view = minflater.inflate(R.layout.cardview_item_book_library, parent , false);
+        view = minflater.inflate(R.layout.found_book_view, parent , false);
         return new SearchBookRecyclerViewAdapter.MyViewHolder(view);
     }
 
@@ -72,9 +72,9 @@ class SearchBookRecyclerViewAdapter extends RecyclerView.Adapter<SearchBookRecyc
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            tv_book_title = (TextView) itemView.findViewById(R.id.my_library_book_title);
-            iv_book_thumbnail = (ImageView) itemView.findViewById(R.id.my_library_book_picture);
-            cardView = (CardView) itemView.findViewById(R.id.my_library_card_view);
+            tv_book_title = (TextView) itemView.findViewById(R.id.found_book_title);
+            iv_book_thumbnail = (ImageView) itemView.findViewById(R.id.found_book_picture);
+            cardView = (CardView) itemView.findViewById(R.id.found_book_card_view);
         }
 
         public void bind(final Book item, final SearchBookRecyclerViewAdapter.OnItemClickListener listener) {

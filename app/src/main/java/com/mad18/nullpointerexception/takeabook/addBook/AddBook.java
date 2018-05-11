@@ -224,6 +224,7 @@ public class AddBook extends AppCompatActivity {
             toast.show();
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
@@ -246,6 +247,9 @@ public class AddBook extends AppCompatActivity {
                 eet = findViewById(R.id.add_book_extended_edit_text_ISBN);
                 if(eet.getText().toString().length()>0) {
                     storeBookEditData();
+//                    Intent intent = new Intent();
+//                    intent.putExtra("newbook",new BookWrapper(bookToAdd));
+//                    setResult(RESULT_OK,intent);
                     finish();
                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                     return true;
@@ -346,7 +350,7 @@ public class AddBook extends AppCompatActivity {
         }
         eet = findViewById(R.id.add_book_extended_edit_text_Publisher);
 
-            bookToAdd.setBook_publisher(eet.getText().toString());
+        bookToAdd.setBook_publisher(eet.getText().toString());
 
         for(int j= 0; j<bookImgMap.size();j++ ) {
             mImageRef = FirebaseStorage.getInstance().getReference().child("photo_conditions_by_user/books/" + bookToAdd.getBook_ISBN() + user.getUid() + j);
@@ -364,9 +368,6 @@ public class AddBook extends AppCompatActivity {
                 }
             }
         }
-
-
-
 
         books.document(bookToAdd.getBook_ISBN() + user.getUid()).set(bookToAdd);
         //Aggiunta libro all'elenco dell'utente

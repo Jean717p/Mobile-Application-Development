@@ -35,7 +35,9 @@ public class MyLibraryRecyclerViewAdapter extends RecyclerView.Adapter<MyLibrary
     public void setData(List<Book> mData){
         this.mData = mData;
     }
-
+    public List<Book> getData(){
+        return this.mData;
+    }
     //fine simo
 
     @NonNull
