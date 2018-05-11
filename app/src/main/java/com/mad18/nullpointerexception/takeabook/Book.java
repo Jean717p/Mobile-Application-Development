@@ -82,6 +82,7 @@ public class Book {
         book_userid = bw.getBook_userid();
         book_first_author = bw.getBook_first_author();
         book_condition = bw.getBook_condition();
+        setBook_location(new GeoPoint(bw.getLat(),bw.getLongitude()));
     }
 
 

@@ -26,6 +26,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -33,14 +34,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.mad18.nullpointerexception.takeabook.Book;
 import com.mad18.nullpointerexception.takeabook.InfoBook;
 import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.addBook.BookWrapper;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DisplaySearchOnMap_map extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         SlidingUpPanelLayout.PanelSlideListener, LocationListener, HeaderAdapter.ItemClickListener, GoogleMap.OnMarkerClickListener {
@@ -149,7 +153,15 @@ public class DisplaySearchOnMap_map extends Fragment implements GoogleApiClient.
                 mSlidingUpPanelLayout.collapsePane();
             }
         });*/
-        mHeaderAdapter = new HeaderAdapter(getActivity(), testData, this);
+        ArrayList<Book> mBooks = new ArrayList<>();
+        Bundle bundle = getActivity().getIntent().getExtras();
+        if(bundle!=null){
+            List<BookWrapper> bookWrappers = bundle.getParcelableArrayList("bookToShow");
+            for(BookWrapper bw : bookWrappers){
+                mBooks.add(new Book(bw));
+            }
+        }
+        mHeaderAdapter = new HeaderAdapter(getActivity(), mBooks, this);
         mListView.setItemAnimator(null);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -175,7 +187,12 @@ public class DisplaySearchOnMap_map extends Fragment implements GoogleApiClient.
                 @Override
                 public void onMapReady(GoogleMap mMap) {
                     bookMap = mMap;
-
+                    /*LatLng b1,b2;
+                    b1 = new LatLng(85,-180);
+                    b2 = new LatLng(-85,180);
+                    LatLngBounds bounds = new LatLngBounds(b2,b1);
+                    bookMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds,0));
+                    */
                     // For showing a move to my location button
                     if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -352,7 +369,7 @@ public class DisplaySearchOnMap_map extends Fragment implements GoogleApiClient.
         }
         mTransparentView.setVisibility(View.INVISIBLE);
         if (bookMap != null) {
-            bookMap.animateCamera(CameraUpdateFactory.zoomTo(14f), 1000, null);
+            //bookMap.animateCamera(CameraUpdateFactory.zoomTo(14f), 1000, null);
         }
         mListView.setScrollingEnabled(false);
     }
@@ -413,7 +430,9 @@ public class DisplaySearchOnMap_map extends Fragment implements GoogleApiClient.
     }
 
     @Override
-    public void onItemClicked(int position) {
+    public void onItemClicked(LatLng position) {
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(position).zoom(12).build();
+        bookMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         mSlidingUpPanelLayout.collapsePane();
     }
 
