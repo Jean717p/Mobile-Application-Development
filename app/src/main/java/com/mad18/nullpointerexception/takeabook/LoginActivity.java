@@ -63,9 +63,16 @@ public class LoginActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_login);
         progressBar = (ProgressBar) findViewById(R.id.login_progress_bar);
         progressBarTextView = findViewById(R.id.login_progress_bar_text);
+//        mAuth = FirebaseAuth.getInstance();
+//        if(mAuth.getCurrentUser()!=null){
+//            Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.class);
+//            startActivity(intent);
+//            finish();
+//        }
         toolbar = (Toolbar) findViewById(R.id.login_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(R.string.insert_location);
+        toolbar.setVisibility(View.INVISIBLE);
         firstAttempt = true;
         newUser = false;
     }
@@ -185,6 +192,11 @@ public class LoginActivity extends AppCompatActivity  {
                         if (newUser) {
                             getUserPosition(this);
                         }
+                        else{
+                            Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
                     } else {
                         // Sign in failed
                         if (response == null) {
@@ -246,6 +258,7 @@ public class LoginActivity extends AppCompatActivity  {
         Button getPos_button = findViewById(R.id.login_getPos_button);
         addr_text.setVisibility(View.INVISIBLE);
         getPos_button.setVisibility(View.VISIBLE);
+        toolbar.setVisibility(View.VISIBLE);
 
 
         getPos_button.setOnClickListener(new View.OnClickListener() {

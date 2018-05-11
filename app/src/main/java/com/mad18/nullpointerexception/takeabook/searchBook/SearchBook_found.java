@@ -28,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.mad18.nullpointerexception.takeabook.Book;
+import com.mad18.nullpointerexception.takeabook.Book_generic_info;
 import com.mad18.nullpointerexception.takeabook.InfoBook;
 import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.addBook.AddBook;
@@ -81,7 +82,7 @@ public class SearchBook_found extends Fragment {
                         ArrayList<BookWrapper> book_copies = new ArrayList<>();
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
                         CollectionReference booksRef = db.collection("books");
-                        Query query_ISBN = booksRef.whereEqualTo("book_ISBN",item.getBook_ISBN());
+                        Query query_ISBN = booksRef.whereEqualTo("book_ISBN", item.getBook_ISBN());
                         Task<QuerySnapshot> bookToShow = query_ISBN.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -105,7 +106,15 @@ public class SearchBook_found extends Fragment {
 
                         });
                     }
-                });
+                }, new SearchBookRecyclerViewAdapter.OnItemClickInfoListener() {
+            @Override
+            public void onItemInfoClick(Book item) {
+                Intent intent = new Intent(getActivity(), Book_generic_info.class);
+                intent.putExtra("bookToShow",new BookWrapper(item));
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            }
+        });
         rec.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         rec.setScrollContainer(true);
         rec.setVerticalScrollBarEnabled(true);

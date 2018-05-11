@@ -44,7 +44,7 @@
             android:layout_marginBottom="-249dp"
             android:clickable="true"
             android:padding="16dp"
-            android:src="@drawable/ic_addbook" />
+            android:src="@drawable/ic_paomedia_small_n_flat_book" />
 
 
         <Button
