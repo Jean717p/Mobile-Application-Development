@@ -2,8 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="24dp"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:gravity="center_vertical"
+    android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+    android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    tools:background="@android:color/holo_orange_light"
     tools:context=".BookFound"
     >
 
@@ -31,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/book_found_thumbnail"
-                android:text="Title:"
+                android:text="@string/title"
                 android:textSize="20dp"
                 android:textStyle="normal|bold"
 
@@ -47,7 +52,6 @@
                 android:layout_marginTop="8dp"
                 android:layout_toEndOf="@+id/book_found_position"
                 android:layout_toRightOf="@id/book_found_label_title"
-                android:text="Harry Potter e la pietra filosofale"
                 android:textSize="16sp" />
 
 
@@ -58,7 +62,7 @@
                 android:layout_below="@id/book_found_title"
                 android:layout_marginTop="16dp"
                 android:layout_toEndOf="@id/book_found_thumbnail"
-                android:text="Author:"
+                android:text="@string/info_book_label_author"
                 android:layout_alignBaseline="@id/book_found_author"
                 android:textSize="20sp"
                 android:textStyle="normal|bold" />
@@ -72,7 +76,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:layout_toEndOf="@+id/book_found_label_author"
-                android:text="J.K Rowling" />
+                />
 
 
             <TextView
@@ -96,7 +100,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:layout_toEndOf="@+id/book_found_label_position"
-                android:text="Turin" />
+                />
 
         </RelativeLayout>
 

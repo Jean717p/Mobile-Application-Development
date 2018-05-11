@@ -5,8 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.model.LatLng;
+import com.mad18.nullpointerexception.takeabook.Book;
 import com.mad18.nullpointerexception.takeabook.R;
 
 import java.lang.ref.WeakReference;
@@ -15,19 +19,21 @@ import java.util.ArrayList;
 public class HeaderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
-    private ArrayList<String> mData;
+    private ArrayList<Book> mData;
+    private Context context;
 
     private LayoutInflater mLayoutInflater;
 
     private boolean mIsSpaceVisible = true;
 
     public interface ItemClickListener {
-        void onItemClicked(int position);
+        void onItemClicked(LatLng position);
     }
 
     private WeakReference<ItemClickListener> mCallbackRef;
 
-    public HeaderAdapter(Context ctx, ArrayList<String> data, ItemClickListener listener) {
+    public HeaderAdapter(Context ctx, ArrayList<Book> data, ItemClickListener listener) {
+        context = ctx;
         mLayoutInflater = LayoutInflater.from(ctx);
         mData = data;
         mCallbackRef = new WeakReference<>(listener);
@@ -37,7 +43,7 @@ public class HeaderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_ITEM) {
             //inflate your layout and pass it to view holder
-            View v = mLayoutInflater.inflate(R.layout.display_search_on_map_list_item, parent, false);
+            View v = mLayoutInflater.inflate(R.layout.activity_book_found_card_view, parent, false);
             return new MyItem(v);
         } else if (viewType == TYPE_HEADER) {
             View v = mLayoutInflater.inflate(R.layout.transparent_header_view, parent, false);
@@ -49,9 +55,11 @@ public class HeaderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof MyItem) {
-            String dataItem = getItem(position);
-            ((MyItem) holder).mTitleView.setText(dataItem);
+            Book dataItem = getItem(position);
+            ((MyItem) holder).mTitleView.setText(dataItem.getBook_title());
             ((MyItem) holder).mPosition = position;
+            ((MyItem) holder).mAuthor.setText(dataItem.getBook_first_author());
+            Glide.with(context).load(dataItem.getBook_thumbnail_url()).into(((MyItem) holder).mThumbnail);
         } else if (holder instanceof HeaderItem) {
             ((HeaderItem) holder).mSpaceView.setVisibility(mIsSpaceVisible ? View.VISIBLE : View.GONE);
             ((HeaderItem) holder).mPosition = position;
@@ -71,16 +79,19 @@ public class HeaderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return TYPE_ITEM;
     }
 
-    private String getItem(int position) {
+    private Book getItem(int position) {
         return mData.get(position - 1);
     }
 
     class MyItem extends HeaderItem {
-        TextView mTitleView;
+        TextView mTitleView,mAuthor;
+        ImageView mThumbnail;
 
         public MyItem(View itemView) {
             super(itemView);
-            mTitleView = (TextView) itemView.findViewById(R.id.display_search_on_map_text);
+            mTitleView = (TextView) itemView.findViewById(R.id.book_found_title);
+            mThumbnail = (ImageView) itemView.findViewById(R.id.book_found_thumbnail);
+            mAuthor = (TextView) itemView.findViewById(R.id.book_found_author);
         }
     }
 
@@ -99,7 +110,8 @@ public class HeaderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public void onClick(View v) {
             ItemClickListener callback = mCallbackRef != null ? mCallbackRef.get() : null;
             if (callback != null) {
-                callback.onItemClicked(mPosition);
+                callback.onItemClicked(new LatLng(getItem(mPosition).getBook_location().getLongitude(),
+                        getItem(mPosition).getBook_location().getLatitude()));
             }
 
         }
