@@ -46,6 +46,8 @@ import com.mad18.nullpointerexception.takeabook.R;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import com.mad18.nullpointerexception.takeabook.User;
@@ -86,6 +88,7 @@ public class AddBook extends AppCompatActivity {
 
     private ImageView globalViewImgElement;
     private int globalImgPos = 0 ;
+    private List<String> all_photos_url= new LinkedList<>();
     //simo fine
     @Override
     public void onCreate(Bundle state) {
@@ -354,6 +357,7 @@ public class AddBook extends AppCompatActivity {
 
         for(int j= 0; j<bookImgMap.size();j++ ) {
             mImageRef = FirebaseStorage.getInstance().getReference().child("photo_conditions_by_user/books/" + bookToAdd.getBook_ISBN() + user.getUid() + j);
+            all_photos_url.add("photo_conditions_by_user/books/" + bookToAdd.getBook_ISBN() + user.getUid() + j);
             if (bookImgMap.get(j) != null) {
                 bookImgPath = editProfile.saveImageToInternalStorage(bookImgMap.get(j), "temp_" + "bookEditImage"+ j, this);
                 if (bookImgPath != null) {
@@ -368,6 +372,9 @@ public class AddBook extends AppCompatActivity {
                 }
             }
         }
+        bookToAdd.setBook_photos_of_book_from_user_url(all_photos_url);
+
+
 
         books.document(bookToAdd.getBook_ISBN() + user.getUid()).set(bookToAdd);
         //Aggiunta libro all'elenco dell'utente
@@ -405,7 +412,7 @@ public class AddBook extends AppCompatActivity {
                         Bundle bundle = data.getExtras();
                         BookWrapper bookwrap = (BookWrapper) bundle.getParcelable("bookinfo");
                         //TextView titleView = (TextView)findViewById(R.id.add_book_title);
-                        // titleView.setText(bookwrap.getTitle());
+                        // titleView.setText(bookwrap.getBookwrapper_title());
                         for(int i:addBookTextViewIds){
                             findViewById(i).setVisibility(View.VISIBLE);
                         }
@@ -413,17 +420,17 @@ public class AddBook extends AppCompatActivity {
                         Map<String,Boolean> Mauthors = new HashMap<>();
                         Map<String,Boolean> Mcategories = new HashMap<>();
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                        Mauthors.putAll(bookwrap.getAuthors().stream().collect(Collectors.toMap((String s)->s,s-> true)));
+//                        Mauthors.putAll(bookwrap.getBookwrapper_authors().stream().collect(Collectors.toMap((String s)->s,s-> true)));
 //                    }
-                        for (String key: bookwrap.getAuthors()) {
+                        for (String key: bookwrap.getBookwrapper_authors()) {
                             Mauthors.put(key,true);
                         }
-                        for (String key: bookwrap.getCategories()) {
+                        for (String key: bookwrap.getBookwrapper_categories()) {
                             Mcategories.put(key,true);
                         }
 
-                        bookToAdd = new Book(bookwrap.getISBN(),bookwrap.getTitle(),
-                                bookwrap.getPublisher(),bookwrap.getEditionYear(),0,user.getUid(),Mauthors,"",bookwrap.getThumbnail(), Mcategories, MainActivity.thisUser.getUsr_geoPoint());
+                        bookToAdd = new Book(bookwrap.getBookwrapper_ISBN(),bookwrap.getBookwrapper_title(),
+                                bookwrap.getBookwrapper_publisher(),bookwrap.getBookwrapper_editionYear(),0,user.getUid(),Mauthors,"",bookwrap.getBookwrapper_thumbnail_url(), Mcategories, MainActivity.thisUser.getUsr_geoPoint());
 //                        for(int i:addBookTextViewIds){
 //                            findViewById(i).setVisibility(View.VISIBLE);
 //                        }
@@ -508,7 +515,7 @@ public class AddBook extends AppCompatActivity {
      */
     private void selectBookImg(){
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
-        //pictureDialog.setTitle("Select Action");
+        //pictureDialog.setBookwrapper_title("Select Action");
         String[] pictureDialogItems = {
                 getString(R.string.photo_from_gallery),
                 getString(R.string.photo_from_camera),

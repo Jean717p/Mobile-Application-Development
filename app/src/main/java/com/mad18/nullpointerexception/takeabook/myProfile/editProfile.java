@@ -312,7 +312,7 @@ public class editProfile extends AppCompatActivity {
     private void selectUserImg(){
         //dialog box che compare quando vogliamo inserire l'immagine profilo
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
-        //pictureDialog.setTitle("Select Action");
+        //pictureDialog.setBookwrapper_title("Select Action");
         String[] pictureDialogItems = {
                 getString(R.string.photo_from_gallery),
                 getString(R.string.photo_from_camera),

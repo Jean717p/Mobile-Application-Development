@@ -12,15 +12,15 @@
         <!--<menu>-->
         <!--<item-->
         <!--android:id="@+id/action_reply"-->
-        <!--android:title="reply" />-->
+        <!--android:bookwrapper_title="reply" />-->
 
         <!--<item-->
         <!--android:id="@+id/action_replyall"-->
-        <!--android:title="replyall" />-->
+        <!--android:bookwrapper_title="replyall" />-->
 
         <!--<item-->
         <!--android:id="@+id/action_forward"-->
-        <!--android:title="forward" />-->
+        <!--android:bookwrapper_title="forward" />-->
         <!--</menu>-->
     </item>
 

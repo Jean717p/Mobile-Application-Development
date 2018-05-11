@@ -63,7 +63,7 @@
     <!--SearchBook Related-->
     <string name="search_book_text_title">Titolo</string>
     <string name="search_book_text_category">Categoria</string>
-    <string name="search_book_text_ISBN">ISBN</string>
+    <string name="search_book_text_ISBN">bookwrapper_ISBN</string>
     <string name="search_book_text_author">Autore</string>
     <string name="search_book_button_text">Cerca</string>
     <string name="search_book_progress_bar_text">Sto cercando...</string>
@@ -81,13 +81,13 @@
     <string name="info_book_label_book_conditions">Condizioni:</string>
 
     <!--Barcode Related-->
-    <string name="add_book_read_ISBN">Cerca dettagli ISBN</string>
+    <string name="add_book_read_ISBN">Cerca dettagli bookwrapper_ISBN</string>
     <string name="read_barcode">Leggi Barcode</string>
     <string name="add_a_book">Aggiungi un libro</string>
     <string name="add_book_title">"Titolo"</string>
     <string name="add_book_author">"Autore/i"</string>
     <string name="add_book_edition_year">"Anno edizione"</string>
-    <string name="add_book_ISBN">"ISBN"</string>
+    <string name="add_book_ISBN">"bookwrapper_ISBN"</string>
     <string name="add_book_publisher">"Editore"</string>
     <string name="add_book_helper_text_ISBN">"Scrivi esattamente 13 numeri"</string>
     <string name="add_book_description">"Descrizione"</string>
@@ -101,12 +101,12 @@
     <string name="facebook_application_id" translatable="false">207778776488778</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb207778776488778</string>
     <!--Fragment Top fab menu items -->
-    <string name="top_frag_floating_action_menu_ISBN">Ricerca per ISBN</string>
+    <string name="top_frag_floating_action_menu_ISBN">Ricerca per bookwrapper_ISBN</string>
     <string name="top_frag_floating_action_menu_category">Ricerca per categoria</string>
     <string name="top_frag_floating_action_menu_title">Ricerca per titolo</string>
     <string name="top_frag_floating_action_menu_author">Ricerca per autore</string>
     <string name="top_frag_floating_action_menu_search">Indietro</string>
-    <string name="title">Cerca</string>
+    <string name="bookwrapper_title">Cerca</string>
 
 
 

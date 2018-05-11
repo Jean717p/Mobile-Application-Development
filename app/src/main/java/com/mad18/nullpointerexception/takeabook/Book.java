@@ -25,6 +25,8 @@ public class Book {
     String book_description;
     GeoPoint book_location;
 
+    private List<String> book_photos_of_book_from_user_url = new LinkedList<>();
+
     public Book() {}
 
     public String getUserid() {
@@ -61,25 +63,34 @@ public class Book {
     }
 
     public Book (BookWrapper bw){
-        book_ISBN = bw.getISBN();
-        book_title = bw.getTitle();
-        book_publisher = bw.getPublisher();
-        book_editionYear = bw.getEditionYear();
-        List<String> bwAuthors = bw.getAuthors();
+        book_ISBN = bw.getBookwrapper_ISBN();
+        book_title = bw.getBookwrapper_title();
+        book_publisher = bw.getBookwrapper_publisher();
+        book_editionYear = bw.getBookwrapper_editionYear();
+        List<String> bwAuthors = bw.getBookwrapper_authors();
         book_authors = new HashMap<>();
         book_categories = new HashMap<>();
         for (String x : bwAuthors) {
             book_authors.put(x, true);
         }
-        book_description = bw.getDescription();
-        book_thumbnail_url = bw.getThumbnail();
-        List<String> bwCategories = bw.getCategories();
+        book_description = bw.getBookwrapper_description();
+        book_thumbnail_url = bw.getBookwrapper_thumbnail_url();
+        List<String> bwCategories = bw.getBookwrapper_categories();
         for (String y : bwCategories) {
             book_categories.put(y, true);
         }
         book_userid = bw.getBook_userid();
         book_first_author = bw.getBook_first_author();
         book_condition = bw.getBook_condition();
+    }
+
+
+    public List<String> getBook_photos_of_book_from_user_url() {
+        return book_photos_of_book_from_user_url;
+    }
+
+    public void setBook_photos_of_book_from_user_url(List<String> book_photos_of_book_from_user_url) {
+        this.book_photos_of_book_from_user_url = book_photos_of_book_from_user_url;
     }
 
     public String getBook_ISBN() {
