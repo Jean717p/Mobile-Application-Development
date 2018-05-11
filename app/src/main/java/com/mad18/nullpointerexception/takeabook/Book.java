@@ -78,7 +78,12 @@ public class Book {
             book_categories.put(y, true);
         }
         book_userid = bw.getBook_userid();
-        book_first_author = bw.getBook_first_author();
+        if(bw.getAuthors().size()>0){
+            book_first_author = (String) (bw.getAuthors().toArray())[0];
+        }
+        else{
+            book_first_author = new String("");
+        }
         book_condition = bw.getBook_condition();
         setBook_location(new GeoPoint(bw.getLat(),bw.getLongitude()));
     }
