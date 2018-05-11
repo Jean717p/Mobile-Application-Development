@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,15 +21,22 @@ class SearchBookRecyclerViewAdapter extends RecyclerView.Adapter<SearchBookRecyc
     private Context myContext;
     private List<Book> mData;
     private final SearchBookRecyclerViewAdapter.OnItemClickListener listener;
+    private SearchBookRecyclerViewAdapter.OnItemClickInfoListener infoListener;
 
-    public SearchBookRecyclerViewAdapter(Context myContext, List<Book> mData, SearchBookRecyclerViewAdapter.OnItemClickListener listener ) {
+    public SearchBookRecyclerViewAdapter(Context myContext, List<Book> mData,
+                                         SearchBookRecyclerViewAdapter.OnItemClickListener listener,
+                                         SearchBookRecyclerViewAdapter.OnItemClickInfoListener infoListener) {
         this.myContext = myContext;
         this.mData = mData;
         this.listener = listener;
+        this.infoListener = infoListener;
     }
 
     public interface OnItemClickListener {
         void onItemClick(Book item);
+    }
+    interface OnItemClickInfoListener{
+        void onItemInfoClick(Book item);
     }
 
     public void setData(List<Book> mData){
@@ -57,6 +65,7 @@ class SearchBookRecyclerViewAdapter extends RecyclerView.Adapter<SearchBookRecyc
         //holder.iv_book_thumbnail.setImageResource(mData.get(position));
         Glide.with(myContext).load(mData.get(position).getBook_thumbnail_url()).into(holder.iv_book_thumbnail);
         holder.bind(mData.get(position), listener);
+        holder.bindInfo(mData.get(position),infoListener);
     }
 
     @Override
@@ -69,12 +78,14 @@ class SearchBookRecyclerViewAdapter extends RecyclerView.Adapter<SearchBookRecyc
         TextView tv_book_title;
         ImageView iv_book_thumbnail;
         CardView cardView;
+        Button infoButton;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             tv_book_title = (TextView) itemView.findViewById(R.id.found_book_title);
             iv_book_thumbnail = (ImageView) itemView.findViewById(R.id.found_book_picture);
             cardView = (CardView) itemView.findViewById(R.id.found_book_card_view);
+            infoButton = (Button) itemView.findViewById(R.id.book_found_button_info);
         }
 
         public void bind(final Book item, final SearchBookRecyclerViewAdapter.OnItemClickListener listener) {
@@ -82,7 +93,14 @@ class SearchBookRecyclerViewAdapter extends RecyclerView.Adapter<SearchBookRecyc
                 @Override
                 public void onClick(View v) {
                     listener.onItemClick(item);
-
+                }
+            });
+        }
+        void bindInfo(Book item, SearchBookRecyclerViewAdapter.OnItemClickInfoListener listener){
+            infoButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemInfoClick(item);
                 }
             });
         }

@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="ACCESS_FINE_LOCATION"></uses-permission>
+    <uses-permission android:name="ACCESS_FINE_LOCATION" />
 
     <uses-feature
         android:name="android.hardware.camera2"
@@ -111,9 +111,10 @@
             android:configChanges="orientation|screenSize|locale"
             android:label="InfoBook"
             android:theme="@style/AppTheme" />
-        <activity android:name=".BookFound"></activity>
+        <activity android:name=".BookFound" />
         <activity android:name=".InfoUser" />
-        <activity android:name=".displaySearchOnMap.DisplaySearchOnMap"></activity>
+        <activity android:name=".displaySearchOnMap.DisplaySearchOnMap" />
+        <activity android:name=".Book_generic_info"></activity>
     </application>
 
 </manifest>

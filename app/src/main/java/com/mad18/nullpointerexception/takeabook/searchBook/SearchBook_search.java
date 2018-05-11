@@ -9,6 +9,7 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -77,6 +78,7 @@ public class SearchBook_search extends Fragment {
 
             ProgressBarVisibility(View.VISIBLE);
             search.setVisibility(View.INVISIBLE);
+            //getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             SearchBook s = (SearchBook) getActivity();
             s.searchForBook(searchBase);});
 

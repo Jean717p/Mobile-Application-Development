@@ -93,8 +93,8 @@ public class SearchBook extends AppCompatActivity {
         // Create an instance of the tab layout from the view.
         tabLayout = (TabLayout) findViewById(R.id.search_book_tab_layout);
         // Set the text for each tab.
-        tabLayout.addTab(tabLayout.newTab().setText("Search"));
-        tabLayout.addTab(tabLayout.newTab().setText("Found"));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.search_books));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.found_books));
         // Set the tabs to fill the entire layout.
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         viewPager = (ViewPager) findViewById(R.id.search_book_view_pager);
@@ -202,11 +202,6 @@ public class SearchBook extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     public void searchForBook(String flag){
