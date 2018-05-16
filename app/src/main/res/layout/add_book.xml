@@ -188,6 +188,27 @@
                 />
         </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
 
+        <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+            android:id="@+id/add_book_text_field_Pages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/add_book_text_field_EditionYear"
+            android:layout_margin="16dp"
+            app:errorColor="#ddaa00"
+            app:labelText="@string/add_book_pages"
+            app:panelBackgroundColor="@android:color/transparent"
+            app:primaryColor="@color/colorAccent">
+
+            <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+                android:id="@+id/add_book_extended_edit_text_Pages"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+
+                />
+        </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
 
         <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
             android:id="@+id/add_book_text_field_Publisher"

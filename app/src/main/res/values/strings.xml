@@ -95,6 +95,7 @@
     <string name="add_book_no_description">"No description"</string>
     <string name="add_book_error">"Any book has been inserted"</string>
     <string name="add_book_permission_camera">"Please, grant camera permission to use the QR Scanner"</string>
+    <string name="add_book_pages">"Number of pages"</string>
 
 
     <!--Book conditions-->

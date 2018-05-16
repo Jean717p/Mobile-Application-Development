@@ -506,14 +506,11 @@ public class AddBook extends AppCompatActivity {
             eet.setText(tmp.substring(1,tmp.length()-1));
         }
 
-//        eet = findViewById(R.id.add_book_extended_edit_pages);
-//        tmp = String.valueOf(book.getBook_pages());
-        if(book.getBook_editionYear()!=0){
+        eet = findViewById(R.id.add_book_extended_edit_text_Pages);
+        if(book.getBook_pages()!=0){
             eet.setText(String.valueOf(book.getBook_pages()));
         }
-        if(tmp.length()>2){
-            eet.setText(tmp.substring(1,tmp.length()-1));
-        }
+
 
         iw = findViewById(R.id.add_book_picture);
         Glide.with(this).load(book.getBook_thumbnail_url()).into(iw);

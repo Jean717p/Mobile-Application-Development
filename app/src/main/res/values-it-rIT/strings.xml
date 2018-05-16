@@ -102,6 +102,7 @@
     <string name="add_book_no_description">"Nessuna descrizione"</string>
     <string name="add_book_error">"Nessun libro è stato inserito"</string>
     <string name="add_book_permission_camera">"Autorizza l'accesso alla fotocamera per utilizzare il QR scanner"</string>
+    <string name="add_book_pages">"Numero di pagine"</string>
 
 
     <!-- Facebook login -->
