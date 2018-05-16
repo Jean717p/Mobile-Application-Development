@@ -133,8 +133,10 @@ public class InfoBook extends AppCompatActivity {
                 break;
             case 2:
                 tv.setText(getResources().getStringArray(R.array.book_conditions)[2]);
+                break;
             case 3:
                 tv.setText(getResources().getStringArray(R.array.book_conditions)[3]);
+                break;
         }
         Glide.with(this).load(book.getBook_thumbnail_url()).into(iw);
         FirebaseFirestore db = FirebaseFirestore.getInstance();

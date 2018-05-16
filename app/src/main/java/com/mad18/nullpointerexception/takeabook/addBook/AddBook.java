@@ -610,7 +610,7 @@ public class AddBook extends AppCompatActivity {
                         startActivityForResult(intent, REQUEST_SCANNER);
                     }
                 } else {
-                    Toast.makeText(this, "Please grant camera permission to use the QR Scanner", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.add_book_permission_camera, Toast.LENGTH_SHORT).show();
                 }
                 return;
         }

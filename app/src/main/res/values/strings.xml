@@ -76,6 +76,7 @@
     <string name="info_book_label_owner">Owner:</string>
     <string name="info_book_label_book_conditions">Conditions:</string>
     <string name="info_book_label_book_num_pages">N. pages:</string>
+    <string name="info_book_snackbar">The library has been updated</string>
 
 
     <!--Barcode Related-->
@@ -93,6 +94,7 @@
     <string name="add_book_info_not_available">"Information not available"</string>
     <string name="add_book_no_description">"No description"</string>
     <string name="add_book_error">"Any book has been inserted"</string>
+    <string name="add_book_permission_camera">"Please, grant camera permission to use the QR Scanner"</string>
 
 
     <!--Book conditions-->

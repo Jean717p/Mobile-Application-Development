@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -94,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ViewPager viewPager;
     private MyPagerAdapter myPagerAdapter;
     private TabLayout tabLayout;
+    Main_MyLibrary_Fragment f;
 
     NavigationView navigationView;
     //Called when a fragment is attached as a child of this fragment.
@@ -185,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     case 1:
                         fabSearch.setVisibility(View.GONE);
                         floatingActionButton.setVisibility(View.VISIBLE);
-                        Main_MyLibrary_Fragment f = (Main_MyLibrary_Fragment) adapter.getRegisteredFragment(viewPager.getCurrentItem());
+                        f = (Main_MyLibrary_Fragment) adapter.getRegisteredFragment(viewPager.getCurrentItem());
                         if(f!=null){
                             if(isMyBooksSorted==false){
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -212,24 +214,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         break;
 
                 }
-                /* if(tab.getPosition() == 0){
-                    FloatingActionButton fabSearch= (FloatingActionButton) findViewById(R.id.top_floating_action_menu);
-                    fabSearch.show();
-                }
-                else
-                {
-                    FloatingActionButton fabSearch = (FloatingActionButton) findViewById(R.id.top_floating_action_menu);
-                    fabSearch.hide();
-                }*/
-                /*if (tab.getPosition() == 1) {
-                    FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab_add);
-                    floatingActionButton.setVisibility(View.VISIBLE);
-                }
-                else
-                {
-                    FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab_add);
-                    floatingActionButton.setVisibility(View.GONE);
-                }*/
+
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
@@ -288,12 +273,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-  /*  @Override
+   @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_main, menu); //.xml file name
         return super.onCreateOptionsMenu(menu);
-    }*/
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // action with ID action_refresh was selected
+            case R.id.action_refresh:
+
+                f.updateView(myBooks);
+                Snackbar snackbar = Snackbar
+                        .make(findViewById(R.id.main_library_coordinator_layout),getText(R.string.info_book_snackbar), Snackbar.LENGTH_LONG);
+                snackbar.show();
+                break;
+
+        }
+
+        return true;
+    }
 
     private void setNavDrawerParameters(View nview){ //Usare poi il metodo loadImageFromStorage della classe editProfile
         ImageView drawerImg = nview.findViewById(R.id.mainActivity_drawer_profileImg);

@@ -84,6 +84,7 @@
     <string name="info_book_label_owner">Appartiene a:</string>
     <string name="info_book_label_book_conditions">Condizioni:</string>
     <string name="info_book_label_book_num_pages">N. pagine:</string>
+    <string name="info_book_snackbar">La libreria è stata aggiornata</string>
 
     <!--Barcode Related-->
     <string name="add_book_read_ISBN">Cerca dettagli ISBN</string>
@@ -100,6 +101,7 @@
     <string name="add_book_info_not_available">"Informazione non disponibile"</string>
     <string name="add_book_no_description">"Nessuna descrizione"</string>
     <string name="add_book_error">"Nessun libro è stato inserito"</string>
+    <string name="add_book_permission_camera">"Autorizza l'accesso alla fotocamera per utilizzare il QR scanner"</string>
 
 
     <!-- Facebook login -->
