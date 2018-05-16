@@ -43,16 +43,8 @@ public class BookWrapper extends Book implements Parcelable {
     private List<String> categories;
     private String user_id;
     private double lat, longitude;
-
-    public int getPages() {
-        return pages;
-    }
-
-    public void setPages(int pages) {
-        this.pages = pages;
-    }
-
     private int pages=0;
+    private int condition = 0;
 
     public List<String> getPhoto_list() {
         return photo_list;
@@ -107,6 +99,20 @@ public class BookWrapper extends Book implements Parcelable {
         this.longitude = book.getBook_location().getLongitude();
         this.photo_list = new LinkedList<>(book.getBook_photo_list().keySet());
         this.pages= book.getBook_pages();
+        this.condition = book.getBook_condition();
+    }
+
+
+    public int getCondition() { return condition; }
+
+    public void setCondition(int condition) { this.condition = condition; }
+
+    public int getPages() {
+        return pages;
+    }
+
+    public void setPages(int pages) {
+        this.pages = pages;
     }
 
     public String getISBN() {
@@ -203,6 +209,7 @@ public class BookWrapper extends Book implements Parcelable {
         this.lat = in.readDouble();
         this.photo_list = in.createStringArrayList();
         this.pages = in.readInt();
+        this.condition = in.readInt();
     }
     @Override
     public int describeContents() {
@@ -231,6 +238,7 @@ public class BookWrapper extends Book implements Parcelable {
         dest.writeDouble(this.longitude);
         dest.writeStringList(this.photo_list);
         dest.writeInt(this.pages);
+        dest.writeInt(this.condition);
     }
     @Override
     public String toString() {
@@ -254,6 +262,7 @@ public class BookWrapper extends Book implements Parcelable {
                 ", user_id='" + user_id + '\'' +
                 allphotolist+
                 ", pages='" + Spages + '\'' +
+                ", condition='" + condition + '\'' +
                 '}';
     }
 }
