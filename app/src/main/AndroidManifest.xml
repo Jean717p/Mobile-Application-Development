@@ -114,7 +114,18 @@
         <activity android:name=".BookFound" />
         <activity android:name=".InfoUser" />
         <activity android:name=".displaySearchOnMap.DisplaySearchOnMap" />
-        <activity android:name=".Book_generic_info"></activity>
+        <activity android:name=".Book_generic_info" />
+
+
+        <activity
+            android:name=".GridViewActivity"
+            android:theme="@android:style/Theme.Holo.NoActionBar">
+        </activity>
+
+        <activity
+            android:name="FullScreenViewActivity"
+            android:theme="@android:style/Theme.Holo.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

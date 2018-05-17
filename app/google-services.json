@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "666855697382-jqr8cpvqm2fkpukqd9de03ilonnnt7uj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mad18.nullpointerexception.takeabook",
+            "certificate_hash": "f39501d8247118b64b58bb813f61e673256a1340"
+          }
+        },
+        {
+          "client_id": "666855697382-cbsudp3ugjid74ehlvff0q7r10gkko3b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mad18.nullpointerexception.takeabook",
+            "certificate_hash": "a4f2125a21119fb4b69f77ca156ff97797608705"
+          }
+        },
+        {
           "client_id": "666855697382-m9gdmv4bf9662gb3btqrdgfrk7q78ju7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
