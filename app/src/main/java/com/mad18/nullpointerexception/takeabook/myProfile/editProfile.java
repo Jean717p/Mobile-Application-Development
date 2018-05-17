@@ -29,12 +29,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.User;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -42,10 +45,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class editProfile extends AppCompatActivity {
     private final String TAG = "editProfile";
-    private static final int JPEG_COMPRESSION_QUALITY = 40;
+    private static final int JPEG_COMPRESSION_QUALITY = 90;
     private SharedPreferences sharedPref;
     //    SharedPreferences is an object point to a file of key-value pairs, it works for small amount of data or settings
 //    that need to be shared inside activities in a project, it is managed by the framework and can be private or shared
@@ -178,15 +182,34 @@ public class editProfile extends AppCompatActivity {
         }
         if(profileImg!=null){
 //            se non è ancora stata salvata un'immagine profilo
-            profileImgPath = saveImageToInternalStorage(profileImg,profileImgName,this);
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            profileImg.compress(Bitmap.CompressFormat.JPEG,JPEG_COMPRESSION_QUALITY,out);
 //            prendi l'immagine di default
-            if(profileImgPath!=null){
 //                se il percorso per fare lo storage dell'immagine non è vuoto allora assegna il nostro path
-                editor.putString(profileImgName,profileImgPath);
-                Uri profileImgUri = Uri.fromFile(new File(profileImgPath));
-                mImageRef.putFile(profileImgUri);
-//                e restitusci l'uri dello storage dell'imagine nel mImageRef
-            }
+            mImageRef = FirebaseStorage.getInstance().getReference().child("users/"+user.getUid()+"/profileImage/"+ UUID.nameUUIDFromBytes(out.toByteArray()));
+            editor.putString(profileImgName,saveImageToInternalStorage(profileImg,profileImgName,this));
+            mImageRef.putBytes(out.toByteArray());
+            String newImgPath = mImageRef.getPath();
+            db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    User u = documentSnapshot.toObject(User.class);
+                    if(u.getProfileImgStoragePath().length()>0) {
+                        StorageReference oldImgRef = FirebaseStorage.getInstance().getReference().child(u.getProfileImgStoragePath());
+                        oldImgRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                u.setProfileImgStoragePath(newImgPath);
+                                users.document(user.getUid()).set(u, SetOptions.merge());
+                            }
+                        });
+                    }
+                    else{
+                        u.setProfileImgStoragePath(newImgPath);
+                        users.document(user.getUid()).set(u,SetOptions.merge());
+                    }
+                }
+            });
         }
         else{
             s = sharedPref.getString(profileImgName,"");
@@ -194,11 +217,19 @@ public class editProfile extends AppCompatActivity {
 //                altrimenti controllo se il path esiste
                 file = new File(s);
                 if(file.exists()){
-                    mImageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    file.delete();
+                    db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
-                        public void onSuccess(Void aVoid) {
-                            //se tutto ha successo cancello il file temporaneo
-                            file.delete();
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            User u = documentSnapshot.toObject(User.class);
+                            StorageReference oldImg = FirebaseStorage.getInstance().getReference().child(u.getProfileImgStoragePath());
+                            oldImg.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    u.setProfileImgStoragePath("");
+                                    users.document(user.getUid()).set(u, SetOptions.merge());
+                                }
+                            });
                         }
                     });
                 }

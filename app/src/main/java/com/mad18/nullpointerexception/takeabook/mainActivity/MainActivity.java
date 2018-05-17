@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle("Books Circle");
+        collapsingToolbar.setTitle("Book Circle");
         // Create an instance of the tab layout from the view.
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         // Set the text for each tab.
@@ -233,12 +233,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        View hview = navigationView.getHeaderView(0);
-        setNavDrawerParameters(hview);
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -369,8 +363,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     editor.apply();
                     View hview = navigationView.getHeaderView(0);
                     setNavDrawerParameters(hview);
-                    if(sharedPref.getString(profileImgName,"").length()==0){
-                        StorageReference mImageRef = FirebaseStorage.getInstance().getReference("users/images/"+user.getUid());
+                    if(sharedPref.getString(profileImgName,"").length()==0
+                            && thisUser.getProfileImgStoragePath().length() > 0){
+                        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(thisUser.getProfileImgStoragePath());
                         Glide.with(context).asBitmap().load(mImageRef).into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL) {
                             @Override
                             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {

@@ -1,6 +1,6 @@
 <resources>
     <!--Application-->
-    <string name="app_name">Books Circle</string>
+    <string name="app_name">Book Circle</string>
 
     <!--Profile-->
     <string name="profile_photo">Profile photo</string>
@@ -77,7 +77,7 @@
     <string name="info_book_label_book_conditions">Conditions:</string>
     <string name="info_book_label_book_num_pages">N. pages:</string>
     <string name="info_book_snackbar">The library has been updated</string>
-    <string name="info_book_label_pages">Number of pages:</string>
+    <string name="info_book_label_pages">N. pages:</string>
 
 
     <!--Barcode Related-->
