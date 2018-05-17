@@ -85,6 +85,7 @@
     <string name="info_book_label_book_conditions">Condizioni:</string>
     <string name="info_book_label_book_num_pages">N. pagine:</string>
     <string name="info_book_snackbar">La libreria è stata aggiornata</string>
+    <string name="info_book_label_pages">Numero di pagine:</string>
 
     <!--Barcode Related-->
     <string name="add_book_read_ISBN">Cerca dettagli ISBN</string>

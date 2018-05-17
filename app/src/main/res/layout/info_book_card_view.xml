@@ -209,6 +209,36 @@
             android:textSize="13sp"
             />
 
+        <TextView
+            android:id="@+id/info_book_label_pages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/layout_margin"
+            android:layout_marginRight="8dp"
+            android:layout_toRightOf="@id/info_book_main_image"
+            android:text="@string/info_book_label_pages"
+            android:textSize="15sp"
+            android:textColor="@color/colorPrimary"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-light"
+            android:layout_alignStart="@id/info_book_toolbar"
+            android:layout_below="@id/info_book_categories"
+            />
+        <TextView
+            android:id="@+id/info_book_pages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:paddingBottom="4dp"
+            android:fontFamily="sans-serif-light"
+            android:layout_alignBaseline="@id/info_book_label_pages"
+            android:layout_alignTop="@id/info_book_label_pages"
+            android:layout_toEndOf="@id/info_book_label_pages"
+            android:textColor="@color/textColor"
+            android:textSize="13sp"
+            />
+
 
         <TextView
             android:id="@+id/info_book_label_owner"
@@ -224,7 +254,7 @@
             android:textStyle="bold"
             android:fontFamily="sans-serif-light"
             android:layout_alignStart="@id/info_book_toolbar"
-            android:layout_below="@id/info_book_categories"
+            android:layout_below="@id/info_book_pages"
             />
         <TextView
             android:id="@+id/info_book_owner"

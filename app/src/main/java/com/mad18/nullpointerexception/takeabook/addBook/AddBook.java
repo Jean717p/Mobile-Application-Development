@@ -62,7 +62,8 @@ public class AddBook extends AppCompatActivity {
     private final int REQUEST_PERMISSION_CAMERA = 2, REQUEST_PERMISSION_GALLERY=1;
     private final int addBookTextViewIds[] = {R.id.add_book_text_field_Title,R.id.add_book_text_field_Author,
             R.id.add_book_text_field_EditionYear,R.id.add_book_text_field_Publisher,
-            R.id.add_book_text_field_ISBN,R.id.add_book_text_field_Description,R.id.add_book_text_field_Category};
+            R.id.add_book_text_field_ISBN,R.id.add_book_text_field_Description,R.id.add_book_text_field_Category,
+            R.id.add_book_text_field_Pages};
     private Book bookToAdd;
     private View mClss;
     private Toolbar toolbar;

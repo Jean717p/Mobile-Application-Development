@@ -39,7 +39,8 @@ import java.util.Objects;
 public class InfoBook extends AppCompatActivity {
 
     private int ibTextViewIds[] = new int[]{R.id.info_book_title,R.id.info_book_author, R.id.info_book_ISBN,
-        R.id.info_book_editionYear,R.id.info_book_publisher, R.id.info_book_categories, R.id.info_book_description};
+        R.id.info_book_editionYear,R.id.info_book_publisher, R.id.info_book_categories, R.id.info_book_description,
+        R.id.info_book_pages};
 
     BookWrapper bookToShowInfoOf;
     private String usr_name;
@@ -88,14 +89,20 @@ public class InfoBook extends AppCompatActivity {
         tv = findViewById(R.id.info_book_ISBN);
         tv.setText(bookToShowInfoOf.getISBN());
 
-//        tv = findViewById(R.id.info_book_pages);
-//        tv.setText(Integer.toString(bookToShowInfoOf.getPages()));
-
         tv = findViewById(R.id.info_book_editionYear);
         if(bookToShowInfoOf.getEditionYear() == 0){
             tv.setText(R.string.add_book_info_not_available);
         }else{
             tv.setText(Integer.toString(bookToShowInfoOf.getEditionYear()));
+        }
+
+        tv = findViewById(R.id.info_book_pages);
+        if(bookToShowInfoOf.getPages() == 0){
+            tv.setText(R.string.add_book_info_not_available);
+        }
+        else{
+            tv.setText(Integer.toString(bookToShowInfoOf.getPages()));
+
         }
 
         tv = findViewById(R.id.info_book_description);
@@ -122,6 +129,7 @@ public class InfoBook extends AppCompatActivity {
 
         ImageView iw = findViewById(R.id.info_book_main_image);
         Book book = new Book(bookToShowInfoOf);
+
         tv = findViewById(R.id.info_book_book_conditions);
         switch (book.getBook_condition()){
 

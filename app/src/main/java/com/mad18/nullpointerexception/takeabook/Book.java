@@ -106,7 +106,7 @@ public class Book {
         else{
             book_first_author = new String("");
         }
-        book_condition = bw.getBook_condition();
+        book_condition = bw.getCondition();
         setBook_location(new GeoPoint(bw.getLat(),bw.getLongitude()));
         List<String> allphotolist = bw.getPhoto_list();
         for (String x : allphotolist) {
