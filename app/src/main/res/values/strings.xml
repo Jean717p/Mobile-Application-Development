@@ -124,5 +124,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_book_generic_info">Book_generic_info</string>
+    <string name="send_your_message">Send your message</string>
+    <string name="title_activity_list_of_chat">listOfChatActivity</string>
+    <string name="my_chat">My chat</string>
 
 </resources>

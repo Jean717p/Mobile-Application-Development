@@ -261,6 +261,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             finish();
                         });
                 break;
+            case R.id.nav_mychat:
+                intent = new Intent(context,com.mad18.nullpointerexception.takeabook.chatActivity.listOfChatActivity.class);
+                //startActivityForResult(intent,REQUEST_ADDBOOK);
+                startActivity(intent);
+                break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

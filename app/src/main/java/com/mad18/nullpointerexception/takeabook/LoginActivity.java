@@ -101,7 +101,7 @@ public class LoginActivity extends AppCompatActivity  {
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     CollectionReference users = db.collection("users");
                     FirebaseUser user = mAuth.getCurrentUser();
-                    User u = new User(user.getEmail(), user.getDisplayName(), "", "", new HashMap<String, Boolean>(),gp);
+                    User u = new User(user.getEmail(), user.getDisplayName(), "", "", new HashMap<String, Boolean>(),gp, user.getUid());
                     users.document(user.getUid()).set(u);
                     //Nel caso serva inserire tasto ok su toolbar
                     Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.class);

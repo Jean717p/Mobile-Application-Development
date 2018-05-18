@@ -15,13 +15,14 @@ public class User {
     String usr_city;
     String usr_mail;
     String usr_about;
+    String usr_id;
     Map<String,Boolean> usr_books;
     GeoPoint usr_geoPoint;
     String profileImgStoragePath;
 
     public User(){}
 
-    public User(String email, String displayName, String s, String s1, HashMap<String, Boolean> stringBooleanHashMap, GeoPoint geoPoint) {
+    public User(String email, String displayName, String s, String s1, HashMap<String, Boolean> stringBooleanHashMap, GeoPoint geoPoint, String id) {
         usr_mail = email;
         usr_name = displayName;
         usr_city = s;
@@ -29,6 +30,7 @@ public class User {
         usr_books = stringBooleanHashMap;
         usr_geoPoint = geoPoint;
         profileImgStoragePath = "";
+        usr_id = id;
     }
 
     public String getUsr_name() {
@@ -85,5 +87,13 @@ public class User {
 
     public void setProfileImgStoragePath(String profileImgStoragePath) {
         this.profileImgStoragePath = profileImgStoragePath;
+    }
+
+    public String getUsr_id() {
+        return usr_id;
+    }
+
+    public void setUsr_id(String usr_id) {
+        this.usr_id = usr_id;
     }
 }
