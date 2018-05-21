@@ -124,9 +124,9 @@ public class AddBook extends AppCompatActivity {
 
         for (int i = 0; i < 4; i++) {
 
-            horizontal_photo_list_element = getLayoutInflater().inflate(R.layout.cell_in_image_list, null);
+            horizontal_photo_list_element = getLayoutInflater().inflate(R.layout.add_book_cell_in_image_list, null);
 
-            final ImageView imageView = (ImageView) horizontal_photo_list_element.findViewById(R.id.image_in_horizontal_list_cell);
+            final ImageView imageView = (ImageView) horizontal_photo_list_element.findViewById(R.id.add_book_image_in_horizontal_list_cell);
             imageView.setOnClickListener(new View.OnClickListener() {
 
                 @Override

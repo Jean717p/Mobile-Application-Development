@@ -128,4 +128,9 @@
     <string name="title_activity_list_of_chat">listOfChatActivity</string>
     <string name="my_chat">My chat</string>
 
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="image_fullscreen">image_fullscreen</string>
+
 </resources>
