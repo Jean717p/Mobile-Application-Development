@@ -2,11 +2,15 @@ package com.mad18.nullpointerexception.takeabook;
 
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.icu.text.IDNA;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,6 +43,7 @@ public class InfoBook extends AppCompatActivity {
     private LinearLayout horizontal_photo_list;
     private View horizontal_photo_list_element;
     private List<String> for_me;
+    private boolean isImageFitToScreen = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -140,12 +145,12 @@ public class InfoBook extends AppCompatActivity {
             horizontal_photo_list.addView(horizontal_photo_list_element);
             StorageReference mImageRef = FirebaseStorage.getInstance().getReference(for_me.get(i));
             Glide.with(getApplicationContext()).load(mImageRef).into(imageView);
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //TODO: apri lo slider per le immagini a partire dalla foro cliccata
-                }
-            });
+            //imageView.setOnClickListener(new View.OnClickListener() {
+            //    @Override
+            //    public void onClick(View view) {
+            ImageViewPopUpHelper.enablePopUpOnClick(InfoBook.this,imageView);
+            //    }
+            //});
         }
         //simo fine
 
@@ -227,5 +232,5 @@ public class InfoBook extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-}
 
+}

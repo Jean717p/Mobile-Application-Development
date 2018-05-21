@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FrameLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/photo_cell_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/add_book_linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <ImageView android:id="@+id/add_book_image_in_horizontal_list_cell"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_addbook"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:layout_margin="8dp"/>
+
+</LinearLayout>
+
+</FrameLayout>

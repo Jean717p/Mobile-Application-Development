@@ -2,18 +2,20 @@
 <FrameLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/photo_cell_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="120dp"
         android:orientation="vertical" >
 
         <ImageButton android:id="@+id/image_in_horizontal_list_cell"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@drawable/ic_addbook"
+            android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             android:layout_margin="8dp"/>
 
