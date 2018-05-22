@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+//kotlin annotation processor
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 26
@@ -29,6 +31,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:animated-vector-drawable:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
@@ -63,8 +66,11 @@ dependencies {
     implementation 'com.facebook.android:facebook-login:4.33.0'
 
     //Glide
-    implementation 'com.github.bumptech.glide:glide:4.6.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
+    implementation ('com.github.bumptech.glide:glide:4.6.1') {
+        exclude group: 'com.android.support'
+    }
+    implementation 'com.android.support:support-fragment:26.1.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 
     //barcode
     implementation 'com.google.android.gms:play-services-vision:15.0.2'
@@ -78,6 +84,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support:support-vector-drawable:26.1.0'
     implementation 'com.android.support:customtabs:26.1.0'
+    kapt 'com.github.bumptech.glide:compiler:4.7.1'
 
     //anko
     implementation "org.jetbrains.anko:anko:$anko_version"
@@ -90,9 +97,6 @@ dependencies {
 }
 
 apply plugin: 'com.google.gms.google-services'
-
-//kotlin annotation processor
-apply plugin: 'kotlin-kapt'
 
 kotlin {
     experimental {
