@@ -36,6 +36,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.User;
+import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -65,6 +66,7 @@ public class editProfile extends AppCompatActivity {
     private final int REQUEST_PERMISSION_CAMERA = 2, REQUEST_PERMISSION_GALLERY=1;
     private String profileImgName = "profile.jpg";
     private Bitmap profileImg = null;
+    private Boolean profileImgChanged;
 
     //        onCreate function is called when the activity is launched and before it appears
 //        You can create a new shared preference file or access an existing one by calling:
@@ -105,6 +107,7 @@ public class editProfile extends AppCompatActivity {
         ImageView iw = findViewById(R.id.edit_profile_personalPhoto);
         iw.setClickable(true);
         iw.setOnClickListener(view -> selectUserImg());
+        profileImgChanged = false;
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
     }
 
@@ -165,13 +168,12 @@ public class editProfile extends AppCompatActivity {
         EditText text;
         String s; File file;
         SharedPreferences.Editor editor = sharedPref.edit();
-
         int i=0;
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         StorageReference mImageRef = FirebaseStorage.getInstance().getReference().child("users/images/"+user.getUid());
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference users = db.collection("users");
-        String profileImgPath;
+        User u = MainActivity.thisUser;
         Map<String,String> user_data = new HashMap<>();
         for(String x: showProfile.sharedUserDataKeys){
             text = findViewById(editTextBoxesIds[i++]);
@@ -180,64 +182,53 @@ public class editProfile extends AppCompatActivity {
                 user_data.put(x,text.getText().toString());
             }
         }
-        if(profileImg!=null){
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            profileImg.compress(Bitmap.CompressFormat.JPEG,JPEG_COMPRESSION_QUALITY,out);
-            mImageRef = FirebaseStorage.getInstance().getReference().child("users/"+user.getUid()+"/profileImage/"+ UUID.nameUUIDFromBytes(out.toByteArray()));
-            editor.putString(profileImgName,saveImageToInternalStorage(profileImg,profileImgName,this));
-            mImageRef.putBytes(out.toByteArray());
-            String newImgPath = mImageRef.getPath();
-            db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    User u = documentSnapshot.toObject(User.class);
-                    if(u.getProfileImgStoragePath().length()>0) {
-                        StorageReference oldImgRef = FirebaseStorage.getInstance().getReference().child(u.getProfileImgStoragePath());
-                        oldImgRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                u.setProfileImgStoragePath(newImgPath);
-                                users.document(user.getUid()).set(u, SetOptions.merge());
-                            }
-                        });
-                    }
-                    else{
-                        u.setProfileImgStoragePath(newImgPath);
-                        users.document(user.getUid()).set(u,SetOptions.merge());
-                    }
-                }
-            });
-        }
-        else{
-            s = sharedPref.getString(profileImgName,"");
-            if(s.length()>0){
-                file = new File(s);
-                if(file.exists()){
-                    file.delete();
-                    db.collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        if(profileImgChanged==true){
+            if(profileImg!=null){
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                profileImg.compress(Bitmap.CompressFormat.JPEG,JPEG_COMPRESSION_QUALITY,out);
+                mImageRef = FirebaseStorage.getInstance().getReference().child("users/"+user.getUid()+"/profileImage/"+ UUID.nameUUIDFromBytes(out.toByteArray()));
+                editor.putString(profileImgName,saveImageToInternalStorage(profileImg,profileImgName,this));
+                mImageRef.putBytes(out.toByteArray());
+                String newImgPath = mImageRef.getPath();
+                if(u.getProfileImgStoragePath().length()>0) {
+                    StorageReference oldImgRef = FirebaseStorage.getInstance().getReference().child(u.getProfileImgStoragePath());
+                    oldImgRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            User u = documentSnapshot.toObject(User.class);
-                            StorageReference oldImg = FirebaseStorage.getInstance().getReference().child(u.getProfileImgStoragePath());
-                            oldImg.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    u.setProfileImgStoragePath("");
-                                    users.document(user.getUid()).set(u, SetOptions.merge());
-                                }
-                            });
+                        public void onSuccess(Void aVoid) {
+                            Map<String,String> x = new HashMap<>();
+                            x.put("profileImgStoragePath",newImgPath);
+                            users.document(user.getUid()).set(x, SetOptions.merge());
                         }
                     });
                 }
+                else{
+                    Map<String,String> x = new HashMap<>();
+                    x.put("profileImgStoragePath",newImgPath);
+                    users.document(user.getUid()).set(x,SetOptions.merge());
+                }
             }
-            editor.putString(profileImgName,"");
-            //aggiorna il pathe dell'immagine
+            else{
+                s = sharedPref.getString(profileImgName,"");
+                if(s.length()>0){
+                    file = new File(s);
+                    if(file.exists()){
+                        file.delete();
+                        StorageReference oldImg = FirebaseStorage.getInstance().getReference().child(u.getProfileImgStoragePath());
+                        oldImg.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Map<String,String> x = new HashMap<>();
+                                x.put("profileImgStoragePath","");
+                                users.document(user.getUid()).set(x, SetOptions.merge());
+                            }
+                        });
+                    }
+                }
+                editor.putString(profileImgName,"");
+            }
         }
         editor.apply();
-
         users.document(user.getUid()).set(user_data, SetOptions.merge());
-        //fai l'insert on update delle info inserite dall'utente sul db firebase
-        //questa istruzione
     }
 
     // invoked when the activity may be temporarily destroyed, save the instance state here
@@ -296,6 +287,10 @@ public class editProfile extends AppCompatActivity {
         if(y.length()>0){
             profileImg = loadImageFromStorage(sharedPref.getString(profileImgName,""),R.id.edit_profile_personalPhoto,this);
         }
+        else{
+            ImageView iw = findViewById(R.id.edit_profile_personalPhoto);
+            iw.setImageResource(R.drawable.ic_account_circle_white_48px);
+        }
     }
 
     //in risposta ad una activity che è stata invocata con startactivityforresult
@@ -322,6 +317,7 @@ public class editProfile extends AppCompatActivity {
                         iw = findViewById(R.id.edit_profile_personalPhoto);
                         if(iw!=null && profileImg != null) {
                             iw.setImageBitmap(profileImg);
+                            profileImgChanged = true;
                         }
                     }
                     break;
@@ -331,6 +327,7 @@ public class editProfile extends AppCompatActivity {
                         iw = findViewById(R.id.edit_profile_personalPhoto);
                         if(iw!=null && profileImg != null) {
                             iw.setImageBitmap(profileImg);
+                            profileImgChanged = true;
                         }
                     }
                     break;
@@ -399,6 +396,7 @@ public class editProfile extends AppCompatActivity {
         if(profileImg!=null){
             iw.setImageResource(R.drawable.ic_account_circle_white_48px);
             profileImg = null;
+            profileImgChanged = true;
         }
     }
 

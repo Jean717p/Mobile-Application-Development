@@ -63,7 +63,6 @@ public class showProfile extends AppCompatActivity {
                 Intent intent = new Intent(this,editProfile.class);
                 startActivity(intent);
                 return true;
-
             case android.R.id.home:
                 onBackPressed();
                 finish();

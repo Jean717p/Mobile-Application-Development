@@ -30,16 +30,27 @@
         android:layout_marginLeft="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
         android:layout_marginBottom="8dp"
-        android:src="@drawable/ic_account_circle_white_48px"
+        app:srcCompat="@drawable/ic_account_circle_white_48px"
         app:civ_border_color="@color/textColor"
         app:civ_border_width="@dimen/circle_image_border" />
 
-
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/show_profile_personalPhoto"
-      >
+        android:layout_height="match_parent"
+        android:layout_below="@id/show_profile_personalPhoto">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/show_profile_title_Username"
+            android:text="@string/Username"
+            android:fontFamily="sans-serif-light"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:paddingBottom="8dp"
+
+            android:textSize="@dimen/profile_text_view_title"/>
 
         <TextView
             android:id="@+id/show_profile_Username"
@@ -47,21 +58,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
+            android:layout_below="@id/show_profile_title_Username"
             android:textColor="@color/textColor"
             android:textSize="20sp"
-            android:gravity="center"
             android:layout_marginBottom="16dp"
             />
-
-
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:layout_below="@id/show_profile_personalPhoto">
         <!--Questa è la definizione dell'immagine circolare per la foto personale del profilo utente-->
 
 
@@ -74,7 +75,7 @@
             android:fontFamily="sans-serif-light"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/show_profile_City"
+            android:layout_below="@id/show_profile_Username"
             android:textColor="@color/colorPrimary"
             android:paddingBottom="8dp"
             android:textSize="@dimen/profile_text_view_title"/>
@@ -85,7 +86,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:maxLines="1"
-            android:paddingTop="32dp"
+            android:layout_below="@id/show_profile_title_City"
             android:textColor="@color/textColor"
             android:textSize="@dimen/profile_text_view_content" />
 
@@ -99,7 +100,7 @@
             android:fontFamily="sans-serif-light"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/show_profile_mail"
+            android:layout_below="@id/show_profile_City"
             android:textColor="@color/colorPrimary"
             android:paddingBottom="8dp"
             android:textSize="@dimen/profile_text_view_title"/>
@@ -108,7 +109,7 @@
             android:id="@+id/show_profile_mail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/show_profile_title_City"
+            android:layout_below="@id/show_profile_title_mail"
             android:maxLines="1"
             android:textColor="@color/textColor"
             android:textSize="@dimen/profile_text_view_content"
@@ -126,7 +127,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="8dp"
-            android:layout_below="@id/show_profile_about"
+            android:layout_below="@id/show_profile_mail"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/profile_text_view_title"/>
 
@@ -135,11 +136,11 @@
                 android:id="@+id/show_profile_about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/show_profile_title_mail"
+                android:layout_below="@id/show_profile_title_about"
                 android:textColor="@color/textColor"
                 android:fontFamily="sans-serif"
                 android:textSize="@dimen/profile_text_view_content"
                />
-
-    </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>

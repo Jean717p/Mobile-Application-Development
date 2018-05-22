@@ -365,6 +365,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     thisUser = doc.toObject(User.class);
                     for(String tmp:sharedUserDataKeys){
                         editor.putString(tmp,doc.getString(tmp));
+                        Log.d(TAG,tmp+" - "+doc.getString(tmp));
                     }
                     editor.apply();
                     View hview = navigationView.getHeaderView(0);

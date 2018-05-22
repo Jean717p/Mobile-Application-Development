@@ -17,130 +17,104 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark"
         />
-    <RelativeLayout
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/show_profile_personalPhoto"
+        android:layout_width="@dimen/profile_photo_width"
+        android:layout_height="@dimen/profile_photo_height"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="64dp"
+        app:srcCompat="@drawable/ic_account_circle_white_48px"
+        app:civ_border_color="@color/textColor"
+        app:civ_border_width="@dimen/circle_image_border" />
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            >
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/show_profile_personalPhoto"
-                android:layout_width="@dimen/profile_photo_width"
-                android:layout_height="@dimen/profile_photo_height"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="64dp"
-                android:src="@drawable/ic_account_circle_white_48px"
-                app:civ_border_color="@color/textColor"
-                app:civ_border_width="@dimen/circle_image_border" />
-
-
-        </RelativeLayout>
-
-
-
-
-
-            <!--titolo city-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="72dp"
-        >
-
-        <TextView
-            android:id="@+id/show_profile_Username"
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:translationX="200dp"
-            android:textColor="@color/textColor"
-            android:textSize="@dimen/profile_text_view_content" />
+            android:orientation="vertical"
+            android:layout_marginTop="72dp">
 
+            <TextView
+                android:id="@+id/show_profile_title_Username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="@string/Username"
+                android:translationX="200dp"
+                android:fontFamily="sans-serif-light"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/profile_text_view_title" />
 
-        <TextView
-            android:id="@+id/show_profile_title_Username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="8dp"
-            android:text="@string/Username"
-            android:translationX="200dp"
-            android:fontFamily="sans-serif-light"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/profile_text_view_title" />
-
-
-        <TextView
-            android:id="@+id/show_profile_City"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:translationX="200dp"
-            android:textColor="@color/textColor"
-            android:textSize="@dimen/profile_text_view_content" />
-
-
-        <TextView
-            android:id="@+id/show_profile_title_City"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="8dp"
-            android:text="@string/City"
-            android:translationX="200dp"
-            android:fontFamily="sans-serif-light"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/profile_text_view_title" />
-        <!--city-->
-
-
-        <TextView
-            android:id="@+id/show_profile_mail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:maxLines="1"
-            android:translationX="200dp"
-            android:textColor="@color/textColor"
-            android:textSize="@dimen/profile_text_view_content" />
-
-
-        <!--titolo mail-->
-        <TextView
-            android:id="@+id/show_profile_title_mail"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:translationX="200dp"
-            android:paddingBottom="8dp"
-            android:text="@string/Email"
-            android:fontFamily="sans-serif-light"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/profile_text_view_title" />
-        <!-- mail-->
-
-        <!--titolo about-->
-        <!--about-->
-        <TextView
-            android:id="@+id/show_profile_about"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/textColor"
-            android:translationX="200dp"
-            android:textColorHint="@color/colorAccent"
-            android:textSize="@dimen/profile_text_view_content" />
-
-        <TextView
-            android:id="@+id/show_profile_title_about"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="8dp"
-            android:text="@string/AboutMe"
-            android:translationX="200dp"
-            android:fontFamily="sans-serif-light"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/profile_text_view_title" />
-    </LinearLayout>
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/show_profile_Username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:translationX="200dp"
+                android:textColor="@color/textColor"
+                android:textSize="@dimen/profile_text_view_content" />
+            <TextView
+                android:id="@+id/show_profile_title_City"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="@string/City"
+                android:translationX="200dp"
+                android:fontFamily="sans-serif-light"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/profile_text_view_title" />
+            <TextView
+                android:id="@+id/show_profile_City"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:translationX="200dp"
+                android:textColor="@color/textColor"
+                android:textSize="@dimen/profile_text_view_content" />
+            <!--city-->
+            <!--titolo mail-->
+            <TextView
+                android:id="@+id/show_profile_title_mail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:translationX="200dp"
+                android:paddingBottom="8dp"
+                android:text="@string/Email"
+                android:fontFamily="sans-serif-light"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/profile_text_view_title"/>
+            <TextView
+                android:id="@+id/show_profile_mail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:maxLines="1"
+                android:translationX="200dp"
+                android:textColor="@color/textColor"
+                android:textSize="@dimen/profile_text_view_content" />
+            <!-- mail-->
+            <!--titolo about-->
+            <TextView
+                android:id="@+id/show_profile_title_about"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="@string/AboutMe"
+                android:translationX="200dp"
+                android:fontFamily="sans-serif-light"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/profile_text_view_title" />
+            <!--about-->
+            <TextView
+                android:id="@+id/show_profile_about"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textColor"
+                android:translationX="200dp"
+                android:textColorHint="@color/colorAccent"
+                android:textSize="@dimen/profile_text_view_content" />
+        </LinearLayout>
+    </ScrollView>
 </RelativeLayout>

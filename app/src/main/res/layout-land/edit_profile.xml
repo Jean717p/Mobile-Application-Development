@@ -31,11 +31,9 @@
         android:layout_alignParentStart="true"
         android:layout_margin="@dimen/layout_margin"
         android:layout_below="@id/edit_profile_toolbar"
-
         android:layout_centerVertical="true"
         android:layout_marginStart="16dp"
-        android:src="@drawable/ic_account_circle_white_48px"
-
+        app:srcCompat="@drawable/ic_account_circle_white_48px"
         app:civ_border_color="@color/textColor"
         app:civ_border_width="@dimen/circle_image_border"
         />
@@ -46,112 +44,102 @@
         android:layout_below="@id/edit_profile_toolbar"
         android:layout_toRightOf="@id/edit_profile_personalPhoto">
         <!--Questo è un wrapper per i fields da Username fino ad About -->
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <RelativeLayout
+            android:layout_toRightOf="@id/edit_profile_personalPhoto"
+            android:layout_below="@id/edit_profile_toolbar"
+            android:layout_margin="16dp">
+            <!--titolo username-->
+            <TextView
+                android:id="@+id/edit_profile_title_Username"
+                android:text="@string/Username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/edit_profile_personalPhoto"
-                android:layout_below="@id/edit_profile_toolbar"
-                android:layout_margin="16dp">
-                <!--titolo username-->
-                <TextView
-                    android:id="@+id/edit_profile_title_Username"
-                    android:text="@string/Username"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/profile_text_view_title"/>
-                <!-- username-->
-                <EditText
-                    android:id="@+id/edit_profile_Username"
-                    android:hint="@string/Username"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/edit_profile_title_Username"
-                    android:enabled="true"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:textColor="@color/textColor"
-                    android:textColorHint="@color/colorAccent"
-                    android:textSize="@dimen/edit_text_content_height" />
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/profile_text_view_title"/>
+            <!-- username-->
+            <EditText
+                android:id="@+id/edit_profile_Username"
+                android:hint="@string/Username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edit_profile_title_Username"
+                android:enabled="true"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="@color/textColor"
+                android:textSize="@dimen/edit_text_content_height" />
 
-                <!--titolo city-->
-                <TextView
-                    android:id="@+id/edit_profile_title_City"
-                    android:text="@string/City"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/edit_profile_Username"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/profile_text_view_title"/>
-                <!--city-->
-                <EditText
-                    android:id="@+id/edit_profile_City"
-                    android:hint="@string/City"
-                    android:layout_below="@id/edit_profile_title_City"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:textSize="@dimen/edit_text_content_height"
-                    android:textColorHint="@color/colorAccent"
-                    android:enabled="true"
-                    android:maxLines="1"
-                    android:textColor="@color/textColor"
-                    />
+            <!--titolo city-->
+            <TextView
+                android:id="@+id/edit_profile_title_City"
+                android:text="@string/City"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edit_profile_Username"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/profile_text_view_title"/>
+            <!--city-->
+            <EditText
+                android:id="@+id/edit_profile_City"
+                android:hint="@string/City"
+                android:layout_below="@id/edit_profile_title_City"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textSize="@dimen/edit_text_content_height"
+                android:enabled="true"
+                android:maxLines="1"
+                android:textColor="@color/textColor"
+                />
 
-                <!--titolo mail-->
-                <TextView
-                    android:id="@+id/edit_profile_title_mail"
-                    android:text="@string/Email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/edit_profile_City"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/profile_text_view_title"/>
-                <!-- mail-->
-                <EditText
-                    android:id="@+id/edit_profile_mail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/edit_profile_title_mail"
-                    android:enabled="false"
-                    android:hint="@string/Email"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:textColor="@color/textColor"
-                    android:textColorHint="@color/colorAccent"
-                    android:textSize="@dimen/text_view_height" />
+            <!--titolo mail-->
+            <TextView
+                android:id="@+id/edit_profile_title_mail"
+                android:text="@string/Email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edit_profile_City"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/profile_text_view_title"/>
+            <!-- mail-->
+            <EditText
+                android:id="@+id/edit_profile_mail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edit_profile_title_mail"
+                android:enabled="false"
+                android:hint="@string/Email"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:textColor="@color/textColor"
+                android:textSize="@dimen/text_view_height" />
 
-                <!--titolo about-->
-                <TextView
-                    android:id="@+id/edit_profile_title_about"
-                    android:text="@string/AboutMe"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/edit_profile_mail"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/profile_text_view_title"/>
-                <!--about-->
-                <EditText
-                    android:id="@+id/edit_profile_about"
-                    android:hint="@string/AboutMe"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/edit_profile_title_about"
-                    android:enabled="true"
-                    android:gravity="top"
-                    android:inputType="textMultiLine"
-                    android:maxLength="300"
-                    android:scrollbars="vertical"
-                    android:textColor="@color/textColor"
-                    android:textColorHint="@color/colorAccent"
-                    android:textSize="@dimen/edit_text_content_height" />
-
-            </RelativeLayout>
-        </LinearLayout>
+            <!--titolo about-->
+            <TextView
+                android:id="@+id/edit_profile_title_about"
+                android:text="@string/AboutMe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edit_profile_mail"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/profile_text_view_title"/>
+            <!--about-->
+            <EditText
+                android:id="@+id/edit_profile_about"
+                android:hint="@string/AboutMe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edit_profile_title_about"
+                android:enabled="true"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:maxLength="300"
+                android:scrollbars="vertical"
+                android:textColor="@color/textColor"
+                android:textSize="@dimen/edit_text_content_height" />
+        </RelativeLayout>
     </ScrollView>
 
 </RelativeLayout>
