@@ -3,19 +3,23 @@ package com.mad18.nullpointerexception.takeabook.chatActivity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.LinearLayout
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.storage.FirebaseStorage
 import com.mad18.nullpointerexception.takeabook.R
 import com.mad18.nullpointerexception.takeabook.User
-import com.mad18.nullpointerexception.takeabook.chatActivity.AppConstants.USER_ID
-import com.mad18.nullpointerexception.takeabook.chatActivity.AppConstants.USER_NAME
 import com.mad18.nullpointerexception.takeabook.chatActivity.recyclerview.ChatMemberItem
 import com.mad18.nullpointerexception.takeabook.myProfile.editProfile
 import com.xwray.groupie.GroupAdapter
@@ -42,13 +46,14 @@ class listOfChatActivity : AppCompatActivity() {
         context = this
         setSupportActionBar(findViewById(R.id.list_of_chat_toolbar))
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        setTitle(R.string.title_activity_show_profile)
+        title = getString(R.string.mychat)
         userListenerRegistration = addUsersListener(this,this::updateRecyclerView)
         //list_of_chat_recycler_view
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.list_of_chat_toolbar, menu)
         this.menu = menu
         return true
     }
@@ -61,7 +66,15 @@ class listOfChatActivity : AppCompatActivity() {
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
                 return true
             }
+            R.id.action_refresh_chat -> {
+                userListenerRegistration = addUsersListener(this,this::updateRecyclerView)
+                val snackbar = Snackbar
+                        .make(findViewById(R.id.list_of_chat_framelayout), getText(R.string.chat_updated), Snackbar.LENGTH_LONG)
+                snackbar.show()
+            }
         }
+
+
         return super.onOptionsItemSelected(item)
     }
 
@@ -97,14 +110,29 @@ class listOfChatActivity : AppCompatActivity() {
         if (item is ChatMemberItem) {
             // TODO Fare partire la activity in cui si visualizza la chat
             startActivity<ChatActivity>(
-                    USER_NAME to item.person.usr_name,
-                    USER_ID to item.userId)
+                    AppConstants.USER_NAME to item.person.usr_name,
+                    AppConstants.USER_ID to item.userId)
         }
     }
 
     private fun removeListener(registration: ListenerRegistration) = registration.remove()
 
     private fun addUsersListener(context: Context, onListen: (List<Item>) -> Unit): ListenerRegistration {
+        val engagedUserId = mutableListOf<String>()
+        var userId = FirebaseAuth.getInstance().currentUser?.uid
+        var userDocRef = FirebaseFirestore.getInstance().collection("users").document(userId.toString())
+        userDocRef.collection("engagedChatChannels").addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            if (firebaseFirestoreException != null) {
+                Log.e("FIRESTORE", "Users listener error.", firebaseFirestoreException)
+                return@addSnapshotListener
+            }
+
+            querySnapshot!!.documents.forEach {
+                if (it.id != FirebaseAuth.getInstance().currentUser?.uid)
+                    engagedUserId.add(it.id)
+            }
+
+        }
         return FirebaseFirestore.getInstance().collection("users")
                 .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                     if (firebaseFirestoreException != null) {
@@ -114,8 +142,10 @@ class listOfChatActivity : AppCompatActivity() {
 
                     val items = mutableListOf<Item>()
                     querySnapshot!!.documents.forEach {
-                        if (it.id != FirebaseAuth.getInstance().currentUser?.uid)
+                        if(engagedUserId.contains(it.id) && it.id != userId.toString()){
                             items.add(ChatMemberItem(it.toObject(User::class.java)!!, it.id, context))
+                        }
+                        //if (it.id != FirebaseAuth.getInstance().currentUser?.uid)
                     }
                     onListen(items)
                 }

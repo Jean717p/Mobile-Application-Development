@@ -119,7 +119,20 @@
         <activity
             android:name=".chatActivity.listOfChatActivity"
             android:label="@string/title_activity_list_of_chat"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".mainActivity.MainActivity"/>
+        </activity>
+        <activity android:name=".chatActivity.ChatActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".chatActivity.listOfChatActivity"/>
+            <intent-filter>
+                <action android:name="ChatActivity"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
 
         <!-- FCM -->
 

@@ -249,7 +249,7 @@ public class editProfile extends AppCompatActivity {
 
     // This callback is called only when there is a saved instance that is previously saved by using
 // onSaveInstanceState(). We restore some state in onCreate(), while we can optionally restore
-// other state here, possibly usable after onStart() has completed.
+// other state here, possibly usable after onStart() has commpleted.
 // The savedInstanceState Bundle is same as the one used in onCreate().
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {

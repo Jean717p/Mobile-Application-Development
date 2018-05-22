@@ -126,7 +126,8 @@
     <string name="title_activity_book_generic_info">Book_generic_info</string>
     <string name="send_your_message">Send your message</string>
     <string name="title_activity_list_of_chat">listOfChatActivity</string>
-    <string name="my_chat">My chat</string>
+    <string name="mychat">My chat</string>
+    <string name="chat_updated">List of chat updated!</string>
 
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>

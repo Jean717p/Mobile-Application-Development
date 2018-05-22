@@ -1,13 +1,19 @@
 package com.mad18.nullpointerexception.takeabook.chatActivity
 
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.support.v4.app.ActivityCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
+import android.view.MenuItem
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ListenerRegistration
 import com.mad18.nullpointerexception.takeabook.R
@@ -28,19 +34,21 @@ import java.io.ByteArrayOutputStream
 import java.util.*
 
 private const val RC_SELECT_IMAGE = 2
-
+private const val RC_CAMERA_CAPTURE = 3
+private const val REQUEST_PERMISSION_GALLERY = 4
+private const val REQUEST_PERMISSION_CAMERA = 5
 
 class ChatActivity : AppCompatActivity() {
 
     private lateinit var currentChannelId: String
-
+    private lateinit var menu: Menu
     private lateinit var messagesListenerRegistration: ListenerRegistration
     private var shouldInitRecyclerView = true
     private lateinit var messagesSection: Section
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
-
+        setSupportActionBar(findViewById(R.id.chat_toolbar))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = intent.getStringExtra(USER_NAME)
 
@@ -60,15 +68,83 @@ class ChatActivity : AppCompatActivity() {
             }
 
             chat_fab_send_image.setOnClickListener {
-                val intent = Intent().apply {
-                    type = "image/*"
-                    action = Intent.ACTION_GET_CONTENT
-                    putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
-                }
-                startActivityForResult(Intent.createChooser(intent, "Select Image"), RC_SELECT_IMAGE)
+                selectUserImg()
             }
         }
     }
+
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        this.menu = menu
+        return true
+    }
+
+    private fun selectUserImg() {
+        val pictureDialog = AlertDialog.Builder(this)
+        val pictureDialogItems = arrayOf(getString(R.string.photo_from_gallery), getString(R.string.photo_from_camera), getString(R.string.photo_remove))
+        pictureDialog.setItems(pictureDialogItems
+        ) { dialog, which ->
+            when (which) {
+                0 -> choosePhotoFromGallery()
+                1 -> choosePhotoFromCamera()
+            }
+        }
+        pictureDialog.show()
+    }
+
+    fun choosePhotoFromGallery() {
+
+        if (ActivityCompat.checkSelfPermission(this@ChatActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this@ChatActivity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_PERMISSION_GALLERY)
+            return
+        }
+
+        val intent = Intent().apply {
+            type = "image/*"
+            action = Intent.ACTION_GET_CONTENT
+            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
+        }
+        startActivityForResult(Intent.createChooser(intent, "Select Image"), RC_SELECT_IMAGE)
+    }
+
+    private fun choosePhotoFromCamera() {
+        if (ActivityCompat.checkSelfPermission(this@ChatActivity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this@ChatActivity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this@ChatActivity, arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_PERMISSION_CAMERA)
+            return
+        }
+
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(cameraIntent, RC_CAMERA_CAPTURE)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                finish()
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        //dopo che l'utente ci ha fornito la risposta alla richesta di permessi
+        when (requestCode) {
+            REQUEST_PERMISSION_GALLERY -> if (grantResults.size > 0) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    choosePhotoFromGallery()
+                }
+            }
+            REQUEST_PERMISSION_CAMERA -> if (grantResults.size > 0) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    choosePhotoFromCamera()
+                }
+            }
+        }
+    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == RC_SELECT_IMAGE && resultCode == Activity.RESULT_OK &&
@@ -88,6 +164,22 @@ class ChatActivity : AppCompatActivity() {
                                 FirebaseAuth.getInstance().currentUser!!.uid)
                 FirestoreUtil.sendMessage(messageToSend, currentChannelId)
             }
+        }
+        if(requestCode == RC_CAMERA_CAPTURE && resultCode == Activity.RESULT_OK &&
+                data != null){
+            var photoImg = data.getExtras()!!.get("data") as Bitmap
+            val outputStream = ByteArrayOutputStream()
+            photoImg.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)
+
+            val selectedImageBytes = outputStream.toByteArray()
+
+            StorageUtil.uploadMessageImage(selectedImageBytes) { imagePath ->
+                val messageToSend =
+                        ImageMessage(imagePath, Calendar.getInstance().time,
+                                FirebaseAuth.getInstance().currentUser!!.uid)
+                FirestoreUtil.sendMessage(messageToSend, currentChannelId)
+            }
+
         }
     }
 
