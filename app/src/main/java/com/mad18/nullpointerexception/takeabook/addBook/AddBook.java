@@ -495,7 +495,13 @@ public class AddBook extends AppCompatActivity {
             eet.setText(String.valueOf(book.getBook_editionYear()));
         }
         eet = findViewById(R.id.add_book_extended_edit_Title);
-        eet.setText(book.getBook_title());
+        if(book.getBook_title().length()>1){
+            eet.setText(book.getBook_title());
+        }
+        else{
+            Toast.makeText(this, R.string.add_book_title_not_found, Toast.LENGTH_SHORT).show();
+        }
+
         eet = findViewById(R.id.add_book_extended_edit_text_Publisher);
         if(book.getBook_publisher().length()>2){
             eet.setText(book.getBook_publisher());

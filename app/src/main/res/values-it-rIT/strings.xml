@@ -104,7 +104,7 @@
     <string name="add_book_error">"Nessun libro è stato inserito"</string>
     <string name="add_book_permission_camera">"Autorizza l'accesso alla fotocamera per utilizzare il QR scanner"</string>
     <string name="add_book_pages">"Numero di pagine"</string>
-
+    <string name="add_book_title_not_found">Il libro non è stato trovato</string>
 
     <!-- Facebook login -->
     <string name="facebook_application_id" translatable="false">207778776488778</string>

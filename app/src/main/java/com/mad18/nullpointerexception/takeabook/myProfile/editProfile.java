@@ -47,145 +47,142 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+//    SharedPreferences is an object point to a file of key-value pairs, it works for small amount of data or settings
+//    that need to be shared inside activities in a project, it is managed by the framework and can be private or shared
+//    in this specific case private means that you can use it just in this activity
+//    Menu are used to create a set of options available to user
+//    these static constants are use to launch and retrieve code in startonactivityresult method when you expects certain behaviours on
+//    a called activity and wait for results
+//    initially and when user delete user profile photo, we have to provide a default image and value in  order to avoid crash
 public class editProfile extends AppCompatActivity {
     private final String TAG = "editProfile";
     private static final int JPEG_COMPRESSION_QUALITY = 90;
     private SharedPreferences sharedPref;
-    //    SharedPreferences is an object point to a file of key-value pairs, it works for small amount of data or settings
-//    that need to be shared inside activities in a project, it is managed by the framework and can be private or shared
-//    in this specific case private means that you can use it just in this activity
     private int editTextBoxesIds[] = new int[]{R.id.edit_profile_Username,R.id.edit_profile_City,
             R.id.edit_profile_mail,R.id.edit_profile_about};
-    //    this vector of R.id is later used to scan alll editable field of the layout inside a for loop to avoid code redundancy
     private Menu menu;
-    //    Menu are used to create a set of options available to user
     private final int REQUEST_PICK_IMAGE = 1, REQUEST_IMAGE_CAPTURE = 2;
     private final int REQUEST_PERMISSION_CAMERA = 2, REQUEST_PERMISSION_GALLERY=1;
-    //    these static constants are use to launch and retrieve code in startonactivityresult method when you expects certain behaviours on
-//    a called activity and wait for results
     private String profileImgName = "profile.jpg";
     private Bitmap profileImg = null;
-    //initially and when user delete user profile photo, we have to provide a default image and value in  order to avoid crash
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        onCreate function is called when the activity is launched and before it appears
-        sharedPref = getSharedPreferences(getString(R.string.app_name),Context.MODE_PRIVATE);
+    //        onCreate function is called when the activity is launched and before it appears
 //        You can create a new shared preference file or access an existing one by calling:
 //        getSharedPreferences() — Use this if you need multiple shared preference files identified by name,
 //        which you specify with the first parameter. You can call this from any Context in your app.
-        setContentView(R.layout.edit_profile);
 //        this method set the layout with which this activity will appear
-        Toolbar toolbar = findViewById(R.id.edit_profile_toolbar);
-        setSupportActionBar(toolbar);
-//      setSupportActionBar(toolbar); Retrieve a reference to this activity's ActionBar.
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//       setSupportActionBar(toolbar); Retrieve a reference to this activity's ActionBar.
 //        this method allows user to go back to its logical parent activity
-        setTitle(R.string.title_activity_edit);
-//ora stiamo settando il nome da visualizzare nella toolbar
-        toolbar.setVisibility(View.VISIBLE);
+//        ora stiamo settando il nome da visualizzare nella toolbar
 //        la toolbar diventa visibile a seguito della definizione del layout
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 //        all'avvio dell'activity la tastiera del cellulare rimane nascosta
-        if(savedInstanceState == null){
-//            se non sono ancora state salvate gli inserimenti dell'utente  vai a recuperare le info tramite la
-//                    funzione fill userdata
-            fillUserData();
-//            vedi sotto cosa fa la funzione chiamata
-        }
-        ImageView iw = findViewById(R.id.edit_profile_personalPhoto);
+//        se non sono ancora state salvate gli inserimenti dell'utente  vai a recuperare le info tramite la
+//        funzione fill userdata
+//        vedi sotto cosa fa la funzione chiamata
 //        recupera l'elemento view con id = a "edit_profile_personalPhoto" e assegnalo all'oggetto ImageView come variabile
 //        java iw
-        iw.setClickable(true);
 //        settiamo l'elemento foto profilo presente nella view e appena recuperato come cliccabile
 //        per interagire con gli elementi dell'xml dobbiamo portarli in java come variabili oggetto e operare su di esse
-        iw.setOnClickListener(view -> selectUserImg());
 //        mettiamo una sentinella pronta a ricevere i click sulla foto profilo e una volta cliccata la foto profilo,
 //        con questa lambda expression vogliamo dire di avviare la funzione selectUserImg() più sotto nel codice
-        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
 //        vengono qui inizializzate le animazioni per le transizioni da queste activity ad un'altra a seguito della chiamata startactivity
-//                o finish.  R.anim.slide_in_right è il primo campo e quindi l'animazione di ingresso in questa activity
+//        o finish.  R.anim.slide_in_right è il primo campo e quindi l'animazione di ingresso in questa activity
 //        R.anim.slide_out_left è il secondo campo e indica che animazione utilizzare quando ce ne andiamo da questa activity
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        sharedPref = getSharedPreferences(getString(R.string.app_name),Context.MODE_PRIVATE);
+        setContentView(R.layout.edit_profile);
+        Toolbar toolbar = findViewById(R.id.edit_profile_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(R.string.title_activity_edit);
+        toolbar.setVisibility(View.VISIBLE);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        if(savedInstanceState == null){
+            fillUserData();
+        }
+        ImageView iw = findViewById(R.id.edit_profile_personalPhoto);
+        iw.setClickable(true);
+        iw.setOnClickListener(view -> selectUserImg());
+        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
     }
 
+//        la prima volta che il menu viene creato viene invocato questo metodo, per successive modifiche chiama onprepareotionsmenu
+//        assegnamo a menu il valore richiesto
+//        creiamo l'oggetto inflater per poter gonfiare e dare vita alle cose
+//        gonfia il menu e rendilo vivo e utilizzabile dall'utente sfruttando l'inflater appena creato
+//        ritornando true indichiamo che il menu deve essere mostrato
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-//        la prima volta che il menu viene creato viene invocato questo metodo, per successive modifiche chiama onprepareotionsmenu
         this.menu = menu;
-//        assegnamo a menu il valore richiesto
         MenuInflater inflater = getMenuInflater();
-//        creiamo l'oggetto inflater per poter gonfiare e dare vita alle cose
         inflater.inflate(R.menu.edit_profile_toolbar, menu);
-//        gonfia il menu e rendilo vivo e utilizzabile dall'utente sfruttando l'inflater appena creato
         return true;
-//        ritornando true indichiamo che il menu deve essere mostrato
     }
 
+    //        quando viene selezionato un elemento del menu viene chiamato questo metodo: onOptionsItemSelected()
+//                se viene selezionato il pulsante save
+//                chimata al metodo UserEditData che vedi sotto
+//                chiudi questa activity
+//                animazioni vedi sopra, le ho già commentate prima
+//                se vogliamo tornare indietro non salviamo i dati inseriti
+//                chiudi questa activity
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-//        quando viene selezionato un elemento del menu viene chiamato questo metodo: onOptionsItemSelected()
         switch (item.getItemId()){
             case R.id.edit_profile_action_save:
-//                se viene selezionato il pulsante save
                 storeUserEditData();
-//                chimata al metodo UserEditData che vedi sotto
                 finish();
-//                chiudi questa activity
                 overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
-//                animazioni vedi sopra, le ho già commentate prima
                 return true;
             case android.R.id.home:
-//                se vogliamo tornare indietro non salviamo i dati inseriti
                 finish();
-//                chiudi questa activity
                 overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
-//                come sopra
                 return true;
         }
         return super.onOptionsItemSelected(item);
-//        questo sarebbe il default case nel momento in cui l'utente non selezione nessun item
     }
 
+    //        con l'editor non andiamo ad agire sulle shared preferences selezionate fino a che non verrà chiamato apply
+//                fino ad allora le modifiche restano in un file di batch tempoaneo e non vanno a modificare le sharedPref
+//                originali
+//        prima interazione con firebase per recuperare dal database l'utente che sta usando l'app
+//        StorageReference è un riferimento a una risorsa in cloud di google che in questo caso recuperiamo da firebase nel
+//                sottoalbero users/images/
+//        recuperiamo il database da firestore dentro firebase
+//        firestore è un nuovo servizio cloud che opera come firebase ma è più prestante e di facile utilizzo
+//        stiamo chiedendo a firestore di ritornarci la collezione di utenti
+//            la shareduserdatakeys è inizializzata nella showprofile e contiene alcuni campi di testo che si trovano
+//            nelle sharedPreferences //            è un vettore di stringhe
+//            qui stiamo salvando nelle shared preferences temporanea i campi inseriti dall'utente negli edittext
+//                se non è ancora presente la mail dell'utente
+//                  allora inserisci nella mappa ciò che è stato inserito in questo form
+//            se non è ancora stata salvata un'immagine profilo
+//            prendi l'immagine di default
+//                se il percorso per fare lo storage dell'immagine non è vuoto allora assegna il nostro path
     private void storeUserEditData(){
         EditText text;
         String s; File file;
         SharedPreferences.Editor editor = sharedPref.edit();
-//        con l'editor non andiamo ad agire sulle shared preferences selezionate fino a che non verrà chiamato apply
-//                fino ad allora le modifiche restano in un file di batch tempoaneo e non vanno a modificare le sharedPref
-//                originali
+
         int i=0;
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//        prima interazione con firebase per recuperare dal database l'utente che sta usando l'app
         StorageReference mImageRef = FirebaseStorage.getInstance().getReference().child("users/images/"+user.getUid());
-//        StorageReference è un riferimento a una risorsa in cloud di google che in questo caso recuperiamo da firebase nel
-//                sottoalbero users/images/
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        recuperiamo il database da firestore dentro firebase
-//        firestore è un nuovo servizio cloud che opera come firebase ma è più prestante e di facile utilizzo
         CollectionReference users = db.collection("users");
-//        stiamo chiedendo a firestore di ritornarci la collezione di utenti
         String profileImgPath;
         Map<String,String> user_data = new HashMap<>();
-
         for(String x: showProfile.sharedUserDataKeys){
-//            la shareduserdatakeys è inizializzata nella showprofile e contiene alcuni campi di testo che si trovano
-//            nelle sharedPreferences //            è un vettore di stringhe
             text = findViewById(editTextBoxesIds[i++]);
             editor.putString(x,text.getText().toString());
-//            qui stiamo salvando nelle shared preferences temporanea i campi inseriti dall'utente negli edittext
             if(x.equals(showProfile.sharedUserDataKeys[2])==false){ //Not email
-//                se non è ancora presente la mail dell'utente
                 user_data.put(x,text.getText().toString());
-//                  allora inserisci nella mappa ciò che è stato inserito in questo form
             }
         }
         if(profileImg!=null){
-//            se non è ancora stata salvata un'immagine profilo
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             profileImg.compress(Bitmap.CompressFormat.JPEG,JPEG_COMPRESSION_QUALITY,out);
-//            prendi l'immagine di default
-//                se il percorso per fare lo storage dell'immagine non è vuoto allora assegna il nostro path
             mImageRef = FirebaseStorage.getInstance().getReference().child("users/"+user.getUid()+"/profileImage/"+ UUID.nameUUIDFromBytes(out.toByteArray()));
             editor.putString(profileImgName,saveImageToInternalStorage(profileImg,profileImgName,this));
             mImageRef.putBytes(out.toByteArray());
@@ -214,7 +211,6 @@ public class editProfile extends AppCompatActivity {
         else{
             s = sharedPref.getString(profileImgName,"");
             if(s.length()>0){
-//                altrimenti controllo se il path esiste
                 file = new File(s);
                 if(file.exists()){
                     file.delete();
@@ -238,35 +234,34 @@ public class editProfile extends AppCompatActivity {
             //aggiorna il pathe dell'immagine
         }
         editor.apply();
-        // aggiorna le shared preferences perchè tutto è andato a buon fine
-        // quind prendi dal file batch e scrivi su sharedpreferences
+
         users.document(user.getUid()).set(user_data, SetOptions.merge());
         //fai l'insert on update delle info inserite dall'utente sul db firebase
         //questa istruzione
     }
 
+    // invoked when the activity may be temporarily destroyed, save the instance state here
+    // call superclass to save any view hierarchy
+    //salva tutti i campi inseriti dall'utente più il path della immagine profilo
     @Override
     protected void onSaveInstanceState(Bundle outState){
-        // invoked when the activity may be temporarily destroyed, save the instance state here
         super.onSaveInstanceState(outState);
-        // call superclass to save any view hierarchy
         EditText text;
         for(int i: editTextBoxesIds){
             text = findViewById(i);
             outState.putString(Integer.toString(i),text.getText().toString());
         }
-        //salva tutti i campi inseriti dall'utente più il path della immagine profilo
         if(profileImg!=null){
             outState.putString("profileImgPath", saveImageToInternalStorage(profileImg,"temp_"+profileImgName,this));
         }
     }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        // This callback is called only when there is a saved instance that is previously saved by using
+    // This callback is called only when there is a saved instance that is previously saved by using
 // onSaveInstanceState(). We restore some state in onCreate(), while we can optionally restore
 // other state here, possibly usable after onStart() has completed.
 // The savedInstanceState Bundle is same as the one used in onCreate().
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         EditText text;
         String path = savedInstanceState.getString("profileImgPath");
@@ -283,10 +278,10 @@ public class editProfile extends AppCompatActivity {
         }
     }
 
+    //come si può dedurre dal titolo della funzione. stiamo recuperando le info dell'utente dalle shared pred
+    // e le stiamo riposizionando nei field della view edit_profile.xml
+    // bisogna sempre fare i check se i campi esistono
     private void fillUserData(){
-        //come si può dedurre dal titolo della funzione. stiamo recuperando le info dell'utente dalle shared pred
-        // e le stiamo riposizionando nei field della view edit_profile.xml
-        // bisogna sempre fare i check se i campi esistono
         TextView text;
         String y;
         int i=0;
@@ -303,15 +298,19 @@ public class editProfile extends AppCompatActivity {
         }
     }
 
+    //in risposta ad una activity che è stata invocata con startactivityforresult
+    // dobbiamo prima capire da quale activity stiamo tornando e con quale codice
+    //l'immagine è stata presa dallo storage del telefono -> galleria
+    //immagine recuperata tramite fotocampera
+    //notare come siano state messe nel bundle "data" dall'altra activity
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //in risposta ad una activity che è stata invocata con startactivityforresult
         super.onActivityResult(requestCode,resultCode,data);
         ImageView iw;
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                // dobbiamo prima capire da quale activity stiamo tornando e con quale codice
+
                 case REQUEST_PICK_IMAGE:
-                    //l'immagine è stata presa dallo storage del telefono -> galleria
+
                     if (data != null) {
                         Uri selectedMediaUri = data.getData();
                         try {
@@ -327,8 +326,6 @@ public class editProfile extends AppCompatActivity {
                     }
                     break;
                 case REQUEST_IMAGE_CAPTURE:
-                    //immagine recuperata tramite fotocampera
-                    //notare come siano state messe nel bundle "data" dall'altra activity
                     if (data != null) {
                         profileImg = (Bitmap) data.getExtras().get("data");
                         iw = findViewById(R.id.edit_profile_personalPhoto);
@@ -405,16 +402,17 @@ public class editProfile extends AppCompatActivity {
         }
     }
 
+    //salvare immagine profilo nello storage del telefono per non doverla recuperare da firebase ogni volta
+    // path to /data/data/appname/app_data/imageDir internal
+    //Environment.getExternalStorageDirectory(); sd
+    // Create imageDir
     public static String saveImageToInternalStorage(Bitmap bitmapImage, String filename, Context context){
-        //salvare immagine profilo nello storage del telefono per non doverla recuperare da firebase ogni volta
         if(bitmapImage==null){
             return null;
         }
         ContextWrapper cw = new ContextWrapper(context);
-        // path to /data/data/appname/app_data/imageDir internal
+
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-        //Environment.getExternalStorageDirectory(); sd
-        // Create imageDir
         File file = new File(directory,filename);
         FileOutputStream out = null;
         try {

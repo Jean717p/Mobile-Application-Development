@@ -97,7 +97,7 @@
     <string name="add_book_error">"Any book has been inserted"</string>
     <string name="add_book_permission_camera">"Please, grant camera permission to use the QR Scanner"</string>
     <string name="add_book_pages">"Number of pages"</string>
-
+    <string name="add_book_title_not_found">book not found</string>
 
     <!--Book conditions-->
     <string-array name="book_conditions">
@@ -132,5 +132,6 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="image_fullscreen">image_fullscreen</string>
+
 
 </resources>

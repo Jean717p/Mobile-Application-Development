@@ -1,16 +1,16 @@
 package com.mad18.nullpointerexception.takeabook;
 
+import com.mad18.nullpointerexception.takeabook.addBook.BookWrapper;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.icu.text.IDNA;
-import android.os.Build;
+
 import android.os.Bundle;
+
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,9 +25,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.mad18.nullpointerexception.takeabook.addBook.BookWrapper;
+
 import java.util.LinkedList;
 import java.util.List;
+
 
 public class InfoBook extends AppCompatActivity {
 
@@ -133,9 +134,10 @@ public class InfoBook extends AppCompatActivity {
                 break;
         }
         Glide.with(this).load(book.getBook_thumbnail_url()).into(iw);
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
         //simo inizio
+
         horizontal_photo_list = (LinearLayout) findViewById(R.id.info_book_list_photo_container);
 
         for_me = new LinkedList<>(book.getBook_photo_list().keySet());
@@ -144,16 +146,15 @@ public class InfoBook extends AppCompatActivity {
             ImageView imageView = (ImageView) horizontal_photo_list_element.findViewById(R.id.image_in_horizontal_list_cell);
             horizontal_photo_list.addView(horizontal_photo_list_element);
             StorageReference mImageRef = FirebaseStorage.getInstance().getReference(for_me.get(i));
-            Glide.with(getApplicationContext()).load(mImageRef).into(imageView);
-            //imageView.setOnClickListener(new View.OnClickListener() {
-            //    @Override
-            //    public void onClick(View view) {
+
+            GlideApp.with(this).load(mImageRef).into(imageView);
+
             ImageViewPopUpHelper.enablePopUpOnClick(InfoBook.this,imageView);
-            //    }
-            //});
+
         }
         //simo fine
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference user_doc;
 
         user_doc = db.collection("users").document(bookToShowInfoOf.getUser_id());
