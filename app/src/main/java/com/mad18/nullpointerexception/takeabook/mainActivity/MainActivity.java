@@ -370,7 +370,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     setNavDrawerParameters(hview);
                     if(sharedPref.getString(profileImgName,"").length()==0
                             && thisUser.getProfileImgStoragePath().length() > 0){
-                        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(thisUser.getProfileImgStoragePath());
+                        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(thisUser.getProfileImgStoragePath().substring(1,thisUser.getProfileImgStoragePath().length()-1));
                         Glide.with(context).asBitmap().load(mImageRef).into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL) {
                             @Override
                             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
