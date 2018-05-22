@@ -267,6 +267,7 @@
             android:layout_alignTop="@id/info_book_label_owner"
             android:layout_toEndOf="@id/info_book_label_owner"
             android:textColor="@color/textColor"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textSize="13sp"
             android:text="Owner"
             />

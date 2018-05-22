@@ -8,6 +8,7 @@
     tools:context=".mainActivity.MainActivity">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/main_app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
@@ -45,6 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:clickable="true"
             android:minHeight="?android:attr/actionBarSize"
             app:layout_collapseParallaxMultiplier="0.75"
             app:tabTextAppearance="@style/MineCustomTabText"

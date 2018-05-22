@@ -29,6 +29,7 @@
     <string name="title_activity_info_book">Dettagli libro</string>
     <string name="title_activity_info_user">Informazioni utente</string>
     <string name="title_activity_generic_info">Dettagli libro</string>
+    <string name="title_activity_settings">Impostazioni</string>
 
     <!--Photo-->
     <string name="photo_from_gallery">Seleziona una foto dalla galleria</string>
@@ -43,13 +44,19 @@
         <item>Scarso</item>
     </string-array>
 
+
+    <string-array name="setting_language">
+        <item>Italiano</item>
+        <item>English</item>
+    </string-array>
+    <string name="select_lang">Lingua</string>
     <!--Navigation Drawer-->
     <string name="navigation_drawer_open">Apri menu laterale</string>
     <string name="navigation_drawer_close">Chiudi menu laterale</string>
     <string name="nav_header_title">Nome Utente</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Intestazione menu laterale</string>
-    <string name="action_settings">Impostazioni</string>
+    <string name="nav_settings">Impostazioni</string>
     <string name="nav_element_addbook">Aggiungi un nuovo libro</string>
     <string name="nav_element_showprofile">Il mio profilo</string>
     <string name="nav_element_mylibrary">La mia libreria</string>
@@ -72,6 +79,10 @@
     <string name="search_books">Ricerca</string>
     <string name="search_books_button_cv">Vedi info</string>
 
+
+
+    <!--Home related -->
+    <string name="fragment_home_distance">Distanza:</string>
 
     <!--InfoBook Related-->
     <string name="info_book_label_title">Titolo:</string>
@@ -99,7 +110,7 @@
     <string name="add_book_helper_text_ISBN">"Scrivi esattamente 13 numeri"</string>
     <string name="add_book_description">"Descrizione"</string>
     <string name="add_book_category">"Categoria"</string>
-    <string name="add_book_info_not_available">"Informazione non disponibile"</string>
+    <string name="add_book_info_not_available">"Info non disponibile"</string>
     <string name="add_book_no_description">"Nessuna descrizione"</string>
     <string name="add_book_error">"Nessun libro è stato inserito"</string>
     <string name="add_book_permission_camera">"Autorizza l'accesso alla fotocamera per utilizzare il QR scanner"</string>

@@ -4,13 +4,16 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -38,31 +41,34 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.FutureTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.mad18.nullpointerexception.takeabook.Book;
+import com.mad18.nullpointerexception.takeabook.LanguageHelper;
 import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.LoginActivity;
 import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.SettingsActivity;
 import com.mad18.nullpointerexception.takeabook.SplashScreenActivity;
 import com.mad18.nullpointerexception.takeabook.User;
-import com.mad18.nullpointerexception.takeabook.addBook.BookWrapper;
 import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
 import  com.github.clans.fab.FloatingActionMenu;
 import java.io.File;
@@ -72,7 +78,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import static com.mad18.nullpointerexception.takeabook.myProfile.showProfile.deleteUserData;
@@ -86,17 +91,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
     private SharedPreferences sharedPref;
     private FirebaseFirestore db;
+    private FirebaseFirestore db_home;
     private FirebaseAuth mAuth;
     private DocumentReference user_doc;
     private Context context = this;
     public static User thisUser;
     private FloatingActionButton fab_my_lib;
     public static List<Book> myBooks;
+    public static List<Book> homeBooks;
     private boolean isMyBooksSorted;
     private ViewPager viewPager;
     private MyPagerAdapter myPagerAdapter;
     private TabLayout tabLayout;
     Main_MyLibrary_Fragment f;
+    Main_HomeBooks_Fragment fragment_home;
 
     NavigationView navigationView;
     //Called when a fragment is attached as a child of this fragment.
@@ -113,16 +121,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         isMyBooksSorted = true;
+        Resources res;
+        res = getResources();
         myBooks = new LinkedList<>();
+        homeBooks = new LinkedList<>();
         setContentView(R.layout.activity_main);
         myOnCreateLayout();
         if(savedInstanceState==null){
             //Download userData & books
             new updateUserData().doInBackground();
+            new UpdateHomeData().doInBackground();
             Intent intent = new Intent(this,SplashScreenActivity.class);
             startActivity(intent);
         }
         sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        String y;
+        y = sharedPref.getString("language", "");
+        if(y.length()>0){
+            switch (y){
+                case "Italiano":
+                    LanguageHelper.changeLocale(res,"it");
+                    break;
+                case "English":
+                    LanguageHelper.changeLocale(res,"eng");
+                    break;
+            }
+        }
+
         // Add the parameters requested by the NavDrawer (Image, email, username)
         View hview = navigationView.getHeaderView(0);
         setNavDrawerParameters(hview);
@@ -151,6 +176,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle("Book Circle");
+        AppBarLayout appBarLayout = findViewById(R.id.main_app_bar);
+        appBarLayout.setExpanded(false);
         // Create an instance of the tab layout from the view.
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         // Set the text for each tab.
@@ -184,6 +211,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     case 0:
                         fabSearch.setVisibility(View.VISIBLE);
                         floatingActionButton.setVisibility(View.GONE);
+                        fragment_home = (Main_HomeBooks_Fragment) adapter.getRegisteredFragment(viewPager.getCurrentItem());
+                         double user_lat=0,user_long=0;
+                         Location user_loc;
+                        if(fragment_home!=null && thisUser!=null){
+                            if(thisUser.getUsr_geoPoint()!=null){
+                                user_lat = thisUser.getUsr_geoPoint().getLatitude();
+                                user_long = thisUser.getUsr_geoPoint().getLongitude();
+                                user_loc = new Location("Provider");
+                                user_loc.setLatitude(user_lat);
+                                user_loc.setLongitude(user_long);
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                    homeBooks = homeBooks.stream().sorted((a,b)->{
+                                        Location book_loc_a = new Location("Provider");
+                                        Location book_loc_b = new Location("Provider");
+                                        book_loc_b.setLatitude(b.getBook_location().getLatitude());
+                                        book_loc_b.setLongitude(b.getBook_location().getLongitude());
+                                        book_loc_a.setLatitude(a.getBook_location().getLatitude());
+                                        book_loc_a.setLongitude(a.getBook_location().getLongitude());
+                                        return Float.compare(book_loc_a.distanceTo(user_loc),book_loc_b.distanceTo(user_loc));
+                                    }).collect(Collectors.toList());
+                                }
+                                else{
+                                    Collections.sort(homeBooks, (a, b) -> {
+                                        Location book_loc_b = new Location("Provider");
+                                        Location book_loc_a = new Location("Provider");
+                                        book_loc_b.setLatitude(b.getBook_location().getLatitude());
+                                        book_loc_b.setLongitude(b.getBook_location().getLongitude());
+                                        book_loc_a.setLatitude(a.getBook_location().getLatitude());
+                                        book_loc_a.setLongitude(a.getBook_location().getLongitude());
+                                        return Float.compare(book_loc_a.distanceTo(user_loc),book_loc_b.distanceTo(user_loc));
+                                    });
+                                }
+                                fragment_home.updateView(homeBooks,thisUser.getUsr_geoPoint());
+                            }
+                        }
                         break;
                     case 1:
                         fabSearch.setVisibility(View.GONE);
@@ -265,6 +327,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_mychat:
                 intent = new Intent(context,com.mad18.nullpointerexception.takeabook.chatActivity.listOfChatActivity.class);
                 //startActivityForResult(intent,REQUEST_ADDBOOK);
+                startActivity(intent);
+                break;
+            case R.id.nav_settings:
+                intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -351,75 +417,120 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onPostExecute(s);
         }
 
+
+    @Override
+    protected String doInBackground(String... strings) {
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        user_doc = db.collection("users").document(user.getUid());
+        user_doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot doc = task.getResult();
+                SharedPreferences.Editor editor = sharedPref.edit();
+                navigationView = (NavigationView) findViewById(R.id.nav_view);
+                thisUser = doc.toObject(User.class);
+                for(String tmp:sharedUserDataKeys){
+                    editor.putString(tmp,doc.getString(tmp));
+                    Log.d(TAG,tmp+" - "+doc.getString(tmp));
+                }
+                editor.apply();
+                View hview = navigationView.getHeaderView(0);
+                setNavDrawerParameters(hview);
+                if(sharedPref.getString(profileImgName,"").length()==0
+                        && thisUser.getProfileImgStoragePath().length() > 0){
+                    StorageReference mImageRef = FirebaseStorage.getInstance().getReference(thisUser.getProfileImgStoragePath());
+                    //Glide.with(context).asBitmap().load(mImageRef).into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL) {
+                    GlideApp.with(context).asBitmap().load(mImageRef).into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL) {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            String tmp = editProfile.saveImageToInternalStorage(resource,profileImgName,context);
+                            if(tmp.length()>0){
+                                editor.putString(profileImgName,tmp);
+                                editor.apply();
+                                //Update img drawer
+                                setNavDrawerParameters(hview);
+                            }
+                        }
+                    });
+                }
+                for (String x : thisUser.getUsr_books().keySet()) {
+                    db.collection("books").document(x).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            DocumentSnapshot bookDoc = task.getResult();
+                            Book book = bookDoc.toObject(Book.class);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                if(myBooks.stream().filter(b->b.getBook_ISBN().equals(book.getBook_ISBN())).count()==0){
+                                    myBooks.add(bookDoc.toObject(Book.class));
+                                    isMyBooksSorted = false;
+                                }
+                            }
+                            else{
+                                boolean bookNotPresent = true;
+                                for(Book b:myBooks){
+                                    if(b.getBook_ISBN().equals(book.getBook_ISBN())){
+                                        bookNotPresent = false;
+                                        break;
+                                    }
+                                }
+                                if(bookNotPresent){
+                                    myBooks.add(book);
+                                    isMyBooksSorted = false;
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        return "ok";
+    }
+    }
+
+    private class UpdateHomeData extends AsyncTask<String,Void,String>{
+
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
         protected String doInBackground(String... strings) {
             FirebaseUser user = mAuth.getCurrentUser();
-
-            user_doc = db.collection("users").document(user.getUid());
-            user_doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            String user_id = user.getUid();
+            CollectionReference booksRef = db.collection("books");
+            Query a = booksRef.whereGreaterThan("book_userid",user_id);
+            Query b = booksRef.whereLessThan("book_userid",user_id);
+            a.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                 @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    DocumentSnapshot doc = task.getResult();
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    navigationView = (NavigationView) findViewById(R.id.nav_view);
-                    thisUser = doc.toObject(User.class);
-                    for(String tmp:sharedUserDataKeys){
-                        editor.putString(tmp,doc.getString(tmp));
-                        Log.d(TAG,tmp+" - "+doc.getString(tmp));
-                    }
-                    editor.apply();
-                    View hview = navigationView.getHeaderView(0);
-                    setNavDrawerParameters(hview);
-                    if(sharedPref.getString(profileImgName,"").length()==0
-                            && thisUser.getProfileImgStoragePath().length() > 0){
-                        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(thisUser.getProfileImgStoragePath());
-                        //Glide.with(context).asBitmap().load(mImageRef).into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL) {
-                        GlideApp.with(context).asBitmap().load(mImageRef).into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL) {
-                            @Override
-                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                String tmp = editProfile.saveImageToInternalStorage(resource,profileImgName,context);
-                                if(tmp.length()>0){
-                                    editor.putString(profileImgName,tmp);
-                                    editor.apply();
-                                    //Update img drawer
-                                    setNavDrawerParameters(hview);
-                                }
-                            }
-                        });
-                    }
-                    for (String x : thisUser.getUsr_books().keySet()) {
-                        db.collection("books").document(x).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                DocumentSnapshot bookDoc = task.getResult();
-                                Book book = bookDoc.toObject(Book.class);
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                    if(myBooks.stream().filter(b->b.getBook_ISBN().equals(book.getBook_ISBN())).count()==0){
-                                        myBooks.add(bookDoc.toObject(Book.class));
-                                        isMyBooksSorted = false;
-                                    }
-                                }
-                                else{
-                                    boolean bookNotPresent = true;
-                                    for(Book b:myBooks){
-                                        if(b.getBook_ISBN().equals(book.getBook_ISBN())){
-                                            bookNotPresent = false;
-                                            break;
-                                        }
-                                    }
-                                    if(bookNotPresent){
-                                        myBooks.add(book);
-                                        isMyBooksSorted = false;
-                                    }
-                                }
-                            }
-                        });
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    for(DocumentSnapshot d : queryDocumentSnapshots.getDocuments()) {
+                        if (d != null && d.exists()) {
+                            homeBooks.add(d.toObject(Book.class));
+                        }
                     }
                 }
             });
+            b.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    for(DocumentSnapshot d : queryDocumentSnapshots.getDocuments()) {
+                        if (d != null && d.exists()) {
+                            homeBooks.add(d.toObject(Book.class));
+                        }
+                    }
+                }
+            });
+
             return "ok";
         }
     }
+
+
 
     public List<Book> getMyBooks() {
         return myBooks;
@@ -494,7 +605,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public Fragment getItem(int position) {
             switch (position) {
                 case 0: // Fragment # 0 - This will show FirstFragment
-                    return Main_TopBooks_Fragment.newInstance(0, "Page #"+position);
+                    return Main_HomeBooks_Fragment.newInstance(0, "Page #"+position);
                 case 1: // Fragment # 0 - This will show FirstFragment different title
                     return Main_MyLibrary_Fragment.newInstance(1, "Page #"+position);
                 case 2: // Fragment # 1 - This will show SecondFragment

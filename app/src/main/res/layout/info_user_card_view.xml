@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_height="300dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:elevation="5dp"
-    android:layout_marginTop="63dp"
+    app:cardCornerRadius="4dp"
+    android:layout_marginTop="7dp"
     android:layout_marginStart="7dp"
     android:layout_marginEnd="7dp"
-    android:layout_marginBottom="7dp"
-    android:layout_height="match_parent">
+    android:layout_marginBottom="7dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -25,6 +26,11 @@
             android:layout_marginTop="16dp"
             android:src="@drawable/ic_account_circle_white_48px" />
 
+        <android.support.v7.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.CardView>
 
         <TextView
             android:id="@+id/info_user_username_label"
@@ -33,7 +39,7 @@
             android:layout_below="@id/info_user_photo_profile"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="48dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="8dp"
             android:text="@string/Username"
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"
@@ -93,7 +99,7 @@
             android:layout_marginStart="16dp"
             android:layout_alignTop="@+id/info_user_city_label"
             android:src="@drawable/ic_location_city_black_24px" />
-        <TextView
+       <!-- <TextView
             android:id="@+id/info_user_about_me_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -124,12 +130,7 @@
             android:layout_marginTop="8dp"
             android:text="Bio"
             android:textColor="#424242"
-            android:textSize="14sp" />
-
-
-
-
-
+            android:textSize="14sp" />-->
 
 
 

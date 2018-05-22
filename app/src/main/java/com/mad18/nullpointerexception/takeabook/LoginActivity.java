@@ -2,7 +2,9 @@ package com.mad18.nullpointerexception.takeabook;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -71,6 +73,11 @@ public class LoginActivity extends AppCompatActivity  {
 //        }
         toolbar = (Toolbar) findViewById(R.id.login_toolbar);
         setSupportActionBar(toolbar);
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        String x = sharedPref.getString(SettingsActivity.language,"");
+        if(x.length()>0){
+            LanguageHelper.changeLocale(getResources(),x);
+        }
         toolbar.setTitle(R.string.insert_location);
         toolbar.setVisibility(View.INVISIBLE);
         firstAttempt = true;

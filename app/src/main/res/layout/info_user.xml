@@ -3,8 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context=".InfoUser">
+
 
     <!--Questa è la toolbar dove appare appName più l'icona salva o modifica-->
     <android.support.v7.widget.Toolbar
@@ -12,18 +14,42 @@
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:background="@color/colorPrimary"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark"/>
 
 
+            <include
+                android:layout_margin="7dp"
+                android:layout_below="@id/info_user_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:id="@+id/user_cardv"
+                layout="@layout/info_user_card_view" />
 
-    <include
-        android:id="@+id/user_cardv"
-        layout="@layout/info_user_card_view"
-        />
+
+            <include
+                android:id="@+id/info_bio_cv"
+                android:layout_margin="7dp"
+                android:layout_below="@id/user_cardv"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                layout="@layout/info_user_bio_card_view"
+
+                />
 
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/info_fab_chat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_icon_chat"
+        tools:layout_marginTop="64dp" />
 
 </RelativeLayout>

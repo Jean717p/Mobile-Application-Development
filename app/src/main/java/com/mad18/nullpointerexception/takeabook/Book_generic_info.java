@@ -1,6 +1,7 @@
 package com.mad18.nullpointerexception.takeabook;
 
 import android.os.AsyncTask;
+import android.support.annotation.StyleRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -34,7 +35,6 @@ public class Book_generic_info extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         myActivity = this;
-        toolbar.setTitle(R.string.title_activity_book_generic_info);
         Bundle extras = getIntent().getExtras();
         if(extras!=null){
             BookWrapper bw = extras.getParcelable("bookToShow");
@@ -48,19 +48,27 @@ public class Book_generic_info extends AppCompatActivity {
         else{
             finish();
         }
+        //toolbar.setTitle(book.getBook_title());
+        this.setTitle(book.getBook_title());
         ImageView iw = findViewById(R.id.generic_info_book_image);
         Glide.with(this).load(book.getBook_thumbnail_url()).into(iw);
         TextView title = findViewById(R.id.generic_info_book_title);
         title.setText(book.getBook_title());
         TextView author = findViewById(R.id.generic_info_book_author);
         TextView numpage = findViewById(R.id.generic_info_book_num_pages);
+        if(book.getBook_pages()>0){
+            numpage.setText(Integer.toString(book.getBook_pages()));
+        }
+        else{
+            numpage.setText(R.string.add_book_info_not_available);
+        }
         String tmp = book.getBook_authors().keySet().toString();
         if(tmp.length()>2){
             author.setText(tmp.substring(1,tmp.length()-1));
         }
         //numpage.setText(Integer.toString(book.getBook_pages));
         //progress bar on plot visible
-        new DownloadDescription().doInBackground();
+        //new DownloadDescription().doInBackground();
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
     }
 

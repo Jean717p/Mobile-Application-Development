@@ -20,9 +20,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_library"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic_library"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
@@ -116,6 +116,16 @@
         <activity android:name=".InfoUser" />
         <activity android:name=".displaySearchOnMap.DisplaySearchOnMap" />
         <activity android:name=".Book_generic_info" />
+        <activity
+            android:name=".SettingsActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".mainActivity.MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity" />
+        </activity>
+
         <activity
             android:name=".chatActivity.listOfChatActivity"
             android:label="@string/title_activity_list_of_chat"

@@ -1,12 +1,8 @@
 package com.mad18.nullpointerexception.takeabook.searchBook;
 
-import android.location.Location;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,19 +11,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 
-import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.mad18.nullpointerexception.takeabook.Book;
 import com.mad18.nullpointerexception.takeabook.R;
@@ -37,12 +28,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.FileNotFoundException;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -51,14 +38,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.mad18.nullpointerexception.takeabook.mainActivity.Main_BorrowedBooks_Fragment;
-import com.mad18.nullpointerexception.takeabook.mainActivity.Main_LentBooks_Fragment;
-import com.mad18.nullpointerexception.takeabook.mainActivity.Main_MyLibrary_Fragment;
-import com.mad18.nullpointerexception.takeabook.mainActivity.Main_TopBooks_Fragment;
 
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -178,9 +159,6 @@ public class SearchBook extends AppCompatActivity {
                     }
                     Collections.sort(booksFound, (a, b) -> a.getBook_title().compareTo(b.getBook_title()));
                 }
-
-
-
                 tabLayout.getTabAt(1).select();
             }
         });
