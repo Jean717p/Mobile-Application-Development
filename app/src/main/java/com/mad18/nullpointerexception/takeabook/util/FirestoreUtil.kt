@@ -7,10 +7,8 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.mad18.nullpointerexception.takeabook.chatActivity.model.*
-import com.mad18.nullpointerexception.takeabook.User
 
 import com.mad18.nullpointerexception.takeabook.chatActivity.recyclerview.ImageMessageItem
-import com.mad18.nullpointerexception.takeabook.chatActivity.recyclerview.chatMemberItem
 import com.mad18.nullpointerexception.takeabook.chatActivity.recyclerview.TextMessageItem
 import com.xwray.groupie.kotlinandroidextensions.Item
 
@@ -133,17 +131,17 @@ object FirestoreUtil {
     fun getChatOfUser(otherUserId: String, myUserId: String){
         val db = FirebaseFirestore.getInstance()
         val userRef:DocumentReference = db.collection("user").document(myUserId)
-        userRef.get().addOnSuccessListener { documentSnapshot ->
-            val user = documentSnapshot.toObject(User::class.java)
-            val channelList:MutableMap<String,String> = user.getChannels()
-            val channel = channelList.get(otherUserId);
-            db.collection("chats").document(channel).get().addOnSuccessListener { documentSnapshot ->
-                documentSnapshot.get("");
-                documentSnapshot.toObject(chat::java.class);
-            }
-
-
-        }
+//        userRef.get().addOnSuccessListener { documentSnapshot ->
+//            val user = documentSnapshot.toObject(User::class.java)
+//            val channelList:MutableMap<String,String> = user.getChannels()
+//            val channel = channelList.get(otherUserId);
+//            db.collection("chats").document(channel).get().addOnSuccessListener { documentSnapshot ->
+//                documentSnapshot.get("");
+//                documentSnapshot.toObject(chat::java.class);
+//            }
+//
+//
+//        }
 
 
     }
