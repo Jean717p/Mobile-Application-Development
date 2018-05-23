@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -58,8 +59,8 @@ import studio.carbonylgroup.textfieldboxes.ExtendedEditText;
 
 public class AddBook extends AppCompatActivity {
     private final String TAG = "AddBook";
-    private static final int ZXING_CAMERA_PERMISSION = 1;
-    private final int REQUEST_PICK_IMAGE = 1, REQUEST_IMAGE_CAPTURE = 2, REQUEST_SCANNER=3;;
+    private static final int ZXING_CAMERA_PERMISSION = 4;
+    private final int REQUEST_PICK_IMAGE = 1, REQUEST_IMAGE_CAPTURE = 2, REQUEST_SCANNER=3;
     private final int REQUEST_PERMISSION_CAMERA = 2, REQUEST_PERMISSION_GALLERY=1;
     private final int addBookTextViewIds[] = {R.id.add_book_text_field_Title,R.id.add_book_text_field_Author,
             R.id.add_book_text_field_EditionYear,R.id.add_book_text_field_Publisher,
@@ -128,18 +129,14 @@ public class AddBook extends AppCompatActivity {
             horizontal_photo_list_element = getLayoutInflater().inflate(R.layout.add_book_cell_in_image_list, null);
 
             final ImageView imageView = (ImageView) horizontal_photo_list_element.findViewById(R.id.add_book_image_in_horizontal_list_cell);
-            imageView.setOnClickListener(new View.OnClickListener() {
+            imageView.setOnClickListener(v -> {
+                // do whatever you want ...
+                globalImgPos = Integer.parseInt(imageView.getTag().toString());
+                globalViewImgElement = imageView;
+               selectBookImg();
 
-                @Override
-                public void onClick(View v) {
-                    // do whatever you want ...
-                    globalImgPos = Integer.parseInt(imageView.getTag().toString());
-                    globalViewImgElement = imageView;
-                   selectBookImg();
-
-                    //Toast.makeText(AddBook.this,
-                      //      (CharSequence) imageView.getTag(), Toast.LENGTH_SHORT).show();
-                }
+                //Toast.makeText(AddBook.this,
+                  //      (CharSequence) imageView.getTag(), Toast.LENGTH_SHORT).show();
             });
 
             imageView.setTag(i);
@@ -163,18 +160,15 @@ public class AddBook extends AppCompatActivity {
                         android.R.layout.simple_dropdown_item_1line);
         staticSpinner.setAdapter(staticAdapter);
         user = FirebaseAuth.getInstance().getCurrentUser();
-        scan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(AddBook.this, Manifest.permission.CAMERA)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    mClss = v;
-                    ActivityCompat.requestPermissions(AddBook.this,
-                            new String[]{Manifest.permission.CAMERA}, ZXING_CAMERA_PERMISSION);
-                } else {
-                    Intent intent = new Intent(AddBook.this, ScanBarcode.class);
-                    startActivityForResult(intent,REQUEST_SCANNER);
-                }
+        scan.setOnClickListener(v -> {
+            if (ContextCompat.checkSelfPermission(AddBook.this, Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED) {
+                mClss = v;
+                ActivityCompat.requestPermissions(AddBook.this,
+                        new String[]{Manifest.permission.CAMERA}, ZXING_CAMERA_PERMISSION);
+            } else {
+                Intent intent = new Intent(AddBook.this, ScanBarcode.class);
+                startActivityForResult(intent,REQUEST_SCANNER);
             }
         });
        if(state == null){
@@ -604,9 +598,41 @@ public class AddBook extends AppCompatActivity {
      * @param grantResults
      */
 
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode,  String permissions[], int[] grantResults) {
+//        switch (requestCode) {
+//            case ZXING_CAMERA_PERMISSION:
+//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    if(mClss != null) {
+//                        Intent intent = new Intent(AddBook.this, ScanBarcode.class);
+//                        startActivityForResult(intent, REQUEST_SCANNER);
+//                    }
+//                } else {
+//                    Toast.makeText(this, R.string.add_book_permission_camera, Toast.LENGTH_SHORT).show();
+//                }
+//                return;
+//        }
+//    }
+
     @Override
-    public void onRequestPermissionsResult(int requestCode,  String permissions[], int[] grantResults) {
-        switch (requestCode) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        //dopo che l'utente ci ha fornito la risposta alla richesta di permessi
+        switch (requestCode){
+            case REQUEST_PERMISSION_GALLERY:
+                if(grantResults.length>0) {
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        choosePhotoFromGallery();
+                    }
+                }
+                break;
+            case REQUEST_PERMISSION_CAMERA:
+                if(grantResults.length>0){
+                    if(grantResults[0]==PackageManager.PERMISSION_GRANTED
+                            && grantResults[1]==PackageManager.PERMISSION_GRANTED){
+                        choosePhotoFromCamera();
+                    }
+                }
+                break;
             case ZXING_CAMERA_PERMISSION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if(mClss != null) {
@@ -619,7 +645,6 @@ public class AddBook extends AppCompatActivity {
                 return;
         }
     }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();

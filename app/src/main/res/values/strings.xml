@@ -82,6 +82,7 @@
     <string name="info_book_label_book_num_pages">N. pages:</string>
     <string name="info_book_snackbar">The library has been updated</string>
     <string name="info_book_label_pages">N. pages:</string>
+    <string name="info_book_delete_this_book">Delete this book</string>
 
 
     <!--Barcode Related-->

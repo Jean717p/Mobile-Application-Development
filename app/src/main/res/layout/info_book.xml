@@ -38,6 +38,15 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="7dp"
                 layout="@layout/cardview_description"/>
+            <Button
+                android:id="@+id/info_book_delete_book_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/info_book_delete_this_book"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:clickable="false"
+                android:visibility="invisible"/>
 
         </LinearLayout>
 
