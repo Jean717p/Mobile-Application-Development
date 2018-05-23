@@ -46,6 +46,7 @@ public class InfoBook extends AppCompatActivity {
     private View horizontal_photo_list_element;
     private List<String> for_me;
     private boolean isImageFitToScreen = true;
+    private String usr_prof_strg_path;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -165,16 +166,18 @@ public class InfoBook extends AppCompatActivity {
             usr_name = doc.getString("usr_name");
             usr_city = doc.getString("usr_city");
             usr_about = doc.getString("usr_about");
+            usr_prof_strg_path = doc.getString("profileImgStoragePath");
             TextView tv2 = findViewById(R.id.info_book_owner);
             tv2.setText(usr_name);
             tv2.setTextColor(Color.BLUE);
             tv2.setClickable(true);
             tv2.setOnClickListener(view -> {
-                Intent toInfoUser = new Intent(getApplicationContext(), InfoUser.class);
+                Intent toInfoUser = new Intent(InfoBook.this, InfoUser.class);
                 toInfoUser.putExtra("usr_id", bookToShowInfoOf.getUser_id());
                 toInfoUser.putExtra("usr_name", usr_name);
                 toInfoUser.putExtra("usr_city", usr_city);
                 toInfoUser.putExtra("usr_bio", usr_about);
+                toInfoUser.putExtra("usr_prof_strg_path", usr_prof_strg_path);
                 //toInfoUser.putExtra("img_uri",downloadOwnerUri);
                 //qui l'immagine
 
@@ -212,9 +215,7 @@ public class InfoBook extends AppCompatActivity {
             tv = findViewById(i);
             tv.setText(savedInstanceState.getString(Integer.toString(i), ""));
         }
-//        /**
-//         * da implementare per le immagini
-//         */
+
     }
 
     @Override

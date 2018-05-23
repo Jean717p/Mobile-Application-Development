@@ -1,9 +1,5 @@
 package com.mad18.nullpointerexception.takeabook;
 
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -14,22 +10,15 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
-
-import static com.mad18.nullpointerexception.takeabook.myProfile.showProfile.profileImgName;
 
 public class InfoUser extends AppCompatActivity {
 
     private String usr_name;
     private String usr_city;
     private String usr_bio;
+    private String usr_prof_stg_path;
     //private Uri usr_img_uri;
     private String usr_id;
     private Menu menu;
@@ -52,7 +41,9 @@ public class InfoUser extends AppCompatActivity {
         usr_bio = getIntent().getExtras().getString("usr_bio");
         //usr_img_uri = (Uri)getIntent().getExtras().get("img_uri");
         usr_id = getIntent().getExtras().getString("usr_id");
-        fillInfoUserViews();
+        usr_prof_stg_path = getIntent().getExtras().getString("usr_prof_strg_path");
+        usr_prof_stg_path = usr_prof_stg_path.substring(1);
+        //fillInfoUserViews();
     }
 
     @Override
@@ -70,15 +61,13 @@ public class InfoUser extends AppCompatActivity {
         tv.setText(usr_bio);
         ImageView iv = findViewById(R.id.info_user_photo_profile);
 
-        StorageReference mImageRef = FirebaseStorage.getInstance().getReference().child("users/images/"+usr_id);
-        mImageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Glide.with(getApplicationContext()).load(uri).into(iv);
-            }
-        });
+        //iv.setImageResource(R.drawable.ic_book_cover);
 
 
+        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(usr_prof_stg_path);
+        //iv.setImageResource(R.drawable.ic_book_cover);
+
+        GlideApp.with(this).load(mImageRef).placeholder(R.drawable.account_circle).into(iv);
     }
 
     @Override

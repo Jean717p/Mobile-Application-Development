@@ -7,6 +7,7 @@ import android.net.Uri;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class User {
@@ -31,6 +32,20 @@ public class User {
         usr_geoPoint = geoPoint;
         profileImgStoragePath = "";
         usr_id = id;
+    }
+
+    public User (UserWrapper userWrapper){
+        usr_mail = userWrapper.getUser_wrapper_mail();
+        usr_name = userWrapper.getUser_wrapper_name();
+        usr_city = userWrapper.getUser_wrapper_city();
+        usr_about = userWrapper.getUser_wrapper_about();
+        List<String> uwBooks = userWrapper.getUser_wrapper_books();
+        for (String y : uwBooks) {
+            usr_books.put(y, true);
+        }
+        //usr_geoPoint = userWrapper.getUser_wrapper_geoPoint();
+        profileImgStoragePath = "";
+        usr_id = userWrapper.getUser_wrapper_id();
     }
 
     public String getUsr_name() {
