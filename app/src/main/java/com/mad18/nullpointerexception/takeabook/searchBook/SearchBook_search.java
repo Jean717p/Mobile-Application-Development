@@ -3,6 +3,7 @@ package com.mad18.nullpointerexception.takeabook.searchBook;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -75,12 +76,19 @@ public class SearchBook_search extends Fragment {
         }
         search.setOnClickListener(view -> {
             //progress bar visible and button search invisible
-
-            ProgressBarVisibility(View.VISIBLE);
-            search.setVisibility(View.INVISIBLE);
-            //getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-            SearchBook s = (SearchBook) getActivity();
-            s.searchForBook(searchBase);});
+            if(text.length()>0){
+                ProgressBarVisibility(View.VISIBLE);
+                search.setVisibility(View.INVISIBLE);
+                //getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                SearchBook s = (SearchBook) getActivity();
+                s.searchForBook(searchBase);
+            }
+            else{
+                //Do nothing
+                SearchBook s = (SearchBook) getActivity();
+                s.searchForBook(searchBase);
+            }
+           });
 
         return myFragmentView;
     }

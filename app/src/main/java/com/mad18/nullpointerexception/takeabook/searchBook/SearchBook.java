@@ -3,6 +3,7 @@ package com.mad18.nullpointerexception.takeabook.searchBook;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -188,8 +189,18 @@ public class SearchBook extends AppCompatActivity {
         String to_find;
         to_find = text.getText().toString();
         booksFound.clear();
-        getFromGoogleApi(flag,to_find);
-        //Startare l'intent della nuova activity o riempire fragment con i risultati
+        if(to_find.length()>0){
+            getFromGoogleApi(flag,to_find);
+            //Startare l'intent della nuova activity o riempire fragment con i risultati
+        }
+        else{
+            Snackbar snackbar = Snackbar
+                    .make(findViewById(R.id.search_book_layout),getText(R.string.search_book_nothing_inserted), Snackbar.LENGTH_LONG);
+            snackbar.show();
+            //Issearching = false;
+            return;
+        }
+
 
     }
 

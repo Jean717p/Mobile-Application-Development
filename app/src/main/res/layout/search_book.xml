@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".searchBook.SearchBook">
+    tools:context=".searchBook.SearchBook"
+    android:id="@+id/search_book_layout">
 
 
     <android.support.design.widget.AppBarLayout

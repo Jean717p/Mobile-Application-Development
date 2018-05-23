@@ -67,6 +67,7 @@
     <string name="search_book_button_text">Search</string>
     <string name="search_book_progress_bar_text">Searching...</string>
     <string name="search_books_button_cv">More info</string>
+    <string name="search_book_nothing_inserted">Please insert something</string>
 
     <!--InfoBook Related-->
     <string name="info_book_label_title">Title:</string>
@@ -146,6 +147,7 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="image_fullscreen">image_fullscreen</string>
+
 
 
 </resources>
