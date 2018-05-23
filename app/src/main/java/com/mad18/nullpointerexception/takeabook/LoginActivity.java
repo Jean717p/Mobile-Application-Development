@@ -37,12 +37,20 @@ import com.google.firebase.auth.FirebaseUserMetadata;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.mad18.nullpointerexception.takeabook.chatActivity.service.MyFirebaseInstanceIDService;
+import com.mad18.nullpointerexception.takeabook.chatActivity.service.MyFirebaseMessagingService;
+import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
 import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
 
 import org.w3c.dom.Text;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 public class LoginActivity extends AppCompatActivity  {
     private static final String TAG = "LoginActivity";
@@ -108,7 +116,128 @@ public class LoginActivity extends AppCompatActivity  {
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     CollectionReference users = db.collection("users");
                     FirebaseUser user = mAuth.getCurrentUser();
-                    User u = new User(user.getEmail(), user.getDisplayName(), "", "", new HashMap<String, Boolean>(),gp, user.getUid());
+                    User u = new User(user.getEmail(), user.getDisplayName(), "", "", new HashMap<String, Boolean>(), gp, user.getUid(), new List<String>() {
+                        @Override
+                        public int size() {
+                            return 0;
+                        }
+
+                        @Override
+                        public boolean isEmpty() {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean contains(Object o) {
+                            return false;
+                        }
+
+                        @NonNull
+                        @Override
+                        public Iterator<String> iterator() {
+                            return null;
+                        }
+
+                        @NonNull
+                        @Override
+                        public Object[] toArray() {
+                            return new Object[0];
+                        }
+
+                        @NonNull
+                        @Override
+                        public <T> T[] toArray(@NonNull T[] ts) {
+                            return null;
+                        }
+
+                        @Override
+                        public boolean add(String s) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean remove(Object o) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean containsAll(@NonNull Collection<?> collection) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean addAll(@NonNull Collection<? extends String> collection) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean addAll(int i, @NonNull Collection<? extends String> collection) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean removeAll(@NonNull Collection<?> collection) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean retainAll(@NonNull Collection<?> collection) {
+                            return false;
+                        }
+
+                        @Override
+                        public void clear() {
+
+                        }
+
+                        @Override
+                        public String get(int i) {
+                            return null;
+                        }
+
+                        @Override
+                        public String set(int i, String s) {
+                            return null;
+                        }
+
+                        @Override
+                        public void add(int i, String s) {
+
+                        }
+
+                        @Override
+                        public String remove(int i) {
+                            return null;
+                        }
+
+                        @Override
+                        public int indexOf(Object o) {
+                            return 0;
+                        }
+
+                        @Override
+                        public int lastIndexOf(Object o) {
+                            return 0;
+                        }
+
+                        @NonNull
+                        @Override
+                        public ListIterator<String> listIterator() {
+                            return null;
+                        }
+
+                        @NonNull
+                        @Override
+                        public ListIterator<String> listIterator(int i) {
+                            return null;
+                        }
+
+                        @NonNull
+                        @Override
+                        public List<String> subList(int i, int i1) {
+                            return null;
+                        }
+                    });
                     users.document(user.getUid()).set(u);
                     //Nel caso serva inserire tasto ok su toolbar
                     Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.class);
@@ -198,9 +327,12 @@ public class LoginActivity extends AppCompatActivity  {
                         newUser = metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp();
                         if (newUser) {
                             getUserPosition(this);
+                            String RegistrationToken = FirebaseInstanceId.getInstance().getToken();
+                            MyFirebaseInstanceIDService.Companion.addTokenToFirestore(RegistrationToken);
+                            //TODO Aggiungere il registration token nell'oggetto User
                         }
                         else{
-                            Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.class);
+                            Intent intent = new Intent(this, MainActivity.class);
                             startActivity(intent);
                             finish();
                         }

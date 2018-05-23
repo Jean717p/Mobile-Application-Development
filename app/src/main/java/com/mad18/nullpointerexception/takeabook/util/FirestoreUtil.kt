@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.mad18.nullpointerexception.takeabook.User
 import com.mad18.nullpointerexception.takeabook.chatActivity.model.*
 
 import com.mad18.nullpointerexception.takeabook.chatActivity.recyclerview.ImageMessageItem
@@ -52,7 +53,8 @@ object FirestoreUtil {
                     onComplete(it.toObject(User::class.java)!!)
                 }
     }
-
+    */
+    /*
     fun addUsersListener(context: Context, onListen: (List<Item>) -> Unit): ListenerRegistration {
         return firestoreInstance.collection("users")
                 .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
@@ -148,7 +150,7 @@ object FirestoreUtil {
 
 
     //region FCM
-    /*
+
     fun getFCMRegistrationTokens(onComplete: (tokens: MutableList<String>) -> Unit) {
         currentUserDocRef.get().addOnSuccessListener {
             val user = it.toObject(User::class.java)!!
@@ -158,6 +160,6 @@ object FirestoreUtil {
 
     fun setFCMRegistrationTokens(registrationTokens: MutableList<String>) {
         currentUserDocRef.update(mapOf("registrationTokens" to registrationTokens))
-    } */
+    }
     //endregion FCM
 }

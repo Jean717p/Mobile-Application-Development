@@ -1,5 +1,11 @@
 package com.mad18.nullpointerexception.takeabook;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +18,14 @@ import android.widget.TextView;
 
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.mad18.nullpointerexception.takeabook.addBook.AddBook;
+import com.mad18.nullpointerexception.takeabook.chatActivity.AppConstants;
+import com.mad18.nullpointerexception.takeabook.chatActivity.listOfChatActivity;
+import com.mad18.nullpointerexception.takeabook.chatActivity.ChatActivity;
+
+import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
+
+import static com.mad18.nullpointerexception.takeabook.myProfile.showProfile.profileImgName;
 
 public class InfoUser extends AppCompatActivity {
 
@@ -23,6 +37,7 @@ public class InfoUser extends AppCompatActivity {
     private String usr_id;
     private Menu menu;
 
+    private FloatingActionButton chat_fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +49,7 @@ public class InfoUser extends AppCompatActivity {
         setTitle(R.string.title_activity_info_user);
         toolbar.setVisibility(View.VISIBLE);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        chat_fab = findViewById(R.id.info_fab_chat);
 
         String user_id = getIntent().getExtras().getString("userID");
         usr_name = getIntent().getExtras().getString("usr_name");
@@ -44,6 +60,16 @@ public class InfoUser extends AppCompatActivity {
         usr_prof_stg_path = getIntent().getExtras().getString("usr_prof_strg_path");
         usr_prof_stg_path = usr_prof_stg_path.substring(1);
         //fillInfoUserViews();
+        fillInfoUserViews();
+
+        if(chat_fab!=null){
+            chat_fab.setOnClickListener(v -> {
+                Intent chatIntent = new Intent(this, ChatActivity.class);
+                chatIntent.putExtra(AppConstants.USER_NAME, usr_name);
+                chatIntent.putExtra(AppConstants.USER_ID, usr_id);
+                startActivity(chatIntent);
+            });
+        }
     }
 
     @Override

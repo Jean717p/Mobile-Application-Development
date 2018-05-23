@@ -1,5 +1,5 @@
 package com.mad18.nullpointerexception.takeabook.chatActivity.service
-/*
+
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -13,4 +13,4 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             Log.d("FCM", "FCM message received!")
         }
     }
-}*/
+}

@@ -4,7 +4,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.iid.FirebaseInstanceIdService
 import com.mad18.nullpointerexception.takeabook.util.FirestoreUtil
-/*
+
 
 class MyFirebaseInstanceIDService : FirebaseInstanceIdService() {
 
@@ -22,10 +22,9 @@ class MyFirebaseInstanceIDService : FirebaseInstanceIdService() {
             FirestoreUtil.getFCMRegistrationTokens { tokens ->
                 if (tokens.contains(newRegistrationToken))
                     return@getFCMRegistrationTokens
-
                 tokens.add(newRegistrationToken)
                 FirestoreUtil.setFCMRegistrationTokens(tokens)
             }
         }
     }
-}*/
+}

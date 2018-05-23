@@ -60,11 +60,15 @@ class ChatActivity : AppCompatActivity() {
                     FirestoreUtil.addChatMessagesListener(channelId, this, this::updateRecyclerView)
 
             chat_imageView_send.setOnClickListener {
-                val messageToSend =
-                        TextMessage(chat_editText_message.text.toString(), Calendar.getInstance().time,
-                                FirebaseAuth.getInstance().currentUser!!.uid, MessageType.TEXT)
-                chat_editText_message.setText("")
-                FirestoreUtil.sendMessage(messageToSend, channelId)
+                val textToSend = chat_editText_message.text.toString()
+                if(textToSend.isNotEmpty()){
+                    val messageToSend =
+                            TextMessage(textToSend, Calendar.getInstance().time,
+                                    FirebaseAuth.getInstance().currentUser!!.uid, MessageType.TEXT)
+                    chat_editText_message.setText("")
+                    FirestoreUtil.sendMessage(messageToSend, channelId)
+                }
+
             }
 
             chat_fab_send_image.setOnClickListener {
@@ -81,7 +85,7 @@ class ChatActivity : AppCompatActivity() {
 
     private fun selectUserImg() {
         val pictureDialog = AlertDialog.Builder(this)
-        val pictureDialogItems = arrayOf(getString(R.string.photo_from_gallery), getString(R.string.photo_from_camera), getString(R.string.photo_remove))
+        val pictureDialogItems = arrayOf(getString(R.string.photo_from_gallery), getString(R.string.photo_from_camera))
         pictureDialog.setItems(pictureDialogItems
         ) { dialog, which ->
             when (which) {

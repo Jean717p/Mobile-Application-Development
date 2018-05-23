@@ -20,10 +20,11 @@ public class User {
     Map<String,Boolean> usr_books;
     GeoPoint usr_geoPoint;
     String profileImgStoragePath;
+    List<String> registrationTokens;
 
     public User(){}
 
-    public User(String email, String displayName, String s, String s1, HashMap<String, Boolean> stringBooleanHashMap, GeoPoint geoPoint, String id) {
+    public User(String email, String displayName, String s, String s1, HashMap<String, Boolean> stringBooleanHashMap, GeoPoint geoPoint, String id, List<String> tokens) {
         usr_mail = email;
         usr_name = displayName;
         usr_city = s;
@@ -32,6 +33,7 @@ public class User {
         usr_geoPoint = geoPoint;
         profileImgStoragePath = "";
         usr_id = id;
+        registrationTokens = tokens;
     }
 
     public User (UserWrapper userWrapper){
@@ -110,5 +112,13 @@ public class User {
 
     public void setUsr_id(String usr_id) {
         this.usr_id = usr_id;
+    }
+
+    public List<String> getRegistrationTokens() {
+        return registrationTokens;
+    }
+
+    public void setRegistrationTokens(List<String> registrationTokens) {
+        this.registrationTokens = registrationTokens;
     }
 }
