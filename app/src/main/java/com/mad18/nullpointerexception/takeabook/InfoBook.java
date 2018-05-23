@@ -26,6 +26,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -168,21 +169,31 @@ public class InfoBook extends AppCompatActivity {
             usr_about = doc.getString("usr_about");
             usr_prof_strg_path = doc.getString("profileImgStoragePath");
             TextView tv2 = findViewById(R.id.info_book_owner);
-            tv2.setText(usr_name);
-            tv2.setTextColor(Color.BLUE);
-            tv2.setClickable(true);
-            tv2.setOnClickListener(view -> {
-                Intent toInfoUser = new Intent(InfoBook.this, InfoUser.class);
-                toInfoUser.putExtra("usr_id", bookToShowInfoOf.getUser_id());
-                toInfoUser.putExtra("usr_name", usr_name);
-                toInfoUser.putExtra("usr_city", usr_city);
-                toInfoUser.putExtra("usr_bio", usr_about);
-                toInfoUser.putExtra("usr_prof_strg_path", usr_prof_strg_path);
-                //toInfoUser.putExtra("img_uri",downloadOwnerUri);
-                //qui l'immagine
+            User u = MainActivity.thisUser;
+            if(!bookToShowInfoOf.getUser_id().equals(u.getUsr_id())) {
+                tv2.setText(usr_name);
+                tv2.setTextColor(Color.BLUE);
+                tv2.setClickable(true);
+                tv2.setOnClickListener(view -> {
+                    Intent toInfoUser = new Intent(InfoBook.this, InfoUser.class);
+                    toInfoUser.putExtra("usr_id", bookToShowInfoOf.getUser_id());
+                    toInfoUser.putExtra("usr_name", usr_name);
+                    toInfoUser.putExtra("usr_city", usr_city);
+                    toInfoUser.putExtra("usr_bio", usr_about);
+                    toInfoUser.putExtra("usr_prof_strg_path", usr_prof_strg_path);
+                    //toInfoUser.putExtra("img_uri",downloadOwnerUri);
+                    //qui l'immagine
 
-                startActivity(toInfoUser);
-            });
+                    startActivity(toInfoUser);
+                });
+            }
+            else{
+                tv2.setVisibility(View.INVISIBLE);
+                tv2.setHeight(0);
+                tv2 = findViewById(R.id.info_book_label_owner);
+                tv2.setVisibility(View.INVISIBLE);
+                tv2.setHeight(0);
+            }
 
         });
     }
