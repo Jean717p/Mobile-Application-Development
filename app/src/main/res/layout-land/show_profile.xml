@@ -40,12 +40,14 @@
                 android:id="@+id/show_profile_title_Username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="8dp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:textSize="13sp"
                 android:text="@string/Username"
                 android:translationX="200dp"
                 android:fontFamily="sans-serif-light"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/profile_text_view_title" />
+              />
 
             <TextView
                 android:id="@+id/show_profile_Username"
@@ -59,12 +61,13 @@
                 android:id="@+id/show_profile_title_City"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="8dp"
                 android:text="@string/City"
                 android:translationX="200dp"
                 android:fontFamily="sans-serif-light"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/profile_text_view_title" />
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:textSize="13sp" />
             <TextView
                 android:id="@+id/show_profile_City"
                 android:layout_width="match_parent"
@@ -80,11 +83,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:translationX="200dp"
-                android:paddingBottom="8dp"
                 android:text="@string/Email"
                 android:fontFamily="sans-serif-light"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/profile_text_view_title"/>
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:textSize="13sp"/>
             <TextView
                 android:id="@+id/show_profile_mail"
                 android:layout_width="match_parent"
@@ -100,12 +104,13 @@
                 android:id="@+id/show_profile_title_about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="8dp"
                 android:text="@string/AboutMe"
                 android:translationX="200dp"
                 android:fontFamily="sans-serif-light"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/profile_text_view_title" />
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:textSize="13sp" />
             <!--about-->
             <TextView
                 android:id="@+id/show_profile_about"

@@ -6,33 +6,34 @@
     android:id="@+id/item_chat_member_cardView"
     android:layout_width="match_parent"
     android:layout_height="70dp"
-    android:layout_margin="4dp"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardBackgroundColor="@android:color/white"
+    android:layout_marginBottom="1dp"
     android:clickable="true"
     android:focusable="true"
-    app:cardCornerRadius="4dp"
-    app:cardElevation="4dp">
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/item_chat_member_profile_picture"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="20dp"
-            tools:src="@drawable/ic_account_circle_black_24px"/>
+            tools:src="@drawable/ic_account_circle_white_48px"/>
 
         <TextView
             android:id="@+id/item_chat_member_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/item_chat_member_profile_picture"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:textSize="25sp"
+            android:layout_alignBaseline="@id/item_chat_member_profile_picture"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:textSize="20sp"
+            android:text="Valeria"
             android:textAppearance="@style/Base.TextAppearance.AppCompat" />
 
         <TextView
@@ -41,10 +42,29 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/item_chat_member_name"
             android:layout_below="@+id/item_chat_member_name"
-            android:layout_marginStart="2dp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:layout_marginBottom="8dp"
+            android:text="new message"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+        <!--<View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/darker_gray" />-->
+
+        <TextView
+            android:id="@+id/item_chat_time_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="15:18"
+            android:layout_alignBaseline="@id/item_chat_member_name"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="16dp"
+            />
     </RelativeLayout>
+
 
 </android.support.v7.widget.CardView>

@@ -139,7 +139,7 @@
     <string name="title_activity_book_generic_info">Book_generic_info</string>
     <string name="title_activity_settings">Settings</string>
     <!--Chat Related -->
-    <string name="send_your_message">Send your message</string>
+    <string name="send_your_message">Text message</string>
     <string name="title_activity_list_of_chat">listOfChatActivity</string>
     <string name="mychat">My chat</string>
     <string name="chat_updated">List of chat updated!</string>

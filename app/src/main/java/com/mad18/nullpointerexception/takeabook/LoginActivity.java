@@ -81,10 +81,10 @@ public class LoginActivity extends AppCompatActivity  {
 //        }
         toolbar = (Toolbar) findViewById(R.id.login_toolbar);
         setSupportActionBar(toolbar);
-        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+       SharedPreferences sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         String x = sharedPref.getString(SettingsActivity.language,"");
         if(x.length()>0){
-            LanguageHelper.changeLocale(getResources(),x);
+            SettingsActivity.changeLocale(getResources(),x);
         }
         toolbar.setTitle(R.string.insert_location);
         toolbar.setVisibility(View.INVISIBLE);

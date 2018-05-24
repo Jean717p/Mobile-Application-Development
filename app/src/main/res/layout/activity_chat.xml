@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:background="@color/colorPrimary"
+        android:elevation="5dp"
         android:minHeight="?android:attr/actionBarSize"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark" />
@@ -25,15 +26,16 @@
         app:layout_constraintBottom_toTopOf="@id/chat_relativeLayout_message"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"  />
 
     <RelativeLayout
         android:id="@+id/chat_relativeLayout_message"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
@@ -42,24 +44,29 @@
             android:id="@+id/chat_fab_send_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:tint="?attr/colorPrimaryDark"
+            app:backgroundTint="@color/colorAccent"
             app:fabSize="mini"
-            app:srcCompat="@drawable/ic_photo_camera_black_24dp" />
+            app:srcCompat="@drawable/ic_photo_camera_white_24px" />
+
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/chat_editText_message"
-            android:layout_width="match_parent"
+            android:layout_width="264dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_centerInParent="true"
+            android:layout_marginEnd="32dp"
             android:layout_toEndOf="@id/chat_fab_send_image"
+            android:layout_marginTop="16dp"
             android:background="@drawable/rect_oval_white"
             android:elevation="2dp"
+            android:ems="10"
             android:hint="@string/send_your_message"
-            android:padding="8dp" />
+            android:maxHeight="80dp"
+            android:padding="8dp"
+            android:textAlignment="viewStart" />
 
         <ImageView
             android:id="@+id/chat_imageView_send"
@@ -67,7 +74,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="24dp"
+            android:layout_alignBaseline="@id/chat_fab_send_image"
+            android:layout_marginEnd="8dp"
             android:elevation="2dp"
             app:srcCompat="@drawable/ic_send_black_24dp" />
     </RelativeLayout>
