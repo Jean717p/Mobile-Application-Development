@@ -31,7 +31,7 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.activity_chat.*
 import java.io.ByteArrayOutputStream
-import java.util.*
+import java.util.Calendar
 
 private const val RC_SELECT_IMAGE = 2
 private const val RC_CAMERA_CAPTURE = 3
@@ -99,7 +99,6 @@ class ChatActivity : AppCompatActivity() {
     }
 
     fun choosePhotoFromGallery() {
-
         if (ActivityCompat.checkSelfPermission(this@ChatActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this@ChatActivity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_PERMISSION_GALLERY)
             return

@@ -37,7 +37,7 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat" />
 
         <TextView
-            android:id="@+id/item_chat_member_profile_picture_last_msg"
+            android:id="@+id/item_chat_member_last_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/item_chat_member_name"
@@ -45,24 +45,27 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:layout_marginBottom="8dp"
-            android:text="new message"
+            android:text=""
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
-        <!--<View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_alignParentBottom="true"
-            android:background="@android:color/darker_gray" />-->
-
         <TextView
-            android:id="@+id/item_chat_time_message"
+            android:id="@+id/item_chat_member_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="15:18"
             android:layout_alignBaseline="@id/item_chat_member_name"
             android:layout_alignParentEnd="true"
             android:layout_margin="16dp"
+            android:text=""
+            />
+        <TextView
+            android:id="@+id/item_chat_member_unread_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_chat_member_time"
+            android:layout_margin="16dp"
+            android:text=""
+            android:layout_alignBaseline="@id/item_chat_member_last_msg"
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/colorPrimary"
             />
     </RelativeLayout>
 

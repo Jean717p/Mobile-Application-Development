@@ -6,23 +6,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
@@ -39,47 +39,32 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.mad18.nullpointerexception.takeabook.chatActivity.service.MyFirebaseInstanceIDService;
-import com.mad18.nullpointerexception.takeabook.chatActivity.service.MyFirebaseMessagingService;
 import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
-import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
-
-import org.w3c.dom.Text;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
 
 public class LoginActivity extends AppCompatActivity  {
-    private static final String TAG = "LoginActivity";
-    private static final int RC_SIGN_IN = 123;
-    private static final int REQUEST_PERMISSION_INTERNET=3;
-    private static final int PLACE_PICKER_REQUEST = 1;
+    private final String TAG = "LoginActivity";
+    private final int RC_SIGN_IN = 123;
+    private final int REQUEST_PERMISSION_INTERNET=3;
+    private final int PLACE_PICKER_REQUEST = 1;
     private FirebaseAuth mAuth;
     private Toolbar toolbar;
     private ProgressBar progressBar;
     private TextView progressBarTextView;
     private boolean firstAttempt;
     private boolean newUser;
-    public static final String usr_lat = "usr_lat";
-    public static final String usr_long = "usr_lat";
     private Menu menu;
-    GeoPoint gp;
+    private GeoPoint gp;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         progressBar = (ProgressBar) findViewById(R.id.login_progress_bar);
         progressBarTextView = findViewById(R.id.login_progress_bar_text);
-//        mAuth = FirebaseAuth.getInstance();
-//        if(mAuth.getCurrentUser()!=null){
-//            Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
         toolbar = (Toolbar) findViewById(R.id.login_toolbar);
         setSupportActionBar(toolbar);
        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
@@ -93,7 +78,6 @@ public class LoginActivity extends AppCompatActivity  {
         newUser = false;
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
@@ -105,15 +89,11 @@ public class LoginActivity extends AppCompatActivity  {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        String s;
-
         switch (item.getItemId()){
             case R.id.add_book_done:
                 TextView tw = findViewById(R.id.login_Address);
                 if(tw.getText().toString().length() > 0) {
-
                     /* Inserimento dati su Firebase */
-
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     CollectionReference users = db.collection("users");
                     FirebaseUser user = mAuth.getCurrentUser();
@@ -128,14 +108,11 @@ public class LoginActivity extends AppCompatActivity  {
                     finish();
                     return true;
                 }else{
-
                     Snackbar snackbar = Snackbar
                             .make(findViewById(R.id.relativeLayout),getText(R.string.Error_position), Snackbar.LENGTH_LONG);
                     snackbar.show();
                     return false;
                 }
-
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -170,7 +147,7 @@ public class LoginActivity extends AppCompatActivity  {
                         .setAvailableProviders(Arrays.asList(
                                 new AuthUI.IdpConfig.EmailBuilder().build()
                                 ,new AuthUI.IdpConfig.GoogleBuilder().build()
-                                ,new AuthUI.IdpConfig.FacebookBuilder().build()
+                                //,new AuthUI.IdpConfig.FacebookBuilder().build()
                         ))
                         //.setIsSmartLockEnabled(!BuildConfig.DEBUG /* credentials */, true /* hints */)
                         .build(),
@@ -184,14 +161,11 @@ public class LoginActivity extends AppCompatActivity  {
             case PLACE_PICKER_REQUEST:
                 if (resultCode == RESULT_OK) {
                     Place place = PlacePicker.getPlace(this, data);
-                    String placeName = String.format("Place: %s", place.getName());
+                    //String placeName = String.format("Place: %s", place.getName());
                     gp = new GeoPoint(place.getLatLng().latitude,place.getLatLng().longitude);
                     TextView addr_text = findViewById(R.id.login_Address);
                     addr_text.setVisibility(View.VISIBLE);
                     addr_text.setText(place.getName().toString());
-
-
-
                 } else {
                     //Place picking fallito
                 }
@@ -201,7 +175,6 @@ public class LoginActivity extends AppCompatActivity  {
                 // RC_SIGN_IN is the request code you passed into startActivityForResult(...) when starting the sign in flow.
                 if (requestCode == RC_SIGN_IN) {
                     IdpResponse response = IdpResponse.fromResultIntent(data);
-
                     // Successfully signed in
                     if (resultCode == RESULT_OK) {
                         IdpResponse idpResponse = IdpResponse.fromResultIntent(data);
@@ -267,10 +240,9 @@ public class LoginActivity extends AppCompatActivity  {
      * @param thisActivity
      */
     private void getUserPosition(Activity thisActivity){
-        FirebaseUser user = mAuth.getCurrentUser();
-
         /* Rende visibili i vari campi*/
         progressBar.setVisibility(View.INVISIBLE);
+        progressBarTextView.setVisibility(View.INVISIBLE);
         findViewById(R.id.login_progress_bar_text).setVisibility(View.INVISIBLE);
         TextView addr_text = findViewById(R.id.login_Address);
         Button getPos_button = findViewById(R.id.login_getPos_button);
@@ -278,13 +250,11 @@ public class LoginActivity extends AppCompatActivity  {
         getPos_button.setVisibility(View.VISIBLE);
         toolbar.setVisibility(View.VISIBLE);
 
-
         getPos_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 /* Lanciare l'intent per ottenere la posizione*/
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-
                 try {
                     startActivityForResult(builder.build(thisActivity), PLACE_PICKER_REQUEST);
                 } catch (GooglePlayServicesRepairableException e) {

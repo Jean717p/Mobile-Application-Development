@@ -5,6 +5,8 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
+    signingConfigs {
+    }
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.mad18.nullpointerexception.takeabook"
@@ -20,6 +22,8 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
         }
     }
     compileOptions {
@@ -64,33 +68,27 @@ dependencies {
     //-------------
     //Facebook auth
     implementation 'com.facebook.android:facebook-login:4.33.0'
-
     //Glide
-    implementation ('com.github.bumptech.glide:glide:4.6.1') {
+    implementation('com.github.bumptech.glide:glide:4.6.1') {
         exclude group: 'com.android.support'
     }
     implementation 'com.android.support:support-fragment:26.1.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
-
     //barcode
     implementation 'com.google.android.gms:play-services-vision:15.0.2'
     implementation 'me.dm7.barcodescanner:zxing:1.9.8'
-
     //Location
-    implementation "com.google.android.gms:play-services-places:15.0.1"
+    implementation 'com.google.android.gms:play-services-places:15.0.1'
     implementation 'com.google.android.gms:play-services-location:15.0.1'
-
     //Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support:support-vector-drawable:26.1.0'
     implementation 'com.android.support:customtabs:26.1.0'
     kapt 'com.github.bumptech.glide:compiler:4.7.1'
-
     //anko
     implementation "org.jetbrains.anko:anko:$anko_version"
     implementation "org.jetbrains.anko:anko-design:$anko_version"
     implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
-
     //groupie
     implementation 'com.xwray:groupie:2.0.3'
     implementation 'com.xwray:groupie-kotlin-android-extensions:2.0.3'

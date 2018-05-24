@@ -12,8 +12,6 @@ import com.mad18.nullpointerexception.takeabook.chatActivity.model.*
 import com.mad18.nullpointerexception.takeabook.chatActivity.recyclerview.ImageMessageItem
 import com.mad18.nullpointerexception.takeabook.chatActivity.recyclerview.TextMessageItem
 import com.xwray.groupie.kotlinandroidextensions.Item
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.RemoteMessage
 import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity
 
 
@@ -30,6 +28,9 @@ object FirestoreUtil {
 
     fun getOrCreateChatChannel(otherUserId: String,
                                onComplete: (channelId: String) -> Unit) {
+        /**REVIEW: creare timestamp la prima volta ed ogni volta che si apre una chat per last read
+        //dentro user/engagedChannel/otheruserid da controllare poi per il numero di messaggi non letti
+        //in listofchatactivity@checknewmessages*/
         currentUserDocRef.collection("engagedChatChannels")
                 .document(otherUserId).get().addOnSuccessListener {
                     if (it.exists()) {
@@ -65,7 +66,6 @@ object FirestoreUtil {
                         Log.e("FIRESTORE", "ChatMessagesListener error.", firebaseFirestoreException)
                         return@addSnapshotListener
                     }
-
                     val items = mutableListOf<Item>()
                     querySnapshot!!.documents.forEach {
                         if (it["type"] == MessageType.TEXT)

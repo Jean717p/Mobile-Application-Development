@@ -132,6 +132,7 @@
     <!-- Facebook login -->
     <string name="facebook_application_id" translatable="false">207778776488778</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb207778776488778</string>
+
     <string name="title_activity_book_found">BookFoundActivity</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -148,7 +149,7 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="image_fullscreen">image_fullscreen</string>
-
+    <string name="chat_photo">Photo</string>
 
 
 </resources>

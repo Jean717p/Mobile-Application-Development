@@ -1,6 +1,6 @@
 package com.mad18.nullpointerexception.takeabook.chatActivity.model
 
-import java.util.*
+import java.util.Date
 
 
 object MessageType {

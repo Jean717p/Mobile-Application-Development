@@ -132,7 +132,7 @@
     <string name="send_your_message">Messsaggio di testo</string>
     <string name="mychat">Le mie chat</string>
     <string name="chat_updated">Aggiornata la lista della chat!</string>
-
+    <string name="chat_photo">Foto</string>
 
 
 </resources>

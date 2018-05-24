@@ -128,7 +128,7 @@
         </activity>
 
         <activity
-            android:name=".chatActivity.listOfChatActivity"
+            android:name=".chatActivity.ListOfChatActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_list_of_chat"
             android:theme="@style/AppTheme">
@@ -140,7 +140,7 @@
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".chatActivity.listOfChatActivity"/>
+                android:value=".chatActivity.ListOfChatActivity"/>
             <intent-filter>
                 <action android:name="ChatActivity"/>
                 <category android:name="android.intent.category.DEFAULT"/>

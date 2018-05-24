@@ -1,10 +1,6 @@
 package com.mad18.nullpointerexception.takeabook;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,14 +14,8 @@ import android.widget.TextView;
 
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.mad18.nullpointerexception.takeabook.addBook.AddBook;
 import com.mad18.nullpointerexception.takeabook.chatActivity.AppConstants;
-import com.mad18.nullpointerexception.takeabook.chatActivity.listOfChatActivity;
 import com.mad18.nullpointerexception.takeabook.chatActivity.ChatActivity;
-
-import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
-
-import static com.mad18.nullpointerexception.takeabook.myProfile.showProfile.profileImgName;
 
 public class InfoUser extends AppCompatActivity {
 
