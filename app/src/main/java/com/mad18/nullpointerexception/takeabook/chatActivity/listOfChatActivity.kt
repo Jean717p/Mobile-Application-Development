@@ -131,8 +131,8 @@ class listOfChatActivity : AppCompatActivity() {
                 if (it.id != FirebaseAuth.getInstance().currentUser?.uid)
                     engagedUserId.add(it.id)
             }
-
         }
+
         return FirebaseFirestore.getInstance().collection("users")
                 .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                     if (firebaseFirestoreException != null) {

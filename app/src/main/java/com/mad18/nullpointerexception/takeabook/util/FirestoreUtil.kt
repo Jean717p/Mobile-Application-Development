@@ -12,6 +12,9 @@ import com.mad18.nullpointerexception.takeabook.chatActivity.model.*
 import com.mad18.nullpointerexception.takeabook.chatActivity.recyclerview.ImageMessageItem
 import com.mad18.nullpointerexception.takeabook.chatActivity.recyclerview.TextMessageItem
 import com.xwray.groupie.kotlinandroidextensions.Item
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.RemoteMessage
+import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity
 
 
 object FirestoreUtil {
@@ -22,55 +25,6 @@ object FirestoreUtil {
                 ?: throw NullPointerException("UID is null.")}")
 
     private val chatChannelsCollectionRef = firestoreInstance.collection("chatChannels")
-
-    /*
-    fun initCurrentUserIfFirstTime(onComplete: () -> Unit) {
-        currentUserDocRef.get().addOnSuccessListener { documentSnapshot ->
-            if (!documentSnapshot.exists()) {
-                val newUser = User(FirebaseAuth.getInstance().currentUser?.displayName ?: "",
-                        "", null, mutableListOf())
-                currentUserDocRef.set(newUser).addOnSuccessListener {
-                    onComplete()
-                }
-            }
-            else
-                onComplete()
-        }
-    }
-
-    fun updateCurrentUser(name: String = "", bio: String = "", profilePicturePath: String? = null) {
-        val userFieldMap = mutableMapOf<String, Any>()
-        if (name.isNotBlank()) userFieldMap["name"] = name
-        if (bio.isNotBlank()) userFieldMap["bio"] = bio
-        if (profilePicturePath != null)
-            userFieldMap["profilePicturePath"] = profilePicturePath
-        currentUserDocRef.update(userFieldMap)
-    }
-
-    fun getCurrentUser(onComplete: (User) -> Unit) {
-        currentUserDocRef.get()
-                .addOnSuccessListener {
-                    onComplete(it.toObject(User::class.java)!!)
-                }
-    }
-    */
-    /*
-    fun addUsersListener(context: Context, onListen: (List<Item>) -> Unit): ListenerRegistration {
-        return firestoreInstance.collection("users")
-                .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                    if (firebaseFirestoreException != null) {
-                        Log.e("FIRESTORE", "Users listener error.", firebaseFirestoreException)
-                        return@addSnapshotListener
-                    }
-
-                    val items = mutableListOf<Item>()
-                    querySnapshot!!.documents.forEach {
-                        if (it.id != FirebaseAuth.getInstance().currentUser?.uid)
-                            items.add(PersonItem(it.toObject(User::class.java)!!, it.id, context))
-                    }
-                    onListen(items)
-                }
-    }*/
 
     fun removeListener(registration: ListenerRegistration) = registration.remove()
 
@@ -124,16 +78,48 @@ object FirestoreUtil {
                 }
     }
 
-    fun sendMessage(message: Message, channelId: String) {
+    fun sendMessage(message: Message, channelId: String,otherUserId: String) {
         chatChannelsCollectionRef.document(channelId)
                 .collection("messages")
                 .add(message)
+        FirebaseFirestore.getInstance().collection("users").document(otherUserId)
+                .get().addOnSuccessListener { documentSnapshot ->
+                    if(documentSnapshot==null || documentSnapshot.exists()==false){
+                        return@addOnSuccessListener
+                    }
+                    val otherUser = documentSnapshot.toObject(User::class.java)
+                    val myUser:User = MainActivity.thisUser
+                    if(myUser==null){
+                        FirebaseFirestore.getInstance().collection("users")
+                                .document(FirebaseAuth.getInstance().uid!!).get().addOnSuccessListener {
+                            documentSnapshot ->
+                            if(documentSnapshot == null || !documentSnapshot.exists()){
+                                return@addOnSuccessListener
+                            }
+                            val myUser = documentSnapshot.toObject(User::class.java)
+                            otherUser!!.registrationTokens.forEach {
+                                val notification = NotificationMessage(myUser!!.usr_name, message.time,
+                                        FirebaseAuth.getInstance().uid.toString(), it, "New Message!",
+                                        "","Book Circle")
+                                FirebaseFirestore.getInstance().collection("notifications").add(notification)
+                             }
+
+                                }
+                    }
+                    else {
+                        otherUser!!.registrationTokens.forEach {
+                            val notification = NotificationMessage(myUser.usr_name, message.time,
+                                    FirebaseAuth.getInstance().uid.toString(), it, "New Message!","","Book Circle")
+                            FirebaseFirestore.getInstance().collection("notifications").add(notification)
+                        }
+                    }
+                }
     }
 
     fun getChatOfUser(otherUserId: String, myUserId: String){
         val db = FirebaseFirestore.getInstance()
         val userRef:DocumentReference = db.collection("user").document(myUserId)
-//        userRef.get().addOnSuccessListener { documentSnapshot ->
+//        userRef.get().addOnSuccessListener {  documentSnapshot ->
 //            val user = documentSnapshot.toObject(User::class.java)
 //            val channelList:MutableMap<String,String> = user.getChannels()
 //            val channel = channelList.get(otherUserId);
@@ -152,14 +138,18 @@ object FirestoreUtil {
     //region FCM
 
     fun getFCMRegistrationTokens(onComplete: (tokens: MutableList<String>) -> Unit) {
-        currentUserDocRef.get().addOnSuccessListener {
+        val db = FirebaseFirestore.getInstance()
+        var userCollection = db.collection("users")
+        userCollection.document(FirebaseAuth.getInstance().currentUser!!.uid).get().addOnSuccessListener {
             val user = it.toObject(User::class.java)!!
             onComplete(user.registrationTokens)
         }
     }
 
     fun setFCMRegistrationTokens(registrationTokens: MutableList<String>) {
-        currentUserDocRef.update(mapOf("registrationTokens" to registrationTokens))
+        val db = FirebaseFirestore.getInstance()
+        var userCollection = db.collection("users")
+        userCollection.document(FirebaseAuth.getInstance().currentUser!!.uid).update(mapOf("registrationTokens" to registrationTokens))
     }
     //endregion FCM
 }

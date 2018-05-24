@@ -45,6 +45,8 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var messagesListenerRegistration: ListenerRegistration
     private var shouldInitRecyclerView = true
     private lateinit var messagesSection: Section
+    private lateinit var otherUserId:String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
@@ -52,7 +54,7 @@ class ChatActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = intent.getStringExtra(USER_NAME)
 
-        val otherUserId = intent.getStringExtra(USER_ID)
+        otherUserId = intent.getStringExtra(USER_ID)
         FirestoreUtil.getOrCreateChatChannel(otherUserId) { channelId ->
             currentChannelId = channelId
 
@@ -66,7 +68,7 @@ class ChatActivity : AppCompatActivity() {
                             TextMessage(textToSend, Calendar.getInstance().time,
                                     FirebaseAuth.getInstance().currentUser!!.uid, MessageType.TEXT)
                     chat_editText_message.setText("")
-                    FirestoreUtil.sendMessage(messageToSend, channelId)
+                    FirestoreUtil.sendMessage(messageToSend, channelId,otherUserId)
                 }
 
             }
@@ -166,7 +168,7 @@ class ChatActivity : AppCompatActivity() {
                 val messageToSend =
                         ImageMessage(imagePath, Calendar.getInstance().time,
                                 FirebaseAuth.getInstance().currentUser!!.uid)
-                FirestoreUtil.sendMessage(messageToSend, currentChannelId)
+                FirestoreUtil.sendMessage(messageToSend, currentChannelId,otherUserId)
             }
         }
         if(requestCode == RC_CAMERA_CAPTURE && resultCode == Activity.RESULT_OK &&
@@ -181,7 +183,7 @@ class ChatActivity : AppCompatActivity() {
                 val messageToSend =
                         ImageMessage(imagePath, Calendar.getInstance().time,
                                 FirebaseAuth.getInstance().currentUser!!.uid)
-                FirestoreUtil.sendMessage(messageToSend, currentChannelId)
+                FirestoreUtil.sendMessage(messageToSend, currentChannelId,otherUserId)
             }
 
         }

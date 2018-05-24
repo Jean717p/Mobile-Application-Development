@@ -8,9 +8,11 @@ import com.google.firebase.messaging.RemoteMessage
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        if (remoteMessage.notification != null) {
+        super.onMessageReceived(remoteMessage)
+        Log.d("FCM-Messaging", "FCM message received!")
+        if (remoteMessage.notification != null ) {
             //TODO: Show notification
-            Log.d("FCM", "FCM message received!")
+            Log.d("FCM-Messaging", "FCM message received!")
         }
     }
 }

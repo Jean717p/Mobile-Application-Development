@@ -1,5 +1,6 @@
 package com.mad18.nullpointerexception.takeabook.chatActivity.service
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.iid.FirebaseInstanceIdService
@@ -18,8 +19,8 @@ class MyFirebaseInstanceIDService : FirebaseInstanceIdService() {
     companion object {
         fun addTokenToFirestore(newRegistrationToken: String?) {
             if (newRegistrationToken == null) throw NullPointerException("FCM token is null.")
-
             FirestoreUtil.getFCMRegistrationTokens { tokens ->
+                Log.d("debug", "kotlin")
                 if (tokens.contains(newRegistrationToken))
                     return@getFCMRegistrationTokens
                 tokens.add(newRegistrationToken)

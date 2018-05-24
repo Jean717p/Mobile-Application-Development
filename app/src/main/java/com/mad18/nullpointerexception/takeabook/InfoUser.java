@@ -58,7 +58,10 @@ public class InfoUser extends AppCompatActivity {
         //usr_img_uri = (Uri)getIntent().getExtras().get("img_uri");
         usr_id = getIntent().getExtras().getString("usr_id");
         usr_prof_stg_path = getIntent().getExtras().getString("usr_prof_strg_path");
-        usr_prof_stg_path = usr_prof_stg_path.substring(1);
+        if(usr_prof_stg_path.length() > 0){
+            usr_prof_stg_path = usr_prof_stg_path.substring(1);
+        }
+
         //fillInfoUserViews();
         fillInfoUserViews();
 
@@ -85,15 +88,14 @@ public class InfoUser extends AppCompatActivity {
         tv.setText(usr_city);
         tv = findViewById(R.id.info_user_about_me);
         tv.setText(usr_bio);
-        ImageView iv = findViewById(R.id.info_user_photo_profile);
 
         //iv.setImageResource(R.drawable.ic_book_cover);
 
-
-        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(usr_prof_stg_path);
-        //iv.setImageResource(R.drawable.ic_book_cover);
-
-        GlideApp.with(this).load(mImageRef).placeholder(R.drawable.account_circle).into(iv);
+        if(usr_prof_stg_path.length() > 0){
+            ImageView iv = findViewById(R.id.info_user_photo_profile);
+            StorageReference mImageRef = FirebaseStorage.getInstance().getReference(usr_prof_stg_path);
+            GlideApp.with(this).load(mImageRef).placeholder(R.drawable.account_circle).into(iv);
+        }
     }
 
     @Override

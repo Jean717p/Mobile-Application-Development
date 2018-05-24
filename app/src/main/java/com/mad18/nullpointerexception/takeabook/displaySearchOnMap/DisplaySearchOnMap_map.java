@@ -215,7 +215,7 @@ public class DisplaySearchOnMap_map extends Fragment implements GoogleApiClient.
                         Marker marker = bookMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(i.getLongitude(),i.getLat()))
                                 .title(i.getTitle())
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                         );
                         marker.setTag(i);
                     }
