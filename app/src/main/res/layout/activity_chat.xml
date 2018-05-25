@@ -64,7 +64,7 @@
             android:elevation="2dp"
             android:ems="10"
             android:hint="@string/send_your_message"
-            android:maxHeight="80dp"
+            android:maxHeight="96dp"
             android:padding="8dp"
             android:textAlignment="viewStart" />
 
