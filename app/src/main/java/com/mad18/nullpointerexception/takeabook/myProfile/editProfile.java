@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -135,6 +136,13 @@ public class editProfile extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.edit_profile_action_save:
+                EditText text = findViewById(R.id.edit_profile_Username);
+                if(text.getText().toString().length() ==0){
+                    Snackbar snackbar = Snackbar
+                            .make(findViewById(R.id.edit_profile_layout),getText(R.string.edit_profile_msg_error_username), Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    return false;
+                }
                 storeUserEditData();
                 finish();
                 overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);

@@ -1,5 +1,7 @@
 package com.mad18.nullpointerexception.takeabook;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.mad18.nullpointerexception.takeabook.addBook.BookWrapper;
 
 import android.content.Intent;
@@ -42,6 +44,7 @@ public class InfoBook extends AppCompatActivity {
     private String usr_name;
     private String usr_city;
     private String usr_about;
+    private FirebaseAuth mAuth;
     private Menu menu;
     private LinearLayout horizontal_photo_list;
     private View horizontal_photo_list_element;
@@ -169,8 +172,9 @@ public class InfoBook extends AppCompatActivity {
             usr_about = doc.getString("usr_about");
             usr_prof_strg_path = doc.getString("profileImgStoragePath");
             TextView tv2 = findViewById(R.id.info_book_owner);
-            User u = MainActivity.thisUser;
-            if(!bookToShowInfoOf.getUser_id().equals(u.getUsr_id())) {
+            mAuth = FirebaseAuth.getInstance();
+            FirebaseUser user = mAuth.getCurrentUser();
+            if(!bookToShowInfoOf.getUser_id().equals(user.getUid())) {
                 tv2.setText(usr_name);
                 tv2.setTextColor(Color.BLUE);
                 tv2.setClickable(true);

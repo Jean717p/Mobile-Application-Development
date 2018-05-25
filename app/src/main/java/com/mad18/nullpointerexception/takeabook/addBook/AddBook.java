@@ -218,7 +218,7 @@ public class AddBook extends AppCompatActivity {
             }
         }
         else{
-            Toast toast = Toast.makeText(getApplicationContext(), "Exactly 13 characters for ISBN", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.add_book_helper_text_ISBN), Toast.LENGTH_SHORT);
             toast.show();
         }
     }

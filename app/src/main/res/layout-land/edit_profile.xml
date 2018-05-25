@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
+    android:id="@+id/edit_profile_layout"
     android:layout_height="match_parent"
     >
 
@@ -54,10 +55,13 @@
             <TextView
                 android:id="@+id/edit_profile_title_Username"
                 android:text="@string/Username"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:textSize="13sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/profile_text_view_title"/>
+               />
             <!-- username-->
             <EditText
                 android:id="@+id/edit_profile_Username"
@@ -75,11 +79,14 @@
             <TextView
                 android:id="@+id/edit_profile_title_City"
                 android:text="@string/City"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:textSize="13sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/edit_profile_Username"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/profile_text_view_title"/>
+                />
             <!--city-->
             <EditText
                 android:id="@+id/edit_profile_City"
@@ -98,11 +105,14 @@
             <TextView
                 android:id="@+id/edit_profile_title_mail"
                 android:text="@string/Email"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:textSize="13sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/edit_profile_City"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/profile_text_view_title"/>
+                />
             <!-- mail-->
             <EditText
                 android:id="@+id/edit_profile_mail"
@@ -120,11 +130,14 @@
             <TextView
                 android:id="@+id/edit_profile_title_about"
                 android:text="@string/AboutMe"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:textSize="13sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/edit_profile_mail"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/profile_text_view_title"/>
+                />
             <!--about-->
             <EditText
                 android:id="@+id/edit_profile_about"

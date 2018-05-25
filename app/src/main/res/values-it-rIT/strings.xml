@@ -9,9 +9,12 @@
     <string name="Email">Email</string>
     <string name="AboutMe">Bio</string>
     <string name="Address">Indirizzo</string>
+    <string name="edit_profile_msg_error_username">Per favore, inserisci il nome utente</string>
 
     <!--Login Related-->
     <string name="login_getposition">Ottieni</string>
+    <string name="login_welcomeBack">Bentornato</string>
+    <string name="login_welcome">Benvenuto</string>
 
     <!--Login-->
     <string name="no_internet">Nessuna connessione ad internet</string>
@@ -129,7 +132,7 @@
     <string name="top_frag_floating_action_menu_author">Ricerca per autore</string>
     <string name="top_frag_floating_action_menu_search">Indietro</string>
     <string name="title">Cerca</string>
-    <string name="send_your_message">Messsaggio di testo</string>
+    <string name="send_your_message">Messaggio di testo</string>
     <string name="mychat">Le mie chat</string>
     <string name="chat_updated">Aggiornata la lista della chat!</string>
     <string name="chat_photo">Foto</string>

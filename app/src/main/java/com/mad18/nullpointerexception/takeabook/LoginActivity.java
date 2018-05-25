@@ -68,9 +68,17 @@ public class LoginActivity extends AppCompatActivity  {
         toolbar = (Toolbar) findViewById(R.id.login_toolbar);
         setSupportActionBar(toolbar);
        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
-        String x = sharedPref.getString(SettingsActivity.language,"");
+        String x = sharedPref.getString("language", "");
         if(x.length()>0){
-            SettingsActivity.changeLocale(getResources(),x);
+            switch (x){
+                case "Italiano":
+                    SettingsActivity.changeLocale(getResources(),"it");
+                    break;
+                case "English":
+                    SettingsActivity.changeLocale(getResources(),"eng");
+                    break;
+            }
+            //SettingsActivity.changeLocale(getResources(),x);
         }
         toolbar.setTitle(R.string.insert_location);
         toolbar.setVisibility(View.INVISIBLE);
@@ -124,6 +132,8 @@ public class LoginActivity extends AppCompatActivity  {
         if (mAuth.getCurrentUser() != null) {
                 if (!newUser) {
                     Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.class);
+                    Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.login_welcomeBack)+" "+mAuth.getCurrentUser().getDisplayName(), Toast.LENGTH_SHORT);
+                    toast.show();
                     startActivity(intent);
                     finish();
                 }
@@ -182,6 +192,8 @@ public class LoginActivity extends AppCompatActivity  {
                         newUser = metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp();
                         if (newUser) {
                             getUserPosition(this);
+                            Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.login_welcome)+" "+mAuth.getCurrentUser().getDisplayName(), Toast.LENGTH_SHORT);
+                            toast.show();
                         }
                         else{
                             Intent intent = new Intent(this, MainActivity.class);

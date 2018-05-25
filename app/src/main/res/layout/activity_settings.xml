@@ -16,7 +16,15 @@
         android:background="@color/colorPrimary"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark"/>
-    <View
+
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/settings_toolbar"
+        layout="@layout/cardview_language"/>
+
+   <!-- <View
         android:id="@+id/settings_Language_view"
         android:layout_below="@id/settings_toolbar"
         android:layout_width="wrap_content"
@@ -55,5 +63,5 @@
     android:layout_width="match_parent"
     android:layout_height="1dp"
     android:background="@android:color/darker_gray"/>
-
+-->
 </RelativeLayout>

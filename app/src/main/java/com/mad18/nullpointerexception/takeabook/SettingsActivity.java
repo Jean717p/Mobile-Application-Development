@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,7 +29,7 @@ public class SettingsActivity extends AppCompatActivity {
     Resources res;
     TextView tv_language;
     TextView tv_choosen_language;
-    View language_view;
+    CardView language_view;
     MotionEvent event;
     Toolbar toolbar;
     private SharedPreferences sharedPref;
@@ -52,7 +53,7 @@ public class SettingsActivity extends AppCompatActivity {
         setTitle(R.string.nav_settings);
         tv_language = findViewById(R.id.settings_language_label);
         tv_choosen_language = findViewById(R.id.settings_language);
-        language_view = findViewById(R.id.settings_Language_view);
+        language_view = findViewById(R.id.language_card_view);
         language_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
