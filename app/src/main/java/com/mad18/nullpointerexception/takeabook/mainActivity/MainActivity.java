@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -21,12 +22,16 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.TypefaceSpan;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
@@ -40,6 +45,8 @@ import android.widget.TextView;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
+import com.elmargomez.typer.Font;
+import com.elmargomez.typer.Typer;
 import com.firebase.ui.auth.AuthUI;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -168,9 +175,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab_my_lib = findViewById(R.id.fab_add);
         toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
-        CollapsingToolbarLayout collapsingToolbar =
-                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        Typeface typeface = ResourcesCompat.getFont(this, R.font.autour_one);
+        CollapsingToolbarLayout collapsingToolbar =(CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle("Book Circle");
+        collapsingToolbar.setExpandedTitleTypeface(typeface);
+        collapsingToolbar.setCollapsedTitleTypeface(typeface);
         AppBarLayout appBarLayout = findViewById(R.id.main_app_bar);
         appBarLayout.setExpanded(false);
         // Create an instance of the tab layout from the view.
@@ -193,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewPager.setAdapter(myPagerAdapter);
         viewPager.setOffscreenPageLimit(2);
         // Setting a listener for clicks.
+
         viewPager.addOnPageChangeListener(new
                 TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -281,6 +291,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -289,6 +301,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+
     }
 
 
@@ -328,10 +341,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivityForResult(intent,REQUEST_SETTINGS);
                 break;
         }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+
 
    @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -18,6 +18,7 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+
     <style name="MineCustomTabText" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">13dp</item>
     </style>
@@ -30,11 +31,6 @@
     <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
-
-    <style name="AppTheme.ToolbarTextStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:fontFamily">@font/autour_one</item>
-        <item name="fontFamily">@font/autour_one</item>
-    </style>
 
 
     <style name="CircularProgress" parent="Theme.AppCompat.Light">
@@ -63,6 +59,11 @@
 
     <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
         <item name="android:background">@color/black_overlay</item>
+    </style>
+
+    <style name="ToolbarTitleTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">18sp</item>
+        <item name="font">@font/autour_one</item>
     </style>
 
 </resources>
