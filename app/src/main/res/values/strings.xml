@@ -154,6 +154,7 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="image_fullscreen">image_fullscreen</string>
     <string name="chat_photo">Photo</string>
+    <string name="Updating">Updating..</string>
 
 
 </resources>

@@ -8,11 +8,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.mad18.nullpointerexception.takeabook.User
 import com.mad18.nullpointerexception.takeabook.chatActivity.model.*
-
 import com.mad18.nullpointerexception.takeabook.chatActivity.recyclerview.ImageMessageItem
 import com.mad18.nullpointerexception.takeabook.chatActivity.recyclerview.TextMessageItem
-import com.xwray.groupie.kotlinandroidextensions.Item
 import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity
+import com.xwray.groupie.kotlinandroidextensions.Item
 
 
 object FirestoreUtil {
@@ -28,9 +27,6 @@ object FirestoreUtil {
 
     fun getOrCreateChatChannel(otherUserId: String,
                                onComplete: (channelId: String) -> Unit) {
-        /**REVIEW: creare timestamp la prima volta ed ogni volta che si apre una chat per last read
-        //dentro user/engagedChannel/otheruserid da controllare poi per il numero di messaggi non letti
-        //in listofchatactivity@checknewmessages*/
         currentUserDocRef.collection("engagedChatChannels")
                 .document(otherUserId).get().addOnSuccessListener {
                     if (it.exists()) {
@@ -57,6 +53,34 @@ object FirestoreUtil {
                 }
     }
 
+    fun getOrCreateChatChannel_2(otherUserId: String,
+                               onComplete: (channelId: String,otherUserId:String) -> Unit) {
+        currentUserDocRef.collection("engagedChatChannels")
+                .document(otherUserId).get().addOnSuccessListener {
+                    if (it.exists()) {
+                        onComplete(it["channelId"] as String, otherUserId)
+                        return@addOnSuccessListener
+                    }
+
+                    val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+
+                    val newChannel = chatChannelsCollectionRef.document()
+                    newChannel.set(ChatChannel(mutableListOf(currentUserId, otherUserId)))
+
+                    currentUserDocRef
+                            .collection("engagedChatChannels")
+                            .document(otherUserId)
+                            .set(mapOf("channelId" to newChannel.id))
+
+                    firestoreInstance.collection("users").document(otherUserId)
+                            .collection("engagedChatChannels")
+                            .document(currentUserId)
+                            .set(mapOf("channelId" to newChannel.id))
+
+                    onComplete(newChannel.id,otherUserId)
+                }
+    }
+
     fun addChatMessagesListener(channelId: String, context: Context,
                                 onListen: (List<Item>) -> Unit): ListenerRegistration {
         return chatChannelsCollectionRef.document(channelId).collection("messages")
@@ -79,6 +103,9 @@ object FirestoreUtil {
     }
 
     fun sendMessage(message: Message, channelId: String,otherUserId: String) {
+        firestoreInstance.collection("users").document(otherUserId)
+                .collection("engagedChatChannels").document(FirebaseAuth.getInstance().currentUser!!.uid)
+                .update("pending",true)
         chatChannelsCollectionRef.document(channelId)
                 .collection("messages")
                 .add(message)

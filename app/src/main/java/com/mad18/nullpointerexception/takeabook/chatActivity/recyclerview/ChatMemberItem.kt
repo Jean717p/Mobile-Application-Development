@@ -13,13 +13,14 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 
-class ChatMemberItem(val person: User,
+data class ChatMemberItem(val person: User,
                      val userId: String,
-                     val lastMessageTimeStamp: Date,
+                     var lastReadByUser: Date,
+                     var lastMessageTimeStamp: Date,
                      var unreadMessages: Int,
-                     val lastMessage: String,
-                     private val context: Context)
-    : Item() {
+                     var lastMessage: String,
+                     var context: Context)
+    : Item(),Comparable<ChatMemberItem> {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.item_chat_member_name.text = person.usr_name
@@ -31,8 +32,9 @@ class ChatMemberItem(val person: User,
             viewHolder.item_chat_member_profile_picture.setImageResource(R.drawable.ic_person_black_24dp)
         }
         if(lastMessageTimeStamp.after(Date(0))){
-            val dateFormat = SimpleDateFormat("yyyy/MM/dd hh:mm")
+            val dateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm")
             viewHolder.item_chat_member_time.text = dateFormat.format(lastMessageTimeStamp)
+            viewHolder.item_chat_member_last_msg.text = lastMessage
         }
         else{
             viewHolder.item_chat_member_time.text = ""
@@ -40,11 +42,14 @@ class ChatMemberItem(val person: User,
         if(unreadMessages>0){
             viewHolder.item_chat_member_unread_msg.visibility = View.VISIBLE
             viewHolder.item_chat_member_unread_msg.text = unreadMessages.toString()
-            viewHolder.item_chat_member_last_msg.text = lastMessage
         }
         else{
             viewHolder.item_chat_member_unread_msg.visibility = View.INVISIBLE
         }
+    }
+
+    override fun compareTo(other: ChatMemberItem): Int {
+        return this.lastMessageTimeStamp.compareTo(other.lastMessageTimeStamp)
     }
 
     override fun getLayout() = R.layout.item_chat_member

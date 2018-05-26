@@ -9,14 +9,15 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.QueryDocumentSnapshot
+import com.google.firebase.firestore.*
+import com.google.firebase.firestore.EventListener
 import com.mad18.nullpointerexception.takeabook.R
 import com.mad18.nullpointerexception.takeabook.User
-import com.mad18.nullpointerexception.takeabook.chatActivity.model.*
+import com.mad18.nullpointerexception.takeabook.chatActivity.model.ImageMessage
+import com.mad18.nullpointerexception.takeabook.chatActivity.model.MessageType
+import com.mad18.nullpointerexception.takeabook.chatActivity.model.TextMessage
 import com.mad18.nullpointerexception.takeabook.chatActivity.recyclerview.ChatMemberItem
 import com.mad18.nullpointerexception.takeabook.util.FirestoreUtil
 import com.xwray.groupie.GroupAdapter
@@ -32,15 +33,15 @@ import kotlin.reflect.KFunction4
 
 class ListOfChatActivity : AppCompatActivity() {
 
-    private lateinit var userListenerRegistration: ListenerRegistration
-
     private var shouldInitRecyclerView = true
     private lateinit var context:Context
     private lateinit var listOfChatSection: Section
     private lateinit var menu: Menu
+    private var engagedUserId = mutableMapOf<String,Date>()
+    private lateinit var firestoreListener: ListenerRegistration
 
-    companion object {
-        var chatStatusMap:MutableMap<String,ChatStatus> = mutableMapOf<String,ChatStatus>()
+    private companion object {
+        var itemsMap:MutableMap<String,ChatMemberItem> = mutableMapOf()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,9 +51,36 @@ class ListOfChatActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.list_of_chat_toolbar))
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         title = getString(R.string.mychat)
-        userListenerRegistration = addUsersListener(this,this::checkNewMessages,this::sortAndUpdate,this::updateRecyclerView)
         //list_of_chat_recycler_view
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        val userDocRef = FirebaseFirestore.getInstance().collection("users").document(userId.toString())
+        if(shouldInitRecyclerView && itemsMap.size>0){
+            itemsMap.values.forEach { chatMemberItem: ChatMemberItem ->
+                chatMemberItem.context = this
+            }
+            sortAndUpdate(this, itemsMap.values.toList(),this::updateRecyclerView)
+        }
+        firestoreListener = userDocRef.collection("engagedChatChannels")
+                .addSnapshotListener(EventListener{ querySnapshot, firebaseFirestoreException ->
+                    if (firebaseFirestoreException != null) {
+                        Log.e("FIRESTORE", "Users listener error.", firebaseFirestoreException)
+                        return@EventListener
+                    }
+                    querySnapshot!!.documents.forEach {
+                        if (it.id != FirebaseAuth.getInstance().currentUser?.uid) {
+                            val datetmp:Date
+                            if(it.get("lastReadByUser") != null){
+                                datetmp = it.get("lastReadByUser") as Date
+                            }
+                            else{
+                                datetmp = Date(0)
+                            }
+                            engagedUserId.put(it.id,datetmp)
+                        }
+                    }
+                    updateItemsMap(this,this::checkNewMessages,this::sortAndUpdate,this::updateRecyclerView)
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -70,24 +98,25 @@ class ListOfChatActivity : AppCompatActivity() {
                 return true
             }
             R.id.action_refresh_chat -> {
-                userListenerRegistration = addUsersListener(this,this::checkNewMessages,this::sortAndUpdate,this::updateRecyclerView)
+                checkChannelChanges()
                 val snackbar = Snackbar
-                        .make(findViewById(R.id.list_of_chat_framelayout), getText(R.string.chat_updated), Snackbar.LENGTH_LONG)
+                        .make(findViewById(R.id.list_of_chat_framelayout), getString(R.string.Updating), Snackbar.LENGTH_LONG)
                 snackbar.show()
+//                val snackbar = Snackbar
+//                        .make(findViewById(R.id.list_of_chat_framelayout), getText(R.string.chat_updated), Snackbar.LENGTH_LONG)
+//                snackbar.show()
             }
         }
-
-
         return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        removeListener(userListenerRegistration)
+        firestoreListener.remove()
         shouldInitRecyclerView = true
     }
 
-    private fun updateRecyclerView(items: List<ChatMemberItem>) {
+    fun updateRecyclerView(items: List<ChatMemberItem>) {
 
         fun init() {
             list_of_chat_recycler_view.apply {
@@ -101,29 +130,59 @@ class ListOfChatActivity : AppCompatActivity() {
             shouldInitRecyclerView = false
         }
 
-        fun updateItems() = listOfChatSection.update(items)
+        fun updateItems() {
+            listOfChatSection.update(items)
+            listOfChatSection.notifyChanged()
+        }
 
         if (shouldInitRecyclerView)
             init()
         else
             updateItems()
+
     }
 
     private val onItemClick = OnItemClickListener { item, view ->
         if (item is ChatMemberItem) {
-            // TODO Fare partire la activity in cui si visualizza la chat
             startActivity<ChatActivity>(
                     AppConstants.USER_NAME to item.person.usr_name,
                     AppConstants.USER_ID to item.userId)
-            item.unreadMessages =  0
-            item.notifyChanged()
         }
     }
 
-    private fun removeListener(registration: ListenerRegistration) = registration.remove()
+    private fun checkChannelChanges(){
+        val userDocRef = FirebaseFirestore.getInstance()
+                .collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+        userDocRef.collection("engagedChatChannels")
+                .get().addOnCompleteListener { task: Task<QuerySnapshot> ->
+                    if(task==null || task.isSuccessful==false || task.result.isEmpty){
+                        return@addOnCompleteListener
+                    }
+                    var toUpdate:Boolean = false
+                    task.getResult().forEach { queryDocumentSnapshot: QueryDocumentSnapshot? ->
+                        if(queryDocumentSnapshot!!.id != FirebaseAuth.getInstance().currentUser!!.uid){
+                            val datetmp:Date
+                            if(queryDocumentSnapshot.get("lastReadByUser") != null){
+                                datetmp = queryDocumentSnapshot.get("lastReadByUser") as Date
+                            }
+                            else{
+                                datetmp = Date(0)
+                            }
+                            if(engagedUserId.containsKey(queryDocumentSnapshot.id)==false ||
+                                    engagedUserId[queryDocumentSnapshot.id]!!.before(datetmp)){
+                                engagedUserId.put(queryDocumentSnapshot.id,datetmp)
+                                toUpdate = true
+                            }
+                        }
+                    }
+                    if(toUpdate){
+                        updateItemsMap(this,this::checkNewMessages,this::sortAndUpdate,this::updateRecyclerView)
+                    }
+                }
+    }
 
-    private fun addUsersListener(myActivity: Activity,
-                                 checkListen: KFunction4<
+    private fun updateItemsMap(myActivity: Activity,
+                               checkListen: KFunction4<
                                          @ParameterName(name = "myActivity") Activity,
                                          @ParameterName(name = "items") List<ChatMemberItem>,
                                          @ParameterName(name = "sortListen") KFunction3<
@@ -132,46 +191,34 @@ class ListOfChatActivity : AppCompatActivity() {
                                                  @ParameterName(name = "updateListen") (List<ChatMemberItem>) -> Unit, Unit>,
                                          @ParameterName(name = "updateListen") KFunction1<
                                                  @ParameterName(name = "items") List<ChatMemberItem>, Unit>, Unit>,
-                                 sortListen: KFunction3<@ParameterName(name = "myActivity") Activity,
+                               sortListen: KFunction3<@ParameterName(name = "myActivity") Activity,
                                          @ParameterName(name = "items") List<ChatMemberItem>,
                                          @ParameterName(name = "updateListen") (List<ChatMemberItem>) -> Unit, Unit>,
-                                 updateListen: KFunction1<@ParameterName(name = "items") List<ChatMemberItem>, Unit>
-    )
-            : ListenerRegistration {
-        val engagedUserId = mutableListOf<String>()
-        var userId = FirebaseAuth.getInstance().currentUser?.uid
-        var userDocRef = FirebaseFirestore.getInstance().collection("users").document(userId.toString())
-        userDocRef.collection("engagedChatChannels").addSnapshotListener(myActivity) { querySnapshot, firebaseFirestoreException ->
-            if (firebaseFirestoreException != null) {
-                Log.e("FIRESTORE", "Users listener error.", firebaseFirestoreException)
-                return@addSnapshotListener
-            }
-            querySnapshot!!.documents.forEach {
-                if (it.id != FirebaseAuth.getInstance().currentUser?.uid)
-                    engagedUserId.add(it.id)
-            }
-        }
-        return FirebaseFirestore.getInstance().collection("users")
-                .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                    if (firebaseFirestoreException != null) {
-                        Log.e("FIRESTORE", "Users listener error.", firebaseFirestoreException)
-                        return@addSnapshotListener
-                    }
-                    val items = mutableListOf<ChatMemberItem>()
-                    querySnapshot!!.documents.forEach {
-                        if(engagedUserId.contains(it.id) && it.id != userId.toString()){
-                            //REVIEW: Da controllare nuove chat a runtime
-                            items.add(ChatMemberItem(it.toObject(User::class.java)!!, it.id,Date(0),0,"", myActivity))
-                            if(chatStatusMap.containsKey(it.id)==false){
-                                chatStatusMap.put(it.id,ChatStatus(it.id, Date(0),0,""))
+                               updateListen: KFunction1<@ParameterName(name = "items") List<ChatMemberItem>, Unit>
+    ) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        FirebaseFirestore.getInstance().collection("users")
+                .get().addOnCompleteListener { task1 ->
+                    if (task1.isSuccessful) {
+                        val snap1 = task1.getResult()
+                        snap1!!.documents.forEach {
+                            if (engagedUserId.containsKey(it.id) && it.id != userId.toString()) {
+                                val x = ChatMemberItem(it.toObject(User::class.java)!!, it.id, engagedUserId[it.id]!!, Date(0), 0, "", myActivity)
+                                if (itemsMap.containsKey(it.id) == false) {
+                                    itemsMap.put(it.id, x)
+                                } else {
+                                    itemsMap.get(it.id)!!.lastReadByUser = engagedUserId[it.id]!!
+                                    itemsMap.get(it.id)!!.person.usr_name = x.person.usr_name
+                                    itemsMap.get(it.id)!!.person.profileImgStoragePath = x.person.profileImgStoragePath
+                                }
                             }
                         }
+                        checkListen(myActivity, itemsMap.values.toList(), sortListen, updateListen)
                     }
-                    checkListen(myActivity,items,sortListen,updateListen)
                 }
     }
 
-    private fun checkNewMessages(myActivity: Activity,
+    fun checkNewMessages(myActivity: Activity,
                                  items: List<ChatMemberItem>,
                                  sortListen: KFunction3<
                                          @ParameterName(name = "myActivity") Activity,
@@ -179,59 +226,74 @@ class ListOfChatActivity : AppCompatActivity() {
                                          @ParameterName(name = "updateListen") (List<ChatMemberItem>) -> Unit, Unit>,
                                  updateListen: KFunction1<@ParameterName(name = "items") List<ChatMemberItem>, Unit>) {
         items.forEach {
-            FirestoreUtil.getOrCreateChatChannel(it.userId) { channelId ->
-                val otherUserId: String = it.userId
+            FirestoreUtil.getOrCreateChatChannel_2(it.userId) { channelId,otherUserId ->
                 FirebaseFirestore.getInstance().collection("chatChannels")
                         .document(channelId).collection("messages")
-                        .whereGreaterThan("time", it.lastMessageTimeStamp)
-                        .orderBy("time")
-                        .addSnapshotListener(myActivity) { snapshot, firebaseFirestoreException ->
-                            if (firebaseFirestoreException != null || snapshot == null) {
-                                Log.e("FIRESTORE", "Users listener error.", firebaseFirestoreException)
-                                return@addSnapshotListener
+                        .orderBy("time",Query.Direction.DESCENDING)
+                        .limit(1)
+                        .get().addOnCompleteListener { myTask ->
+                            val snapshot:QuerySnapshot
+                            if(myTask== null || myTask.isSuccessful==false){
+                                sortListen(myActivity,items,updateListen)
+                                return@addOnCompleteListener
                             }
-                            if (snapshot.isEmpty || snapshot.documents.isEmpty()) {
-                                return@addSnapshotListener
+                            else{
+                                snapshot = myTask.getResult()
                             }
-                            val lastMessage = if(snapshot.documents[snapshot.documents.size - 1]
-                                            .getString("type").equals(MessageType.TEXT)){
+                            if (snapshot == null || snapshot.isEmpty || snapshot.documents.isEmpty()) {
+                                return@addOnCompleteListener
+                            }
+                            val lastMessage = if (snapshot.documents[snapshot.documents.size - 1]
+                                            .getString("type").equals(MessageType.TEXT)) {
                                 snapshot.documents[snapshot.documents.size - 1].toObject(TextMessage::class.java)
-                            }else{
+                            } else {
                                 snapshot.documents[snapshot.documents.size - 1].toObject(ImageMessage::class.java)
                             }
-                            val msg: String = if (lastMessage is TextMessage) {
-                                lastMessage.text
-                            } else {
-                                getString(R.string.chat_photo)
+                            val x = itemsMap[otherUserId]!!
+                            if(lastMessage!!.time.after(x.lastMessageTimeStamp)){
+                                //if new message update and check how many new msg are there...
+                                val msg: String = if (lastMessage is TextMessage) {
+                                    lastMessage.text
+                                } else {
+                                    getString(R.string.chat_photo)
+                                }
+                                x.lastMessageTimeStamp = lastMessage!!.time
+                                x.lastMessage = msg
+                                FirestoreUtil.getOrCreateChatChannel_2(x.userId) { channelId,otherUserId ->
+                                    FirebaseFirestore.getInstance().collection("chatChannels")
+                                            .document(channelId).collection("messages")
+                                            .whereGreaterThan("time", itemsMap[otherUserId]!!.lastReadByUser)
+                                            .orderBy("time")
+                                            .get()
+                                            .addOnCompleteListener { task ->
+                                                if (task.isSuccessful) {
+                                                    val snap = task.getResult()
+                                                    if (snap == null || snap.isEmpty || snap.documents.isEmpty()) {
+                                                        itemsMap[otherUserId]!!.unreadMessages = 0
+                                                        sortListen(myActivity,itemsMap.values.toList(),updateListen)
+                                                        return@addOnCompleteListener
+                                                    }
+                                                    itemsMap[otherUserId]!!.unreadMessages = snap.documents.size
+                                                    sortListen(myActivity,itemsMap.values.toList(),updateListen)
+                                                }
+                                                else{
+                                                    itemsMap[otherUserId]!!.unreadMessages = 0
+                                                    sortListen(myActivity,itemsMap.values.toList(),updateListen)
+                                                    return@addOnCompleteListener
+                                                }
+                                            }
+                                }
                             }
-                            ListOfChatActivity.chatStatusMap.put(otherUserId,
-                                    ChatStatus(otherUserId, lastMessage!!.time, snapshot.size(), msg))
-                            sortListen(myActivity,items,updateListen)
-                            //REVIEW: Da eliminare il listener dopo l'esecuzione mi sa...
                         }
             }
         }
     }
-    private fun sortAndUpdate(myActivity: Activity,
+    fun sortAndUpdate(myActivity: Activity,
                                  items:List<ChatMemberItem>,
                                  updateListen: (List<ChatMemberItem>) -> Unit){
         val tmp = mutableListOf<ChatMemberItem>()
-        val sorted = ListOfChatActivity.chatStatusMap.entries.sortedByDescending {
-            entry: MutableMap.MutableEntry<String, ChatStatus> ->
-            entry.value
-        }
-        ListOfChatActivity.chatStatusMap = sorted.map {
-            entry: MutableMap.MutableEntry<String, ChatStatus> -> entry.key to entry.value
-        }.toMap().toMutableMap()
-        for(x in sorted){
-            val s:String = x.key
-            for(y:ChatMemberItem in items){
-                if(s.equals(y.userId)){
-                    tmp.add(ChatMemberItem(y.person,y.userId,x.value.timeStamp,x.value.unreadMessages,x.value.text,myActivity))
-                    break
-                }
-            }
-        }
-        updateListen(tmp)
+        tmp.addAll(items)
+        val sorted = tmp.sortedByDescending { chatMemberItem: ChatMemberItem -> chatMemberItem }
+        updateListen(sorted)
     }
 }
