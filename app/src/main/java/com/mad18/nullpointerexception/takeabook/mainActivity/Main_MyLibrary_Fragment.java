@@ -173,28 +173,6 @@ public class Main_MyLibrary_Fragment extends Fragment {
         scaleSet.start();
     }
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        List<Book> books = myAdapter.getData();
-//        switch (requestCode){
-//            case REQUEST_ADDBOOK:
-//                if(resultCode == RESULT_OK){
-//                    if(data!=null){
-//                        Bundle extras = data.getExtras();
-//                        if(extras!=null){
-//                            BookWrapper bookWrapper = extras.getParcelable("newbook");
-//                            if(bookWrapper!=null){
-//                                books.add(new Book(bookWrapper));
-//                                updateView(books);
-//                            }
-//                        }
-//                    }
-//                }
-//                break;
-//        }
-//    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);

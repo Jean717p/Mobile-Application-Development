@@ -3,9 +3,7 @@ package com.mad18.nullpointerexception.takeabook.addBook;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -21,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
@@ -33,9 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.mad18.nullpointerexception.takeabook.GlideApp;
+import com.google.firebase.firestore.DocumentReference;
 import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -57,16 +52,16 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.mad18.nullpointerexception.takeabook.User;
-import com.mad18.nullpointerexception.takeabook.mainActivity.Main_MyLibrary_Fragment;
 import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
 import studio.carbonylgroup.textfieldboxes.ExtendedEditText;
 
 
 public class AddBook extends AppCompatActivity {
     private final int BOOK_EFFECTIVELY_ADDED = 31;
-    private final String TAG = "AddBook";
+    //private final String TAG = "AddBook";
     private static final int ZXING_CAMERA_PERMISSION = 4;
     private final int REQUEST_PICK_IMAGE = 1, REQUEST_IMAGE_CAPTURE = 2, REQUEST_SCANNER=3;
     private final int REQUEST_PERMISSION_CAMERA = 2, REQUEST_PERMISSION_GALLERY=1;
@@ -328,6 +323,9 @@ public class AddBook extends AppCompatActivity {
         Map<String,Boolean> authors = new HashMap<>();
         ExtendedEditText eet;
         Map<String,Boolean>photourllist = new HashMap<>();
+        DocumentReference bookRef = books.document();
+        String bookRefPath = bookRef.getPath();
+
         //Aggiunta libro a elenco libri
         if(bookToAdd==null){
             bookToAdd = new Book();
@@ -357,18 +355,22 @@ public class AddBook extends AppCompatActivity {
         }
         eet = findViewById(R.id.add_book_extended_edit_text_Publisher);
 
-            bookToAdd.setBook_publisher(eet.getText().toString());
+        bookToAdd.setBook_publisher(eet.getText().toString());
 
+        //aggiunta foto allo storage
         for(int j= 0; j<4;j++ ) {
             if(bookImgMap.containsKey(j)){
-                mImageRef = FirebaseStorage.getInstance().getReference().child("photo_conditions_by_user/books/" + bookToAdd.getBook_ISBN() + user.getUid() + j);
-                photourllist.put("photo_conditions_by_user/books/" + bookToAdd.getBook_ISBN() + user.getUid() + j, true);
                 if (bookImgMap.get(j) != null) {
                     bookImgPath = editProfile.saveImageToInternalStorage(bookImgMap.get(j), "temp_" + "bookEditImage"+ j, this);
                     if (bookImgPath != null) {
                         File file1 = new File(bookImgPath);
-                        Uri profileImgUri = Uri.fromFile(file1);
-                        mImageRef.putFile(profileImgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        ByteArrayOutputStream out = new ByteArrayOutputStream();
+                        Bitmap bookImgForName = bookImgMap.get(j);
+                        bookImgForName.compress(Bitmap.CompressFormat.JPEG,75,out);
+                        mImageRef = FirebaseStorage.getInstance().getReference().child("users/"+user.getUid()+ "/books/" + bookRefPath.substring(6) + "/" + UUID.nameUUIDFromBytes(out.toByteArray()));
+                        photourllist.put("users/"+user.getUid()+ "/books/" + bookRefPath.substring(6)+ "/"+ UUID.nameUUIDFromBytes(out.toByteArray()), true);
+                        Uri photoImgUri = Uri.fromFile(file1);
+                        mImageRef.putFile(photoImgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 file1.delete();
@@ -379,14 +381,15 @@ public class AddBook extends AppCompatActivity {
             }
         }
         bookToAdd.setBook_photo_list(photourllist);
+        bookRef.set(bookToAdd);
+        bookRef.getPath();
 
-        books.document(bookToAdd.getBook_ISBN() + user.getUid()).set(bookToAdd);
         //Aggiunta libro all'elenco dell'utente
         users.document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User u = documentSnapshot.toObject(User.class);
-                u.getUsr_books().put(bookToAdd.getBook_ISBN() + user.getUid(),true);
+                u.getUsr_books().put(bookRef.getPath().substring(6),true);
 
                 users.document(user.getUid()).set(u);
             }
@@ -451,8 +454,6 @@ public class AddBook extends AppCompatActivity {
                         iw = globalViewImgElement;
                         if(iw!=null && bookImg != null) {
                             iw.setImageBitmap(bookImg);
-  //                          GlideApp.with(this).asBitmap().load(bookImg).into(iw);
-
                             bookImgMap.put(globalImgPos,bookImg);
                         }
                     }
@@ -467,10 +468,8 @@ public class AddBook extends AppCompatActivity {
                                 //iw.setImageBitmap(bookImg);
                                 int size = 10;
                                 Bitmap bitmapsimplesize = Bitmap.createScaledBitmap(bookImg,bookImg.getWidth() / size, bookImg.getHeight() / size, true);
-                                bookImg.recycle();
+                                //bookImg.recycle();
                                 iw.setImageBitmap(bitmapsimplesize);
-
-                                        //                            GlideApp.with(this).load(bookImg).override(200,600).fitCenter().into(iw);
                                 bookImgMap.put(globalImgPos,bookImg);
                             }
                         } catch (IOException e) {

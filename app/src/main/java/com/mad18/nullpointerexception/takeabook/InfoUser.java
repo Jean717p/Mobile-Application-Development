@@ -45,7 +45,6 @@ public class InfoUser extends AppCompatActivity {
         usr_name = getIntent().getExtras().getString("usr_name");
         usr_city = getIntent().getExtras().getString("usr_city");
         usr_bio = getIntent().getExtras().getString("usr_bio");
-        //usr_img_uri = (Uri)getIntent().getExtras().get("img_uri");
         usr_id = getIntent().getExtras().getString("usr_id");
         usr_prof_stg_path = getIntent().getExtras().getString("usr_prof_strg_path");
         if(usr_prof_stg_path.length() > 0){
@@ -78,8 +77,6 @@ public class InfoUser extends AppCompatActivity {
         tv.setText(usr_city);
         tv = findViewById(R.id.info_user_about_me);
         tv.setText(usr_bio);
-
-        //iv.setImageResource(R.drawable.ic_book_cover);
 
         if(usr_prof_stg_path.length() > 0){
             ImageView iv = findViewById(R.id.info_user_photo_profile);
