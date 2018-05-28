@@ -68,7 +68,7 @@ public class BookWrapper extends Book implements Parcelable {
 
     //Constructor
     public BookWrapper(String ISBN,String title,List<String> authors, String publisher, int editionYear, String thumbnail,
-                       List<String> categories, String description, double lat, double longitude, int pages){
+                       List<String> categories, String description, String user, double lat, double longitude, int pages){
         this.ISBN = ISBN;
         this.title = title;
         this.authors = authors;
@@ -77,7 +77,7 @@ public class BookWrapper extends Book implements Parcelable {
         this.thumbnail = thumbnail;
         this.categories = categories;
         this.description = description;
-        this.user_id = "";
+        this.user_id = user;
         this.lat = lat;
         this.longitude = longitude;
         photo_list = new LinkedList<>();

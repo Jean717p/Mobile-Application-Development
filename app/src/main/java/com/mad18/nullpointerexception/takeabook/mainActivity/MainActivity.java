@@ -85,9 +85,10 @@ import static java.util.stream.Collectors.toList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private final String TAG = "MainActivity";
-    private final int REQUEST_ADDBOOK = 3, REQUEST_SETTINGS = 4;;
+    private final int REQUEST_ADDBOOK = 3, REQUEST_SETTINGS = 4;
     private Toolbar toolbar;
     private SharedPreferences sharedPref;
+
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private DocumentReference user_doc;
@@ -481,8 +482,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     }
                                 }
                                 if(bookNotPresent){
-                                    myBooks.add(book);
-                                    isMyBooksSorted = false;
+                                    if(book!=null) {
+                                        myBooks.add(book);
+                                        isMyBooksSorted = false;
+                                    }
                                 }
                             }
                         }
@@ -657,5 +660,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        SharedPreferences sharedPref;
+//        sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPref.edit();
+//        boolean book_removed = sharedPref.getBoolean("book_removed", false);
+//        if(book_removed){
+////            Snackbar snackbar = Snackbar
+////                    .make(findViewById(R.id.drawer_layout),getText(R.string.info_book_deleted), Snackbar.LENGTH_LONG);
+////            snackbar.show();
+//
+//            editor.putBoolean("book_removed",false);
+////            f.updateView(myBooks);
+////            new updateUserData().doInBackground();
+//            //TODO: refresh my library e modifica path foto conditions sulla falsa riga dell'immagine profilo
+//        }
+//        editor.apply();
+//
+//    }
 }

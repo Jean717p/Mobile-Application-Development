@@ -27,7 +27,6 @@ public class MyLibraryRecyclerViewAdapter extends RecyclerView.Adapter<MyLibrary
         this.listener = listener;
     }
 
-    //inizio simo
     public interface OnItemClickListener {
         void onItemClick(Book item);
     }
@@ -38,7 +37,6 @@ public class MyLibraryRecyclerViewAdapter extends RecyclerView.Adapter<MyLibrary
     public List<Book> getData(){
         return this.mData;
     }
-    //fine simo
 
     @NonNull
     @Override

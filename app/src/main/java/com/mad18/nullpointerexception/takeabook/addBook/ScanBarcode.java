@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.zxing.Result;
 import com.mad18.nullpointerexception.takeabook.R;
 
@@ -28,6 +30,7 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.ResultHandler{
     private ZXingScannerView mScannerView;
+    private String uid = "";
 
     @Override
     public void onCreate(Bundle state) {
@@ -149,8 +152,9 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
 
                         }
                     }
+                    FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
                     BookWrapper bookWrapper = new BookWrapper(ISBN,title,authors, publisher,editionYear,
-                            thumbnail, categories,"",0,0, pages);
+                            thumbnail, categories,"",fbuser.getUid(),0,0, pages);
                     intent.putExtra("bookinfo", bookWrapper);
                     setResult(RESULT_OK,intent);
                     finish();

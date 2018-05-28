@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -30,7 +31,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.mad18.nullpointerexception.takeabook.MyGlideModule;
 import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,6 +45,7 @@ import com.mad18.nullpointerexception.takeabook.Book;
 import com.mad18.nullpointerexception.takeabook.R;
 
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -53,11 +54,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.mad18.nullpointerexception.takeabook.User;
+import com.mad18.nullpointerexception.takeabook.mainActivity.Main_MyLibrary_Fragment;
 import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
 import studio.carbonylgroup.textfieldboxes.ExtendedEditText;
 
 
 public class AddBook extends AppCompatActivity {
+    private final int BOOK_EFFECTIVELY_ADDED = 31;
     private final String TAG = "AddBook";
     private static final int ZXING_CAMERA_PERMISSION = 4;
     private final int REQUEST_PICK_IMAGE = 1, REQUEST_IMAGE_CAPTURE = 2, REQUEST_SCANNER=3;
@@ -244,9 +247,9 @@ public class AddBook extends AppCompatActivity {
                 eet = findViewById(R.id.add_book_extended_edit_Title);
                 if(eet.getText().toString().length()>0) {
                     storeBookEditData();
-//                    Intent intent = new Intent();
-//                    intent.putExtra("newbook",new BookWrapper(bookToAdd));
-//                    setResult(RESULT_OK,intent);
+                    Intent myLibIntent = new Intent();
+                    myLibIntent.putExtra("new_book",new BookWrapper(bookToAdd));
+                    setResult(BOOK_EFFECTIVELY_ADDED,myLibIntent);
                     finish();
                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                     return true;
@@ -324,6 +327,7 @@ public class AddBook extends AppCompatActivity {
         if(bookToAdd==null){
             bookToAdd = new Book();
         }
+        bookToAdd.setBook_userid(user.getUid());
         eet = findViewById(R.id.add_book_extended_edit_text_ISBN);
         bookToAdd.setBook_ISBN(eet.getText().toString());
         eet = findViewById(R.id.add_book_extended_edit_text_Description);
@@ -442,6 +446,7 @@ public class AddBook extends AppCompatActivity {
                         iw = globalViewImgElement;
                         if(iw!=null && bookImg != null) {
                             iw.setImageBitmap(bookImg);
+  //                          GlideApp.with(this).asBitmap().load(bookImg).into(iw);
                             bookImgMap.put(globalImgPos,bookImg);
                         }
                     }
@@ -450,16 +455,18 @@ public class AddBook extends AppCompatActivity {
                     if (data != null) {
                         Uri selectedMediaUri = data.getData();
                         try {
-                            bookImg = MediaStore.Images.Media.getBitmap(
-                                    this.getContentResolver(),selectedMediaUri);
+                            bookImg = MediaStore.Images.Media.getBitmap(this.getContentResolver(),selectedMediaUri);
+                            iw = globalViewImgElement;
+                            if(iw!=null && !bookImg.equals("")) {
+                                iw.setImageBitmap(bookImg);
+    //                            GlideApp.with(this).load(bookImg).override(200,600).fitCenter().into(iw);
+                                bookImgMap.put(globalImgPos,bookImg);
+                            }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        iw = globalViewImgElement;
-                        if(iw!=null && bookImg != null) {
-                            iw.setImageBitmap(bookImg);
-                            bookImgMap.put(globalImgPos,bookImg);
-                        }
+
+
                     }
                     break;
             }
