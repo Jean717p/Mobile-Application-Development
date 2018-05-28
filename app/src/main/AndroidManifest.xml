@@ -133,10 +133,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity" />
         </activity>
-
         <activity
             android:name=".chatActivity.ListOfChatActivity"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_list_of_chat"
             android:theme="@style/AppTheme">
             <meta-data
@@ -144,7 +142,7 @@
                 android:value=".mainActivity.MainActivity"/>
         </activity>
         <activity android:name=".chatActivity.ChatActivity"
-            android:screenOrientation="portrait">
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".chatActivity.ListOfChatActivity"/>
