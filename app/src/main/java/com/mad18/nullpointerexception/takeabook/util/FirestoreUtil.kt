@@ -54,7 +54,7 @@ object FirestoreUtil {
     }
 
     fun getOrCreateChatChannel_2(otherUserId: String,
-                               onComplete: (channelId: String,otherUserId:String) -> Unit) {
+                                 onComplete: (channelId: String,otherUserId:String) -> Unit) {
         currentUserDocRef.collection("engagedChatChannels")
                 .document(otherUserId).get().addOnSuccessListener {
                     if (it.exists()) {
@@ -119,17 +119,17 @@ object FirestoreUtil {
                     if(myUser==null){
                         FirebaseFirestore.getInstance().collection("users")
                                 .document(FirebaseAuth.getInstance().uid!!).get().addOnSuccessListener {
-                            documentSnapshot ->
-                            if(documentSnapshot == null || !documentSnapshot.exists()){
-                                return@addOnSuccessListener
-                            }
-                            val myUser = documentSnapshot.toObject(User::class.java)
-                            otherUser!!.registrationTokens.forEach {
-                                val notification = NotificationMessage(myUser!!.usr_name, message.time,
-                                        FirebaseAuth.getInstance().uid.toString(), it, "New Message!",
-                                        "","Book Circle")
-                                FirebaseFirestore.getInstance().collection("notifications").add(notification)
-                             }
+                                    documentSnapshot ->
+                                    if(documentSnapshot == null || !documentSnapshot.exists()){
+                                        return@addOnSuccessListener
+                                    }
+                                    val myUser = documentSnapshot.toObject(User::class.java)
+                                    otherUser!!.registrationTokens.forEach {
+                                        val notification = NotificationMessage(myUser!!.usr_name, message.time,
+                                                FirebaseAuth.getInstance().uid.toString(), it, "New Message!",
+                                                "","Book Circle")
+                                        FirebaseFirestore.getInstance().collection("notifications").add(notification)
+                                    }
 
                                 }
                     }
@@ -166,7 +166,7 @@ object FirestoreUtil {
 
     fun getFCMRegistrationTokens(onComplete: (tokens: MutableList<String>) -> Unit) {
         val db = FirebaseFirestore.getInstance()
-        var userCollection = db.collection("users")
+        val userCollection = db.collection("users")
         userCollection.document(FirebaseAuth.getInstance().currentUser!!.uid).get().addOnSuccessListener {
             val user = it.toObject(User::class.java)!!
             onComplete(user.registrationTokens)
@@ -175,7 +175,7 @@ object FirestoreUtil {
 
     fun setFCMRegistrationTokens(registrationTokens: MutableList<String>) {
         val db = FirebaseFirestore.getInstance()
-        var userCollection = db.collection("users")
+        val userCollection = db.collection("users")
         userCollection.document(FirebaseAuth.getInstance().currentUser!!.uid).update(mapOf("registrationTokens" to registrationTokens))
     }
     //endregion FCM

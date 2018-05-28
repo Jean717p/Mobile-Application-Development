@@ -31,7 +31,7 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.activity_chat.*
 import java.io.ByteArrayOutputStream
-import java.util.Calendar
+import java.util.*
 
 private const val RC_SELECT_IMAGE = 2
 private const val RC_CAMERA_CAPTURE = 3
@@ -72,9 +72,6 @@ class ChatActivity : AppCompatActivity() {
             chat_fab_send_image.setOnClickListener {
                 selectUserImg()
             }
-            FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
-                    .collection("engagedChatChannels").document(otherUserId)
-                    .update("pending",false)
         }
     }
 
@@ -201,7 +198,12 @@ class ChatActivity : AppCompatActivity() {
             shouldInitRecyclerView = false
         }
 
-        fun updateItems() = messagesSection.update(messages)
+        fun updateItems() {
+            messagesSection.update(messages)
+            FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+                    .collection("engagedChatChannels").document(otherUserId)
+                    .update("pending",false)
+        }
 
         if (shouldInitRecyclerView)
             init()

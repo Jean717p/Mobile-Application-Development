@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity  {
         progressBarTextView = findViewById(R.id.login_progress_bar_text);
         toolbar = (Toolbar) findViewById(R.id.login_toolbar);
         setSupportActionBar(toolbar);
-       SharedPreferences sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         String x = sharedPref.getString("language", "");
         if(x.length()>0){
             switch (x){
@@ -78,7 +78,6 @@ public class LoginActivity extends AppCompatActivity  {
                     SettingsActivity.changeLocale(getResources(),"eng");
                     break;
             }
-            //SettingsActivity.changeLocale(getResources(),x);
         }
         toolbar.setTitle(R.string.insert_location);
         toolbar.setVisibility(View.INVISIBLE);
@@ -105,7 +104,8 @@ public class LoginActivity extends AppCompatActivity  {
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     CollectionReference users = db.collection("users");
                     FirebaseUser user = mAuth.getCurrentUser();
-                    User u = new User(user.getEmail(), user.getDisplayName(), "", "", new HashMap<String, Boolean>(), gp, user.getUid(), new LinkedList<String>());
+                    User u = new User(user.getEmail(), user.getDisplayName(), tw.getText().toString(), "",
+                            new HashMap<String, Boolean>(), gp, user.getUid(), new LinkedList<String>());
                     users.document(user.getUid()).set(u);
                     String RegistrationToken = FirebaseInstanceId.getInstance().getToken();
                     MyFirebaseInstanceIDService.Companion.addTokenToFirestore(RegistrationToken);
@@ -130,13 +130,13 @@ public class LoginActivity extends AppCompatActivity  {
         super.onResume();
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) {
-                if (!newUser) {
-                    Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.class);
-                    Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.login_welcomeBack)+" "+mAuth.getCurrentUser().getDisplayName(), Toast.LENGTH_SHORT);
-                    toast.show();
-                    startActivity(intent);
-                    finish();
-                }
+            if (!newUser) {
+                Intent intent = new Intent(this, com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.class);
+                Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.login_welcomeBack)+" "+mAuth.getCurrentUser().getDisplayName(), Toast.LENGTH_SHORT);
+                toast.show();
+                startActivity(intent);
+                finish();
+            }
         }
         else {
             if (ActivityCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
@@ -163,7 +163,7 @@ public class LoginActivity extends AppCompatActivity  {
                         .build(),
                 RC_SIGN_IN);
         return;
-        }
+    }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -226,23 +226,23 @@ public class LoginActivity extends AppCompatActivity  {
         }
     }
 
-        @Override
-        public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-            switch (requestCode){
-                case REQUEST_PERMISSION_INTERNET:
-                    if(grantResults.length>0) {
-                        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                            sign_in();
-                        }
-                        else{
-                            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{
-                                            Manifest.permission.INTERNET}
-                                    , REQUEST_PERMISSION_INTERNET);
-                        }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case REQUEST_PERMISSION_INTERNET:
+                if(grantResults.length>0) {
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        sign_in();
                     }
-                    break;
-            }
+                    else{
+                        ActivityCompat.requestPermissions(LoginActivity.this, new String[]{
+                                        Manifest.permission.INTERNET}
+                                , REQUEST_PERMISSION_INTERNET);
+                    }
+                }
+                break;
         }
+    }
 
 
     /**

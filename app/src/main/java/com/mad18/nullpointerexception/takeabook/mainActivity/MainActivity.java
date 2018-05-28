@@ -17,7 +17,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -213,8 +212,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         fabSearch.setVisibility(View.VISIBLE);
                         floatingActionButton.setVisibility(View.GONE);
                         fragment_home = (Main_HomeBooks_Fragment) adapter.getRegisteredFragment(viewPager.getCurrentItem());
-                         double user_lat=0,user_long=0;
-                         Location user_loc;
+                        double user_lat=0,user_long=0;
+                        Location user_loc;
                         if(fragment_home!=null && thisUser!=null){
                             if(thisUser.getUsr_geoPoint()!=null){
                                 user_lat = thisUser.getUsr_geoPoint().getLatitude();
@@ -345,8 +344,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-
-   @Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_main, menu); //.xml file name
@@ -359,11 +357,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             // action with ID action_refresh was selected
             case R.id.action_refresh:
-
-                f.updateView(myBooks);
-                Snackbar snackbar = Snackbar
-                        .make(findViewById(R.id.main_library_coordinator_layout),getText(R.string.info_book_snackbar), Snackbar.LENGTH_LONG);
-                snackbar.show();
+//                f.updateView(myBooks);
+//                Snackbar snackbar = Snackbar
+//                        .make(findViewById(R.id.main_library_coordinator_layout),getText(R.string.info_book_snackbar), Snackbar.LENGTH_LONG);
+//                snackbar.show();
                 break;
 
         }
@@ -425,76 +422,76 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
 
-    @Override
-    protected String doInBackground(String... strings) {
-        FirebaseUser user = mAuth.getCurrentUser();
+        @Override
+        protected String doInBackground(String... strings) {
+            FirebaseUser user = mAuth.getCurrentUser();
 
-        user_doc = db.collection("users").document(user.getUid());
-        user_doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot doc = task.getResult();
-                SharedPreferences.Editor editor = sharedPref.edit();
-                navigationView = (NavigationView) findViewById(R.id.nav_view);
-                thisUser = doc.toObject(User.class);
-                for(String tmp:sharedUserDataKeys){
-                    editor.putString(tmp,doc.getString(tmp));
-                    Log.d(TAG,tmp+" - "+doc.getString(tmp));
-                }
-                editor.apply();
-                View hview = navigationView.getHeaderView(0);
-                setNavDrawerParameters(hview);
-                if(sharedPref.getString(profileImgName,"").length()==0
-                        && thisUser.getProfileImgStoragePath().length() > 0){
-                    StorageReference mImageRef = FirebaseStorage.getInstance().getReference(thisUser.getProfileImgStoragePath());
-                    //Glide.with(context).asBitmap().load(mImageRef).into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL) {
-                    GlideApp.with(context).asBitmap().load(mImageRef).into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL) {
-                        @Override
-                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                            String tmp = editProfile.saveImageToInternalStorage(resource,profileImgName,context);
-                            if(tmp.length()>0){
-                                editor.putString(profileImgName,tmp);
-                                editor.apply();
-                                //Update img drawer
-                                setNavDrawerParameters(hview);
-                            }
-                        }
-                    });
-                }
-                for (String x : thisUser.getUsr_books().keySet()) {
-                    db.collection("books").document(x).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            DocumentSnapshot bookDoc = task.getResult();
-                            Book book = bookDoc.toObject(Book.class);
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                if(myBooks.stream().filter(b->b.getBook_ISBN().equals(book.getBook_ISBN())).count()==0){
-                                    myBooks.add(bookDoc.toObject(Book.class));
-                                    isMyBooksSorted = false;
+            user_doc = db.collection("users").document(user.getUid());
+            user_doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    DocumentSnapshot doc = task.getResult();
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    navigationView = (NavigationView) findViewById(R.id.nav_view);
+                    thisUser = doc.toObject(User.class);
+                    for(String tmp:sharedUserDataKeys){
+                        editor.putString(tmp,doc.getString(tmp));
+                        Log.d(TAG,tmp+" - "+doc.getString(tmp));
+                    }
+                    editor.apply();
+                    View hview = navigationView.getHeaderView(0);
+                    setNavDrawerParameters(hview);
+                    if(sharedPref.getString(profileImgName,"").length()==0
+                            && thisUser.getProfileImgStoragePath().length() > 0){
+                        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(thisUser.getProfileImgStoragePath());
+                        //Glide.with(context).asBitmap().load(mImageRef).into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL) {
+                        GlideApp.with(context).asBitmap().load(mImageRef).into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL) {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                String tmp = editProfile.saveImageToInternalStorage(resource,profileImgName,context);
+                                if(tmp.length()>0){
+                                    editor.putString(profileImgName,tmp);
+                                    editor.apply();
+                                    //Update img drawer
+                                    setNavDrawerParameters(hview);
                                 }
                             }
-                            else{
-                                boolean bookNotPresent = true;
-                                for(Book b:myBooks){
-                                    if(b.getBook_ISBN().equals(book.getBook_ISBN())){
-                                        bookNotPresent = false;
-                                        break;
-                                    }
-                                }
-                                if(bookNotPresent){
-                                    if(book!=null) {
-                                        myBooks.add(book);
+                        });
+                    }
+                    for (String x : thisUser.getUsr_books().keySet()) {
+                        db.collection("books").document(x).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                DocumentSnapshot bookDoc = task.getResult();
+                                Book book = bookDoc.toObject(Book.class);
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                    if(myBooks.stream().filter(b->b.getBook_ISBN().equals(book.getBook_ISBN())).count()==0){
+                                        myBooks.add(bookDoc.toObject(Book.class));
                                         isMyBooksSorted = false;
                                     }
                                 }
+                                else{
+                                    boolean bookNotPresent = true;
+                                    for(Book b:myBooks){
+                                        if(b.getBook_ISBN().equals(book.getBook_ISBN())){
+                                            bookNotPresent = false;
+                                            break;
+                                        }
+                                    }
+                                    if(bookNotPresent){
+                                        if(book!=null) {
+                                            myBooks.add(book);
+                                            isMyBooksSorted = false;
+                                        }
+                                    }
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
-            }
-        });
-        return "ok";
-    }
+            });
+            return "ok";
+        }
     }
 
     private class UpdateHomeData extends AsyncTask<String,Void,String>{

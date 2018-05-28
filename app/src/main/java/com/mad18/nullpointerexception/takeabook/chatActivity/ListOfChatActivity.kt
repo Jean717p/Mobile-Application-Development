@@ -26,7 +26,7 @@ import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.activity_list_of_chat.*
 import org.jetbrains.anko.startActivity
-import java.util.Date
+import java.util.*
 import kotlin.reflect.KFunction1
 import kotlin.reflect.KFunction3
 import kotlin.reflect.KFunction4
@@ -80,7 +80,7 @@ class ListOfChatActivity : AppCompatActivity() {
                         }
                     }
                     updateItemsMap(this,this::checkNewMessages,this::sortAndUpdate,this::updateRecyclerView)
-        })
+                })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -183,17 +183,17 @@ class ListOfChatActivity : AppCompatActivity() {
 
     private fun updateItemsMap(myActivity: Activity,
                                checkListen: KFunction4<
-                                         @ParameterName(name = "myActivity") Activity,
-                                         @ParameterName(name = "items") List<ChatMemberItem>,
-                                         @ParameterName(name = "sortListen") KFunction3<
-                                                 @ParameterName(name = "myActivity") Activity,
-                                                 @ParameterName(name = "items") List<ChatMemberItem>,
-                                                 @ParameterName(name = "updateListen") (List<ChatMemberItem>) -> Unit, Unit>,
-                                         @ParameterName(name = "updateListen") KFunction1<
-                                                 @ParameterName(name = "items") List<ChatMemberItem>, Unit>, Unit>,
+                                       @ParameterName(name = "myActivity") Activity,
+                                       @ParameterName(name = "items") List<ChatMemberItem>,
+                                       @ParameterName(name = "sortListen") KFunction3<
+                                               @ParameterName(name = "myActivity") Activity,
+                                               @ParameterName(name = "items") List<ChatMemberItem>,
+                                               @ParameterName(name = "updateListen") (List<ChatMemberItem>) -> Unit, Unit>,
+                                       @ParameterName(name = "updateListen") KFunction1<
+                                               @ParameterName(name = "items") List<ChatMemberItem>, Unit>, Unit>,
                                sortListen: KFunction3<@ParameterName(name = "myActivity") Activity,
-                                         @ParameterName(name = "items") List<ChatMemberItem>,
-                                         @ParameterName(name = "updateListen") (List<ChatMemberItem>) -> Unit, Unit>,
+                                       @ParameterName(name = "items") List<ChatMemberItem>,
+                                       @ParameterName(name = "updateListen") (List<ChatMemberItem>) -> Unit, Unit>,
                                updateListen: KFunction1<@ParameterName(name = "items") List<ChatMemberItem>, Unit>
     ) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
@@ -219,12 +219,12 @@ class ListOfChatActivity : AppCompatActivity() {
     }
 
     fun checkNewMessages(myActivity: Activity,
-                                 items: List<ChatMemberItem>,
-                                 sortListen: KFunction3<
-                                         @ParameterName(name = "myActivity") Activity,
-                                         @ParameterName(name = "items") List<ChatMemberItem>,
-                                         @ParameterName(name = "updateListen") (List<ChatMemberItem>) -> Unit, Unit>,
-                                 updateListen: KFunction1<@ParameterName(name = "items") List<ChatMemberItem>, Unit>) {
+                         items: List<ChatMemberItem>,
+                         sortListen: KFunction3<
+                                 @ParameterName(name = "myActivity") Activity,
+                                 @ParameterName(name = "items") List<ChatMemberItem>,
+                                 @ParameterName(name = "updateListen") (List<ChatMemberItem>) -> Unit, Unit>,
+                         updateListen: KFunction1<@ParameterName(name = "items") List<ChatMemberItem>, Unit>) {
         items.forEach {
             FirestoreUtil.getOrCreateChatChannel_2(it.userId) { channelId,otherUserId ->
                 FirebaseFirestore.getInstance().collection("chatChannels")
@@ -284,13 +284,19 @@ class ListOfChatActivity : AppCompatActivity() {
                                             }
                                 }
                             }
+                            else if(x.lastMessageTimeStamp.before(x.lastReadByUser)
+                                    && x.unreadMessages > 0){
+                                x.unreadMessages = 0
+                                sortListen(myActivity, itemsMap.values.toList(),updateListen)
+                            }
                         }
             }
         }
     }
+
     fun sortAndUpdate(myActivity: Activity,
-                                 items:List<ChatMemberItem>,
-                                 updateListen: (List<ChatMemberItem>) -> Unit){
+                      items:List<ChatMemberItem>,
+                      updateListen: (List<ChatMemberItem>) -> Unit){
         val tmp = mutableListOf<ChatMemberItem>()
         tmp.addAll(items)
         val sorted = tmp.sortedByDescending { chatMemberItem: ChatMemberItem -> chatMemberItem }

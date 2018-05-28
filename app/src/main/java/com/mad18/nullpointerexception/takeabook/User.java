@@ -2,8 +2,6 @@ package com.mad18.nullpointerexception.takeabook;
 
 
 
-import android.net.Uri;
-
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.HashMap;
@@ -24,11 +22,11 @@ public class User {
 
     public User(){}
 
-    public User(String email, String displayName, String s, String s1, HashMap<String, Boolean> stringBooleanHashMap, GeoPoint geoPoint, String id, List<String> tokens) {
+    public User(String email, String displayName, String city, String about, HashMap<String, Boolean> stringBooleanHashMap, GeoPoint geoPoint, String id, List<String> tokens) {
         usr_mail = email;
         usr_name = displayName;
-        usr_city = s;
-        usr_about = s1;
+        usr_city = city;
+        usr_about = about;
         usr_books = stringBooleanHashMap;
         usr_geoPoint = geoPoint;
         profileImgStoragePath = "";
