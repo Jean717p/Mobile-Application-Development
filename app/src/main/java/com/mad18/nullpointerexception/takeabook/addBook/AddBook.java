@@ -3,6 +3,7 @@ package com.mad18.nullpointerexception.takeabook.addBook;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
@@ -31,6 +33,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -447,6 +452,7 @@ public class AddBook extends AppCompatActivity {
                         if(iw!=null && bookImg != null) {
                             iw.setImageBitmap(bookImg);
   //                          GlideApp.with(this).asBitmap().load(bookImg).into(iw);
+
                             bookImgMap.put(globalImgPos,bookImg);
                         }
                     }
@@ -458,8 +464,13 @@ public class AddBook extends AppCompatActivity {
                             bookImg = MediaStore.Images.Media.getBitmap(this.getContentResolver(),selectedMediaUri);
                             iw = globalViewImgElement;
                             if(iw!=null && !bookImg.equals("")) {
-                                iw.setImageBitmap(bookImg);
-    //                            GlideApp.with(this).load(bookImg).override(200,600).fitCenter().into(iw);
+                                //iw.setImageBitmap(bookImg);
+                                int size = 10;
+                                Bitmap bitmapsimplesize = Bitmap.createScaledBitmap(bookImg,bookImg.getWidth() / size, bookImg.getHeight() / size, true);
+                                bookImg.recycle();
+                                iw.setImageBitmap(bitmapsimplesize);
+
+                                        //                            GlideApp.with(this).load(bookImg).override(200,600).fitCenter().into(iw);
                                 bookImgMap.put(globalImgPos,bookImg);
                             }
                         } catch (IOException e) {
@@ -658,4 +669,59 @@ public class AddBook extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
     }
 
+//    private void setScaledImage(ImageView imageView, final int resId) {
+//        final ImageView iv = imageView;
+//        ViewTreeObserver viewTreeObserver = iv.getViewTreeObserver();
+//        viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+//            public boolean onPreDraw() {
+//                iv.getViewTreeObserver().removeOnPreDrawListener(this);
+//                int imageViewHeight = iv.getMeasuredHeight();
+//                int imageViewWidth = iv.getMeasuredWidth();
+//                iv.setImageBitmap(
+//                        decodeSampledBitmapFromResource(getResources(),
+//                                resId, imageViewWidth, imageViewHeight));
+//                return true;
+//            }
+//        });
+//    }
+//
+//    private static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+//                                                          int reqWidth, int reqHeight) {
+//
+//        // First decode with inJustDecodeBounds = true to check dimensions
+//        final BitmapFactory.Options options = new BitmapFactory.Options();
+//        options.inJustDecodeBounds = true;
+//        BitmapFactory.decodeResource(res, resId, options);
+//
+//        // Calculate inSampleSize
+//        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+//
+//        // Decode bitmap with inSampleSize set
+//        options.inJustDecodeBounds = false;
+//        return BitmapFactory.decodeResource(res, resId, options);
+//    }
+//
+//    private static int calculateInSampleSize(
+//            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+//
+//        // Raw height and width of image
+//        final int height = options.outHeight;
+//        final int width = options.outWidth;
+//        int inSampleSize = 1;
+//
+//        if (height > reqHeight || width > reqWidth) {
+//
+//            final int halfHeight = height / 2;
+//            final int halfWidth = width / 2;
+//
+//            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+//            // height and width larger than the requested height and width.
+//            while ((halfHeight / inSampleSize) > reqHeight
+//                    && (halfWidth / inSampleSize) > reqWidth) {
+//                inSampleSize *= 2;
+//            }
+//        }
+//
+//        return inSampleSize;
+//    }
 }
