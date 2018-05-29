@@ -3,123 +3,255 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:orientation="vertical"
+    android:layout_height="match_parent">
 
-    <!--Questa è la toolbar dove appare appName più l'icona salva o modifica-->
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/show_profile_toolbar"
         android:layout_width="match_parent"
+        android:scrollbars="none"
         android:layout_height="?android:attr/actionBarSize"
         android:background="@color/colorPrimary"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark"
-        />
+        app:theme="@style/ThemeOverlay.AppCompat.Dark">
+    </android.support.v7.widget.Toolbar>
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/show_profile_personalPhoto"
-        android:layout_width="@dimen/profile_photo_width"
-        android:layout_height="@dimen/profile_photo_height"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="64dp"
-        app:srcCompat="@drawable/ic_account_circle_white_48px"
-        app:civ_border_color="@color/textColor"
-        app:civ_border_width="@dimen/circle_image_border" />
     <ScrollView
+        android:layout_marginTop="56dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
+        android:layout_height="wrap_content">
+
+
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_below="@id/show_profile_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="72dp">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/show_profile_title_Username"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:layout_marginTop="8dp"
-                android:textSize="13sp"
-                android:text="@string/Username"
-                android:translationX="200dp"
-                android:fontFamily="sans-serif-light"
-                android:textColor="@color/colorPrimary"
-              />
 
-            <TextView
-                android:id="@+id/show_profile_Username"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:translationX="200dp"
-                android:textColor="@color/textColor"
-                android:textSize="@dimen/profile_text_view_content" />
-            <TextView
-                android:id="@+id/show_profile_title_City"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/City"
-                android:translationX="200dp"
-                android:fontFamily="sans-serif-light"
-                android:textColor="@color/colorPrimary"
-                android:textStyle="bold"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/show_profile_personalPhoto"
+                android:layout_width="@dimen/profile_photo_width"
+                android:layout_height="@dimen/profile_photo_height"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_marginTop="8dp"
-                android:textSize="13sp" />
-            <TextView
-                android:id="@+id/show_profile_City"
-                android:layout_width="match_parent"
+                app:civ_border_color="@color/textColor"
+                app:civ_border_width="@dimen/circle_image_border"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_account_circle_white_48px"
+                tools:ignore="MissingConstraints" />
+
+            <RatingBar
+                android:id="@+id/show_profile_rating_bar"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:translationX="200dp"
-                android:textColor="@color/textColor"
-                android:textSize="@dimen/profile_text_view_content" />
-            <!--city-->
-            <!--titolo mail-->
-            <TextView
-                android:id="@+id/show_profile_title_mail"
+                android:layout_margin="16dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginLeft="8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/show_profile_personalPhoto"
+                />
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/username_cv"
+                android:clickable="true"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:translationX="200dp"
-                android:text="@string/Email"
-                android:fontFamily="sans-serif-light"
-                android:textColor="@color/colorPrimary"
-                android:textStyle="bold"
-                android:layout_marginTop="8dp"
-                android:textSize="13sp"/>
-            <TextView
-                android:id="@+id/show_profile_mail"
+                android:layout_height="56dp"
+                app:layout_constraintTop_toBottomOf="@id/show_profile_rating_bar"
+                android:layout_margin="8dp"
+                >
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                    <TextView
+                        android:id="@+id/show_profile_title_Username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/Username"
+                        android:layout_margin="16dp"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold|normal"
+                        />
+
+                    <TextView
+                        android:id="@+id/show_profile_Username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        android:text="Valeria"
+                        android:layout_alignBaseline="@id/show_profile_title_Username"
+                        android:layout_toRightOf="@id/show_profile_title_Username"
+                        />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/city_cv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:maxLines="1"
-                android:translationX="200dp"
-                android:textColor="@color/textColor"
-                android:textSize="@dimen/profile_text_view_content" />
-            <!-- mail-->
-            <!--titolo about-->
-            <TextView
-                android:id="@+id/show_profile_title_about"
+                android:layout_height="56dp"
+                android:clickable="true"
+                app:layout_constraintTop_toBottomOf="@id/username_cv"
+                android:layout_margin="8dp"
+                >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/show_profile_title_City"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/City"
+                        android:layout_margin="16dp"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold|normal"
+                        />
+
+                    <TextView
+                        android:text="City"
+                        android:id="@+id/show_profile_City"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_alignBaseline="@id/show_profile_title_City"
+                        android:layout_toRightOf="@id/show_profile_title_City"
+
+                        />
+
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/email_cv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/AboutMe"
-                android:translationX="200dp"
-                android:fontFamily="sans-serif-light"
-                android:textColor="@color/colorPrimary"
-                android:textStyle="bold"
-                android:layout_marginTop="8dp"
-                android:textSize="13sp" />
-            <!--about-->
-            <TextView
-                android:id="@+id/show_profile_about"
+                android:layout_height="56dp"
+                android:clickable="true"
+                app:layout_constraintTop_toBottomOf="@id/city_cv"
+                android:layout_margin="8dp"
+                >
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:id="@+id/show_profile_title_mail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/Email"
+                        android:layout_margin="16dp"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold|normal"
+                        />
+
+                    <TextView
+                        android:text="Email"
+                        android:id="@+id/show_profile_mail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintBaseline_toBaselineOf="@id/show_profile_title_mail"
+                        app:layout_constraintEnd_toStartOf="@id/show_profile_title_mail"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@id/show_profile_title_mail"
+                        android:layout_alignBaseline="@id/show_profile_title_mail"
+                        android:layout_toRightOf="@id/show_profile_title_mail"/>
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/about_cv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/textColor"
-                android:translationX="200dp"
-                android:textColorHint="@color/colorAccent"
-                android:textSize="@dimen/profile_text_view_content" />
-        </LinearLayout>
+                android:layout_height="120dp"
+                android:clickable="true"
+                app:layout_constraintTop_toBottomOf="@id/email_cv"
+                android:layout_margin="8dp"
+                >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:id="@+id/show_profile_title_about"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/AboutMe"
+                        android:layout_margin="16dp"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold|normal"
+                        />
+
+                    <TextView
+                        android:id="@+id/show_profile_about"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintBaseline_toBaselineOf="@id/show_profile_title_about"
+                        app:layout_constraintEnd_toStartOf="@id/show_profile_title_about"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@id/show_profile_title_about"
+                        android:text="Bio"
+                        android:layout_alignBaseline="@id/show_profile_title_about"
+                        android:layout_toRightOf="@id/show_profile_title_about"/>
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:clickable="true"
+                android:id="@+id/library_cv"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                app:layout_constraintTop_toBottomOf="@id/about_cv"
+                android:layout_margin="8dp">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/show_profile_arrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_baseline_keyboard_arrow_right_24px"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="8dp"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:textSize="16dp"
+                        android:textStyle="bold|normal"
+                        android:textColor="@color/colorPrimary"
+                        android:text="@string/show_profile_books"
+                        android:layout_alignBaseline="@id/show_profile_arrow"/>
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+
+
+        </android.support.constraint.ConstraintLayout>
     </ScrollView>
 </RelativeLayout>

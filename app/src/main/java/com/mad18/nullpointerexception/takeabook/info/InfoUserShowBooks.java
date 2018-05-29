@@ -48,14 +48,14 @@ public class InfoUserShowBooks extends AppCompatActivity {
         UserWrapper userWrapper = bundle.getParcelable("user");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle(userWrapper.getUser_wrapper_name()+" 's Books");
+        setTitle(userWrapper.getUser_wrapper_name()+" 's books");
         Locale current = getResources().getConfiguration().locale;
         switch (current.getLanguage()) {
             case "it":
                 setTitle("Libri di " + userWrapper.getUser_wrapper_name());
                 break;
             case "en":
-                setTitle(userWrapper.getUser_wrapper_name() + " 's Books");
+                setTitle(userWrapper.getUser_wrapper_name() + " 's books");
                 break;
         }
 
