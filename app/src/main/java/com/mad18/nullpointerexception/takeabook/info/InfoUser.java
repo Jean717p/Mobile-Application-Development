@@ -26,6 +26,7 @@ import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.util.User;
 import com.mad18.nullpointerexception.takeabook.chatActivity.AppConstants;
 import com.mad18.nullpointerexception.takeabook.chatActivity.ChatActivity;
+import com.mad18.nullpointerexception.takeabook.util.UserWrapper;
 
 import java.util.ArrayList;
 
@@ -38,6 +39,7 @@ public class InfoUser extends AppCompatActivity {
     //private Uri usr_img_uri;
     private String usr_id;
     private Menu menu;
+    User u;
     private Context context;
     private Button chat_fab;
 
@@ -85,6 +87,7 @@ public class InfoUser extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 DocumentSnapshot userdoc = task.getResult();
                User user  = userdoc.toObject(User.class);
+               u = user;
                for(String x : user.getUsr_books().keySet()){
 
                    userBooks.add(x);
@@ -96,6 +99,8 @@ public class InfoUser extends AppCompatActivity {
                        public void onClick(View v) {
                            Intent showBooksIntent = new Intent(InfoUser.this ,InfoUserShowBooks.class);
                            Bundle bundle = new Bundle();
+                           UserWrapper userWrapper = new UserWrapper(u);
+                           bundle.putParcelable("user",userWrapper);
                            bundle.putStringArrayList("UserBooks", userBooks);
                            showBooksIntent.putExtras(bundle);
                            startActivity(showBooksIntent);
