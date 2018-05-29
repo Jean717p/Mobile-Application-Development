@@ -6,7 +6,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
-import com.mad18.nullpointerexception.takeabook.User
 import com.mad18.nullpointerexception.takeabook.chatActivity.model.*
 import com.mad18.nullpointerexception.takeabook.chatActivity.recyclerview.ImageMessageItem
 import com.mad18.nullpointerexception.takeabook.chatActivity.recyclerview.TextMessageItem
@@ -115,7 +114,7 @@ object FirestoreUtil {
                         return@addOnSuccessListener
                     }
                     val otherUser = documentSnapshot.toObject(User::class.java)
-                    val myUser:User = MainActivity.thisUser
+                    val myUser: User = MainActivity.thisUser
                     if(myUser==null){
                         FirebaseFirestore.getInstance().collection("users")
                                 .document(FirebaseAuth.getInstance().uid!!).get().addOnSuccessListener {

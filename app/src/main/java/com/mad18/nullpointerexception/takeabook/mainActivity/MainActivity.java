@@ -58,13 +58,13 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.mad18.nullpointerexception.takeabook.Book;
+import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.LoginActivity;
 import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.SettingsActivity;
 import com.mad18.nullpointerexception.takeabook.SplashScreenActivity;
-import com.mad18.nullpointerexception.takeabook.User;
+import com.mad18.nullpointerexception.takeabook.util.User;
 import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
 
 import java.io.File;

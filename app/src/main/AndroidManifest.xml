@@ -114,17 +114,17 @@
                 android:value="com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity" />
         </activity>
         <activity
-            android:name=".InfoBook"
+            android:name=".info.InfoBook"
             android:configChanges="orientation|screenSize|locale"
             android:label="InfoBook"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity android:name=".BookFound" />
         <activity
-            android:name=".InfoUser"
+            android:name=".info.InfoUser"
             android:screenOrientation="portrait" />
         <activity android:name=".displaySearchOnMap.DisplaySearchOnMap" />
-        <activity android:name=".Book_generic_info" />
+        <activity android:name=".searchBook.Book_generic_info" />
         <activity
             android:name=".SettingsActivity"
             android:parentActivityName=".mainActivity.MainActivity"
@@ -179,10 +179,10 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".InfoUserShowBooks">
+        <activity android:name=".info.InfoUserShowBooks">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.mad18.nullpointerexception.takeabook.InfoUser" />
+                android:value="com.mad18.nullpointerexception.takeabook.info.InfoUser" />
         </activity>
     </application>
 

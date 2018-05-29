@@ -1,24 +1,16 @@
 package com.mad18.nullpointerexception.takeabook.searchBook;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.app.DownloadManager;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.OvershootInterpolator;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,16 +19,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.mad18.nullpointerexception.takeabook.Book;
-import com.mad18.nullpointerexception.takeabook.Book_generic_info;
-import com.mad18.nullpointerexception.takeabook.InfoBook;
+import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.R;
-import com.mad18.nullpointerexception.takeabook.addBook.AddBook;
-import com.mad18.nullpointerexception.takeabook.addBook.BookWrapper;
+import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
 import com.mad18.nullpointerexception.takeabook.displaySearchOnMap.DisplaySearchOnMap;
-import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
-import com.mad18.nullpointerexception.takeabook.mainActivity.Main_MyLibrary_Fragment;
-import com.mad18.nullpointerexception.takeabook.mainActivity.MyLibraryRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

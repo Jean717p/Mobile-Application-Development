@@ -4,7 +4,6 @@ import android.location.Location;
 import android.support.v7.widget.RecyclerView;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,7 @@ import android.support.v7.widget.CardView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.GeoPoint;
-import com.mad18.nullpointerexception.takeabook.Book;
+import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.R;
 
 import java.util.List;

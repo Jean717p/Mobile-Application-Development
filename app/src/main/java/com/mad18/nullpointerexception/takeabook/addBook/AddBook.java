@@ -30,20 +30,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.firestore.DocumentReference;
-import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.mad18.nullpointerexception.takeabook.Book;
 import com.mad18.nullpointerexception.takeabook.R;
-
+import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
+import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
+import com.mad18.nullpointerexception.takeabook.util.Book;
+import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
+import com.mad18.nullpointerexception.takeabook.util.User;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -54,8 +56,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.mad18.nullpointerexception.takeabook.User;
-import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
 import studio.carbonylgroup.textfieldboxes.ExtendedEditText;
 
 

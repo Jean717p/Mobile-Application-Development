@@ -1,32 +1,14 @@
-package com.mad18.nullpointerexception.takeabook;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FieldValue;
-import com.mad18.nullpointerexception.takeabook.addBook.BookWrapper;
+package com.mad18.nullpointerexception.takeabook.info;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-
 import android.os.Bundle;
-
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.StyleRes;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,15 +18,22 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.mad18.nullpointerexception.takeabook.util.Book;
+import com.mad18.nullpointerexception.takeabook.GlideApp;
+import com.mad18.nullpointerexception.takeabook.ImageViewPopUpHelper;
+import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
 import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
 
 import java.util.HashMap;
@@ -267,7 +256,7 @@ public class InfoBook extends AppCompatActivity {
 //                        Toast.LENGTH_SHORT).show();
                 Log.d("delete","deleted from books");
 
-                DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(MainActivity.thisUser.usr_id);
+                DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(MainActivity.thisUser.getUsr_id());
                 Map<String,Object> updates = new HashMap<>();
                 String that_specific_book = "usr_books."+bookToShowInfoOf.getISBN()+bookToShowInfoOf.getUser_id();
                 updates.put(that_specific_book, FieldValue.delete());

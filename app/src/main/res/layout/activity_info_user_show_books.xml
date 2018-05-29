@@ -5,7 +5,7 @@
     android:id="@+id/info_user_show_books_coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".InfoUserShowBooks">
+    tools:context=".info.InfoUserShowBooks">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/info_user_show_books_toolbar"

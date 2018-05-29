@@ -2,27 +2,21 @@ package com.mad18.nullpointerexception.takeabook.addBook;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.zxing.Result;
-import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 

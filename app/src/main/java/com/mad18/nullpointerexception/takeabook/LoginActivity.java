@@ -40,6 +40,7 @@ import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.mad18.nullpointerexception.takeabook.chatActivity.service.MyFirebaseInstanceIDService;
 import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
+import com.mad18.nullpointerexception.takeabook.util.User;
 
 import java.util.Arrays;
 import java.util.HashMap;

@@ -1,8 +1,6 @@
 package com.mad18.nullpointerexception.takeabook.mainActivity;
 
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,16 +11,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.OvershootInterpolator;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.firestore.GeoPoint;
-import com.mad18.nullpointerexception.takeabook.Book;
-import com.mad18.nullpointerexception.takeabook.InfoBook;
+import com.mad18.nullpointerexception.takeabook.util.Book;
+import com.mad18.nullpointerexception.takeabook.info.InfoBook;
 import com.mad18.nullpointerexception.takeabook.R;
-import com.mad18.nullpointerexception.takeabook.addBook.BookWrapper;
+import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
 import com.mad18.nullpointerexception.takeabook.searchBook.SearchBook;
 
 import java.util.List;

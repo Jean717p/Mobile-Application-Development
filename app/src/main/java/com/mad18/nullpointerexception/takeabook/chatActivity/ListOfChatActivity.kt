@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import com.mad18.nullpointerexception.takeabook.R
-import com.mad18.nullpointerexception.takeabook.User
+import com.mad18.nullpointerexception.takeabook.util.User
 import com.mad18.nullpointerexception.takeabook.chatActivity.model.ImageMessage
 import com.mad18.nullpointerexception.takeabook.chatActivity.model.MessageType
 import com.mad18.nullpointerexception.takeabook.chatActivity.model.TextMessage

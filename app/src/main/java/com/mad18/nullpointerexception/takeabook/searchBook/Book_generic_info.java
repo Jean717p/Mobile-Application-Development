@@ -1,9 +1,8 @@
-package com.mad18.nullpointerexception.takeabook;
+package com.mad18.nullpointerexception.takeabook.searchBook;
 
 import android.os.AsyncTask;
-import android.support.annotation.StyleRes;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,16 +10,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.mad18.nullpointerexception.takeabook.addBook.BookWrapper;
+import com.mad18.nullpointerexception.takeabook.util.Book;
+import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
 import com.mad18.nullpointerexception.takeabook.addBook.JsonParser;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 
 public class Book_generic_info extends AppCompatActivity {
     private Book book;

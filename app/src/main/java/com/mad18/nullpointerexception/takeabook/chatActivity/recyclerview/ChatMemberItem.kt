@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.View
 import com.bumptech.glide.Glide
 import com.mad18.nullpointerexception.takeabook.R
-import com.mad18.nullpointerexception.takeabook.User
+import com.mad18.nullpointerexception.takeabook.util.User
 import com.mad18.nullpointerexception.takeabook.util.StorageUtil
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
@@ -14,12 +14,12 @@ import java.util.Date
 
 
 data class ChatMemberItem(val person: User,
-                     val userId: String,
-                     var lastReadByUser: Date,
-                     var lastMessageTimeStamp: Date,
-                     var unreadMessages: Int,
-                     var lastMessage: String,
-                     var context: Context)
+                          val userId: String,
+                          var lastReadByUser: Date,
+                          var lastMessageTimeStamp: Date,
+                          var unreadMessages: Int,
+                          var lastMessage: String,
+                          var context: Context)
     : Item(),Comparable<ChatMemberItem> {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {

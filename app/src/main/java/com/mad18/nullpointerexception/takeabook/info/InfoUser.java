@@ -1,10 +1,8 @@
-package com.mad18.nullpointerexception.takeabook;
+package com.mad18.nullpointerexception.takeabook.info;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -23,15 +21,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.mad18.nullpointerexception.takeabook.addBook.BookWrapper;
+import com.mad18.nullpointerexception.takeabook.GlideApp;
+import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.util.User;
 import com.mad18.nullpointerexception.takeabook.chatActivity.AppConstants;
 import com.mad18.nullpointerexception.takeabook.chatActivity.ChatActivity;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
 
 public class InfoUser extends AppCompatActivity {
     private FirebaseFirestore db;
