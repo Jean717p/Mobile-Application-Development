@@ -4,12 +4,13 @@
 
     <!--Profile-->
     <string name="profile_photo">Profile photo</string>
-    <string name="Username">Username</string>
-    <string name="City">City</string>
-    <string name="Email">Email</string>
-    <string name="AboutMe">Bio</string>
+    <string name="Username">Username:</string>
+    <string name="City">City:</string>
+    <string name="Email">Email:</string>
+    <string name="AboutMe">Bio:</string>
     <string name="Address">Address</string>
     <string name="edit_profile_msg_error_username">Please, insert Username</string>
+    <string name="show_profile_books">Show books</string>
 
 
     <!--Login Related-->

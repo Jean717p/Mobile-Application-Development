@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,6 +19,9 @@ import java.io.File;
 import java.util.Locale;
 
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.SettingsActivity;
 import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
@@ -32,9 +36,9 @@ public class showProfile extends AppCompatActivity {
     private final int textViewIds[] = new int[]{R.id.show_profile_Username, R.id.show_profile_City,
             R.id.show_profile_mail,R.id.show_profile_about};
     private Menu menu;
-
     public static final String sharedUserDataKeys[] = new String[]{"usr_name","usr_city","usr_mail","usr_about"};
     public static final String profileImgName = "profile.jpg";
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
