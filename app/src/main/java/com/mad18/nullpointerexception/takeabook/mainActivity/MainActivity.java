@@ -58,6 +58,9 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.mad18.nullpointerexception.takeabook.info.InfoUser;
+import com.mad18.nullpointerexception.takeabook.info.InfoUserShowBooks;
+import com.mad18.nullpointerexception.takeabook.myProfile.showProfile;
 import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.LoginActivity;
@@ -386,9 +389,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         if(b==null){
             drawerImg.setImageResource(R.drawable.ic_account_circle_white_48px);
+            drawerImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context,showProfile.class);
+                    startActivity(intent);
+                }
+            });
         }
         else{
             drawerImg.setImageBitmap(b);
+            drawerImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context ,showProfile.class);
+                    startActivity(intent);
+                }
+            });
         }
         // Insert username and email into the drawer
         TextView usr_text = nview.findViewById(R.id.mainActivity_drawer_username);

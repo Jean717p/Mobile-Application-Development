@@ -104,8 +104,9 @@
     <string name="info_book_snackbar">La libreria è stata aggiornata</string>
     <string name="info_book_label_pages">N. pagine:</string>
     <string name="info_book_delete_this_book">Elimina</string>
+    <string name="info_book_delete_want_delete">Vuoi eliminare questo libro?</string>
     <string name="info_book_deleted">Il libro è stato rimosso con successo</string>
-    <string name="info_book_not_deleted">Ops errore! Il libro NON è stato rimosso</string>
+    <string name="info_book_not_deleted">Ops errore! Il libro non è stato rimosso</string>
     <string name="info_book_modify_this_book">Modifica</string>
     <string name="info_book_request_this_book">Richiedi</string>
 
@@ -147,6 +148,7 @@
     <string name="Updating">Aggiornamento..</string>
     <string name="request_book_message_to_owner">Message to owner</string>
     <string name="send">Send</string>
+    <string name="info_book_delete">Delete</string>
 
 
 </resources>

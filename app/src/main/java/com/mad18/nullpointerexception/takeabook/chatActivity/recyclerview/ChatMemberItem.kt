@@ -29,7 +29,7 @@ data class ChatMemberItem(val person: User,
                     .into(viewHolder.item_chat_member_profile_picture)
         }
         else {
-            viewHolder.item_chat_member_profile_picture.setImageResource(R.drawable.ic_person_black_24dp)
+            viewHolder.item_chat_member_profile_picture.setImageResource(R.drawable.ic_account_circle_white_48px)
         }
         if(lastMessageTimeStamp.after(Date(0))){
             val dateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm")

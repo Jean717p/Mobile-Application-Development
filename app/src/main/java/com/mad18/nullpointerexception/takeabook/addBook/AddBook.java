@@ -40,6 +40,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
 import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
@@ -530,9 +531,11 @@ public class AddBook extends AppCompatActivity {
             eet.setText(String.valueOf(book.getBook_pages()));
         }
 
+        if(book.getBook_thumbnail_url().length()>0){
+            iw = findViewById(R.id.add_book_picture);
+            GlideApp.with(this).load(book.getBook_thumbnail_url()).placeholder(R.drawable.ic_thumbnail_cover_book).into(iw);
+        }
 
-        iw = findViewById(R.id.add_book_picture);
-        Glide.with(this).load(book.getBook_thumbnail_url()).into(iw);
     }
 
     /**

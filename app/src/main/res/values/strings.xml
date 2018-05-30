@@ -88,6 +88,7 @@
     <string name="info_book_snackbar">The library has been updated</string>
     <string name="info_book_label_pages">N. pages:</string>
     <string name="info_book_delete_this_book">Delete</string>
+    <string name="info_book_delete_want_delete">Do you want delete this book?</string>
     <string name="info_book_deleted">Book has been successfully deleted</string>
     <string name="info_book_not_deleted">Some errors occurred, book not deleted</string>
     <string name="info_book_modify_this_book">Modify</string>
@@ -164,6 +165,7 @@
     <string name="Updating">Updating..</string>
     <string name="request_book_message_to_owner">Message to owner</string>
     <string name="send">Send</string>
+    <string name="info_book_delete">Delete</string>
 
 
 </resources>

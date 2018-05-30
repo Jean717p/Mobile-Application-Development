@@ -232,8 +232,8 @@ public class InfoBook extends AppCompatActivity {
     {
         AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
                 //set message, title, and icon
-                .setTitle("Delete")
-                .setMessage("Do you want to Delete")
+                .setTitle(R.string.info_book_delete_this_book)
+                .setMessage(R.string.info_book_delete_want_delete)
                 .setIcon(R.drawable.ic_delete_white_24px)
 
                 .setPositiveButton(R.string.info_book_delete_this_book, (dialog, whichButton) -> {
