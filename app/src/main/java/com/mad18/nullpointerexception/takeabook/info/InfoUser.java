@@ -125,12 +125,18 @@ public class InfoUser extends AppCompatActivity {
         tv = findViewById(R.id.info_user_city);
         tv.setText(usr_city);
         tv = findViewById(R.id.info_user_about_me);
-        tv.setText(usr_bio);
+        if (usr_bio.length() > 0) {
+            tv.setText(usr_bio);
+        }else{
+            CardView cardView = findViewById(R.id.info_user_about_cv);
+            cardView.setVisibility(View.GONE);
+        }
+
 
         if(usr_prof_stg_path.length() > 0){
             ImageView iv = findViewById(R.id.info_user_photo_profile);
             StorageReference mImageRef = FirebaseStorage.getInstance().getReference(usr_prof_stg_path);
-            GlideApp.with(this).load(mImageRef).placeholder(R.drawable.account_circle).into(iv);
+            GlideApp.with(this).load(mImageRef).placeholder(R.drawable.ic_account_circle_white_48px).into(iv);
         }
     }
 

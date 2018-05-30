@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_addbook"
             android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
             android:layout_margin="8dp"/>
 
 </LinearLayout>
