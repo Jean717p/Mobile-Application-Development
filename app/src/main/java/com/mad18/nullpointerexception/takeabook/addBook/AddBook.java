@@ -29,6 +29,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.algolia.search.saas.Client;
+import com.algolia.search.saas.Index;
+
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,9 +51,14 @@ import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
 import com.mad18.nullpointerexception.takeabook.util.User;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -234,6 +242,45 @@ public class AddBook extends AppCompatActivity {
         return true;
     }
 
+
+    public void addIndexToAlgolia(Book b){
+        String algoliaID = "P15KSBYCLA";
+        String algoliaKey = "18740ed4b222f99d8f8dcd7c17002b84";
+        Client client = new Client(algoliaID, algoliaKey);
+
+
+        /* Titolo */
+        Index title_index = client.getIndex("book_title");
+        List<JSONObject> array_title = new ArrayList<JSONObject>();
+        try {
+            array_title.add(new JSONObject().put("Title", b.getBook_title()).put("ISBN", b.getBook_ISBN()).put("UserID", b.getBook_userid()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        title_index.addObjectsAsync(new JSONArray(array_title), null);
+
+        /* Autore */
+        Index author_index = client.getIndex("book_author");
+        List<JSONObject> array_author = new ArrayList<JSONObject>();
+        try {
+            array_author.add(new JSONObject().put("Author", b.getBook_first_author()).put("ISBN", b.getBook_ISBN())
+                    .put("User", b.getBook_first_author()).put("UserID", b.getBook_userid()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        author_index.addObjectsAsync(new JSONArray(array_author), null);
+
+        /* ISBN */
+        Index ISBN_index = client.getIndex("book_ISBN");
+        List<JSONObject> array_ISBN= new ArrayList<JSONObject>();
+        try {
+            array_ISBN.add(new JSONObject().put("ISBN", b.getBook_ISBN()).put("UserID", b.getBook_userid()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ISBN_index.addObjectsAsync(new JSONArray(array_ISBN), null);
+    }
+
     /**
      * Gestisce le opzioni della toolbar, in particolare si occupa di gestire le operazioni necessarie al
      * salvataggio di un libro.
@@ -384,7 +431,8 @@ public class AddBook extends AppCompatActivity {
         bookToAdd.setBook_photo_list(photourllist);
         bookToAdd.setBook_id(bookRefPath);
         bookRef.set(bookToAdd);
-        //bookRef.getPath();
+        bookRef.getPath();
+        addIndexToAlgolia(bookToAdd);
 
         //Aggiunta libro all'elenco dell'utente
         users.document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

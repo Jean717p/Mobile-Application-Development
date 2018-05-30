@@ -92,6 +92,12 @@ dependencies {
     //groupie
     implementation 'com.xwray:groupie:2.0.3'
     implementation 'com.xwray:groupie-kotlin-android-extensions:2.0.3'
+
+    //Algolia
+    implementation 'com.algolia:algoliasearch-android:3.+'
+
+    //Search bar
+    implementation 'com.github.mancj:MaterialSearchBar:0.7.6'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.firestore.GeoPoint;
+import com.mad18.nullpointerexception.takeabook.searchBook.SearchBookAlgolia;
 import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.info.InfoBook;
 import com.mad18.nullpointerexception.takeabook.R;
@@ -107,7 +108,7 @@ public class Main_HomeBooks_Fragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        Intent search = new Intent(getActivity(), SearchBook.class);
+                        Intent search = new Intent(getActivity(), SearchBookAlgolia.class);
                         search.putExtra("action", "Title");
                         startActivity(search);
                     }
@@ -121,7 +122,7 @@ public class Main_HomeBooks_Fragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        Intent search = new Intent(getActivity(), SearchBook.class);
+                        Intent search = new Intent(getActivity(), SearchBookAlgolia.class);
                         search.putExtra("action", "Author");
                         startActivity(search);
                     }
@@ -135,7 +136,7 @@ public class Main_HomeBooks_Fragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         MainActivity mainActivity = (MainActivity) getActivity();
-                        Intent search = new Intent(getActivity(), SearchBook.class);
+                        Intent search = new Intent(getActivity(), SearchBookAlgolia.class);
                         search.putExtra("action", "ISBN");
                         if(mainActivity.thisUser!=null){
                             if(mainActivity.thisUser.getUsr_geoPoint()!=null){

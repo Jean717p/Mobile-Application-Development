@@ -182,6 +182,8 @@
                 android:value="com.mad18.nullpointerexception.takeabook.info.InfoUser" />
         </activity>
         <activity android:name=".requestBook.RequestBook"></activity>
+        <activity android:name=".searchBook.SearchBookAlgolia"></activity>
+        <activity android:name=".searchBook.SearchBook_BarcodeScanner" />
     </application>
 
 </manifest>
