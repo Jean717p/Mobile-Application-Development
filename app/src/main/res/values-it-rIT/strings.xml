@@ -146,9 +146,9 @@
     <string name="cancel">annulla</string>
     <string name="chat_photo">Foto</string>
     <string name="Updating">Aggiornamento..</string>
-    <string name="request_book_message_to_owner">Message to owner</string>
-    <string name="send">Send</string>
+    <string name="request_book_message_to_owner">Aggiungi un messaggio</string>
+    <string name="send">Invia</string>
+    <string name="request_book_sent">Richiesta inviata</string>
     <string name="info_book_delete">Delete</string>
-
 
 </resources>

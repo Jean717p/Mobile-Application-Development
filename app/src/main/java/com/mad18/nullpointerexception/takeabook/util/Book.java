@@ -22,46 +22,12 @@ public class Book {
     Map<String,Boolean> book_categories;
     String book_description;
     GeoPoint book_location;
-    String book_id="";
-
-    public String getBook_id() {
-        return book_id;
-    }
-
-    public void setBook_id(String book_id) {
-        this.book_id = book_id;
-    }
-
-    public int getBook_pages() {
-        return book_pages;
-    }
-
-    public void setBook_pages(int book_pages) {
-        this.book_pages = book_pages;
-    }
-
-    private int book_pages=0;
-
-    public Map<String, Boolean> getBook_photo_list() {
-        return book_photo_list;
-    }
-
-    public void setBook_photo_list(Map<String, Boolean> book_photo_list) {
-        this.book_photo_list = book_photo_list;
-    }
+    String book_id;
 
     Map<String,Boolean> book_photo_list= new HashMap<>();
 
 
     public Book() {}
-
-    public String getUserid() {
-        return book_userid;
-    }
-
-    public void setUserid(String userid) {
-        this.book_userid = userid;
-    }
 
     public Book(String ISBN, String title, String publisher, int editionYear, int condition, String user, Map<String,Boolean> authors, String description, String thumbnail, Map<String,Boolean> categories, GeoPoint geoPoint, int book_pages){
         book_ISBN = ISBN;
@@ -77,6 +43,7 @@ public class Book {
                 book_first_author = new String("");
             }
         }
+        book_id = "";
         book_publisher = publisher;
         book_editionYear = editionYear;
         book_condition = condition;
@@ -106,7 +73,7 @@ public class Book {
         for (String y : bwCategories) {
             book_categories.put(y, true);
         }
-        book_userid = bw.getBook_userid();
+        book_userid = bw.getUser_id();
         if(bw.getAuthors().size()>0){
             book_first_author = (String) (bw.getAuthors().toArray())[0];
         }
@@ -219,4 +186,31 @@ public class Book {
     public void setBook_location(GeoPoint book_location) {
         this.book_location = book_location;
     }
+
+    public String getBook_id() {
+        return book_id;
+    }
+
+    public void setBook_id(String book_id) {
+        this.book_id = book_id;
+    }
+
+    public int getBook_pages() {
+        return book_pages;
+    }
+
+    public void setBook_pages(int book_pages) {
+        this.book_pages = book_pages;
+    }
+
+    private int book_pages=0;
+
+    public Map<String, Boolean> getBook_photo_list() {
+        return book_photo_list;
+    }
+
+    public void setBook_photo_list(Map<String, Boolean> book_photo_list) {
+        this.book_photo_list = book_photo_list;
+    }
+
 }

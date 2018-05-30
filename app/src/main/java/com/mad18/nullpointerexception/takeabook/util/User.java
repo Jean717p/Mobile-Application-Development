@@ -40,12 +40,14 @@ public class User {
         usr_city = userWrapper.getUser_wrapper_city();
         usr_about = userWrapper.getUser_wrapper_about();
         List<String> uwBooks = userWrapper.getUser_wrapper_books();
+        usr_books = new HashMap<>();
         for (String y : uwBooks) {
             usr_books.put(y, true);
         }
-        //usr_geoPoint = userWrapper.getUser_wrapper_geoPoint();
-        profileImgStoragePath = "";
+        usr_geoPoint = userWrapper.getUser_wrapper_geoPoint();
+        profileImgStoragePath = userWrapper.getUser_wrapper_profileImgStoragePath();
         usr_id = userWrapper.getUser_wrapper_id();
+        this.registrationTokens = userWrapper.getUser_wrapper_registrationTokens();
     }
 
     public String getUsr_name() {

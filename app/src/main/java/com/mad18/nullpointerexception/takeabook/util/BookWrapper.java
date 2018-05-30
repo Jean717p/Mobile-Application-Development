@@ -12,7 +12,7 @@ import java.util.List;
  * un oggetto di questo tipo affinchè possa essere inserito nel bundle.
  *
  */
-public class BookWrapper extends Book implements Parcelable {
+public class BookWrapper implements Parcelable {
 
     /**
      * Si occupa di creare una nuova istanza della classe Parcelable, instanziandola dal Parcel specificato.
@@ -35,39 +35,14 @@ public class BookWrapper extends Book implements Parcelable {
     private int editionYear;
     private String thumbnail;
     private List<String> categories;
-    private String user_id;
+    private String user_id="";
     private double lat, longitude;
     private int pages=0;
     private int condition = 0;
     private String id="";
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public List<String> getPhoto_list() {
-        return photo_list;
-    }
-
-    public void setPhoto_list(List<String> photo_list) {
-        this.photo_list = photo_list;
-    }
-
-    private List<String> photo_list;
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     private String description;
+
 
     //Constructor
     public BookWrapper(String ISBN,String title,List<String> authors, String publisher, int editionYear, String thumbnail,
@@ -87,7 +62,6 @@ public class BookWrapper extends Book implements Parcelable {
         this.pages=pages;
     }
 
-
     public BookWrapper(Book book){
         this.ISBN = book.getBook_ISBN();
         this.title = book.getBook_title();
@@ -106,6 +80,79 @@ public class BookWrapper extends Book implements Parcelable {
         this.id=book.getBook_id();
     }
 
+    public BookWrapper(Parcel in){
+        this.ISBN = in.readString();
+        this.title = in.readString();
+        this.authors = in.createStringArrayList();
+        this.publisher = in.readString();
+        this.editionYear = in.readInt();
+        this.thumbnail = in.readString();
+        this.categories = in.createStringArrayList();
+        this.description = in.readString();
+        this.user_id = in.readString();
+        this.longitude = in.readDouble();
+        this.lat = in.readDouble();
+        this.photo_list = in.createStringArrayList();
+        this.pages = in.readInt();
+        this.condition = in.readInt();
+        this.id = in.readString();
+    }
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Questo metodo si occupa di scrivere nel Parcel di destinazione i dati richiesti.
+     * @param dest
+     * @param flags
+     */
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.ISBN);
+        dest.writeString(this.title);
+        //dest.writeMap(this.authors);
+        dest.writeStringList(this.authors);
+        dest.writeString(this.publisher);
+        dest.writeInt(this.editionYear);
+        dest.writeString(this.thumbnail);
+        dest.writeStringList(this.categories);
+        dest.writeString(this.description);
+        dest.writeString(this.user_id);
+        dest.writeDouble(this.lat);
+        dest.writeDouble(this.longitude);
+        dest.writeStringList(this.photo_list);
+        dest.writeInt(this.pages);
+        dest.writeInt(this.condition);
+        dest.writeString(this.id);
+    }
+    @Override
+    public String toString() {
+        String Totauthors= ", authors='";
+//        for (String key : authors.keySet()) {
+//            Totauthors = Totauthors + key + '\'';
+//        }
+        Totauthors = Totauthors +this.authors.toString()+'\'';
+        String allphotolist=", photolist='";
+        allphotolist = allphotolist +this.photo_list.toString()+'\'';
+
+        String SeditionYear = Integer.toString(editionYear);
+        String Spages = Integer.toString(this.pages);
+
+        return "BookWrapper{"+"ISBN='"+ISBN+'\''+
+                ", title='" + title + '\'' +
+                Totauthors +
+                ", publisher='" + publisher + '\'' +
+                ", editionYear='" + SeditionYear + '\'' +
+                ", description='" + description + '\'' +
+                ", user_id='" + user_id + '\'' +
+                allphotolist+
+                ", pages='" + Spages + '\'' +
+                ", condition='" + condition + '\'' +
+                ", id='" + this.id + '\'' +
+                '}';
+    }
 
     public int getCondition() { return condition; }
 
@@ -199,74 +246,29 @@ public class BookWrapper extends Book implements Parcelable {
         this.user_id = user_id;
     }
 
-    public BookWrapper(Parcel in){
-        this.ISBN = in.readString();
-        this.title = in.readString();
-        this.authors = in.createStringArrayList();
-        this.publisher = in.readString();
-        this.editionYear = in.readInt();
-        this.thumbnail = in.readString();
-        this.categories = in.createStringArrayList();
-        this.description = in.readString();
-        this.user_id = in.readString();
-        this.longitude = in.readDouble();
-        this.lat = in.readDouble();
-        this.photo_list = in.createStringArrayList();
-        this.pages = in.readInt();
-        this.condition = in.readInt();
-    }
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getId() {
+        return id;
     }
 
-    /**
-     * Questo metodo si occupa di scrivere nel Parcel di destinazione i dati richiesti.
-     * @param dest
-     * @param flags
-     */
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.ISBN);
-        dest.writeString(this.title);
-        //dest.writeMap(this.authors);
-        dest.writeStringList(this.authors);
-        dest.writeString(this.publisher);
-        dest.writeInt(this.editionYear);
-        dest.writeString(this.thumbnail);
-        dest.writeStringList(this.categories);
-        dest.writeString(this.description);
-        dest.writeString(this.user_id);
-        dest.writeDouble(this.lat);
-        dest.writeDouble(this.longitude);
-        dest.writeStringList(this.photo_list);
-        dest.writeInt(this.pages);
-        dest.writeInt(this.condition);
+    public void setId(String id) {
+        this.id = id;
     }
-    @Override
-    public String toString() {
-        String Totauthors= ", authors='";
-//        for (String key : authors.keySet()) {
-//            Totauthors = Totauthors + key + '\'';
-//        }
-        Totauthors = Totauthors +this.authors.toString()+'\'';
-        String allphotolist=", photolist='";
-        allphotolist = allphotolist +this.photo_list.toString()+'\'';
 
-        String SeditionYear = Integer.toString(editionYear);
-        String Spages = Integer.toString(this.pages);
+    public List<String> getPhoto_list() {
+        return photo_list;
+    }
 
-        return "BookWrapper{"+"ISBN='"+ISBN+'\''+
-                ", title='" + title + '\'' +
-                Totauthors +
-                ", publisher='" + publisher + '\'' +
-                ", editionYear='" + SeditionYear + '\'' +
-                ", description='" + description + '\'' +
-                ", user_id='" + user_id + '\'' +
-                allphotolist+
-                ", pages='" + Spages + '\'' +
-                ", condition='" + condition + '\'' +
-                '}';
+    public void setPhoto_list(List<String> photo_list) {
+        this.photo_list = photo_list;
+    }
+
+    private List<String> photo_list;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

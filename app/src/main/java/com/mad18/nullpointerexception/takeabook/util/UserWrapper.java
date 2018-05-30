@@ -3,6 +3,7 @@ package com.mad18.nullpointerexception.takeabook.util;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +20,7 @@ public class UserWrapper implements Parcelable{
     //GeoPoint user_wrapper_geoPoint;
     String user_wrapper_profileImgStoragePath;
     private double user_wrapper_lat, user_wrapper_longitude;
+    private List<String> user_wrapper_registrationTokens;
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
         public UserWrapper createFromParcel(Parcel in) {
@@ -47,12 +49,12 @@ public class UserWrapper implements Parcelable{
         parcel.writeString(this.user_wrapper_profileImgStoragePath);
         parcel.writeDouble(this.user_wrapper_lat);
         parcel.writeDouble(this.user_wrapper_longitude);
-
+        parcel.writeStringList(this.user_wrapper_registrationTokens);
     }
 
     public UserWrapper(String user_wrapper_name, String user_wrapper_city, String user_wrapper_mail,
                        String user_wrapper_about, String user_wrapper_id, List<String> user_wrapper_books, String user_wrapper_profileImgStoragePath,
-                       Double lat, Double longitude) {
+                       Double lat, Double longitude,List<String> registrationTokens) {
         this.user_wrapper_name = user_wrapper_name;
         this.user_wrapper_city = user_wrapper_city;
         this.user_wrapper_mail = user_wrapper_mail;
@@ -62,6 +64,7 @@ public class UserWrapper implements Parcelable{
         this.user_wrapper_profileImgStoragePath = user_wrapper_profileImgStoragePath;
         this.user_wrapper_lat = lat;
         this.user_wrapper_longitude = longitude;
+        this.user_wrapper_registrationTokens = registrationTokens;
     }
 
     public UserWrapper(User user){
@@ -74,6 +77,7 @@ public class UserWrapper implements Parcelable{
         this.user_wrapper_profileImgStoragePath = user.getProfileImgStoragePath();
         this.user_wrapper_lat = user.getUsr_geoPoint().getLatitude();
         this.user_wrapper_longitude = user.getUsr_geoPoint().getLongitude();
+        this.user_wrapper_registrationTokens = user.getRegistrationTokens();
     }
 
     public UserWrapper(Parcel in){
@@ -87,6 +91,7 @@ public class UserWrapper implements Parcelable{
         this.user_wrapper_profileImgStoragePath = in.readString();
         this.user_wrapper_lat = in.readDouble();
         this.user_wrapper_longitude = in.readDouble();
+        this.user_wrapper_registrationTokens = in.createStringArrayList();
     }
 
     @Override
@@ -96,7 +101,6 @@ public class UserWrapper implements Parcelable{
 //            Totauthors = Totauthors + key + '\'';
 //        }
         Totbooks = Totbooks +this.user_wrapper_books.toString()+'\'';
-
         return "UserWrapper{"+"name='"+user_wrapper_name+'\''+
                 ", city='" + user_wrapper_city + '\'' +
                 ", mail='" + user_wrapper_mail + '\'' +
@@ -108,6 +112,7 @@ public class UserWrapper implements Parcelable{
                 ", imgStrgPath='" + user_wrapper_profileImgStoragePath + '\'' +
                 ", lat='" + Double.toString(user_wrapper_lat) + '\'' +
                 ", longitude='" + Double.toString(user_wrapper_longitude) + '\'' +
+                ", registrationTokens='" + user_wrapper_registrationTokens.toString() + '\''  +
                 '}';
     }
 
@@ -182,4 +187,15 @@ public class UserWrapper implements Parcelable{
         this.user_wrapper_longitude = user_wrapper_longitude;
     }
 
+    public List<String> getUser_wrapper_registrationTokens() {
+        return user_wrapper_registrationTokens;
+    }
+
+    public void setUser_wrapper_registrationTokens(List<String> user_wrapper_registrationTokens) {
+        this.user_wrapper_registrationTokens = user_wrapper_registrationTokens;
+    }
+
+    public GeoPoint getUser_wrapper_geoPoint(){
+        return new GeoPoint(this.getUser_wrapper_lat(),this.getUser_wrapper_longitude());
+    }
 }

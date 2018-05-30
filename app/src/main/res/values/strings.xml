@@ -165,7 +165,7 @@
     <string name="Updating">Updating..</string>
     <string name="request_book_message_to_owner">Message to owner</string>
     <string name="send">Send</string>
+    <string name="request_book_sent">Request sent</string>
     <string name="info_book_delete">Delete</string>
-
 
 </resources>

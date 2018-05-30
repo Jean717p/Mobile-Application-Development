@@ -97,7 +97,7 @@ public class InfoUserShowBooks extends AppCompatActivity {
                     else{
                         booksSize--;
                     }
-                    if(showBooks.size()==booksSize){
+                    if(showBooks.size()>=booksSize){
                         updateView(showBooks);
                     }
                 }

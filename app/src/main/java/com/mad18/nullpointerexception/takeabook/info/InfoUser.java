@@ -32,12 +32,7 @@ import java.util.ArrayList;
 
 public class InfoUser extends AppCompatActivity {
     private FirebaseFirestore db;
-    private String usr_name;
-    private String usr_city;
-    private String usr_bio;
-    private String usr_prof_stg_path;
-    //private Uri usr_img_uri;
-    private String usr_id;
+    private User otherUser;
     private Menu menu;
     User u;
     private Context context;
@@ -61,28 +56,21 @@ public class InfoUser extends AppCompatActivity {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         chat_fab = findViewById(R.id.info_user_button_message);
         showBooks = findViewById(R.id.info_user_library_cv);
-        usr_name = getIntent().getExtras().getString("usr_name");
-        usr_city = getIntent().getExtras().getString("usr_city");
-        usr_bio = getIntent().getExtras().getString("usr_bio");
-        usr_id = getIntent().getExtras().getString("usr_id");
-        usr_prof_stg_path = getIntent().getExtras().getString("usr_prof_strg_path");
-        if(usr_prof_stg_path.length() > 0){
-            usr_prof_stg_path = usr_prof_stg_path.substring(1);
-        }
-
-        //fillInfoUserViews();
+        UserWrapper userWrapper = getIntent().getExtras().getParcelable("otherUser");
+        otherUser = new User(userWrapper);
         fillInfoUserViews();
 
         if(chat_fab!=null){
             chat_fab.setOnClickListener(v -> {
                 Intent chatIntent = new Intent(this, ChatActivity.class);
-                chatIntent.putExtra(AppConstants.USER_NAME, usr_name);
-                chatIntent.putExtra(AppConstants.USER_ID, usr_id);
+                chatIntent.putExtra(AppConstants.USER_NAME, otherUser.getUsr_name());
+                chatIntent.putExtra(AppConstants.USER_ID, otherUser.getUsr_id());
                 startActivity(chatIntent);
             });
         }
         ArrayList<String> userBooks = new ArrayList<>();
-        db.collection("users").document(usr_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        db.collection("users").document(otherUser.getUsr_id()).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 DocumentSnapshot userdoc = task.getResult();
@@ -121,21 +109,22 @@ public class InfoUser extends AppCompatActivity {
 
     private void fillInfoUserViews(){
         TextView tv = findViewById(R.id.info_user_username);
-        tv.setText(usr_name);
+        tv.setText(otherUser.getUsr_name());
         tv = findViewById(R.id.info_user_city);
-        tv.setText(usr_city);
+        tv.setText(otherUser.getUsr_city());
         tv = findViewById(R.id.info_user_about_me);
-        if (usr_bio.length() > 0) {
-            tv.setText(usr_bio);
+        tv.setText(otherUser.getUsr_about());
+        if (otherUser.getUsr_about().length() > 0) {
+            tv.setText(otherUser.getUsr_about());
         }else{
             CardView cardView = findViewById(R.id.info_user_about_cv);
             cardView.setVisibility(View.GONE);
         }
 
 
-        if(usr_prof_stg_path.length() > 0){
+        if(otherUser.getProfileImgStoragePath().length() > 0){
             ImageView iv = findViewById(R.id.info_user_photo_profile);
-            StorageReference mImageRef = FirebaseStorage.getInstance().getReference(usr_prof_stg_path);
+            StorageReference mImageRef = FirebaseStorage.getInstance().getReference(otherUser.getProfileImgStoragePath());
             GlideApp.with(this).load(mImageRef).placeholder(R.drawable.ic_account_circle_white_48px).into(iv);
         }
     }

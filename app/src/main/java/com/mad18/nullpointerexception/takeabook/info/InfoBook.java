@@ -31,13 +31,15 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.ImageViewPopUpHelper;
 import com.mad18.nullpointerexception.takeabook.R;
-import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
 import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
 import com.mad18.nullpointerexception.takeabook.requestBook.RequestBook;
+import com.mad18.nullpointerexception.takeabook.util.Book;
+import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
+import com.mad18.nullpointerexception.takeabook.util.User;
+import com.mad18.nullpointerexception.takeabook.util.UserWrapper;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -64,6 +66,7 @@ public class InfoBook extends AppCompatActivity {
     private boolean isImageFitToScreen = true;
     private String usr_prof_strg_path;
     private int j=0;
+    private User bookOwner;
     SharedPreferences sharedPref;
 
 
@@ -184,10 +187,12 @@ public class InfoBook extends AppCompatActivity {
         user_doc.get().addOnCompleteListener(task -> {
             DocumentSnapshot doc = task.getResult();
             //thisUser = doc.toObject(User.class);
-            usr_name = doc.getString("usr_name");
-            usr_city = doc.getString("usr_city");
-            usr_about = doc.getString("usr_about");
-            usr_prof_strg_path = doc.getString("profileImgStoragePath");
+            UserWrapper bookOwnerWrapped;
+            if(doc==null){
+                return;
+            }
+            bookOwner = doc.toObject(User.class);
+            bookOwnerWrapped = new UserWrapper(bookOwner);
             TextView tv2 = findViewById(R.id.info_book_owner);
             mAuth = FirebaseAuth.getInstance();
             FirebaseUser user = mAuth.getCurrentUser();
@@ -199,18 +204,16 @@ public class InfoBook extends AppCompatActivity {
                     //TODO: richiesta libro
                     Intent toRequestBook = new Intent(InfoBook.this, RequestBook.class);
                     toRequestBook.putExtra("requested_book", bookToShowInfoOf);
+                    toRequestBook.putExtra("otherUser",bookOwnerWrapped);
                     startActivity(toRequestBook);
                 });
-                tv2.setText(usr_name);
+                tv2.setText(bookOwner.getUsr_name());
                 tv2.setTextColor(Color.BLUE);
                 tv2.setClickable(true);
+                UserWrapper userWrapper = new UserWrapper(bookOwner);
                 tv2.setOnClickListener(view -> {
                     Intent toInfoUser = new Intent(InfoBook.this, InfoUser.class);
-                    toInfoUser.putExtra("usr_id", bookToShowInfoOf.getUser_id());
-                    toInfoUser.putExtra("usr_name", usr_name);
-                    toInfoUser.putExtra("usr_city", usr_city);
-                    toInfoUser.putExtra("usr_bio", usr_about);
-                    toInfoUser.putExtra("usr_prof_strg_path", usr_prof_strg_path);
+                    toInfoUser.putExtra("otherUser", userWrapper);
                     //toInfoUser.putExtra("img_uri",downloadOwnerUri);
                     //qui l'immagine
 
