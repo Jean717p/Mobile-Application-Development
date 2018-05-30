@@ -56,11 +56,17 @@ public class SearchBookAlgolia extends AppCompatActivity {
 
     private String searchBase;
     private Map<String, String> booklist = new HashMap<>();
-    private List<BookWrapper> booksFound = new ArrayList<>();
+    private ArrayList<BookWrapper> booksFound = new ArrayList<>();
     private Context context;
     private View mClss;
     private ZXingScannerView barcodeScanner;
     private static final int ZXING_CAMERA_PERMISSION = 4, REQUEST_SCANNER=3;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        booksFound.clear();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +107,7 @@ public class SearchBookAlgolia extends AppCompatActivity {
             searchBar.addTextChangeListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
                 }
 
                 @Override
@@ -188,11 +195,6 @@ public class SearchBookAlgolia extends AppCompatActivity {
                 String key = searchBar.getLastSuggestions().get(position).toString();
                 String ISBN = booklist.get(key);
                 searchBooksOnFireStore(ISBN);
-                Intent intent = new Intent(context, DisplaySearchOnMap.class);
-                Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList("bookToShow", (ArrayList<? extends Parcelable>) booksFound);
-                intent.putExtras(bundle);
-                startActivity(intent);
             }
 
             @Override
@@ -227,24 +229,27 @@ public class SearchBookAlgolia extends AppCompatActivity {
 
     private void searchBooksOnFireStore(String ISBN){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         CollectionReference booksRef = db.collection("books");
-        com.google.firebase.firestore.Query query_i = booksRef.whereEqualTo("book_ISBN",ISBN);
-        query_i.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        com.google.firebase.firestore.Query query_ISBN = booksRef.whereEqualTo("book_ISBN", ISBN);
+        Task<QuerySnapshot> bookToShow = query_ISBN.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 List<DocumentSnapshot> documents = task.getResult().getDocuments();
-                for(DocumentSnapshot documentSnapshot:documents){
-                    if(documentSnapshot!=null){
-                        if(documentSnapshot.exists()){
+                for (DocumentSnapshot documentSnapshot : documents) {
+                    if (documentSnapshot != null) {
+                        if (documentSnapshot.exists()) {
                             Book tmp = documentSnapshot.toObject(Book.class);
                             booksFound.add(new BookWrapper(tmp));
                         }
                     }
                 }
+                Intent intent = new Intent(context, DisplaySearchOnMap.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList("bookToShow", booksFound);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
-
     }
 
     @Override
@@ -259,7 +264,7 @@ public class SearchBookAlgolia extends AppCompatActivity {
                     searchBooksOnFireStore(ISBN);
                     Intent intent = new Intent(context, DisplaySearchOnMap.class);
                     Bundle b = new Bundle();
-                    b.putParcelableArrayList("bookToShow", (ArrayList<? extends Parcelable>) booksFound);
+                    b.putParcelableArrayList("bookToShow", booksFound);
                     intent.putExtras(b);
                     startActivity(intent);
                 }

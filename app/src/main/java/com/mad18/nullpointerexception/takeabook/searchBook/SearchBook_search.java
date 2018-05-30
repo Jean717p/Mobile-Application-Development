@@ -77,11 +77,13 @@ public class SearchBook_search extends Fragment {
         search.setOnClickListener(view -> {
             //progress bar visible and button search invisible
             if(text.length()>0){
+
                 ProgressBarVisibility(View.VISIBLE);
                 search.setVisibility(View.INVISIBLE);
                 //getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                 SearchBook s = (SearchBook) getActivity();
                 s.searchForBook(searchBase);
+
             }
             else{
                 //Do nothing
