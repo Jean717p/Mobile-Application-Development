@@ -87,9 +87,11 @@
     <string name="info_book_label_book_num_pages">N. pages:</string>
     <string name="info_book_snackbar">The library has been updated</string>
     <string name="info_book_label_pages">N. pages:</string>
-    <string name="info_book_delete_this_book">Delete this book</string>
+    <string name="info_book_delete_this_book">Delete</string>
     <string name="info_book_deleted">Book has been successfully deleted</string>
     <string name="info_book_not_deleted">Some errors occurred, book not deleted</string>
+    <string name="info_book_modify_this_book">Modify</string>
+    <string name="info_book_request_this_book">Request</string>
 
 
     <!--Barcode Related-->
@@ -160,6 +162,8 @@
     <string name="add_book_added">Book added successfully</string>
     <string name="chat_photo">Photo</string>
     <string name="Updating">Updating..</string>
+    <string name="request_book_message_to_owner">Message to owner</string>
+    <string name="send">Send</string>
 
 
 </resources>

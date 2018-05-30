@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/info_book_options"
+        android:icon="@drawable/ic_more_vert_white_48px"
+        android:orderInCategory="4"
+        android:title="Done"
+        app:showAsAction="always">
+        <!-- "file" submenu -->
+        <menu>
+            <item android:id="@+id/info_book_delete_book"
+                android:title="@string/info_book_delete_this_book" />
+            <item android:id="@+id/info_book_modify_book"
+                android:title="@string/info_book_modify_this_book" />
+        </menu>
+    </item>
+
+</menu>

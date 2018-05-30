@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -35,6 +37,7 @@ import com.mad18.nullpointerexception.takeabook.ImageViewPopUpHelper;
 import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
 import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
+import com.mad18.nullpointerexception.takeabook.requestBook.RequestBook;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -73,7 +76,8 @@ public class InfoBook extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setTitle(R.string.title_activity_info_book);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle(R.string.title_activity_info_book);
+        //setTitle(R.string.title_activity_info_book);
+
         toolbar.setVisibility(View.VISIBLE);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         bookToShowInfoOf = getIntent().getExtras().getParcelable("bookToShow");
@@ -188,6 +192,15 @@ public class InfoBook extends AppCompatActivity {
             mAuth = FirebaseAuth.getInstance();
             FirebaseUser user = mAuth.getCurrentUser();
             if(!bookToShowInfoOf.getUser_id().equals(user.getUid())) {
+                final Button request_button = findViewById(R.id.info_book_request_book_button);
+                request_button.setClickable(true);
+                request_button.setVisibility(View.VISIBLE);
+                request_button.setOnClickListener( (View view) -> {
+                    //TODO: richiesta libro
+                    Intent toRequestBook = new Intent(InfoBook.this, RequestBook.class);
+                    toRequestBook.putExtra("requested_book", bookToShowInfoOf);
+                    startActivity(toRequestBook);
+                });
                 tv2.setText(usr_name);
                 tv2.setTextColor(Color.BLUE);
                 tv2.setClickable(true);
@@ -210,16 +223,6 @@ public class InfoBook extends AppCompatActivity {
                 tv2 = findViewById(R.id.info_book_label_owner);
                 tv2.setVisibility(View.INVISIBLE);
                 tv2.setHeight(0);
-                //TODO: implementa qui il click sul bottone delete this book
-                //if isLent == false
-                final Button delete_button = findViewById(R.id.info_book_delete_book_button);
-                delete_button.setVisibility(View.VISIBLE);
-                delete_button.setClickable(true);
-                delete_button.setOnClickListener( (View view) -> {
-                    AskOption();
-                });
-
-
             }
 
         });
@@ -286,23 +289,6 @@ public class InfoBook extends AppCompatActivity {
                 });
                 }
         });
-
-
-
-
-        //
-        //finish();
-//        if(true){
-//            SharedPreferences.Editor editor = sharedPref.edit();
-//            editor.putBoolean("book_removed",true);
-//            editor.apply();
-//            Snackbar snackbar = Snackbar
-//                  .make(findViewById(R.id.info_book_layout),getText(R.string.info_book_deleted), Snackbar.LENGTH_LONG);
-//            snackbar.show();
-//            Book book = new Book(bookToShowInfoOf);
-//            MainActivity.myBooks.remove(book);
-//        }
-
     }
 
     @Override
@@ -339,6 +325,11 @@ public class InfoBook extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(bookToShowInfoOf.getUser_id().equals(user.getUid())) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.info_book_menu, menu); //.xml file name
+        }
         return true;
     }
 
@@ -349,6 +340,14 @@ public class InfoBook extends AppCompatActivity {
                 onBackPressed();
                 finish();
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                return true;
+            case R.id.info_book_delete_book:
+                //TODO: if isLent == false
+                AskOption();
+                return true;
+            case R.id.info_book_modify_book:
+                //TODO: fase di modifica e update del libro
+                Toast.makeText(this, "Features in progress, soon available", Toast.LENGTH_SHORT).show();
                 return true;
         }
         return super.onOptionsItemSelected(item);

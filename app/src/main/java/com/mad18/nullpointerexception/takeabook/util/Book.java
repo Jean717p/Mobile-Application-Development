@@ -22,6 +22,15 @@ public class Book {
     Map<String,Boolean> book_categories;
     String book_description;
     GeoPoint book_location;
+    String book_id="";
+
+    public String getBook_id() {
+        return book_id;
+    }
+
+    public void setBook_id(String book_id) {
+        this.book_id = book_id;
+    }
 
     public int getBook_pages() {
         return book_pages;
@@ -112,6 +121,7 @@ public class Book {
 
         }
         book_pages = bw.getPages();
+        book_id = bw.getId();
     }
 
     public String getBook_ISBN() {

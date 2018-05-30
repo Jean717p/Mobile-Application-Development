@@ -4,14 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:id="@+id/info_book_layout"
+    android:id="@+id/request_book_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
 
     <!--Questa è la toolbar dove appare appName più l'icona salva o modifica-->
     <android.support.v7.widget.Toolbar
-        android:id="@+id/info_book_toolbar"
+        android:id="@+id/request_book_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:background="@color/colorPrimary"
@@ -28,27 +28,40 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:id="@+id/llrb">
 
             <!-- Rest of your content -->
             <include
                 android:id="@+id/cv"
-                layout="@layout/info_book_card_view"/>
+                layout="@layout/request_book_card_view"/>
             <include
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="7dp"
-                layout="@layout/cardview_description"/>
-            <Button
-                android:id="@+id/info_book_request_book_button"
+                layout="@layout/request_book_cardview_message"/>
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/info_book_request_this_book"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:clickable="false"
-                android:visibility="invisible"/>
-
+               >
+                <Button
+                    android:id="@+id/request_book_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cancel"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    />
+                <Button
+                    android:id="@+id/request_book_send"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/send"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_toRightOf="@id/request_book_cancel"
+                    />
+            </RelativeLayout>
         </LinearLayout>
 
     </ScrollView>
@@ -56,3 +69,5 @@
 
 
 </LinearLayout>
+
+

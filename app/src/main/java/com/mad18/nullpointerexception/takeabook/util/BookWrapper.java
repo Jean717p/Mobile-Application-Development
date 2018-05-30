@@ -39,6 +39,15 @@ public class BookWrapper extends Book implements Parcelable {
     private double lat, longitude;
     private int pages=0;
     private int condition = 0;
+    private String id="";
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public List<String> getPhoto_list() {
         return photo_list;
@@ -94,6 +103,7 @@ public class BookWrapper extends Book implements Parcelable {
         this.photo_list = new LinkedList<>(book.getBook_photo_list().keySet());
         this.pages= book.getBook_pages();
         this.condition = book.getBook_condition();
+        this.id=book.getBook_id();
     }
 
 

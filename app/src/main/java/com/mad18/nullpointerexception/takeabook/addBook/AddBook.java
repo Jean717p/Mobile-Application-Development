@@ -381,8 +381,9 @@ public class AddBook extends AppCompatActivity {
             }
         }
         bookToAdd.setBook_photo_list(photourllist);
+        bookToAdd.setBook_id(bookRefPath);
         bookRef.set(bookToAdd);
-        bookRef.getPath();
+        //bookRef.getPath();
 
         //Aggiunta libro all'elenco dell'utente
         users.document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
