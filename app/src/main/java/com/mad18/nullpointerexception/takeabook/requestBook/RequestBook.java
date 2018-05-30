@@ -103,7 +103,8 @@ public class RequestBook extends AppCompatActivity {
             TextView textView = findViewById(R.id.request_book_message);
             Loan loan = new Loan(bookOwner.getUsr_id(),user.getUsr_id(),bookOwner.getUsr_name(),user.getUsr_name(),
                     requested_book.getBook_title(),requested_book.getBook_id(),
-                    textView.getText().toString(), Calendar.getInstance().getTime()
+                    textView.getText().toString(), Calendar.getInstance().getTime(),
+                    newReqRef.getId()
                     );
             requestDocId = newReqRef.getId();
             newReqRef.set(loan).addOnSuccessListener(new OnSuccessListener<Void>() {

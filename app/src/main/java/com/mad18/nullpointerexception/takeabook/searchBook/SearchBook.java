@@ -26,9 +26,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.addBook.JsonParser;
+import com.mad18.nullpointerexception.takeabook.util.Book;
+import com.mad18.nullpointerexception.takeabook.util.MyAtomicCounter;
+import com.mad18.nullpointerexception.takeabook.util.OnCounterChangeListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +40,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -475,52 +476,6 @@ public class SearchBook extends AppCompatActivity {
         }
         return totItems;
 
-    }
-
-    private interface OnCounterChangeListener{
-        void onCounterReachZero();
-    }
-
-    private class MyAtomicCounter{
-        private OnCounterChangeListener listener;
-        private AtomicInteger atomicInteger;
-
-        public MyAtomicCounter(int initialValue){
-            atomicInteger = new AtomicInteger(initialValue);
-        }
-
-        public OnCounterChangeListener getListener() {
-            return listener;
-        }
-
-        public void setListener(OnCounterChangeListener listener) {
-            this.listener = listener;
-        }
-
-        public void decrement(){
-            int value = atomicInteger.decrementAndGet();
-            if(listener!=null){
-                if(value ==0){
-                    listener.onCounterReachZero();
-                }
-            }
-        }
-        public void increment(){
-            int value = atomicInteger.incrementAndGet();
-            if(listener!=null){
-                if(value ==0){
-                    listener.onCounterReachZero();
-                }
-            }
-        }
-        public void set(int value){
-            atomicInteger.set(value);
-            if(listener!=null){
-                if(value ==0){
-                    listener.onCounterReachZero();
-                }
-            }
-        }
     }
 
     private static class SearchBookPagerAdapter extends FragmentStatePagerAdapter {

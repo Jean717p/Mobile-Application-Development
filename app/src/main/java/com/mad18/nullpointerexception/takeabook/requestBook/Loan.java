@@ -4,6 +4,7 @@ import java.util.Date;
 
 class Loan {
 
+    String loanId;
     String ownerId;
     String applicantId;
     String ownerName;
@@ -20,7 +21,8 @@ class Loan {
 
     Loan() {}
 
-    Loan(String ownerId, String applicantId, String ownerName, String applicantName, String bookTitle, String bookId, String requestText, Date startDate) {
+    Loan(String ownerId, String applicantId, String ownerName, String applicantName, String bookTitle, String bookId,
+         String requestText, Date startDate, String loanId) {
         this.ownerId = ownerId;
         this.applicantId = applicantId;
         this.ownerName = ownerName;
@@ -29,6 +31,7 @@ class Loan {
         this.bookId = bookId;
         this.requestText = requestText;
         this.startDate = startDate;
+        this.loanId = loanId;
         this.requestStatus = false;
         this.exchangedApplicant = false;
         this.exchangedOwner = false;
@@ -138,5 +141,13 @@ class Loan {
 
     public void setEndLoanApplicant(Date endLoanApplicant) {
         this.endLoanApplicant = endLoanApplicant;
+    }
+
+    public String getLoanId() {
+        return loanId;
+    }
+
+    public void setLoanId(String loanId) {
+        this.loanId = loanId;
     }
 }
