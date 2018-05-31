@@ -7,8 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.util.User;
 
@@ -55,11 +57,20 @@ class RequestRecyclerViewAdapter extends RecyclerView.Adapter<RequestRecyclerVie
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         if(thisUser.getUsr_id().equals(mData.get(position).getOwnerId())){
             holder.tv_loan_applicant_name.setText(mData.get(position).getApplicantName());
+            if(mData.get(position).getEndLoanOwner()!=null){
+                holder.tv_loan_request_end_date.setText(formatter.format(mData.get(position).getEndLoanOwner()));
+            }
         }
         else{
             holder.tv_loan_applicant_name.setText(mData.get(position).getOwnerName());
         }
-        holder.tv_loan_request_date.setText(formatter.format(mData.get(position).getStartDate()));
+        holder.tv_loan_request_start_date.setText(formatter.format(mData.get(position).getStartDate()));
+        holder.tv_loan_book_title.setText(mData.get(position).getBookTitle());
+        if(mData.get(position).getBookThumbnail().length()>0){
+            GlideApp.with(myContext).load(mData.get(position).getBookThumbnail())
+                    .placeholder(R.drawable.ic_thumbnail_cover_book)
+                    .into(holder.iw_loan_book_thumbnail);
+        }
         holder.bind(mData.get(position), listener);
     }
 
@@ -72,13 +83,19 @@ class RequestRecyclerViewAdapter extends RecyclerView.Adapter<RequestRecyclerVie
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView tv_loan_applicant_name;
-        TextView tv_loan_request_date;
+        TextView tv_loan_request_start_date;
+        TextView tv_loan_book_title;
+        TextView tv_loan_request_end_date;
+        ImageView iw_loan_book_thumbnail;
         CardView cardView;
 
         MyViewHolder(View itemView) {
             super(itemView);
-            tv_loan_applicant_name = itemView.findViewById(R.id.request_loan_cv_title);
-            tv_loan_request_date = itemView.findViewById(R.id.request_loan_cv_date);
+            tv_loan_applicant_name = itemView.findViewById(R.id.request_loan_cv_applicant);
+            tv_loan_request_start_date = itemView.findViewById(R.id.request_loan_cv_start_date);
+            tv_loan_book_title = itemView.findViewById(R.id.request_loan_cv_book_title);
+            tv_loan_request_end_date = itemView.findViewById(R.id.request_loan_cv_end_date);
+            iw_loan_book_thumbnail = itemView.findViewById(R.id.request_loan_cv_book_thumbnail);
             cardView = (CardView) itemView.findViewById(R.id.request_loan_card_view);
         }
 

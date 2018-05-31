@@ -102,7 +102,7 @@ public class RequestBook extends AppCompatActivity {
             DocumentReference newReqRef = db.collection("requests").document();
             TextView textView = findViewById(R.id.request_book_message);
             Loan loan = new Loan(bookOwner.getUsr_id(),user.getUsr_id(),bookOwner.getUsr_name(),user.getUsr_name(),
-                    requested_book.getBook_title(),requested_book.getBook_id(),
+                    requested_book.getBook_title(),requested_book.getBook_thumbnail_url(),requested_book.getBook_id(),
                     textView.getText().toString(), Calendar.getInstance().getTime(),
                     newReqRef.getId()
                     );

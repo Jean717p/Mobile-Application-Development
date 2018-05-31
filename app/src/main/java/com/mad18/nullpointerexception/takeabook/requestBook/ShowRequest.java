@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.info.InfoUser;
@@ -42,6 +43,7 @@ public class ShowRequest extends AppCompatActivity {
     private User myUser;
     private MyAtomicCounter myAtomicCounter;
     private String requestType;
+    private ListenerRegistration firestoreListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -10,6 +10,7 @@ class Loan {
     String ownerName;
     String applicantName;
     String bookTitle;
+    String bookThumbnail;
     String bookId;
     String requestText;
     Boolean requestStatus; //A
@@ -21,13 +22,15 @@ class Loan {
 
     Loan() {}
 
-    Loan(String ownerId, String applicantId, String ownerName, String applicantName, String bookTitle, String bookId,
+    Loan(String ownerId, String applicantId, String ownerName, String applicantName,
+         String bookTitle, String bookThumbnail, String bookId,
          String requestText, Date startDate, String loanId) {
         this.ownerId = ownerId;
         this.applicantId = applicantId;
         this.ownerName = ownerName;
         this.applicantName = applicantName;
         this.bookTitle = bookTitle;
+        this.bookThumbnail = bookThumbnail;
         this.bookId = bookId;
         this.requestText = requestText;
         this.startDate = startDate;
@@ -77,6 +80,14 @@ class Loan {
 
     public void setBookTitle(String bookTitle) {
         this.bookTitle = bookTitle;
+    }
+
+    public String getBookThumbnail() {
+        return bookThumbnail;
+    }
+
+    public void setBookThumbnail(String bookThumbnail) {
+        this.bookThumbnail = bookThumbnail;
     }
 
     public String getBookId() {
