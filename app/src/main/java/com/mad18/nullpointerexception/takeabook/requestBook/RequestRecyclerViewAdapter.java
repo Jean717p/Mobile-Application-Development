@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.util.User;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -20,11 +21,13 @@ class RequestRecyclerViewAdapter extends RecyclerView.Adapter<RequestRecyclerVie
     private Context myContext;
     private List<Loan> mData;
     private final OnItemClickListener listener;
+    private final User thisUser;
 
-    public RequestRecyclerViewAdapter(Context myContext, List<Loan> mData, OnItemClickListener listener ) {
+    public RequestRecyclerViewAdapter(Context myContext, List<Loan> mData, User thisUser, OnItemClickListener listener ) {
         this.myContext = myContext;
         this.mData = mData;
         this.listener = listener;
+        this.thisUser = thisUser;
     }
 
     interface OnItemClickListener {
@@ -50,7 +53,12 @@ class RequestRecyclerViewAdapter extends RecyclerView.Adapter<RequestRecyclerVie
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        holder.tv_loan_applicant_name.setText(mData.get(position).getApplicantName());
+        if(thisUser.getUsr_id().equals(mData.get(position).getOwnerId())){
+            holder.tv_loan_applicant_name.setText(mData.get(position).getApplicantName());
+        }
+        else{
+            holder.tv_loan_applicant_name.setText(mData.get(position).getOwnerName());
+        }
         holder.tv_loan_request_date.setText(formatter.format(mData.get(position).getStartDate()));
         holder.bind(mData.get(position), listener);
     }
@@ -67,8 +75,6 @@ class RequestRecyclerViewAdapter extends RecyclerView.Adapter<RequestRecyclerVie
         TextView tv_loan_request_date;
         CardView cardView;
 
-
-
         MyViewHolder(View itemView) {
             super(itemView);
             tv_loan_applicant_name = itemView.findViewById(R.id.request_loan_cv_title);
@@ -77,7 +83,6 @@ class RequestRecyclerViewAdapter extends RecyclerView.Adapter<RequestRecyclerVie
         }
 
         void bind(final Loan item, final OnItemClickListener listener) {
-
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

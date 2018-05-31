@@ -151,13 +151,23 @@
     <!--RequestBook Related -->
     <string name="request_book_message_to_owner">Aggiungi un messaggio</string>
     <string name="send">Invia</string>
-    <string name="request_book_sent">Richiesta inviata</string>
-
+    <string name="request_book_sent">Richiesta inviata!</string>
+    <string name="requests_book_sent">Richieste inviate</string>
+    <string name="requests_book_received">Richieste ricevute</string>
+    <string name="requests_archive">Archivio richieste</string>
 
     <!--ShowRequest Related-->
     <string name="show_request_applicant">Richiedente</string>
     <string name="show_request_accept_request">Accetta richiesta</string>
     <string name="show_request_accepted_request">Richiesta Accettata</string>
     <string name="show_request">Richiesta già accettata</string>
+    <string name="request_book_start_date">Request date:</string>
+    <string name="request_book_status">Status:</string>
+    <string name="request_book_status_pending">Pending</string>
+    <string name="request_book_status_exchg_applicant">Waiting for applicant</string>
+    <string name="request_book_status_exchg_confirm">To confirm</string>
+    <string name="request_book_status_on_loan">On loan</string>
+    <string name="request_book_status_closed">Closed</string>
+    <string name="request_book_label_start_date_loan">Loan started</string>
 
 </resources>

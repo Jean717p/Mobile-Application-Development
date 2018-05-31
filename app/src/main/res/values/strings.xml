@@ -165,12 +165,23 @@
     <string name="Updating">Updating..</string>
     <string name="request_book_message_to_owner">Message to owner</string>
     <string name="send">Send</string>
-    <string name="request_book_sent">Request sent</string>
+    <string name="request_book_sent">Request sent!</string>
+    <string name="requests_book_sent">Sent requests</string>
+    <string name="requests_book_received">Received requests</string>
+    <string name="requests_archive">Requests archive</string>
     <string name="info_book_delete">Delete</string>
     <string name="show_request_applicant">Applicant</string>
     <string name="show_request_accept_request">Accept Request</string>
     <string name="show_request_accepted_request">Request Accepted</string>
     <string name="show_request">Request already accepted</string>
     <string name="show_request_wait_applicant">Wait for applicant</string>
+    <string name="request_book_start_date">Request date:</string>
+    <string name="request_book_status">Status:</string>
+    <string name="request_book_status_pending">Pending</string>
+    <string name="request_book_status_exchg_applicant">Waiting for applicant</string>
+    <string name="request_book_status_exchg_confirm">To confirm</string>
+    <string name="request_book_status_on_loan">On loan</string>
+    <string name="request_book_status_closed">Closed</string>
+    <string name="request_book_label_start_date_loan">Loan started</string>
 
 </resources>

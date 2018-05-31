@@ -65,8 +65,10 @@ import com.mad18.nullpointerexception.takeabook.SettingsActivity;
 import com.mad18.nullpointerexception.takeabook.SplashScreenActivity;
 import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
 import com.mad18.nullpointerexception.takeabook.myProfile.showProfile;
+import com.mad18.nullpointerexception.takeabook.requestBook.RequestList;
 import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.util.User;
+import com.mad18.nullpointerexception.takeabook.util.UserWrapper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -317,8 +319,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 intent = new Intent(this, com.mad18.nullpointerexception.takeabook.myProfile.showProfile.class);
                 startActivity(intent);
                 break;
+            case R.id.nav_mychat:
+                intent = new Intent(context,com.mad18.nullpointerexception.takeabook.chatActivity.ListOfChatActivity.class);
+                //startActivityForResult(intent,REQUEST_ADDBOOK);
+                startActivity(intent);
+                break;
+            case R.id.nav_request_sent:
+                intent = new Intent(context, RequestList.class);
+                intent.putExtra("requestType","sent");
+                intent.putExtra("thisUser",new UserWrapper(thisUser));
+                startActivity(intent);
+                break;
+            case R.id.nav_request_received:
+                intent = new Intent(context, RequestList.class);
+                intent.putExtra("requestType","received");
+                intent.putExtra("thisUser",new UserWrapper(thisUser));
+                startActivity(intent);
+                break;
+            case R.id.nav_request_archive:
+                intent = new Intent(context, RequestList.class);
+                intent.putExtra("requestType","archived");
+                intent.putExtra("thisUser",new UserWrapper(thisUser));
+                startActivity(intent);
+                break;
+            case R.id.nav_settings:
+                intent = new Intent(this, SettingsActivity.class);
+                startActivityForResult(intent,REQUEST_SETTINGS);
+                break;
             case R.id.nav_logout:
-                AuthUI.getInstance()
+            AuthUI.getInstance()
                         .signOut(this)
                         .addOnCompleteListener(task -> {
                             // user is now signed out
@@ -326,16 +355,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             deleteUserData(sharedPref, Locale.getDefault(),getResources());
                             finish();
                         });
-                break;
-            case R.id.nav_mychat:
-                intent = new Intent(context,com.mad18.nullpointerexception.takeabook.chatActivity.ListOfChatActivity.class);
-                //startActivityForResult(intent,REQUEST_ADDBOOK);
-                startActivity(intent);
-                break;
-            case R.id.nav_settings:
-                intent = new Intent(this, SettingsActivity.class);
-                startActivityForResult(intent,REQUEST_SETTINGS);
-                break;
+            break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

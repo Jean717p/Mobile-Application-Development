@@ -189,6 +189,13 @@
         <activity android:name=".requestBook.RequestBook" />
         <activity android:name=".searchBook.SearchBookAlgolia" />
         <activity android:name=".searchBook.SearchBook_BarcodeScanner" />
+        <activity
+            android:name=".requestBook.RequestList"
+            android:screenOrientation="portrait">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity" />
+        </activity>
         <activity android:name=".requestBook.ShowRequest"></activity>
     </application>
 

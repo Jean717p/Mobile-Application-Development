@@ -2,10 +2,10 @@ package com.mad18.nullpointerexception.takeabook.requestBook;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -16,18 +16,20 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.R;
-import com.mad18.nullpointerexception.takeabook.info.InfoBook;
 import com.mad18.nullpointerexception.takeabook.info.InfoUser;
-import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
 import com.mad18.nullpointerexception.takeabook.util.Book;
+import com.mad18.nullpointerexception.takeabook.util.MyAtomicCounter;
+import com.mad18.nullpointerexception.takeabook.util.OnCounterChangeListener;
 import com.mad18.nullpointerexception.takeabook.util.User;
 import com.mad18.nullpointerexception.takeabook.util.UserWrapper;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class ShowRequest extends AppCompatActivity {
     private final String TAG = "ShowRequest";
@@ -37,6 +39,9 @@ public class ShowRequest extends AppCompatActivity {
     private User applicant;
     private Book requested_book;
     private String loanRef;
+    private User myUser;
+    private MyAtomicCounter myAtomicCounter;
+    private String requestType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,91 +53,137 @@ public class ShowRequest extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.request_book_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         loanRef = getIntent().getStringExtra("loanRef");
-        if(loanRef.equals("")){
+        myUser = new User((UserWrapper) getIntent().getParcelableExtra("thisUser"));
+        requestType = getIntent().getStringExtra("requestType");
+        if(loanRef==null || loanRef.equals("") || myUser == null || requestType == null){
             Log.d(TAG, "Extras String loanref not found");
-            finish();
+            onBackPressed();
         }
+        myAtomicCounter = new MyAtomicCounter(4);
+        myAtomicCounter.setListener(new OnCounterChangeListener() {
+            @Override
+            public void onCounterReachZero() {
+                if(applicant!=null && owner!=null && requested_book!=null){
+                    fillViews();
+                }
+                else{
+                    Log.d(TAG,"Fail listener atomic counter");
+                    onBackPressed();
+                }
+            }
+        });
         db.collection("requests").document(loanRef)
                 .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 loan = documentSnapshot.toObject(Loan.class);
+                myAtomicCounter.decrement();
+                if(loan.getOwnerId().equals(myUser.getUsr_id())){
+                    db.collection("users").document(loan.getApplicantId())
+                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            applicant = documentSnapshot.toObject(User.class);
+                            myAtomicCounter.decrement();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(TAG, "Applicant "+loan.getApplicantId()+" not present");
+                            onBackPressed();
+                        }
+                    });
+                    owner = myUser;
+                    myAtomicCounter.decrement();
+                }
+                else{
+                    db.collection("users").document(loan.getOwnerId())
+                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            owner = documentSnapshot.toObject(User.class);
+                            myAtomicCounter.decrement();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(TAG, "Owner "+loan.getOwnerId()+" not present");
+                            onBackPressed();
+                        }
+                    });
+                    applicant = myUser;
+                    myAtomicCounter.decrement();
+                }
+                db.document(loan.getBookId())
+                        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        requested_book = documentSnapshot.toObject(Book.class);
+                        myAtomicCounter.decrement();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Requested book "+loan.getBookId()+" not present");
+                        onBackPressed();
+                    }
+                });
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Loan not present");
-                finish();
+                Log.d(TAG, "Loan not present");
+                onBackPressed();
             }
         });
-
-        db.collection("users").document(loan.getOwnerId())
-                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                owner = documentSnapshot.toObject(User.class);
-            }
-        });
-
-        db.collection("users").document(loan.getApplicantId())
-                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                applicant = documentSnapshot.toObject(User.class);
-            }
-        });
-
-        db.collection("books").document(loan.getBookId())
-                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                requested_book = documentSnapshot.toObject(Book.class);
-            }
-        });
-
-
-        fillViews();
     }
 
     private void fillViews(){
         TextView tv = findViewById(R.id.request_book_message);
-        if(loan.getRequestText().length()>0){
-            tv.setText(loan.getRequestText());
-        }
+        tv.setText(loan.getRequestText());
         tv.setEnabled(false);
-
-        if(MainActivity.thisUser!=null){
-            if(MainActivity.thisUser.getUsr_id().equals(loan.getOwnerId())){
-                tv = findViewById(R.id.request_book_label_owner);
-                tv.setText(R.string.show_request_applicant);
-                tv = findViewById(R.id.request_book_owner);
-                tv.setText(applicant.getUsr_name());
-                tv.setTextColor(Color.BLUE);
-                tv.setClickable(true);
-                UserWrapper userWrapper = new UserWrapper(applicant);
-                tv.setOnClickListener(view -> {
-                    Intent toInfoUser = new Intent(ShowRequest.this, InfoUser.class);
-                    toInfoUser.putExtra("otherUser", userWrapper);
-                    startActivity(toInfoUser);
-                });
-
-                setButtonsParametersOwner();
+        ImageView iw = findViewById(R.id.request_book_main_image);
+        tv = findViewById(R.id.request_book_title);
+        tv.setText(requested_book.getBook_title());
+        GlideApp.with(this).load(requested_book.getBook_thumbnail_url())
+                .placeholder(R.drawable.ic_thumbnail_cover_book).into(iw);
+        if(myUser.getUsr_id().equals(loan.getOwnerId())){
+            tv = findViewById(R.id.request_book_label_owner);
+            tv.setText(R.string.show_request_applicant);
+            tv = findViewById(R.id.request_book_owner);
+            tv.setText(applicant.getUsr_name());
+            tv.setTextColor(Color.BLUE);
+            tv.setClickable(true);
+            tv.setOnClickListener(view -> {
+                Intent toInfoUser = new Intent(ShowRequest.this, InfoUser.class);
+                toInfoUser.putExtra("otherUser", new UserWrapper(applicant));
+                startActivity(toInfoUser);
+            });
+            setButtonsParametersOwner();
+            tv = findViewById(R.id.request_book_status);
+            DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            if(requestType.equals("archived")==false) {
+                if (loan.getRequestStatus()) { //A
+                    if (loan.getExchangedApplicant()) { //B
+                        if (loan.getExchangedOwner()) { //C
+                            tv.setText(R.string.request_book_status_on_loan);
+                        } else {
+                            tv.setText(R.string.request_book_status_exchg_confirm);
+                        }
+                    } else {
+                        tv.setText(R.string.request_book_status_exchg_applicant);
+                    }
+                } else {
+                    tv.setText(R.string.request_book_status_pending);
+                }
             }
             else{
-                tv = findViewById(R.id.request_book_owner);
-                tv.setText(owner.getUsr_name());
-                tv.setTextColor(Color.BLUE);
-                tv.setClickable(true);
-                UserWrapper userWrapper = new UserWrapper(owner);
-                tv.setOnClickListener(view -> {
-                    Intent toInfoUser = new Intent(ShowRequest.this, InfoUser.class);
-                    toInfoUser.putExtra("otherUser", userWrapper);
-                    startActivity(toInfoUser);
-                });
-
-                setButtonsParametersApplicant();
+                tv.setText(R.string.request_book_status_closed);
+                tv = findViewById(R.id.request_book_start_date);
+                tv.setText(formatter.format(loan.getStartDate()));
+                tv = findViewById(R.id.request_book_label_start_date);
+                tv.setText(R.string.request_book_label_start_date_loan);
             }
         }
         else{
@@ -140,25 +191,21 @@ public class ShowRequest extends AppCompatActivity {
             tv.setText(owner.getUsr_name());
             tv.setTextColor(Color.BLUE);
             tv.setClickable(true);
-            UserWrapper userWrapper = new UserWrapper(owner);
             tv.setOnClickListener(view -> {
                 Intent toInfoUser = new Intent(ShowRequest.this, InfoUser.class);
-                toInfoUser.putExtra("otherUser", userWrapper);
+                toInfoUser.putExtra("otherUser", new UserWrapper(owner));
                 startActivity(toInfoUser);
             });
+            setButtonsParametersApplicant();
         }
-
-        tv.findViewById(R.id.request_book_title);
-        tv.setText(loan.getBookTitle());
-
-        if(requested_book.getBook_thumbnail_url().length()>0){
-            ImageView iw = findViewById(R.id.request_book_main_image);
-            GlideApp.with(this).load(requested_book.getBook_thumbnail_url()).placeholder(R.drawable.ic_thumbnail_cover_book).into(iw);
+        switch (requestType) {
+            case "sent":
+                break;
+            case "received":
+                break;
+            case "archived":
+                break;
         }
-
-
-
-
     }
 
     private void setButtonsParametersOwner(){
@@ -271,11 +318,5 @@ public class ShowRequest extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        fillViews();
     }
 }
