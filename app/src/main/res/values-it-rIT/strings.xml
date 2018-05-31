@@ -1,6 +1,8 @@
 <resources>
+
     <!--Application-->
     <string name="app_name">Book Circle</string>
+
 
     <!--Profile-->
     <string name="profile_photo">Foto profilo</string>
@@ -13,10 +15,12 @@
     <string name="show_profile_books">Mostra libri</string>
     <string name="show_profile_send_message">Invia messaggio</string>
 
+
     <!--Login Related-->
     <string name="login_getposition">Ottieni</string>
     <string name="login_welcomeBack">Bentornato</string>
     <string name="login_welcome">Benvenuto</string>
+
 
     <!--Login-->
     <string name="no_internet">Nessuna connessione ad internet</string>
@@ -25,6 +29,7 @@
     <string name="Location_label">Ottieni la tua posizione</string>
     <string name="Location">Posizione</string>
     <string name="Error_position">Nessuna posizione inserita</string>
+
 
     <!--Activities Title -->
     <string name="title_activity_edit">Modifica profilo</string>
@@ -35,26 +40,22 @@
     <string name="title_activity_info_user">Informazioni utente</string>
     <string name="title_activity_generic_info">Dettagli libro</string>
     <string name="title_activity_settings">Impostazioni</string>
+    <string name="title_activity_book_found">Libri trovati</string>
+    <string name="title_activity_book_generic_info">Informazioni libro</string>
+    <string name="title_activity_fullscreen">Schermo intero</string>
+    <string name="title_activity_list_of_chat">Lista delle chat</string>
+
 
     <!--Photo-->
     <string name="photo_from_gallery">Seleziona una foto dalla galleria</string>
     <string name="photo_from_camera">Scatta una foto dalla fotocamera</string>
     <string name="photo_remove">Rimuovi foto</string>
 
-    <!--Book condition-->
-    <string-array name="book_conditions">
-        <item>Seleziona condizioni libro </item>
-        <item>Eccellente</item>
-        <item>Buono</item>
-        <item>Scarso</item>
-    </string-array>
+
+    <!--Home related -->
+    <string name="fragment_home_distance">Distanza:</string>
 
 
-    <string-array name="setting_language">
-        <item>Italiano</item>
-        <item>English</item>
-    </string-array>
-    <string name="select_lang">Lingua</string>
     <!--Navigation Drawer-->
     <string name="navigation_drawer_open">Apri menu laterale</string>
     <string name="navigation_drawer_close">Chiudi menu laterale</string>
@@ -67,11 +68,15 @@
     <string name="nav_element_mylibrary">La mia libreria</string>
     <string name="nav_element_logOut">Esci</string>
 
+
     <!--Fragment Related-->
     <string name="top_books">Home</string>
     <string name="my_library">Libreria</string>
     <string name="lent_books">Prestati</string>
     <string name="borrowed_books">In prestito</string>
+    <string name="found_books">Risultati</string>
+    <string name="search_books">Ricerca</string>
+
 
     <!--SearchBook Related-->
     <string name="search_book_text_title">Titolo</string>
@@ -80,15 +85,9 @@
     <string name="search_book_text_author">Autore</string>
     <string name="search_book_button_text">Cerca</string>
     <string name="search_book_progress_bar_text">Sto cercando...</string>
-    <string name="found_books">Risultati</string>
-    <string name="search_books">Ricerca</string>
     <string name="search_books_button_cv">Vedi info</string>
     <string name="search_book_nothing_inserted">Per favore inserisci qualcosa</string>
 
-
-
-    <!--Home related -->
-    <string name="fragment_home_distance">Distanza:</string>
 
     <!--InfoBook Related-->
     <string name="info_book_label_title">Titolo:</string>
@@ -111,7 +110,8 @@
     <string name="info_book_request_this_book">Richiedi</string>
     <string name="info_book_delete">Elimina</string>
 
-    <!--Barcode Related-->
+
+    <!--add book Related-->
     <string name="add_book_read_ISBN">Cerca dettagli ISBN</string>
     <string name="read_barcode">Leggi Barcode</string>
     <string name="add_a_book">Aggiungi un libro</string>
@@ -131,9 +131,24 @@
     <string name="add_book_title_not_found">Il libro non è stato trovato</string>
     <string name="add_book_added">Libro aggiunto con successo</string>
 
-    <!-- Facebook login -->
-    <string name="facebook_application_id" translatable="false">207778776488778</string>
-    <string name="facebook_login_protocol_scheme" translatable="false">fb207778776488778</string>
+
+    <!--Book condition-->
+    <string-array name="book_conditions">
+        <item>Seleziona condizioni libro </item>
+        <item>Eccellente</item>
+        <item>Buono</item>
+        <item>Scarso</item>
+    </string-array>
+
+
+    <!--Setting language related-->
+    <string-array name="setting_language">
+        <item>Italiano</item>
+        <item>English</item>
+    </string-array>
+    <string name="select_lang">Lingua</string>
+
+
     <!--Fragment Top fab menu items -->
     <string name="top_frag_floating_action_menu_ISBN">Ricerca per ISBN</string>
     <string name="top_frag_floating_action_menu_category">Ricerca per categoria</string>
@@ -141,33 +156,56 @@
     <string name="top_frag_floating_action_menu_author">Ricerca per autore</string>
     <string name="top_frag_floating_action_menu_search">Indietro</string>
     <string name="title">Cerca</string>
+
+
+    <!-- Facebook login -->
+    <string name="facebook_application_id" translatable="false">207778776488778</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb207778776488778</string>
+
+
+    <!--Chat Related -->
     <string name="send_your_message">Messaggio di testo</string>
     <string name="mychat">Le mie chat</string>
     <string name="chat_updated">Aggiornata la lista della chat!</string>
-    <string name="cancel">annulla</string>
     <string name="chat_photo">Foto</string>
-    <string name="Updating">Aggiornamento..</string>
 
-    <!--RequestBook Related -->
+
+    <!--request book e show request related-->
     <string name="request_book_message_to_owner">Aggiungi un messaggio</string>
-    <string name="send">Invia</string>
     <string name="request_book_sent">Richiesta inviata!</string>
     <string name="requests_book_sent">Richieste inviate</string>
     <string name="requests_book_received">Richieste ricevute</string>
-    <string name="requests_archive">Archivio richieste</string>
+    <string name="requests_book_archive">Archivio richieste</string>
+    <string name="request_book_applicant">Richiedente</string>
+    <string name="request_book_accept_request">Accetta richiesta</string>
+    <string name="request_book_start_date">Data richiesta:</string>
+    <string name="request_book_status">Stato:</string>
+    <string name="request_book_status_pending">In attesa</string>
+    <string name="request_book_status_exchg_applicant">In attesa del richiedente</string>
+    <string name="request_book_status_exchg_confirm">Da confermare</string>
+    <string name="request_book_status_on_loan">In prestito</string>
+    <string name="request_book_status_closed">Chiuso</string>
+    <string name="request_book_label_start_date_loan">Prestito iniziato:</string>
+    <string name="request_book_archived">Archiviata</string>
+    <string name="request_book_label_end_date">Data chiusura</string>
+    <string name="request_book_status_request_accepted">Richiesta Accettata</string>
+    <string name="request_book_wait_owner">Aspetta il proprietario</string>
+    <string name="request_book_applicant_has_sent_request">IL richiedente ha inviato la richiesta</string>
+    <string name="request_book_waiting_for_owner_to_accept">Aspetta che il proprietario accetti</string>
+    <string name="request_book_waiting_for_applicant_exchange_confirmation">Aspetta la conferma dello scambio del richiedente</string>
+    <string name="request_book_confirm_exchange">Conferma scambio</string>
+    <string name="request_book_applicant_has_confirmed_exchange">IL richedente ha confermato lo scambio</string>
+    <string name="request_book_waiting_for_owner_exchange_confirmation">Aspetta la conferma dello scambio del proprietario</string>
+    <string name="request_book_start_date_loan">Data inizio prestito</string>
+    <string name="request_book_close_loan">Chiudi prestito</string>
 
-    <!--ShowRequest Related-->
-    <string name="show_request_applicant">Richiedente</string>
-    <string name="show_request_accept_request">Accetta richiesta</string>
-    <string name="show_request_accepted_request">Richiesta Accettata</string>
-    <string name="show_request">Richiesta già accettata</string>
-    <string name="request_book_start_date">Request date:</string>
-    <string name="request_book_status">Status:</string>
-    <string name="request_book_status_pending">Pending</string>
-    <string name="request_book_status_exchg_applicant">Waiting for applicant</string>
-    <string name="request_book_status_exchg_confirm">To confirm</string>
-    <string name="request_book_status_on_loan">On loan</string>
-    <string name="request_book_status_closed">Closed</string>
-    <string name="request_book_label_start_date_loan">Loan started</string>
+    <!--Altro-->
+    <string name="Updating">Aggiornamento..</string>
+    <string name="cancel">annulla</string>
+    <string name="send">Invia</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="image_fullscreen">image_fullscreen</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

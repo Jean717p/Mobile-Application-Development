@@ -68,23 +68,23 @@ public class ShowRequest extends AppCompatActivity {
             public void onCounterReachZero() {
                 if(applicant!=null && owner!=null && requested_book!=null){
                     if(requestType.equals("archived")){
-                        //fillViewsArchived();
+                        fillViewsArchived();
                     }
                     else if(loan.getRequestStatus()){ //A
                         if(loan.getExchangedApplicant()){ //B
                             if(loan.getExchangedOwner()){ //C
-                                //fillViewLoan();
+                                fillViewLoan();
                             }
                             else{
-                                //fillViewPendingExchangeOwner();
+                                fillViewPendingExchangeOwner();
                             }
                         }
                         else{
-                            //fillViewsPendingExchangeApplicant();
+                            fillViewsPendingExchangeApplicant();
                         }
                     }
                     else{
-                        //fillViewsPendingRequest();
+                        fillViewsPendingRequest();
                     }
                 }
                 else{
@@ -159,6 +159,151 @@ public class ShowRequest extends AppCompatActivity {
         });
     }
 
+    private void fillViewsArchived(){
+        fillCommonViews();
+        TextView tv = findViewById(R.id.request_book_label_start_date);
+        tv.setText(R.string.request_book_label_start_date_loan);
+        tv = findViewById(R.id.request_book_status);
+        tv.setText(R.string.request_book_archived);
+        tv = findViewById(R.id.request_book_label_end_date_owner);
+        tv.setText(R.string.request_book_label_end_date);
+        tv.setVisibility(View.VISIBLE);
+        Button button = findViewById(R.id.request_book_cancel);
+        button.setVisibility(View.GONE);
+        button = findViewById(R.id.request_book_send);
+        button.setVisibility(View.GONE);
+    }
+    private void fillViewsPendingRequest(){
+        fillCommonViews();
+        Button acceptReq = findViewById(R.id.request_book_send);
+        TextView tv;
+        tv = findViewById(R.id.request_book_status);
+
+        if(myUser.getUsr_id().equals(loan.getOwnerId())){ //sono l'owner
+            tv.setText(R.string.request_book_applicant_has_sent_request);
+            acceptReq.setText(R.string.request_book_accept_request);
+            acceptReq.setOnClickListener(view -> {
+//                db.collection("requests").document(loanRef)
+//                        .update("requestStatus", true);
+//                acceptReq.setClickable(false);
+//                acceptReq.setText(R.string.show_request_wait_applicant);
+//                tv.setText(R.string.request_book_status_request_accepted);
+//                Snackbar.make(findViewById(R.id.request_book_send),
+//                        R.string.show_request_accepted_request, Snackbar.LENGTH_LONG).show();
+            });
+        }
+        else{ //sono l'applicant
+            tv.setText(R.string.request_book_waiting_for_owner_to_accept);
+            //acceptReq.setClickable(false);
+            //acceptReq.setText(R.string.request_book_wait_owner);
+            acceptReq.setVisibility(View.GONE);
+        }
+    }
+    private void fillViewsPendingExchangeApplicant() {
+        fillCommonViews();
+        Button acceptReq = findViewById(R.id.request_book_send);
+        TextView tv = findViewById(R.id.request_book_status);
+        //
+        if (myUser.getUsr_id().equals(loan.getOwnerId())) { //sono l'owner
+            //status pending aspetta l'applicant
+            tv.setText(R.string.request_book_waiting_for_applicant_exchange_confirmation);
+            acceptReq.setVisibility(View.GONE);
+
+        } else {//sono l'applicant
+            //conferma scambio
+            tv.setText(R.string.request_book_status_request_accepted);
+            acceptReq.setText(R.string.request_book_confirm_exchange);
+            acceptReq.setVisibility(View.VISIBLE);
+//            acceptReq.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    db.collection("requests").document(loanRef)
+//                            .update("exchangedApplicant", true);
+//                    Snackbar.make(findViewById(R.id.request_book_send),
+//                            R.string.show_request_accepted_request, Snackbar.LENGTH_LONG).show();
+//                    acceptReq.setClickable(false);
+//                    acceptReq.setText("Wait for owner");
+//                }
+//            });
+        }
+    }
+    private void fillViewPendingExchangeOwner(){
+        fillCommonViews();
+        TextView tv = findViewById(R.id.request_book_status);
+        Button acceptReq = findViewById(R.id.request_book_send);
+        if (myUser.getUsr_id().equals(loan.getOwnerId())) { //sono l'owner
+            acceptReq.setVisibility(View.VISIBLE);
+            acceptReq.setText(R.string.request_book_confirm_exchange);
+            tv.setText(R.string.request_book_applicant_has_confirmed_exchange);
+        }
+        else{ //sono l'applicant
+            acceptReq.setVisibility(View.GONE);
+            tv.setText(R.string.request_book_waiting_for_owner_exchange_confirmation);
+        }
+    }
+    private void fillViewLoan(){
+        fillCommonViews();
+        TextView tv = findViewById(R.id.request_book_status);
+        tv.setText(R.string.request_book_status_on_loan);
+        tv = findViewById(R.id.request_book_label_start_date);
+        tv.setText(R.string.request_book_start_date_loan);
+        Button btn = findViewById(R.id.request_book_send);
+        btn.setVisibility(View.VISIBLE);
+        btn.setText(R.string.request_book_close_loan);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: phase 3
+            }
+        });
+    }
+
+    private  void fillCommonViews(){
+        //Setto il messaggio, la thumbnail, il titolo del libro, il nome e il link al profilo dell'altro utente
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+        TextView tv = findViewById(R.id.request_book_message);
+        tv.setText(loan.getRequestText());
+        tv.setEnabled(false);
+        tv = findViewById(R.id.request_book_start_date);
+        if(loan.getStartDate()!=null){
+            tv.setText(formatter.format(loan.getStartDate()));
+        }
+        ImageView iw = findViewById(R.id.request_book_main_image);
+        tv = findViewById(R.id.request_book_title);
+        tv.setText(requested_book.getBook_title());
+        GlideApp.with(this).load(requested_book.getBook_thumbnail_url())
+                .placeholder(R.drawable.ic_thumbnail_cover_book).into(iw);
+
+        if(myUser.getUsr_id().equals(loan.getOwnerId())){
+            tv = findViewById(R.id.request_book_label_owner);
+            tv.setText(R.string.request_book_applicant);
+            tv = findViewById(R.id.request_book_owner);
+            tv.setText(applicant.getUsr_name());
+            tv.setTextColor(Color.BLUE);
+            tv.setClickable(true);
+            tv.setOnClickListener(view -> {
+                Intent toInfoUser = new Intent(ShowRequest.this, InfoUser.class);
+                toInfoUser.putExtra("otherUser", new UserWrapper(applicant));
+                startActivity(toInfoUser);
+            });
+        }
+
+        else{
+            tv = findViewById(R.id.request_book_owner);
+            tv.setText(owner.getUsr_name());
+            tv.setTextColor(Color.BLUE);
+            tv.setClickable(true);
+            tv.setOnClickListener(view -> {
+                Intent toInfoUser = new Intent(ShowRequest.this, InfoUser.class);
+                toInfoUser.putExtra("otherUser", new UserWrapper(owner));
+                startActivity(toInfoUser);
+            });
+        }
+
+
+    }
+
     private void fillViews(){
         TextView tv = findViewById(R.id.request_book_message);
         tv.setText(loan.getRequestText());
@@ -170,7 +315,7 @@ public class ShowRequest extends AppCompatActivity {
                 .placeholder(R.drawable.ic_thumbnail_cover_book).into(iw);
         if(myUser.getUsr_id().equals(loan.getOwnerId())){
             tv = findViewById(R.id.request_book_label_owner);
-            tv.setText(R.string.show_request_applicant);
+            tv.setText(R.string.request_book_applicant);
             tv = findViewById(R.id.request_book_owner);
             tv.setText(applicant.getUsr_name());
             tv.setTextColor(Color.BLUE);
@@ -232,7 +377,7 @@ public class ShowRequest extends AppCompatActivity {
 
         Button acceptReq = findViewById(R.id.request_book_send);
         if(loan.requestStatus == false) {
-            acceptReq.setText(R.string.show_request_accept_request);
+            acceptReq.setText(R.string.request_book_accept_request);
             acceptReq.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -242,17 +387,17 @@ public class ShowRequest extends AppCompatActivity {
                             .update("requestStatus", true);
 
                     Snackbar.make(findViewById(R.id.request_book_send),
-                            R.string.show_request_accepted_request, Snackbar.LENGTH_LONG).show();
+                            R.string.request_book_status_request_accepted, Snackbar.LENGTH_LONG).show();
                     acceptReq.setClickable(false);
-                    acceptReq.setText(R.string.show_request_wait_applicant);
+                    acceptReq.setText(R.string.request_book_status_exchg_applicant);
                 }
             });
         }
         if(loan.requestStatus == true){
             acceptReq.setClickable(false);
-            acceptReq.setText(R.string.show_request_wait_applicant);
+            acceptReq.setText(R.string.request_book_status_exchg_applicant);
             if(loan.exchangedApplicant==true){
-                acceptReq.setText("Confirm exchange");
+                acceptReq.setText(R.string.request_book_confirm_exchange);
                 acceptReq.setClickable(true);
                 acceptReq.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -262,7 +407,7 @@ public class ShowRequest extends AppCompatActivity {
                                 .update("exchangedOwner", true);
 
                         Snackbar.make(findViewById(R.id.request_book_send),
-                                R.string.show_request_accepted_request, Snackbar.LENGTH_LONG).show();
+                                R.string.request_book_status_request_accepted, Snackbar.LENGTH_LONG).show();
                         acceptReq.setClickable(false);
                         //TODO: fase 3
                     }
@@ -286,20 +431,20 @@ public class ShowRequest extends AppCompatActivity {
 
         if(loan.getRequestStatus()==false){
             acceptReq.setClickable(false);
-            acceptReq.setText("Wait for owner");
+            acceptReq.setText(R.string.request_book_wait_owner);
         }
 
         if(loan.getRequestStatus()==true){
-            acceptReq.setText("Confirm exchange");
+            acceptReq.setText(R.string.request_book_confirm_exchange);
             acceptReq.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     db.collection("requests").document(loanRef)
                             .update("exchangedApplicant", true);
                     Snackbar.make(findViewById(R.id.request_book_send),
-                            R.string.show_request_accepted_request, Snackbar.LENGTH_LONG).show();
+                            R.string.request_book_status_request_accepted, Snackbar.LENGTH_LONG).show();
                     acceptReq.setClickable(false);
-                    acceptReq.setText("Wait for owner");
+                    acceptReq.setText(R.string.request_book_wait_owner);
                     //TODO:fase 3
                 }
             });

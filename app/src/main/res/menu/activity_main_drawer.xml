@@ -27,7 +27,7 @@
         <item
             android:id="@+id/nav_request_archive"
             android:icon="@drawable/ic_chat_black_24dp"
-            android:title="@string/requests_archive" />
+            android:title="@string/requests_book_archive" />
         <!--<item
             android:id="@+id/nav_mylibrary"
             android:icon="@drawable/ic_local_library_black_24dp"
