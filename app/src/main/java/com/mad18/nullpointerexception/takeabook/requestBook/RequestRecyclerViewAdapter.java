@@ -107,8 +107,6 @@ class RequestRecyclerViewAdapter extends RecyclerView.Adapter<RequestRecyclerVie
 
                 }
             });
-
-
         }
 
     }
