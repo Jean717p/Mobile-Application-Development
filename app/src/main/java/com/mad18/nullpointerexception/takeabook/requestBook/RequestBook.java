@@ -122,7 +122,6 @@ public class RequestBook extends AppCompatActivity {
                 }
             });
             send.setVisibility(View.GONE);
-            textView.setEnabled(false);
             Snackbar.make(findViewById(R.id.request_book_send),
                     R.string.request_book_sent, Snackbar.LENGTH_LONG).show();
         });

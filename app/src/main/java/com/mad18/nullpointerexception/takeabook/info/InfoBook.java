@@ -221,11 +221,11 @@ public class InfoBook extends AppCompatActivity {
                 });
             }
             else{
-                tv2.setVisibility(View.INVISIBLE);
-                tv2.setHeight(0);
+                tv2.setVisibility(View.GONE);
+                //tv2.setHeight(0);
                 tv2 = findViewById(R.id.info_book_label_owner);
-                tv2.setVisibility(View.INVISIBLE);
-                tv2.setHeight(0);
+                tv2.setVisibility(View.GONE);
+                //tv2.setHeight(0);
             }
 
         });

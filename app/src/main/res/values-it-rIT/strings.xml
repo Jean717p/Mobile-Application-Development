@@ -109,6 +109,7 @@
     <string name="info_book_not_deleted">Ops errore! Il libro non è stato rimosso</string>
     <string name="info_book_modify_this_book">Modifica</string>
     <string name="info_book_request_this_book">Richiedi</string>
+    <string name="info_book_delete">Elimina</string>
 
     <!--Barcode Related-->
     <string name="add_book_read_ISBN">Cerca dettagli ISBN</string>
@@ -146,9 +147,17 @@
     <string name="cancel">annulla</string>
     <string name="chat_photo">Foto</string>
     <string name="Updating">Aggiornamento..</string>
+
+    <!--RequestBook Related -->
     <string name="request_book_message_to_owner">Aggiungi un messaggio</string>
     <string name="send">Invia</string>
     <string name="request_book_sent">Richiesta inviata</string>
-    <string name="info_book_delete">Delete</string>
+
+
+    <!--ShowRequest Related-->
+    <string name="show_request_applicant">Richiedente</string>
+    <string name="show_request_accept_request">Accetta richiesta</string>
+    <string name="show_request_accepted_request">Richiesta Accettata</string>
+    <string name="show_request">Richiesta già accettata</string>
 
 </resources>

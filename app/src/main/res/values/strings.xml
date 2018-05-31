@@ -167,5 +167,10 @@
     <string name="send">Send</string>
     <string name="request_book_sent">Request sent</string>
     <string name="info_book_delete">Delete</string>
+    <string name="show_request_applicant">Applicant</string>
+    <string name="show_request_accept_request">Accept Request</string>
+    <string name="show_request_accepted_request">Request Accepted</string>
+    <string name="show_request">Request already accepted</string>
+    <string name="show_request_wait_applicant">Wait for applicant</string>
 
 </resources>
