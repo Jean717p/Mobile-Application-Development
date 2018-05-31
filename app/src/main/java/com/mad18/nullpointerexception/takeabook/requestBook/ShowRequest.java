@@ -65,7 +65,25 @@ public class ShowRequest extends AppCompatActivity {
             @Override
             public void onCounterReachZero() {
                 if(applicant!=null && owner!=null && requested_book!=null){
-                    fillViews();
+                    if(requestType.equals("archived")){
+                        //fillViewsArchived();
+                    }
+                    else if(loan.getRequestStatus()){ //A
+                        if(loan.getExchangedApplicant()){ //B
+                            if(loan.getExchangedOwner()){ //C
+                                //fillViewLoan();
+                            }
+                            else{
+                                //fillViewPendingExchangeOwner();
+                            }
+                        }
+                        else{
+                            //fillViewsPendingExchangeApplicant();
+                        }
+                    }
+                    else{
+                        //fillViewsPendingRequest();
+                    }
                 }
                 else{
                     Log.d(TAG,"Fail listener atomic counter");
