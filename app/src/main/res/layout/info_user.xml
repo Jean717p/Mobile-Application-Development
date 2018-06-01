@@ -79,7 +79,7 @@
                 android:id="@+id/info_user_username_cv"
                 android:clickable="true"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/info_user_button_message"
                 android:layout_margin="8dp"
                 >
@@ -117,7 +117,7 @@
             <android.support.v7.widget.CardView
                 android:id="@+id/info_user_city_cv"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
                 android:clickable="true"
                 app:layout_constraintTop_toBottomOf="@id/info_user_username_cv"
                 android:layout_margin="8dp"
@@ -160,7 +160,7 @@
             <android.support.v7.widget.CardView
                 android:id="@+id/info_user_about_cv"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="wrap_content"
                 android:clickable="true"
                 app:layout_constraintTop_toBottomOf="@id/info_user_city_cv"
                 android:layout_margin="8dp"
@@ -200,7 +200,7 @@
                 android:clickable="true"
                 android:id="@+id/info_user_library_cv"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/info_user_about_cv"
                 android:layout_margin="8dp">
                 <RelativeLayout

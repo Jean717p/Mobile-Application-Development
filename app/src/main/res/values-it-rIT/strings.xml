@@ -178,7 +178,8 @@
     <string name="requests_book_archive">Archivio richieste</string>
     <string name="request_book_applicant">Richiedente</string>
     <string name="request_book_accept_request">Accetta richiesta</string>
-    <string name="request_book_start_date">Data richiesta:</string>
+    <string name="request_book_start_date">Data richiesta</string>
+    <string name="request_book_book_title">Titolo del libro</string>
     <string name="request_book_status">Stato:</string>
     <string name="request_book_status_pending">In attesa</string>
     <string name="request_book_status_exchg_applicant">In attesa del richiedente</string>

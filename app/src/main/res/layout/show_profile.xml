@@ -64,7 +64,7 @@
                 android:id="@+id/showProfile_username_cv"
                 android:clickable="true"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/show_profile_rating_bar"
                 android:layout_margin="8dp"
                 >
@@ -102,7 +102,7 @@
             <android.support.v7.widget.CardView
                 android:id="@+id/show_profile_city_cv"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
                 android:clickable="true"
                 app:layout_constraintTop_toBottomOf="@id/showProfile_username_cv"
                 android:layout_margin="8dp"
@@ -144,7 +144,7 @@
             <android.support.v7.widget.CardView
                 android:id="@+id/show_profile_email_cv"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
                 android:clickable="true"
                 app:layout_constraintTop_toBottomOf="@id/show_profile_city_cv"
                 android:layout_margin="8dp"
@@ -183,7 +183,7 @@
             <android.support.v7.widget.CardView
                 android:id="@+id/show_profile_about_cv"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="wrap_content"
                 android:clickable="true"
                 app:layout_constraintTop_toBottomOf="@id/show_profile_email_cv"
                 android:layout_margin="8dp"
@@ -207,7 +207,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
                         app:layout_constraintBaseline_toBaselineOf="@id/show_profile_title_about"
                         app:layout_constraintEnd_toStartOf="@id/show_profile_title_about"
                         app:layout_constraintHorizontal_bias="0.0"
@@ -223,7 +225,7 @@
                 android:clickable="true"
                 android:id="@+id/show_profile_library_cv"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/show_profile_about_cv"
                 android:layout_margin="8dp">
                 <RelativeLayout

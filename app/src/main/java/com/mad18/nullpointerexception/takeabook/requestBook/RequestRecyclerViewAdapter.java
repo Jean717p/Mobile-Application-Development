@@ -54,7 +54,7 @@ class RequestRecyclerViewAdapter extends RecyclerView.Adapter<RequestRecyclerVie
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
         Loan loan = mData.get(position);
         if(thisUser.getUsr_id().equals(loan.getOwnerId())){
             holder.tv_loan_applicant_name.setText(loan.getApplicantName());
@@ -62,35 +62,37 @@ class RequestRecyclerViewAdapter extends RecyclerView.Adapter<RequestRecyclerVie
                 holder.tv_loan_request_end_date.setText(formatter.format(loan.getEndLoanOwner()));
             }
             if(loan.getExchangedOwner()){
-                //holder.iw_loan_request_status.setMaxHeight(0);
-                //holder.iw_loan_request_status.setMaxWidth(0);
+                holder.iw_loan_request_status.setMaxHeight(0);
+                holder.iw_loan_request_status.setMaxWidth(0);
+                holder.iw_loan_request_status.setImageResource(R.drawable.ic_hand_shake);
             }
             else if(loan.getRequestStatus()) { //A
                 if (loan.getExchangedApplicant()) { //B
-                    //holder.iw_loan_request_status.setImageResource(R.drawable.do_action);
+                    holder.iw_loan_request_status.setImageResource(R.drawable.ic_notification);
                 } else {
-                    //holder.iw_loan_request_status.setImageResource(R.drawable.clockpending);
+                    holder.iw_loan_request_status.setImageResource(R.drawable.ic_clock_pending);
                 }
             }
             else{
-                //holder.iw_loan_request_status.setImageResource(R.drawable.do_action);
+                holder.iw_loan_request_status.setImageResource(R.drawable.ic_notification);
             }
         }
         else{
             holder.tv_loan_applicant_name.setText(loan.getOwnerName());
             if(loan.getExchangedOwner()){
-                //holder.iw_loan_request_status.setMaxHeight(0);
-                //holder.iw_loan_request_status.setMaxWidth(0);
+                holder.iw_loan_request_status.setMaxHeight(0);
+                holder.iw_loan_request_status.setMaxWidth(0);
+                holder.iw_loan_request_status.setImageResource(R.drawable.ic_hand_shake);
             }
             else if(loan.getRequestStatus()) { //A
                 if (loan.getExchangedApplicant()) { //B
-                    //holder.iw_loan_request_status.setImageResource(R.drawable.clockpending);
+                    holder.iw_loan_request_status.setImageResource(R.drawable.ic_clock_pending);
                 } else {
-                    //holder.iw_loan_request_status.setImageResource(R.drawable.do_action);
+                    holder.iw_loan_request_status.setImageResource(R.drawable.ic_notification);
                 }
             }
             else{
-                //holder.iw_loan_request_status.setImageResource(R.drawable.clock_pending);
+                holder.iw_loan_request_status.setImageResource(R.drawable.ic_clock_pending);
             }
         }
         holder.tv_loan_request_start_date.setText(formatter.format(loan.getStartDate()));
@@ -116,7 +118,7 @@ class RequestRecyclerViewAdapter extends RecyclerView.Adapter<RequestRecyclerVie
         TextView tv_loan_book_title;
         TextView tv_loan_request_end_date;
         ImageView iw_loan_book_thumbnail;
-        //ImageView iw_loan_request_status;
+        ImageView iw_loan_request_status;
         CardView cardView;
 
         MyViewHolder(View itemView) {
@@ -126,7 +128,7 @@ class RequestRecyclerViewAdapter extends RecyclerView.Adapter<RequestRecyclerVie
             tv_loan_book_title = itemView.findViewById(R.id.request_loan_cv_book_title);
             tv_loan_request_end_date = itemView.findViewById(R.id.request_loan_cv_end_date);
             iw_loan_book_thumbnail = itemView.findViewById(R.id.request_loan_cv_book_thumbnail);
-            //iw_loan_request_status = itemView.findViewById(R.id.request_loan_cv_status_icon);
+            iw_loan_request_status = itemView.findViewById(R.id.request_loan_cv_status_icon);
             cardView = (CardView) itemView.findViewById(R.id.request_loan_card_view);
         }
 

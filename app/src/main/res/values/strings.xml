@@ -178,7 +178,7 @@
     <string name="requests_book_archive">Requests archive</string>
     <string name="request_book_applicant">Applicant</string>
     <string name="request_book_accept_request">Accept request</string>
-    <string name="request_book_start_date">Request date:</string>
+    <string name="request_book_start_date">Request date</string>
     <string name="request_book_status">Status:</string>
     <string name="request_book_status_pending">Pending</string>
     <string name="request_book_status_exchg_applicant">Waiting for applicant</string>
@@ -221,6 +221,8 @@
     <string name="request_review_write">Write your review</string>
     <string name="request_review_review">Review</string>
     <string name="request_review_no_rating">Please insert also a rating</string>
+    <string name="start_date">Start date</string>
+    <string name="request_book_book_title">Book title</string>
 
 
 </resources>
