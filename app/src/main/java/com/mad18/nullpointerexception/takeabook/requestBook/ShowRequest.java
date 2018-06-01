@@ -222,8 +222,6 @@ public class ShowRequest extends AppCompatActivity {
         else{ //sono l'applicant
             tv.setText(R.string.request_book_waiting_for_owner_to_accept);
             acceptReq.setVisibility(View.GONE);
-//            acceptReq.setClickable(false);
-//            acceptReq.setText(R.string.request_book_waiting_for_owner_to_accept);
         }
     }
     private void fillViewsPendingExchangeApplicant() {
@@ -298,7 +296,7 @@ public class ShowRequest extends AppCompatActivity {
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Dialog box Are u sure????
+                    //TODO: Dialog box Are u sure????
                     TextView textView = findViewById(R.id.request_book_status);
                     Button button = findViewById(R.id.request_book_send);
                     button.setVisibility(View.GONE);
@@ -323,7 +321,7 @@ public class ShowRequest extends AppCompatActivity {
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Dialog box Are u sure????
+                    //TODO: Dialog box Are u sure????
                     TextView textView = findViewById(R.id.request_book_status);
                     Button button = findViewById(R.id.request_book_send);
                     button.setVisibility(View.GONE);
@@ -360,6 +358,13 @@ public class ShowRequest extends AppCompatActivity {
         GlideApp.with(this).load(requested_book.getBook_thumbnail_url())
                 .placeholder(R.drawable.ic_thumbnail_cover_book).into(iw);
         if(myUser.getUsr_id().equals(loan.getOwnerId())){
+            if(loan.getEndLoanOwner()!=null){
+                tv = findViewById(R.id.request_book_end_date_owner);
+                tv.setText(formatter.format(loan.getEndLoanOwner()));
+                tv.setVisibility(View.VISIBLE);
+                tv = findViewById(R.id.request_book_label_end_date_owner);
+                tv.setVisibility(View.VISIBLE);
+            }
             tv = findViewById(R.id.request_book_label_owner);
             tv.setText(R.string.request_book_applicant);
             tv = findViewById(R.id.request_book_owner);
@@ -373,6 +378,13 @@ public class ShowRequest extends AppCompatActivity {
             });
         }
         else{
+            if(loan.getEndLoanApplicant()!=null){
+                tv = findViewById(R.id.request_book_end_date_owner);
+                tv.setText(formatter.format(loan.getEndLoanApplicant()));
+                tv.setVisibility(View.VISIBLE);
+                tv = findViewById(R.id.request_book_label_end_date_owner);
+                tv.setVisibility(View.VISIBLE);
+            }
             tv = findViewById(R.id.request_book_owner);
             tv.setText(owner.getUsr_name());
             tv.setTextColor(Color.BLUE);
@@ -388,29 +400,38 @@ public class ShowRequest extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //TODO : DIALOG BOX ARE U SURE????
+                DocumentReference docLoanRef = db.collection("requests").document(loanRef);
+                DocumentReference loanOwner = db.collection("users").document(loan.getOwnerId())
+                        .collection("requests").document(loanRef);
+                DocumentReference loanApplicant = db.collection("users").document(loan.getApplicantId())
+                        .collection("requests").document(loanRef);
                 if(loan.getExchangedOwner()==false){
-                    DocumentReference loanOwner = db.collection("users").document(loan.getOwnerId())
-                            .collection("requests").document(loanRef);
                     loanOwner.delete();
-                    DocumentReference loanApplicant = db.collection("users").document(loan.getApplicantId())
-                            .collection("requests").document(loanRef);
                     loanApplicant.delete();
-                    DocumentReference docLoanRef = db.collection("requests").document(loanRef);
                     docLoanRef.delete();
                 }
                 else{
                     if(myUser.getUsr_id().equals(owner.getUsr_id())){
-                        DocumentReference loanOwner = db.collection("users").document(loan.getOwnerId())
-                                .collection("requests").document(loanRef);
                         loanOwner.delete();
+                        if(loan.getEndLoanApplicant() != null){
+                            docLoanRef.update("endLoanOwner",null);
+                        }
+                        else{
+                            docLoanRef.delete();
+                        }
                     }
                     else{
-                        DocumentReference loanApplicant = db.collection("users").document(loan.getApplicantId())
-                                .collection("requests").document(loanRef);
                         loanApplicant.delete();
+                        if(loan.getEndLoanOwner() != null){
+                            docLoanRef.update("endLoanApplicant",null);
+                        }
+                        else{
+                            docLoanRef.delete();
+                        }
                     }
                 }
                 setResult(RESULT_OK);
+                overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
                 finish();
             }
         });
