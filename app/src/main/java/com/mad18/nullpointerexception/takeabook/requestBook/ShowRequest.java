@@ -540,22 +540,4 @@ public class ShowRequest extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-//    private AlertDialog AskOptionSure( String dbtext)
-//    {
-//        AlertDialog myQuittingDialogBox = new AlertDialog.Builder(ShowRequest.this)
-//                //set message, title, and icon
-//                .setTitle(R.string.request_book_accept_request)
-//                .setMessage(R.string.sure_question)
-//                .setIcon(R.drawable.ic_done_white_24px)
-//                .setPositiveButton(R.string.affermative_response, (dialog, whichButton) -> {
-//                    //your code
-//
-//                    dialog.dismiss();
-//                })
-//                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
-//                .show();
-//        return myQuittingDialogBox;
-//
-//    }
 }

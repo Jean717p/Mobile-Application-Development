@@ -229,37 +229,36 @@ public class InfoBook extends AppCompatActivity {
 
     private void DeleteBook(Book bookToDelete) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("books").document(bookToDelete.getBook_id())
-                .delete().addOnSuccessListener(aVoid -> {
-                    Log.d("delete","deleted from books");
-                    DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(bookToDelete.getBook_userid());
-                    docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            User owner = documentSnapshot.toObject(User.class);
-                            owner.getUsr_books().remove(bookToDelete.getBook_id());
-                            docRef.update("usr_books",owner.getUsr_books(), SetOptions.merge());
-                        }
-                    });
-                    List<String> x = new LinkedList<String>(bookToDelete.getBook_photo_list().keySet());
-                    if(bookToDelete.getBook_photo_list().keySet().size() == 0) {
+        db.document(bookToDelete.getBook_id()).delete().addOnSuccessListener(aVoid -> {
+                Log.d("delete","deleted from books");
+                DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(bookToDelete.getBook_userid());
+                docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        User owner = documentSnapshot.toObject(User.class);
+                        owner.getUsr_books().remove(bookToDelete.getBook_id());
+                        docRef.update("usr_books",owner.getUsr_books(), SetOptions.merge());
+                    }
+                });
+                List<String> x = new LinkedList<String>(bookToDelete.getBook_photo_list().keySet());
+                if(bookToDelete.getBook_photo_list().keySet().size() == 0) {
+                    Intent bookRemovedintent = new Intent();
+                    bookRemovedintent.putExtra("book_removed", new BookWrapper(bookToDelete));
+                    setResult(BOOK_EFFECTIVELY_REMOVED,bookRemovedintent);
+                    finish();
+                }
+                for (int i = 0; i < bookToDelete.getBook_photo_list().size(); i++) {
+                    StorageReference mImageRef = FirebaseStorage.getInstance().getReference(x.get(i));
+                    mImageRef.delete().addOnSuccessListener(aVoid1 -> {
+                        // File deleted successfully
+                        Log.d("delete", "deleted photo");
                         Intent bookRemovedintent = new Intent();
                         bookRemovedintent.putExtra("book_removed", new BookWrapper(bookToDelete));
                         setResult(BOOK_EFFECTIVELY_REMOVED,bookRemovedintent);
                         finish();
-                    }
-                    for (int i = 0; i < bookToDelete.getBook_photo_list().size(); i++) {
-                        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(x.get(i));
-                        mImageRef.delete().addOnSuccessListener(aVoid1 -> {
-                            // File deleted successfully
-                            Log.d("delete", "deleted photo");
-                            Intent bookRemovedintent = new Intent();
-                            bookRemovedintent.putExtra("book_removed", new BookWrapper(bookToDelete));
-                            setResult(BOOK_EFFECTIVELY_REMOVED,bookRemovedintent);
-                            finish();
-                        });
-                    }
-                });
+                    });
+                }
+            });
     }
 
     @Override
@@ -353,7 +352,7 @@ public class InfoBook extends AppCompatActivity {
         switch (requestCode){
             case REQUEST_BOOK:
                 if(resultCode == RESULT_OK){
-                    Snackbar.make(findViewById(R.id.request_book_send),
+                    Snackbar.make(findViewById(R.id.info_book_ISBN),
                             R.string.request_book_sent, Snackbar.LENGTH_LONG).show();
                 }
                 break;
