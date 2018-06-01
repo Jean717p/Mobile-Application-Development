@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,6 +24,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -58,19 +61,23 @@ public class InfoBook extends AppCompatActivity {
             R.id.info_book_editionYear, R.id.info_book_publisher, R.id.info_book_categories, R.id.info_book_description,
             R.id.info_book_pages};
 
-    BookWrapper bookToShowInfoOf;
+    private BookWrapper bookToShowInfoOf;
     private FirebaseAuth mAuth;
     private Menu menu;
     private LinearLayout horizontal_photo_list;
     private View horizontal_photo_list_element;
     private List<String> for_me;
     private User bookOwner;
-    SharedPreferences sharedPref;
+    private SharedPreferences sharedPref;
+    private Context context;
+    private AppCompatActivity myActivity;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
+        myActivity = this;
         setContentView(R.layout.info_book);
         Toolbar toolbar = findViewById(R.id.info_book_toolbar);
         setSupportActionBar(toolbar);
@@ -148,11 +155,21 @@ public class InfoBook extends AppCompatActivity {
         for (int i = 0; i < book.getBook_photo_list().size(); i++) {
             horizontal_photo_list_element = getLayoutInflater().inflate(R.layout.cell_in_image_list, null);
             ImageView imageView = (ImageView) horizontal_photo_list_element.findViewById(R.id.image_in_horizontal_list_cell);
-            horizontal_photo_list.addView(horizontal_photo_list_element);
             StorageReference mImageRef = FirebaseStorage.getInstance().getReference(for_me.get(i));
-            GlideApp.with(this).load(mImageRef)
-                    .placeholder(R.drawable.ic_thumbnail_cover_book).into(imageView);
-            ImageViewPopUpHelper.enablePopUpOnClick(InfoBook.this,imageView);
+            GlideApp.with(context).asDrawable().load(mImageRef).into(new SimpleTarget<Drawable>(SimpleTarget.SIZE_ORIGINAL, SimpleTarget.SIZE_ORIGINAL) {
+                private ImageView iwPopUp;
+                @Override
+                public void onStart() {
+                    super.onStart();
+                    iwPopUp = imageView;
+                }
+                @Override
+                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                    ImageViewPopUpHelper.enablePopUpOnClick(myActivity,iwPopUp,resource);
+                }
+            });
+            GlideApp.with(context).load(mImageRef).placeholder(R.drawable.ic_thumbnail_cover_book).into(imageView);
+            horizontal_photo_list.addView(horizontal_photo_list_element);
         }
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference user_doc;

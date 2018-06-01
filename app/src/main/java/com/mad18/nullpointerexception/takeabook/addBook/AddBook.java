@@ -484,7 +484,7 @@ public class AddBook extends AppCompatActivity {
                         bookImg = (Bitmap) data.getExtras().get("data");
                         iw = globalViewImgElement;
                         if(iw!=null && bookImg != null) {
-                            bookImg = Bitmap.createScaledBitmap(bookImg,1024, 1024, true);
+                            bookImg = Bitmap.createScaledBitmap(bookImg,768, 1024, true);
                             iw.setImageBitmap(bookImg);
                             bookImgMap.put(globalImgPos,bookImg);
                         }
@@ -497,7 +497,7 @@ public class AddBook extends AppCompatActivity {
                             bookImg = MediaStore.Images.Media.getBitmap(this.getContentResolver(),selectedMediaUri);
                             iw = globalViewImgElement;
                             if(iw!=null && !bookImg.equals("")) {
-                                bookImg = Bitmap.createScaledBitmap(bookImg,1024, 1024, true);
+                                bookImg = Bitmap.createScaledBitmap(bookImg,768, 1024, true);
                                 iw.setImageBitmap(bookImg);
                                 bookImgMap.put(globalImgPos,bookImg);
                             }

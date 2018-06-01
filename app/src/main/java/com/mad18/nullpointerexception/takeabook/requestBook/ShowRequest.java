@@ -166,6 +166,18 @@ public class ShowRequest extends AppCompatActivity {
     }
 
     private void updateView(){
+        if(myUser.getUsr_id().equals(owner.getUsr_id())){
+            if(loan.getEndLoanOwner()!=null){
+                fillViewsArchived();
+                return;
+            }
+        }
+        else{
+            if(loan.getEndLoanApplicant()!=null){
+                fillViewsArchived();
+                return;
+            }
+        }
         if(loan.getRequestStatus()){ //A
             if(loan.getExchangedApplicant()){ //B
                 if(loan.getExchangedOwner()){ //C
@@ -268,13 +280,13 @@ public class ShowRequest extends AppCompatActivity {
                     TextView textView = findViewById(R.id.request_book_status);
                     Button button = findViewById(R.id.request_book_send);
                     button.setVisibility(View.GONE);
+                    db.collection("requests").document(loanRef)
+                            .update("exchangedOwner", true,
+                                    "startDate", Calendar.getInstance().getTime()
+                            );
                     textView.setText(R.string.request_book_status_on_loan);
                     Snackbar.make(findViewById(R.id.request_book_send),
                             R.string.request_book_status_on_loan, Snackbar.LENGTH_LONG).show();
-                    db.collection("requests").document(loanRef)
-                            .update("exchangeOwner", true,
-                                    "startDate", Calendar.getInstance().getTime()
-                            );
                 }
             });
         }
@@ -439,7 +451,9 @@ public class ShowRequest extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        loanListener.remove();
+        if(loanListener!=null){
+            loanListener.remove();
+        }
         super.onDestroy();
     }
 
