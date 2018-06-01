@@ -155,26 +155,28 @@ public class RequestBook extends AppCompatActivity {
                 onBackPressed();
                 return;
             }
-            AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
-                    //set message, title, and icon
-                    .setTitle(R.string.cancel)
-                    .setMessage(R.string.sure_question)
-                    .setIcon(R.drawable.ic_done_white_24px)
-                    .setPositiveButton(R.string.affermative_response, (dialog, whichButton) -> {
-                        //your code
-                        DocumentReference newReqRef = db.collection("requests").document(requestDocId);
-                        newReqRef.delete();
-                        DocumentReference reqMe = db.collection("users").document(user.getUsr_id())
-                                .collection("requests").document(requestDocId);
-                        reqMe.delete();
-                        DocumentReference reqOwner = db.collection("users").document(bookOwner.getUsr_id())
-                                .collection("requests").document(requestDocId);
-                        reqOwner.delete();
-                        onBackPressed();
-                        dialog.dismiss();
-                    })
-                    .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
-                    .show();
+            else{
+                AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
+                        //set message, title, and icon
+                        .setTitle(R.string.cancel)
+                        .setMessage(R.string.sure_question)
+                        .setIcon(R.drawable.ic_done_white_24px)
+                        .setPositiveButton(R.string.affermative_response, (dialog, whichButton) -> {
+                            //your code
+                            DocumentReference newReqRef = db.collection("requests").document(requestDocId);
+                            newReqRef.delete();
+                            DocumentReference reqMe = db.collection("users").document(user.getUsr_id())
+                                    .collection("requests").document(requestDocId);
+                            reqMe.delete();
+                            DocumentReference reqOwner = db.collection("users").document(bookOwner.getUsr_id())
+                                    .collection("requests").document(requestDocId);
+                            reqOwner.delete();
+                            onBackPressed();
+                            dialog.dismiss();
+                        })
+                        .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                        .show();
+            }
         });
     }
 }

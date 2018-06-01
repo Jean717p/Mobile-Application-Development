@@ -92,7 +92,12 @@ public class ShowRequest extends AppCompatActivity {
                                             finish();
                                         }
                                         loan = loanSnap.toObject(Loan.class);
-                                        updateView();
+                                        if(loan!=null) {
+                                            updateView();
+                                        }
+                                        if(loan==null){
+                                            finish();
+                                        }
                                     }
                                 });
                         updateView();

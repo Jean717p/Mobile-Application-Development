@@ -126,7 +126,7 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-light"
-                android:layout_below="@id/request_book_label_start_date"
+                android:layout_below="@id/request_book_start_date"
                 android:visibility="invisible"
                 />
             <TextView
@@ -194,8 +194,9 @@
                 android:fontFamily="sans-serif-light"
                 android:layout_below="@id/request_book_label_message"
                 android:textColor="@color/textColor"
-                android:maxLength="300"
+                android:maxLength="150"
                 android:textSize="15sp"
+                android:inputType="textMultiLine"
                 />
             <Button
                 android:id="@+id/request_book_cancel"
