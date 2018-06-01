@@ -25,7 +25,7 @@
                 android:layout_height="150dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                app:srcCompat ="@drawable/ic_book_cover" />
+                app:srcCompat ="@drawable/ic_thumbnail_cover_book" />
 
             <TextView
                 android:id="@+id/request_book_label_title"
@@ -97,7 +97,7 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-light"
-                android:layout_below="@id/request_book_label_owner"
+                android:layout_below="@id/request_book_owner"
                 />
             <TextView
                 android:id="@+id/request_book_start_date"
@@ -127,7 +127,7 @@
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-light"
                 android:layout_below="@id/request_book_label_start_date"
-                android:visibility="gone"
+                android:visibility="invisible"
                 />
             <TextView
                 android:id="@+id/request_book_end_date_owner"
@@ -142,7 +142,7 @@
                 android:textColor="@color/textColor"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:textSize="13sp"
-                android:visibility="gone"
+                android:visibility="invisible"
                 />
             <TextView
                 android:id="@+id/request_book_label_status"
@@ -157,7 +157,7 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-light"
-                android:layout_below="@id/request_book_label_end_date_owner"
+                android:layout_below="@id/request_book_end_date_owner"
                 />
             <TextView
                 android:id="@+id/request_book_status"
@@ -189,13 +189,13 @@
                 android:id="@+id/request_book_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="4dp"
+                android:layout_marginBottom="4dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="sans-serif-light"
                 android:layout_below="@id/request_book_label_message"
                 android:textColor="@color/textColor"
                 android:maxLength="300"
-                android:textSize="13sp"
+                android:textSize="15sp"
                 />
             <Button
                 android:id="@+id/request_book_cancel"
@@ -205,6 +205,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:layout_below="@id/request_book_message"
+                android:layout_marginTop="8dp"
                 />
             <Button
                 android:id="@+id/request_book_send"
@@ -215,6 +216,7 @@
                 android:layout_gravity="center"
                 android:layout_below="@id/request_book_message"
                 android:layout_toRightOf="@id/request_book_cancel"
+                android:layout_marginTop="8dp"
                 />
         </RelativeLayout>
     </ScrollView>

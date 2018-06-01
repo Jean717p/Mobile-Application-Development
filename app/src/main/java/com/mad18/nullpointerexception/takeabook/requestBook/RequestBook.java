@@ -3,6 +3,7 @@ package com.mad18.nullpointerexception.takeabook.requestBook;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -100,31 +101,44 @@ public class RequestBook extends AppCompatActivity {
         }
         Button send = findViewById(R.id.request_book_send);
         send.setOnClickListener(view -> {
-            DocumentReference newReqRef = db.collection("requests").document();
-            TextView textView = findViewById(R.id.request_book_message);
-            Loan loan = new Loan(bookOwner.getUsr_id(),user.getUsr_id(),bookOwner.getUsr_name(),user.getUsr_name(),
-                    requested_book.getBook_title(),requested_book.getBook_thumbnail_url(),requested_book.getBook_id(),
-                    textView.getText().toString(), Calendar.getInstance().getTime(),
-                    newReqRef.getId()
-                    );
-            requestDocId = newReqRef.getId();
-            newReqRef.set(loan).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Map<String,Boolean> toUpdate = new HashMap<>();
-                    toUpdate.put("owned",false);
-                    DocumentReference reqMe = db.collection("users").document(user.getUsr_id())
-                            .collection("requests").document(requestDocId);
-                    reqMe.set(toUpdate);
-                    toUpdate.put("owned",true);
-                    DocumentReference reqOwner = db.collection("users").document(bookOwner.getUsr_id())
-                            .collection("requests").document(requestDocId);
-                    reqOwner.set(toUpdate);
-                }
-            });
-            send.setVisibility(View.GONE);
-            Snackbar.make(findViewById(R.id.request_book_send),
-                    R.string.request_book_sent, Snackbar.LENGTH_LONG).show();
+            AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
+                    //set message, title, and icon
+                    .setTitle(R.string.send_request)
+                    .setMessage(R.string.sure_question)
+                    .setIcon(R.drawable.ic_done_white_24px)
+                    .setPositiveButton(R.string.affermative_response, (dialog, whichButton) -> {
+                        //your code
+                        DocumentReference newReqRef = db.collection("requests").document();
+                        TextView textView = findViewById(R.id.request_book_message);
+                        Loan loan = new Loan(bookOwner.getUsr_id(),user.getUsr_id(),bookOwner.getUsr_name(),user.getUsr_name(),
+                                requested_book.getBook_title(),requested_book.getBook_thumbnail_url(),requested_book.getBook_id(),
+                                textView.getText().toString(), Calendar.getInstance().getTime(),
+                                newReqRef.getId()
+                        );
+                        requestDocId = newReqRef.getId();
+                        newReqRef.set(loan).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Map<String,Boolean> toUpdate = new HashMap<>();
+                                toUpdate.put("owned",false);
+                                DocumentReference reqMe = db.collection("users").document(user.getUsr_id())
+                                        .collection("requests").document(requestDocId);
+                                reqMe.set(toUpdate);
+                                toUpdate.put("owned",true);
+                                DocumentReference reqOwner = db.collection("users").document(bookOwner.getUsr_id())
+                                        .collection("requests").document(requestDocId);
+                                reqOwner.set(toUpdate);
+                            }
+                        });
+                        send.setVisibility(View.GONE);
+                        Snackbar.make(findViewById(R.id.request_book_send),
+                                R.string.request_book_sent, Snackbar.LENGTH_LONG).show();
+
+                        dialog.dismiss();
+                    })
+                    .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                    .show();
+
         });
         Button cancel = findViewById(R.id.request_book_cancel);
         cancel.setOnClickListener(view -> {
@@ -132,15 +146,28 @@ public class RequestBook extends AppCompatActivity {
                 onBackPressed();
                 return;
             }
-            DocumentReference newReqRef = db.collection("requests").document(requestDocId);
-            newReqRef.delete();
-            DocumentReference reqMe = db.collection("users").document(user.getUsr_id())
-                    .collection("requests").document(requestDocId);
-            reqMe.delete();
-            DocumentReference reqOwner = db.collection("users").document(bookOwner.getUsr_id())
-                    .collection("requests").document(requestDocId);
-            reqOwner.delete();
-            onBackPressed();
+            AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
+                    //set message, title, and icon
+                    .setTitle(R.string.cancel)
+                    .setMessage(R.string.sure_question)
+                    .setIcon(R.drawable.ic_done_white_24px)
+                    .setPositiveButton(R.string.affermative_response, (dialog, whichButton) -> {
+                        //your code
+                        DocumentReference newReqRef = db.collection("requests").document(requestDocId);
+                        newReqRef.delete();
+                        DocumentReference reqMe = db.collection("users").document(user.getUsr_id())
+                                .collection("requests").document(requestDocId);
+                        reqMe.delete();
+                        DocumentReference reqOwner = db.collection("users").document(bookOwner.getUsr_id())
+                                .collection("requests").document(requestDocId);
+                        reqOwner.delete();
+                        onBackPressed();
+
+                        dialog.dismiss();
+                    })
+                    .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                    .show();
+
         });
     }
 }

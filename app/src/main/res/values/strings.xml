@@ -211,6 +211,11 @@
 
     <string name="search_book_algolia_request_permission">Grant the permission to view the map!</string>
     <string name="search_book_algolia_no_found">No book found!</string>
+    <string name="affermative_response">Yes, I am</string>
+    <string name="sure_question">Are you sure?</string>
+    <string name="send_request">Send request</string>
+    <string name="message">Message</string>
+
     <string name="search_book_toolbar_title">Search by</string>
 
 

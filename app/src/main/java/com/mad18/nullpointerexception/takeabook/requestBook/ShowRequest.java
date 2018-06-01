@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -221,14 +222,25 @@ public class ShowRequest extends AppCompatActivity {
             acceptReq.setText(R.string.request_book_accept_request);
             acceptReq.setClickable(true);
             acceptReq.setOnClickListener((View view) -> {
-                TextView textView = findViewById(R.id.request_book_status);
-                Button button = findViewById(R.id.request_book_send);
-                button.setVisibility(View.GONE);
-                textView.setText(R.string.request_book_status_request_accepted);
-                Snackbar.make(findViewById(R.id.request_book_send),
-                        R.string.request_book_waiting_for_applicant_exchange_confirmation, Snackbar.LENGTH_LONG).show();
-                db.collection("requests").document(loanRef)
-                        .update("requestStatus", true);
+                AlertDialog myQuittingDialogBox = new AlertDialog.Builder(ShowRequest.this)
+                        //set message, title, and icon
+                        .setTitle(R.string.request_book_accept_request)
+                        .setMessage(R.string.sure_question)
+                        .setIcon(R.drawable.ic_done_white_24px)
+                        .setPositiveButton(R.string.affermative_response, (dialog, whichButton) -> {
+                            //your code
+                            TextView textView = findViewById(R.id.request_book_status);
+                            Button button = findViewById(R.id.request_book_send);
+                            button.setVisibility(View.GONE);
+                            textView.setText(R.string.request_book_status_request_accepted);
+                            Snackbar.make(findViewById(R.id.request_book_send),
+                                    R.string.request_book_waiting_for_applicant_exchange_confirmation, Snackbar.LENGTH_LONG).show();
+                            db.collection("requests").document(loanRef)
+                                    .update("requestStatus", true);
+                            dialog.dismiss();
+                        })
+                        .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                        .show();
             });
         }
         else{ //sono l'applicant
@@ -254,14 +266,25 @@ public class ShowRequest extends AppCompatActivity {
             acceptReq.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    TextView textView = findViewById(R.id.request_book_status);
-                    Button button = findViewById(R.id.request_book_send);
-                    button.setVisibility(View.GONE);
-                    textView.setText(R.string.request_book_waiting_for_owner_exchange_confirmation);
-                    Snackbar.make(findViewById(R.id.request_book_send),
-                            R.string.request_book_waiting_for_owner_exchange_confirmation, Snackbar.LENGTH_LONG).show();
-                    db.collection("requests").document(loanRef)
-                            .update("exchangedApplicant", true);
+                    AlertDialog myQuittingDialogBox = new AlertDialog.Builder(ShowRequest.this)
+                            //set message, title, and icon
+                            .setTitle(R.string.request_book_accept_request)
+                            .setMessage(R.string.sure_question)
+                            .setIcon(R.drawable.ic_done_white_24px)
+                            .setPositiveButton(R.string.affermative_response, (dialog, whichButton) -> {
+                                //your code
+                                TextView textView = findViewById(R.id.request_book_status);
+                                Button button = findViewById(R.id.request_book_send);
+                                button.setVisibility(View.GONE);
+                                textView.setText(R.string.request_book_waiting_for_owner_exchange_confirmation);
+                                Snackbar.make(findViewById(R.id.request_book_send),
+                                        R.string.request_book_waiting_for_owner_exchange_confirmation, Snackbar.LENGTH_LONG).show();
+                                db.collection("requests").document(loanRef)
+                                        .update("exchangedApplicant", true);
+                                dialog.dismiss();
+                            })
+                            .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                            .show();
                 }
             });
         }
@@ -277,16 +300,28 @@ public class ShowRequest extends AppCompatActivity {
             acceptReq.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    TextView textView = findViewById(R.id.request_book_status);
-                    Button button = findViewById(R.id.request_book_send);
-                    button.setVisibility(View.GONE);
-                    db.collection("requests").document(loanRef)
-                            .update("exchangedOwner", true,
-                                    "startDate", Calendar.getInstance().getTime()
-                            );
-                    textView.setText(R.string.request_book_status_on_loan);
-                    Snackbar.make(findViewById(R.id.request_book_send),
-                            R.string.request_book_status_on_loan, Snackbar.LENGTH_LONG).show();
+                    AlertDialog myQuittingDialogBox = new AlertDialog.Builder(ShowRequest.this)
+                            //set message, title, and icon
+                            .setTitle(R.string.request_book_confirm_exchange)
+                            .setMessage(R.string.sure_question)
+                            .setIcon(R.drawable.ic_done_white_24px)
+                            .setPositiveButton(R.string.affermative_response, (dialog, whichButton) -> {
+                                //your code
+                                db.collection("requests").document(loanRef)
+                                        .update("exchangeOwner", true,
+                                                "startDate", Calendar.getInstance().getTime()
+                                        );
+                                TextView textView = findViewById(R.id.request_book_status);
+                                Button button = findViewById(R.id.request_book_send);
+                                button.setVisibility(View.GONE);
+                                textView.setText(R.string.request_book_status_on_loan);
+                                Snackbar.make(findViewById(R.id.request_book_send),
+                                        R.string.request_book_status_on_loan, Snackbar.LENGTH_LONG).show();
+
+                                dialog.dismiss();
+                            })
+                            .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                            .show();
                 }
             });
         }
@@ -308,23 +343,36 @@ public class ShowRequest extends AppCompatActivity {
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO: Dialog box Are u sure????
-                    TextView textView = findViewById(R.id.request_book_status);
-                    Button button = findViewById(R.id.request_book_send);
-                    button.setVisibility(View.GONE);
-                    textView.setText(R.string.request_book_archived);
-                    Snackbar.make(findViewById(R.id.request_book_send),
-                            R.string.request_book_archived, Snackbar.LENGTH_LONG).show();
-                    db.collection("requests").document(loanRef)
-                            .update("endLoanOwner", Calendar.getInstance().getTime());
-                    DocumentReference doc = db.collection("users").document(loan.ownerId)
-                            .collection("requests").document(loan.getLoanId());
-                    doc.delete();
-                    HashMap<String,Boolean> toLoad = new HashMap<>();
-                    toLoad.put("owned",true);
-                    db.collection("users").document(loan.getOwnerId())
-                            .collection("archive").document(loanRef)
-                            .set(toLoad);
+                    //TODO: done / Dialog box Are u sure????
+
+                    AlertDialog myQuittingDialogBox = new AlertDialog.Builder(ShowRequest.this)
+                            //set message, title, and icon
+                            .setTitle(R.string.request_book_close_loan)
+                            .setMessage(R.string.sure_question)
+                            .setIcon(R.drawable.ic_done_white_24px)
+                            .setPositiveButton(R.string.affermative_response, (dialog, whichButton) -> {
+                                //your code
+                                TextView textView = findViewById(R.id.request_book_status);
+                                Button button = findViewById(R.id.request_book_send);
+                                button.setVisibility(View.GONE);
+                                textView.setText(R.string.request_book_archived);
+                                Snackbar.make(findViewById(R.id.request_book_send),
+                                        R.string.request_book_archived, Snackbar.LENGTH_LONG).show();
+                                db.collection("requests").document(loanRef)
+                                        .update("endLoanOwner", Calendar.getInstance().getTime());
+                                DocumentReference doc = db.collection("users").document(loan.ownerId)
+                                        .collection("requests").document(loan.getLoanId());
+                                doc.delete();
+                                HashMap<String,Boolean> toLoad = new HashMap<>();
+                                toLoad.put("owned",true);
+                                db.collection("users").document(loan.getOwnerId())
+                                        .collection("archive").document(loanRef)
+                                        .set(toLoad);
+
+                                dialog.dismiss();
+                            })
+                            .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                            .show();
                     //TODO: StartActivity make a review.
                 }
             });
@@ -333,23 +381,36 @@ public class ShowRequest extends AppCompatActivity {
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO: Dialog box Are u sure????
-                    TextView textView = findViewById(R.id.request_book_status);
-                    Button button = findViewById(R.id.request_book_send);
-                    button.setVisibility(View.GONE);
-                    textView.setText(R.string.request_book_archived);
-                    Snackbar.make(findViewById(R.id.request_book_send),
-                            R.string.request_book_archived, Snackbar.LENGTH_LONG).show();
-                    db.collection("requests").document(loanRef)
-                            .update("endLoanApplicant", Calendar.getInstance().getTime());
-                    DocumentReference doc = db.collection("users").document(loan.getApplicantId())
-                            .collection("requests").document(loan.getLoanId());
-                    doc.delete();
-                    HashMap<String,Boolean> toLoad = new HashMap<>();
-                    toLoad.put("owned",false);
-                    db.collection("users").document(loan.getApplicantId())
-                            .collection("archive").document(loanRef)
-                            .set(toLoad);
+                    //TODO: done /Dialog box Are u sure????
+
+                    AlertDialog myQuittingDialogBox = new AlertDialog.Builder(ShowRequest.this)
+                            //set message, title, and icon
+                            .setTitle(R.string.request_book_close_loan)
+                            .setMessage(R.string.sure_question)
+                            .setIcon(R.drawable.ic_done_white_24px)
+                            .setPositiveButton(R.string.affermative_response, (dialog, whichButton) -> {
+                                //your code
+                                TextView textView = findViewById(R.id.request_book_status);
+                                Button button = findViewById(R.id.request_book_send);
+                                button.setVisibility(View.GONE);
+                                textView.setText(R.string.request_book_archived);
+                                Snackbar.make(findViewById(R.id.request_book_send),
+                                        R.string.request_book_archived, Snackbar.LENGTH_LONG).show();
+                                db.collection("requests").document(loanRef)
+                                        .update("endLoanApplicant", Calendar.getInstance().getTime());
+                                DocumentReference doc = db.collection("users").document(loan.getApplicantId())
+                                        .collection("requests").document(loan.getLoanId());
+                                doc.delete();
+                                HashMap<String,Boolean> toLoad = new HashMap<>();
+                                toLoad.put("owned",false);
+                                db.collection("users").document(loan.getApplicantId())
+                                        .collection("archive").document(loanRef)
+                                        .set(toLoad);
+                                dialog.dismiss();
+                            })
+                            .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                            .show();
+
                     //TODO: StartActivity make a review.
                 }
             });
@@ -359,7 +420,9 @@ public class ShowRequest extends AppCompatActivity {
     //Setto il messaggio, la thumbnail, il titolo del libro, il nome e il link al profilo dell'altro utente
     private  void fillCommonViews(){
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        TextView tv = findViewById(R.id.request_book_message);
+        TextView tv = findViewById(R.id.request_book_label_message);
+        tv.setText(R.string.message);
+        tv = findViewById(R.id.request_book_message);
         ImageView iw = findViewById(R.id.request_book_main_image);
         tv.setText(loan.getRequestText());
         tv.setEnabled(false);
@@ -411,40 +474,51 @@ public class ShowRequest extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO : DIALOG BOX ARE U SURE????
-                DocumentReference docLoanRef = db.collection("requests").document(loanRef);
-                DocumentReference loanOwner = db.collection("users").document(loan.getOwnerId())
-                        .collection("requests").document(loanRef);
-                DocumentReference loanApplicant = db.collection("users").document(loan.getApplicantId())
-                        .collection("requests").document(loanRef);
-                if(loan.getExchangedOwner()==false){
-                    loanOwner.delete();
-                    loanApplicant.delete();
-                    docLoanRef.delete();
-                }
-                else{
-                    if(myUser.getUsr_id().equals(owner.getUsr_id())){
-                        loanOwner.delete();
-                        if(loan.getEndLoanApplicant() != null){
-                            docLoanRef.update("endLoanOwner",null);
-                        }
-                        else{
-                            docLoanRef.delete();
-                        }
-                    }
-                    else{
-                        loanApplicant.delete();
-                        if(loan.getEndLoanOwner() != null){
-                            docLoanRef.update("endLoanApplicant",null);
-                        }
-                        else{
-                            docLoanRef.delete();
-                        }
-                    }
-                }
-                setResult(RESULT_OK);
-                overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
-                finish();
+                //TODO : done / DIALOG BOX ARE U SURE????
+                AlertDialog myQuittingDialogBox = new AlertDialog.Builder(ShowRequest.this)
+                        //set message, title, and icon
+                        .setTitle(R.string.info_book_delete_this_book)
+                        .setMessage(R.string.sure_question)
+                        .setIcon(R.drawable.ic_done_white_24px)
+                        .setPositiveButton(R.string.affermative_response, (dialog, whichButton) -> {
+                            //your code
+                            DocumentReference docLoanRef = db.collection("requests").document(loanRef);
+                            DocumentReference loanOwner = db.collection("users").document(loan.getOwnerId())
+                                    .collection("requests").document(loanRef);
+                            DocumentReference loanApplicant = db.collection("users").document(loan.getApplicantId())
+                                    .collection("requests").document(loanRef);
+                            if(loan.getExchangedOwner()==false){
+                                loanOwner.delete();
+                                loanApplicant.delete();
+                                docLoanRef.delete();
+                            }
+                            else{
+                                if(myUser.getUsr_id().equals(owner.getUsr_id())){
+                                    loanOwner.delete();
+                                    if(loan.getEndLoanApplicant() != null){
+                                        docLoanRef.update("endLoanOwner",null);
+                                    }
+                                    else{
+                                        docLoanRef.delete();
+                                    }
+                                }
+                                else{
+                                    loanApplicant.delete();
+                                    if(loan.getEndLoanOwner() != null){
+                                        docLoanRef.update("endLoanApplicant",null);
+                                    }
+                                    else{
+                                        docLoanRef.delete();
+                                    }
+                                }
+                            }
+                            setResult(RESULT_OK);
+                            overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+                            finish();
+                            dialog.dismiss();
+                        })
+                        .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                        .show();
             }
         });
     }
@@ -467,4 +541,22 @@ public class ShowRequest extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+//    private AlertDialog AskOptionSure( String dbtext)
+//    {
+//        AlertDialog myQuittingDialogBox = new AlertDialog.Builder(ShowRequest.this)
+//                //set message, title, and icon
+//                .setTitle(R.string.request_book_accept_request)
+//                .setMessage(R.string.sure_question)
+//                .setIcon(R.drawable.ic_done_white_24px)
+//                .setPositiveButton(R.string.affermative_response, (dialog, whichButton) -> {
+//                    //your code
+//
+//                    dialog.dismiss();
+//                })
+//                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+//                .show();
+//        return myQuittingDialogBox;
+//
+//    }
 }

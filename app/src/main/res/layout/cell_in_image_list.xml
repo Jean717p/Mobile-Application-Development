@@ -13,8 +13,8 @@
         android:orientation="vertical" >
 
         <ImageButton android:id="@+id/image_in_horizontal_list_cell"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="90dp"
+            android:layout_height="120dp"
             app:srcCompat="@drawable/ic_addbook"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"

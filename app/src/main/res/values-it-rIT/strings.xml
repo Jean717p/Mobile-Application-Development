@@ -192,16 +192,16 @@
     <string name="request_book_wait_owner">Aspetta il proprietario</string>
     <string name="request_book_applicant_has_sent_request">IL richiedente ha inviato la richiesta</string>
     <string name="request_book_waiting_for_owner_to_accept">Aspetta che il proprietario accetti</string>
-    <string name="request_book_waiting_for_applicant_exchange_confirmation">Aspetta la conferma dello scambio del richiedente</string>
+    <string name="request_book_waiting_for_applicant_exchange_confirmation">Aspetta la conferma dello scambio dal richiedente</string>
     <string name="request_book_confirm_exchange">Conferma scambio</string>
     <string name="request_book_applicant_has_confirmed_exchange">IL richedente ha confermato lo scambio</string>
-    <string name="request_book_waiting_for_owner_exchange_confirmation">Aspetta la conferma dello scambio del proprietario</string>
+    <string name="request_book_waiting_for_owner_exchange_confirmation">Aspetta la conferma dello scambio dal proprietario</string>
     <string name="request_book_start_date_loan">Data inizio prestito</string>
     <string name="request_book_close_loan">Chiudi prestito</string>
 
     <!--Altro-->
     <string name="Updating">Aggiornamento..</string>
-    <string name="cancel">annulla</string>
+    <string name="cancel">Annulla</string>
     <string name="send">Invia</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
@@ -211,5 +211,11 @@
     <string name="search_book_algolia_request_permission">Grant the permission to view the map!</string>
     <string name="search_book_algolia_no_found">Nessun libro trovato</string>
     <string name="search_book_toolbar_title">Ricerca per</string>
+
+    <string name="affermative_response">Sì</string>
+    <string name="sure_question">Sei sicuro?</string>
+    <string name="send_request">Invia richiesta</string>
+    <string name="message">Messaggio</string>
+
 
 </resources>
