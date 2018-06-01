@@ -151,6 +151,7 @@
 
             <intent-filter>
                 <action android:name="ChatActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -162,14 +163,15 @@
                 android:value="com.mad18.nullpointerexception.takeabook.info.InfoUser" />
         </activity>
 
-        <!--Algolia - SearchBook-->
+        <!-- Algolia - SearchBook -->
 
         <activity android:name=".searchBook.SearchBookAlgolia" />
         <activity android:name=".searchBook.SearchBook_BarcodeScanner" />
 
-        <!--Request a book + loan management-->
+        <!-- Request a book + loan management -->
 
-        <activity android:name=".requestBook.RequestBook"
+        <activity
+            android:name=".requestBook.RequestBook"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -182,7 +184,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity" />
         </activity>
-        <activity android:name=".requestBook.ShowRequest"
+        <activity
+            android:name=".requestBook.ShowRequest"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -200,6 +203,7 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
         <service android:name=".chatActivity.service.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -211,6 +215,7 @@
             </intent-filter>
         </service>
 
+        <activity android:name=".requestBook.RequestReview"></activity>
     </application>
 
 </manifest>

@@ -217,6 +217,10 @@
     <string name="message">Message</string>
 
     <string name="search_book_toolbar_title">Search by</string>
+    <string name="title_activity_request_review">RequestReview</string>
+    <string name="request_review_write">Write your review</string>
+    <string name="request_review_review">Review</string>
+    <string name="request_review_no_rating">Please insert also a rating</string>
 
 
 </resources>

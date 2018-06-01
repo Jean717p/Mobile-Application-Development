@@ -211,6 +211,9 @@
     <string name="search_book_algolia_request_permission">Grant the permission to view the map!</string>
     <string name="search_book_algolia_no_found">Nessun libro trovato</string>
     <string name="search_book_toolbar_title">Ricerca per</string>
+    <string name="request_review_review">Review</string>
+    <string name="request_review_write">Write your review</string>
+    <string name="request_review_no_rating">Please insert also a rating</string>
 
     <string name="affermative_response">Sì</string>
     <string name="sure_question">Sei sicuro?</string>

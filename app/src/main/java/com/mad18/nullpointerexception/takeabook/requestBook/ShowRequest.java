@@ -1,5 +1,6 @@
 package com.mad18.nullpointerexception.takeabook.requestBook;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.info.InfoUser;
 import com.mad18.nullpointerexception.takeabook.util.Book;
+import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
 import com.mad18.nullpointerexception.takeabook.util.MyAtomicCounter;
 import com.mad18.nullpointerexception.takeabook.util.OnCounterChangeListener;
 import com.mad18.nullpointerexception.takeabook.util.User;
@@ -51,6 +53,7 @@ public class ShowRequest extends AppCompatActivity {
     private MyAtomicCounter myAtomicCounter;
     private String requestType;
     private ListenerRegistration loanListener;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,7 @@ public class ShowRequest extends AppCompatActivity {
             Log.d(TAG,"Error passing parameters");
         }
         setContentView(R.layout.activity_request_book);
+        context = this;
         Toolbar toolbar = findViewById(R.id.request_book_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -374,6 +378,29 @@ public class ShowRequest extends AppCompatActivity {
                             .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                             .show();
                     //TODO: StartActivity make a review.
+                    //TODO: Dialog box Are u sure????
+                    TextView textView = findViewById(R.id.request_book_status);
+                    Button button = findViewById(R.id.request_book_send);
+                    button.setVisibility(View.GONE);
+                    textView.setText(R.string.request_book_archived);
+                    Snackbar.make(findViewById(R.id.request_book_send),
+                            R.string.request_book_archived, Snackbar.LENGTH_LONG).show();
+                    db.collection("requests").document(loanRef)
+                            .update("endLoanOwner", Calendar.getInstance().getTime());
+                    DocumentReference doc = db.collection("users").document(loan.ownerId)
+                            .collection("requests").document(loan.getLoanId());
+                    doc.delete();
+                    HashMap<String,Boolean> toLoad = new HashMap<>();
+                    toLoad.put("owned",true);
+                    db.collection("users").document(loan.getOwnerId())
+                            .collection("archive").document(loanRef)
+                            .set(toLoad);
+                    Intent intent = new Intent(context,RequestReview.class);
+                    intent.putExtra("otherUser", new UserWrapper(applicant));
+                    intent.putExtra("bookToReview", new BookWrapper(requested_book));
+                    intent.putExtra("thisUser", new UserWrapper(myUser));
+                    startActivity(intent);
+                    finish();
                 }
             });
         }
@@ -412,6 +439,30 @@ public class ShowRequest extends AppCompatActivity {
                             .show();
 
                     //TODO: StartActivity make a review.
+                    //TODO: Dialog box Are u sure????
+                    TextView textView = findViewById(R.id.request_book_status);
+                    Button button = findViewById(R.id.request_book_send);
+                    button.setVisibility(View.GONE);
+                    textView.setText(R.string.request_book_archived);
+                    Snackbar.make(findViewById(R.id.request_book_send),
+                            R.string.request_book_archived, Snackbar.LENGTH_LONG).show();
+                    db.collection("requests").document(loanRef)
+                            .update("endLoanApplicant", Calendar.getInstance().getTime());
+                    DocumentReference doc = db.collection("users").document(loan.getApplicantId())
+                            .collection("requests").document(loan.getLoanId());
+                    doc.delete();
+                    HashMap<String,Boolean> toLoad = new HashMap<>();
+                    toLoad.put("owned",false);
+                    db.collection("users").document(loan.getApplicantId())
+                            .collection("archive").document(loanRef)
+                            .set(toLoad);
+                    Intent intent = new Intent(context,RequestReview.class);
+                    intent.putExtra("otherUser", new UserWrapper(owner));
+                    intent.putExtra("bookToReview", new BookWrapper(requested_book));
+                    intent.putExtra("thisUser", new UserWrapper(myUser));
+                    startActivity(intent);
+                    finish();
+
                 }
             });
         }
