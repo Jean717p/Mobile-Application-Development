@@ -1,6 +1,7 @@
 package com.mad18.nullpointerexception.takeabook.myProfile;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -21,16 +22,22 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -62,11 +69,12 @@ public class editProfile extends AppCompatActivity {
     private int editTextBoxesIds[] = new int[]{R.id.edit_profile_Username,R.id.edit_profile_City,
             R.id.edit_profile_mail,R.id.edit_profile_about};
     private Menu menu;
-    private final int REQUEST_PICK_IMAGE = 1, REQUEST_IMAGE_CAPTURE = 2;
+    private final int REQUEST_PICK_IMAGE = 1, REQUEST_IMAGE_CAPTURE = 2, PLACE_PICKER_REQUEST = 7;
     private final int REQUEST_PERMISSION_CAMERA = 2, REQUEST_PERMISSION_GALLERY=1;
     private String profileImgName = "profile.jpg";
     private Bitmap profileImg = null;
     private Boolean profileImgChanged;
+    private GeoPoint geoPoint;
 
     //        onCreate function is called when the activity is launched and before it appears
 //        You can create a new shared preference file or access an existing one by calling:
@@ -107,6 +115,7 @@ public class editProfile extends AppCompatActivity {
         ImageView iw = findViewById(R.id.edit_profile_personalPhoto);
         iw.setClickable(true);
         iw.setOnClickListener(view -> selectUserImg());
+        getUserPosition(this);
         profileImgChanged = false;
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
     }
@@ -122,6 +131,23 @@ public class editProfile extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.edit_profile_toolbar, menu);
         return true;
+    }
+
+    private void getUserPosition(Activity activity){
+        Button map_search = findViewById(R.id.edit_profile_map);
+        map_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                try {
+                    startActivityForResult(builder.build(activity), PLACE_PICKER_REQUEST);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     //        quando viene selezionato un elemento del menu viene chiamato questo metodo: onOptionsItemSelected()
@@ -160,7 +186,7 @@ public class editProfile extends AppCompatActivity {
 //        prima interazione con firebase per recuperare dal database l'utente che sta usando l'app
 //        StorageReference è un riferimento a una risorsa in cloud di google che in questo caso recuperiamo da firebase nel
 //                sottoalbero users/images/
-//        recuperiamo il database da firestore dentro firebase
+//        recuperiamo il database da firestore dentro
 //        firestore è un nuovo servizio cloud che opera come firebase ma è più prestante e di facile utilizzo
 //        stiamo chiedendo a firestore di ritornarci la collezione di utenti
 //            la shareduserdatakeys è inizializzata nella showprofile e contiene alcuni campi di testo che si trovano
@@ -182,12 +208,16 @@ public class editProfile extends AppCompatActivity {
         CollectionReference users = db.collection("users");
         User u = MainActivity.thisUser;
         Map<String,String> user_data = new HashMap<>();
+        Map <String, GeoPoint> tmp_gp = new HashMap<>();
         for(String x: showProfile.sharedUserDataKeys){
             text = findViewById(editTextBoxesIds[i++]);
             editor.putString(x,text.getText().toString());
             if(x.equals(showProfile.sharedUserDataKeys[2])==false){ //Not email
                 user_data.put(x,text.getText().toString());
             }
+        }
+        if(geoPoint != null) {
+            tmp_gp.put("usr_geoPoint", geoPoint);
         }
         if(profileImgChanged==true){
             if(profileImg!=null){
@@ -236,6 +266,7 @@ public class editProfile extends AppCompatActivity {
         }
         editor.apply();
         users.document(user.getUid()).set(user_data, SetOptions.merge());
+        users.document(user.getUid()).set(tmp_gp, SetOptions.merge());
     }
 
     // invoked when the activity may be temporarily destroyed, save the instance state here
@@ -336,6 +367,15 @@ public class editProfile extends AppCompatActivity {
                             iw.setImageBitmap(profileImg);
                             profileImgChanged = true;
                         }
+                    }
+                    break;
+
+                case PLACE_PICKER_REQUEST:
+                    if (data != null){
+                        Place place = PlacePicker.getPlace(this, data);
+                        geoPoint = new GeoPoint(place.getLatLng().latitude,place.getLatLng().longitude);
+                        EditText et = findViewById(R.id.edit_profile_City);
+                        et.setText(place.getName().toString());
                     }
                     break;
             }

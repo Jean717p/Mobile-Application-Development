@@ -22,15 +22,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/edit_profile_toolbar">
+        android:layout_below="@+id/edit_profile_toolbar">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_margin="16dp"
-           >
+            android:orientation="vertical">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/edit_profile_personalPhoto"
@@ -38,51 +36,49 @@
                 android:layout_height="@dimen/profile_photo_height"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center_vertical"
-                app:srcCompat="@drawable/ic_account_circle_white_48px"
                 app:civ_border_color="@color/textColor"
-                app:civ_border_width="0dp" />
+                app:civ_border_width="0dp"
+                app:srcCompat="@drawable/ic_account_circle_white_48px" />
 
             <!--titolo username-->
             <TextView
                 android:id="@+id/edit_profile_title_Username"
-                android:text="@string/Username"
-                android:textStyle="bold"
-                android:layout_marginTop="8dp"
-                android:textSize="13sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/edit_profile_personalPhoto"
+                android:layout_marginTop="8dp"
+                android:text="@string/Username"
                 android:textColor="@color/colorPrimary"
-                />
+                android:textSize="13sp"
+                android:textStyle="bold" />
             <!-- username-->
             <EditText
                 android:id="@+id/edit_profile_Username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/edit_profile_title_Username"
                 android:enabled="true"
                 android:hint="@string/Username"
-                android:layout_below="@id/edit_profile_title_Username"
                 android:inputType="text"
                 android:maxLines="1"
                 android:textColor="@color/textColor"
                 android:textColorHint="#BDBDBD"
                 android:textSize="@dimen/text_view_height" />
-                <!--titolo city-->
+            <!--titolo city-->
             <TextView
                 android:id="@+id/edit_profile_title_City"
-                android:text="@string/City"
-                android:textStyle="bold"
-                android:layout_marginTop="8dp"
-                android:textSize="13sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/edit_profile_Username"
+                android:layout_marginTop="8dp"
+                android:text="@string/City"
                 android:textColor="@color/colorPrimary"
-               />
-                <!--city-->
+                android:textSize="13sp"
+                android:textStyle="bold" />
+            <!--city-->
             <EditText
                 android:id="@+id/edit_profile_City"
-                android:layout_width="match_parent"
+                android:layout_width="267dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/edit_profile_title_City"
                 android:enabled="true"
@@ -92,20 +88,28 @@
                 android:textColor="@color/textColor"
                 android:textColorHint="#BDBDBD"
                 android:textSize="@dimen/text_view_height" />
-                <!--little icon near field city-->
-                <!--titolo mail-->
+
+            <Button
+                android:id="@+id/edit_profile_map"
+                android:layout_width="46dp"
+                android:layout_height="31dp"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/edit_profile_title_City"
+                android:background="@drawable/corner_button"
+                android:drawableTop="@drawable/ic_map_white_24dp" />
+            <!--little icon near field city-->
+            <!--titolo mail-->
             <TextView
                 android:id="@+id/edit_profile_title_mail"
-                android:text="@string/Email"
-                android:textStyle="bold"
-                android:layout_marginTop="8dp"
-                android:textSize="13sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/edit_profile_City"
+                android:layout_marginTop="8dp"
+                android:text="@string/Email"
                 android:textColor="@color/colorPrimary"
-               />
-                <!-- mail-->
+                android:textSize="13sp"
+                android:textStyle="bold" />
+            <!-- mail-->
             <EditText
                 android:id="@+id/edit_profile_mail"
                 android:layout_width="match_parent"
@@ -118,20 +122,19 @@
                 android:textColor="@color/textColor"
                 android:textColorHint="#BDBDBD"
                 android:textSize="@dimen/text_view_height" />
-                <!--little icon near field mail-->
+            <!--little icon near field mail-->
 
-                <!--titolo about-->
+            <!--titolo about-->
             <TextView
                 android:id="@+id/edit_profile_title_about"
-                android:text="@string/AboutMe"
-                android:textStyle="bold"
-                android:layout_marginTop="8dp"
-                android:textSize="13sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/edit_profile_mail"
+                android:layout_marginTop="8dp"
+                android:text="@string/AboutMe"
                 android:textColor="@color/colorPrimary"
-                />
+                android:textSize="13sp"
+                android:textStyle="bold" />
             <!--about-->
             <EditText
                 android:id="@+id/edit_profile_about"
@@ -139,9 +142,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true"
+                android:layout_below="@id/edit_profile_title_about"
                 android:enabled="true"
                 android:gravity="top"
-                android:layout_below="@id/edit_profile_title_about"
                 android:hint="@string/AboutMe"
                 android:inputType="textMultiLine"
                 android:maxLength="100"
@@ -149,6 +152,6 @@
                 android:textColor="@color/textColor"
                 android:textColorHint="#BDBDBD"
                 android:textSize="@dimen/text_view_height" />
-      </RelativeLayout>
+        </RelativeLayout>
     </ScrollView>
 </RelativeLayout>
