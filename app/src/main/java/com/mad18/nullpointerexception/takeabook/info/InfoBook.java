@@ -54,7 +54,7 @@ import java.util.List;
 public class InfoBook extends AppCompatActivity {
 
     private final int BOOK_EFFECTIVELY_REMOVED = 41;
-    private int ibTextViewIds[] = new int[]{R.id.info_book_title, R.id.info_book_author, R.id.info_book_ISBN,
+    private final int ibTextViewIds[] = new int[]{R.id.info_book_title, R.id.info_book_author, R.id.info_book_ISBN,
             R.id.info_book_editionYear, R.id.info_book_publisher, R.id.info_book_categories, R.id.info_book_description,
             R.id.info_book_pages};
     private final int REQUEST_BOOK = 7;

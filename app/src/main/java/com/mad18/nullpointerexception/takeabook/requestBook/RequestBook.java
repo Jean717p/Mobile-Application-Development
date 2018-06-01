@@ -113,7 +113,6 @@ public class RequestBook extends AppCompatActivity {
                     .setMessage(R.string.sure_question)
                     .setIcon(R.drawable.ic_done_white_24px)
                     .setPositiveButton(R.string.affermative_response, (dialog, whichButton) -> {
-                        //your code
                         DocumentReference newReqRef = db.collection("requests").document();
                         TextView textView = findViewById(R.id.request_book_message);
                         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -145,12 +144,10 @@ public class RequestBook extends AppCompatActivity {
                         setResult(RESULT_OK);
                         finish();
                         overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
-
                         dialog.dismiss();
                     })
                     .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                     .show();
-
         });
         Button cancel = findViewById(R.id.request_book_cancel);
         cancel.setOnClickListener(view -> {
@@ -174,12 +171,10 @@ public class RequestBook extends AppCompatActivity {
                                 .collection("requests").document(requestDocId);
                         reqOwner.delete();
                         onBackPressed();
-
                         dialog.dismiss();
                     })
                     .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                     .show();
-
         });
     }
 }
