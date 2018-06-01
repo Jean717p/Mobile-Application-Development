@@ -31,8 +31,6 @@ import android.widget.Toast;
 
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.Index;
-
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -130,25 +128,14 @@ public class AddBook extends AppCompatActivity {
                 return false;
             }
         });
-
-        //simo inizio
-
-
         horizontal_photo_list = (LinearLayout) findViewById(R.id.horizontal_photo_layout);
-
         for (int i = 0; i < 4; i++) {
-
             horizontal_photo_list_element = getLayoutInflater().inflate(R.layout.add_book_cell_in_image_list, null);
-
             final ImageView imageView = (ImageView) horizontal_photo_list_element.findViewById(R.id.add_book_image_in_horizontal_list_cell);
             imageView.setOnClickListener(v -> {
-                // do whatever you want ...
                 globalImgPos = Integer.parseInt(imageView.getTag().toString());
                 globalViewImgElement = imageView;
-               selectBookImg();
-
-                //Toast.makeText(AddBook.this,
-                  //      (CharSequence) imageView.getTag(), Toast.LENGTH_SHORT).show();
+                selectBookImg();
             });
 
             imageView.setTag(i);
@@ -156,12 +143,6 @@ public class AddBook extends AppCompatActivity {
 
             horizontal_photo_list.addView(horizontal_photo_list_element);
         }
-
-
-        //simo fine
-
-
-        //get the spinner from the xml.
         staticSpinner = findViewById(R.id.add_book_spinner_book_cond);
         //create a list of items for the spinner.
         String[] items = new String[]{"condizioni del libro", "Ottime", "Buone", "Scarse"};
@@ -503,6 +484,7 @@ public class AddBook extends AppCompatActivity {
                         bookImg = (Bitmap) data.getExtras().get("data");
                         iw = globalViewImgElement;
                         if(iw!=null && bookImg != null) {
+                            bookImg = Bitmap.createScaledBitmap(bookImg,1024, 1024, true);
                             iw.setImageBitmap(bookImg);
                             bookImgMap.put(globalImgPos,bookImg);
                         }
@@ -515,11 +497,8 @@ public class AddBook extends AppCompatActivity {
                             bookImg = MediaStore.Images.Media.getBitmap(this.getContentResolver(),selectedMediaUri);
                             iw = globalViewImgElement;
                             if(iw!=null && !bookImg.equals("")) {
-                                //iw.setImageBitmap(bookImg);
-                                int size = 10;
-                                Bitmap bitmapsimplesize = Bitmap.createScaledBitmap(bookImg,bookImg.getWidth() / size, bookImg.getHeight() / size, true);
-                                //bookImg.recycle();
-                                iw.setImageBitmap(bitmapsimplesize);
+                                bookImg = Bitmap.createScaledBitmap(bookImg,1024, 1024, true);
+                                iw.setImageBitmap(bookImg);
                                 bookImgMap.put(globalImgPos,bookImg);
                             }
                         } catch (IOException e) {
@@ -653,8 +632,6 @@ public class AddBook extends AppCompatActivity {
         ImageView iw;
         if(bookImgMap.isEmpty()==false){
             iw = globalViewImgElement;
-            //bookImg = null;
-            //bookImgMap.remove(bookImg);
             bookImgMap.remove(globalImgPos);
             iw.setImageResource(R.drawable.ic_addbook);
         }

@@ -55,17 +55,18 @@ public class RequestBook extends AppCompatActivity {
         requestDocId = "";
         if(MainActivity.thisUser!=null){
             user = MainActivity.thisUser;
+            fillRequestBookViews();
         }
         else{
             db.collection("users").document(FirebaseAuth.getInstance().getUid())
                     .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                   user = documentSnapshot.toObject(User.class);
+                    user = documentSnapshot.toObject(User.class);
+                    fillRequestBookViews();
                 }
             });
         }
-        fillRequestBookViews();
     }
 
     @Override

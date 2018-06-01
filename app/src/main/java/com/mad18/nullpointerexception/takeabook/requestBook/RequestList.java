@@ -27,18 +27,20 @@ import com.mad18.nullpointerexception.takeabook.util.UserWrapper;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 public class RequestList extends AppCompatActivity {
     private final String TAG = "RequestList";
+    private final int SHOW_REQUEST = 5;
     private RequestRecyclerViewAdapter myAdapter;
     private User myUser;
     private List<Loan> requests;
     private MyAtomicCounter myAtomicCounter;
     private Boolean isArchive;
-    private Query query_archive;
     private Context context;
+    private String lastItemSelectedId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,11 +72,7 @@ public class RequestList extends AppCompatActivity {
                 break;
             case "archived":
                 query = FirebaseFirestore.getInstance().collection("users")
-                        .document(myUser.getUsr_id()).collection("archive")
-                        .whereEqualTo("owned",true);
-                query_archive = FirebaseFirestore.getInstance().collection("users")
-                        .document(myUser.getUsr_id()).collection("archive")
-                        .whereEqualTo("owned",false);
+                        .document(myUser.getUsr_id()).collection("archive");
                 isArchive = true;
                 break;
                 default:
@@ -86,7 +84,7 @@ public class RequestList extends AppCompatActivity {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if(queryDocumentSnapshots.getDocuments().size()>0){
                     myAtomicCounter = new MyAtomicCounter(queryDocumentSnapshots.getDocuments().size());
-                    if(isArchive && query_archive!=null){
+                    if(isArchive){
                         myAtomicCounter.setListener(new OnCounterChangeListener() {
                             @Override
                             public void onCounterReachZero() {
@@ -100,26 +98,6 @@ public class RequestList extends AppCompatActivity {
                                     }
                                 });
                                 updateView(requests);
-                            }
-                        });
-                        myAtomicCounter.increment(); //decrement when every query on document of archive is launched
-                        query_archive.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                            @Override
-                            public void onSuccess(QuerySnapshot querySnapshot) {
-                                for(DocumentSnapshot d : querySnapshot.getDocuments()){
-                                    myAtomicCounter.increment();
-                                    FirebaseFirestore.getInstance().collection("requests")
-                                            .document(d.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            if(task.isSuccessful() && task.getResult()!=null){
-                                                requests.add(task.getResult().toObject(Loan.class));
-                                            }
-                                            myAtomicCounter.decrement();
-                                        }
-                                    });
-                                }
-                                myAtomicCounter.decrement();
                             }
                         });
                     }
@@ -158,11 +136,12 @@ public class RequestList extends AppCompatActivity {
                 new RequestRecyclerViewAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(Loan item) {
+                        lastItemSelectedId = item.getLoanId();
                         Intent intent = new Intent(context,ShowRequest.class);
                         intent.putExtra("loanRef",item.getLoanId());
                         intent.putExtra("thisUser",new UserWrapper(myUser));
                         intent.putExtra("requestType",type);
-                        startActivity(intent);
+                        startActivityForResult(intent,SHOW_REQUEST);
                     }
                 });
         rec.setLayoutManager(new GridLayoutManager(this, 3));
@@ -199,5 +178,23 @@ public class RequestList extends AppCompatActivity {
         }
         myAdapter.setData(list);
         myAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case SHOW_REQUEST:
+                if(resultCode == RESULT_OK){
+                    for(Iterator<Loan> iterator = requests.listIterator(); iterator.hasNext(); ){
+                        Loan l = iterator.next();
+                        if(l.getLoanId().equals(lastItemSelectedId)){
+                            iterator.remove();
+                            break;
+                        }
+                    }
+                    updateView(requests);
+                }
+        }
     }
 }

@@ -2,7 +2,7 @@ package com.mad18.nullpointerexception.takeabook.requestBook;
 
 import java.util.Date;
 
-class Loan {
+public class Loan {
 
     String loanId;
     String ownerId;
@@ -20,9 +20,9 @@ class Loan {
     Date endLoanOwner;
     Date endLoanApplicant;
 
-    Loan() {}
+    public Loan() {}
 
-    Loan(String ownerId, String applicantId, String ownerName, String applicantName,
+    public Loan(String ownerId, String applicantId, String ownerName, String applicantName,
          String bookTitle, String bookThumbnail, String bookId,
          String requestText, Date startDate, String loanId) {
         this.ownerId = ownerId;

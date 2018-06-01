@@ -54,6 +54,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -103,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ViewPager viewPager;
     private MyPagerAdapter myPagerAdapter;
     private TabLayout tabLayout;
+    private ListenerRegistration userListener;
     Main_MyLibrary_Fragment f;
     Main_HomeBooks_Fragment fragment_home;
 
@@ -152,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View hview = navigationView.getHeaderView(0);
         setNavDrawerParameters(hview);
         DocumentReference userDocRef = db.collection("users").document(mAuth.getCurrentUser().getUid());
-        userDocRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        userListener = userDocRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if(e!=null){
@@ -167,7 +169,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
-
 
     private void myOnCreateLayout(){
         fab_my_lib = findViewById(R.id.fab_add);
@@ -571,7 +572,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        userListener.remove();
+        super.onDestroy();
+    }
 
     public List<Book> getMyBooks() {
         return myBooks;
