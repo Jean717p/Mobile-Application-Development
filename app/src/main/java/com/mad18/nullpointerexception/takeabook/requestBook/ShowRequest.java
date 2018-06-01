@@ -308,7 +308,7 @@ public class ShowRequest extends AppCompatActivity {
                             .setPositiveButton(R.string.affermative_response, (dialog, whichButton) -> {
                                 //your code
                                 db.collection("requests").document(loanRef)
-                                        .update("exchangeOwner", true,
+                                        .update("exchangedOwner", true,
                                                 "startDate", Calendar.getInstance().getTime()
                                         );
                                 TextView textView = findViewById(R.id.request_book_status);
@@ -481,7 +481,6 @@ public class ShowRequest extends AppCompatActivity {
                         .setMessage(R.string.sure_question)
                         .setIcon(R.drawable.ic_done_white_24px)
                         .setPositiveButton(R.string.affermative_response, (dialog, whichButton) -> {
-                            //your code
                             DocumentReference docLoanRef = db.collection("requests").document(loanRef);
                             DocumentReference loanOwner = db.collection("users").document(loan.getOwnerId())
                                     .collection("requests").document(loanRef);
