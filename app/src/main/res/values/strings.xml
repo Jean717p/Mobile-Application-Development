@@ -211,6 +211,7 @@
 
     <string name="search_book_algolia_request_permission">Grant the permission to view the map!</string>
     <string name="search_book_algolia_no_found">No book found!</string>
+    <string name="search_book_toolbar_title">Search by</string>
 
 
 </resources>

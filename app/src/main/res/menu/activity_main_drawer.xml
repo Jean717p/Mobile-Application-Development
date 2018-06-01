@@ -18,15 +18,15 @@
             android:title="@string/mychat" />
         <item
             android:id="@+id/nav_request_sent"
-            android:icon="@drawable/ic_chat_black_24dp"
+            android:icon="@drawable/ic_baseline_send_24px"
             android:title="@string/requests_book_sent" />
         <item
             android:id="@+id/nav_request_received"
-            android:icon="@drawable/ic_chat_black_24dp"
+            android:icon="@drawable/postbox48px"
             android:title="@string/requests_book_received" />
         <item
             android:id="@+id/nav_request_archive"
-            android:icon="@drawable/ic_chat_black_24dp"
+            android:icon="@drawable/ic_baseline_archive_24px"
             android:title="@string/requests_book_archive" />
         <!--<item
             android:id="@+id/nav_mylibrary"

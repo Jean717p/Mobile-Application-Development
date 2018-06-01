@@ -204,14 +204,14 @@ public class SearchBookAlgolia extends AppCompatActivity {
         searchBar.setSuggstionsClickListener(new SuggestionsAdapter.OnItemViewClickListener() {
             @Override
             public void OnItemClickListener(int position, View v) {
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions((Activity) context,
                             new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_PERMISSION);
                     return;
                 }
                 else{
 
-                String key = searchBar.getLastSuggestions().get(position).toString();
+                    String key = searchBar.getLastSuggestions().get(position).toString();
                     String ISBN = booklist.get(key);
                     searchBooksOnFireStore(ISBN);
                 }
