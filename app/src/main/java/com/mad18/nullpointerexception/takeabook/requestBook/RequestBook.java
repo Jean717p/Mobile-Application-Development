@@ -2,7 +2,6 @@ package com.mad18.nullpointerexception.takeabook.requestBook;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,7 +25,10 @@ import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
 import com.mad18.nullpointerexception.takeabook.util.User;
 import com.mad18.nullpointerexception.takeabook.util.UserWrapper;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -92,6 +94,10 @@ public class RequestBook extends AppCompatActivity {
         TextView tv;
         tv = findViewById(R.id.request_book_title);
         tv.setText(requested_book.getBook_title());
+        tv = findViewById(R.id.request_book_start_date);
+        tv.setVisibility(View.INVISIBLE);
+        tv = findViewById(R.id.request_book_label_status);
+        tv.setVisibility(View.INVISIBLE);
         tv = findViewById(R.id.request_book_owner);
         tv.setText(bookOwner.getUsr_name());
         tv.setTextColor(Color.BLUE);
@@ -110,6 +116,8 @@ public class RequestBook extends AppCompatActivity {
                         //your code
                         DocumentReference newReqRef = db.collection("requests").document();
                         TextView textView = findViewById(R.id.request_book_message);
+                        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                        Date myDate = Calendar.getInstance().getTime();
                         Loan loan = new Loan(bookOwner.getUsr_id(),user.getUsr_id(),bookOwner.getUsr_name(),user.getUsr_name(),
                                 requested_book.getBook_title(),requested_book.getBook_thumbnail_url(),requested_book.getBook_id(),
                                 textView.getText().toString(), Calendar.getInstance().getTime(),
@@ -131,8 +139,12 @@ public class RequestBook extends AppCompatActivity {
                             }
                         });
                         send.setVisibility(View.GONE);
-                        Snackbar.make(findViewById(R.id.request_book_send),
-                                R.string.request_book_sent, Snackbar.LENGTH_LONG).show();
+                        textView = findViewById(R.id.request_book_start_date);
+                        textView.setText(formatter.format(myDate));
+                        textView.setVisibility(View.VISIBLE);
+                        setResult(RESULT_OK);
+                        finish();
+                        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
 
                         dialog.dismiss();
                     })
