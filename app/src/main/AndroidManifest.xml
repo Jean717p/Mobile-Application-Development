@@ -137,6 +137,7 @@
         <activity
             android:name=".chatActivity.ListOfChatActivity"
             android:label="@string/title_activity_list_of_chat"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -144,6 +145,7 @@
         </activity>
         <activity
             android:name=".chatActivity.ChatActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="wrap_content" android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     app:cardElevation="5dp"
     android:id="@+id/home_book_card_view"
     android:layout_margin="7dp">
@@ -26,36 +29,34 @@
             android:id="@+id/home_book_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:gravity="center"
+            android:paddingBottom="16dp"
+            android:layout_alignParentStart="true"
             android:layout_below="@id/divider"
             android:layout_margin="8dp"
-            android:layout_marginRight="-2dp"
-            android:gravity="center"
-            android:maxLines="2"
-            android:padding="10dp"
             android:text="Empty for now"
-            android:textSize="13sp" />
+         />
 
         <TextView
             android:id="@+id/home_book_label_distance"
-            android:layout_width="371dp"
-            android:layout_height="39dp"
-            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_margin="8dp"
             android:layout_below="@+id/home_book_title"
-            android:layout_marginEnd="0dp"
-            android:layout_marginStart="16dp"
-            android:background="@android:color/white"
-            android:fontFamily="sans-serif"
             android:text="@string/fragment_home_distance"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="13sp" />
+            android:textColor="@color/colorPrimary"
+            />
 
         <TextView
             android:id="@+id/home_book_distance"
-            android:layout_width="277dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignTop="@+id/home_book_label_distance"
-            android:layout_marginStart="85dp" />
+            android:text="2,5 km"
+            android:layout_margin="8dp"
+            android:layout_toEndOf="@id/home_book_label_distance"
+            android:layout_below="@id/home_book_title"
+            android:layout_alignBaseline="@id/home_book_label_distance"
+            />
     </RelativeLayout>
 </android.support.v7.widget.CardView>
