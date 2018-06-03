@@ -12,34 +12,35 @@ import android.widget.TextView;
 
 import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.R;
-import com.mad18.nullpointerexception.takeabook.util.User;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-class RequestRecyclerViewAdapter extends RecyclerView.Adapter<RequestRecyclerViewAdapter.MyViewHolder> {
+public class RequestRecyclerViewAdapter extends RecyclerView.Adapter<RequestRecyclerViewAdapter.MyViewHolder> {
 
     private Context myContext;
     private List<Loan> mData;
     private final OnItemClickListener listener;
-    private final User thisUser;
+    private final String thisUserId;
+    private boolean showStatusIcon;
 
-    public RequestRecyclerViewAdapter(Context myContext, List<Loan> mData, User thisUser, OnItemClickListener listener ) {
+    public RequestRecyclerViewAdapter(Context myContext, List<Loan> mData, String thisUserId, Boolean showStatusIcon, OnItemClickListener listener ) {
         this.myContext = myContext;
         this.mData = mData;
         this.listener = listener;
-        this.thisUser = thisUser;
+        this.thisUserId = thisUserId;
+        this.showStatusIcon = showStatusIcon;
     }
 
-    interface OnItemClickListener {
-        void onItemClick(Loan item);
+    public interface OnItemClickListener {
+        void onItemClick(Loan item, int position);
     }
 
-    void setData(List<Loan> mData){
+    public void setData(List<Loan> mData){
         this.mData = mData;
     }
-    List<Loan> getData(){
+    public List<Loan> getData(){
         return this.mData;
     }
 
@@ -56,43 +57,51 @@ class RequestRecyclerViewAdapter extends RecyclerView.Adapter<RequestRecyclerVie
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
         Loan loan = mData.get(position);
-        if(thisUser.getUsr_id().equals(loan.getOwnerId())){
+        if(thisUserId.equals(loan.getOwnerId())){
+            holder.tv_loan_label_username.setText(R.string.request_book_applicant);
             holder.tv_loan_applicant_name.setText(loan.getApplicantName());
             if(loan.getEndLoanOwner()!=null){
                 holder.tv_loan_request_end_date.setText(formatter.format(loan.getEndLoanOwner()));
             }
-            if(loan.getExchangedOwner()){
-                holder.iw_loan_request_status.setMaxHeight(0);
-                holder.iw_loan_request_status.setMaxWidth(0);
-                holder.iw_loan_request_status.setImageResource(R.drawable.ic_hand_shake);
-            }
-            else if(loan.getRequestStatus()) { //A
-                if (loan.getExchangedApplicant()) { //B
+            if(showStatusIcon){
+                if(loan.getExchangedOwner()){
+                    holder.iw_loan_request_status.setImageResource(R.drawable.ic_hand_shake);
+                }
+                else if(loan.getRequestStatus()) { //A
+                    if (loan.getExchangedApplicant()) { //B
+                        holder.iw_loan_request_status.setImageResource(R.drawable.ic_notification);
+                    } else {
+                        holder.iw_loan_request_status.setImageResource(R.drawable.ic_clock_pending);
+                    }
+                }
+                else{
                     holder.iw_loan_request_status.setImageResource(R.drawable.ic_notification);
-                } else {
-                    holder.iw_loan_request_status.setImageResource(R.drawable.ic_clock_pending);
                 }
             }
             else{
-                holder.iw_loan_request_status.setImageResource(R.drawable.ic_notification);
+                holder.iw_loan_request_status.setVisibility(View.GONE);
             }
         }
         else{
+            holder.tv_loan_label_username.setText(R.string.info_book_label_owner);
             holder.tv_loan_applicant_name.setText(loan.getOwnerName());
-            if(loan.getExchangedOwner()){
-                holder.iw_loan_request_status.setMaxHeight(0);
-                holder.iw_loan_request_status.setMaxWidth(0);
-                holder.iw_loan_request_status.setImageResource(R.drawable.ic_hand_shake);
-            }
-            else if(loan.getRequestStatus()) { //A
-                if (loan.getExchangedApplicant()) { //B
+            if(showStatusIcon){
+                if(loan.getExchangedOwner()){
+                    holder.iw_loan_request_status.setImageResource(R.drawable.ic_hand_shake);
+                }
+                else if(loan.getRequestStatus()) { //A
+                    if (loan.getExchangedApplicant()) { //B
+                        holder.iw_loan_request_status.setImageResource(R.drawable.ic_clock_pending);
+                    } else {
+                        holder.iw_loan_request_status.setImageResource(R.drawable.ic_notification);
+                    }
+                }
+                else{
                     holder.iw_loan_request_status.setImageResource(R.drawable.ic_clock_pending);
-                } else {
-                    holder.iw_loan_request_status.setImageResource(R.drawable.ic_notification);
                 }
             }
             else{
-                holder.iw_loan_request_status.setImageResource(R.drawable.ic_clock_pending);
+                holder.iw_loan_request_status.setVisibility(View.GONE);
             }
         }
         holder.tv_loan_request_start_date.setText(formatter.format(loan.getStartDate()));
@@ -117,6 +126,7 @@ class RequestRecyclerViewAdapter extends RecyclerView.Adapter<RequestRecyclerVie
         TextView tv_loan_request_start_date;
         TextView tv_loan_book_title;
         TextView tv_loan_request_end_date;
+        TextView tv_loan_label_username;
         ImageView iw_loan_book_thumbnail;
         ImageView iw_loan_request_status;
         CardView cardView;
@@ -127,6 +137,7 @@ class RequestRecyclerViewAdapter extends RecyclerView.Adapter<RequestRecyclerVie
             tv_loan_request_start_date = itemView.findViewById(R.id.request_loan_cv_start_date);
             tv_loan_book_title = itemView.findViewById(R.id.request_loan_cv_book_title);
             tv_loan_request_end_date = itemView.findViewById(R.id.request_loan_cv_end_date);
+            tv_loan_label_username = itemView.findViewById(R.id.request_loan_cv_applicant_label);
             iw_loan_book_thumbnail = itemView.findViewById(R.id.request_loan_cv_book_thumbnail);
             iw_loan_request_status = itemView.findViewById(R.id.request_loan_cv_status_icon);
             cardView = (CardView) itemView.findViewById(R.id.request_loan_card_view);
@@ -136,7 +147,7 @@ class RequestRecyclerViewAdapter extends RecyclerView.Adapter<RequestRecyclerVie
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onItemClick(item);
+                    listener.onItemClick(item, getAdapterPosition());
 
                 }
             });

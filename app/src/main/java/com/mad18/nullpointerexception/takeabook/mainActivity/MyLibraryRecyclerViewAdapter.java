@@ -41,7 +41,6 @@ public class MyLibraryRecyclerViewAdapter extends RecyclerView.Adapter<MyLibrary
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         View view;
         LayoutInflater minflater = LayoutInflater.from(myContext);
         view = minflater.inflate(R.layout.cardview_item_book_library, parent , false);
@@ -74,8 +73,6 @@ public class MyLibraryRecyclerViewAdapter extends RecyclerView.Adapter<MyLibrary
         ImageView iv_book_thumbnail;
         CardView cardView;
 
-
-
         public MyViewHolder(View itemView) {
             super(itemView);
             tv_book_title = (TextView) itemView.findViewById(R.id.my_library_book_title);
@@ -84,12 +81,10 @@ public class MyLibraryRecyclerViewAdapter extends RecyclerView.Adapter<MyLibrary
         }
 
         public void bind(final Book item, final OnItemClickListener listener) {
-
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     listener.onItemClick(item);
-
                 }
             });
 

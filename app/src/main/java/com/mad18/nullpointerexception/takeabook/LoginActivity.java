@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity  {
         setSupportActionBar(toolbar);
         SharedPreferences sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         String x = sharedPref.getString("language", "");
-        if(x.length()>0){
+        /*if(x.length()>0){
             switch (x){
                 case "Italiano":
                     SettingsActivity.changeLocale(getResources(),"it");
@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity  {
                     SettingsActivity.changeLocale(getResources(),"eng");
                     break;
             }
-        }
+        }*/
         toolbar.setTitle(R.string.insert_location);
         toolbar.setVisibility(View.INVISIBLE);
         firstAttempt = true;

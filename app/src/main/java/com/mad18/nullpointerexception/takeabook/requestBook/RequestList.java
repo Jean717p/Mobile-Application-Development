@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -28,7 +27,6 @@ import com.mad18.nullpointerexception.takeabook.util.UserWrapper;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,7 +39,8 @@ public class RequestList extends AppCompatActivity {
     private MyAtomicCounter myAtomicCounter;
     private Boolean isArchive;
     private Context context;
-    private String lastItemSelectedId;
+    private int lastItemSelectedPosition;
+    private String type;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,7 +55,7 @@ public class RequestList extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         context = this;
         myUser = new User((UserWrapper) bundle.getParcelable("thisUser"));
-        String type = bundle.getString("requestType");
+        type = bundle.getString("requestType");
         requests = new LinkedList<>();
         Query query;
         isArchive = false;
@@ -133,11 +132,11 @@ public class RequestList extends AppCompatActivity {
         });
         RecyclerView rec = findViewById(R.id.request_list_recycler_view);
         myAdapter = new RequestRecyclerViewAdapter(this, requests,
-                myUser,
+                myUser.getUsr_id(), true,
                 new RequestRecyclerViewAdapter.OnItemClickListener() {
                     @Override
-                    public void onItemClick(Loan item) {
-                        lastItemSelectedId = item.getLoanId();
+                    public void onItemClick(Loan item, int position) {
+                        lastItemSelectedPosition = position;
                         Intent intent = new Intent(context,ShowRequest.class);
                         intent.putExtra("loanRef",item.getLoanId());
                         intent.putExtra("thisUser",new UserWrapper(myUser));
@@ -188,15 +187,18 @@ public class RequestList extends AppCompatActivity {
         switch (requestCode){
             case SHOW_REQUEST:
                 if(resultCode == RESULT_OK){
-                    for(Iterator<Loan> iterator = requests.listIterator(); iterator.hasNext(); ){
-                        Loan l = iterator.next();
-                        if(l.getLoanId().equals(lastItemSelectedId)){
-                            iterator.remove();
-                            break;
-                        }
-                    }
-                    updateView(requests);
+                    myAdapter.notifyItemRemoved(lastItemSelectedPosition);
+                    requests.remove(lastItemSelectedPosition);
                 }
+                else if(data!=null){
+                        Loan item = myAdapter.getData().get(lastItemSelectedPosition);
+                        item.setRequestStatus(data.getBooleanExtra("A",item.getRequestStatus()));
+                        item.setRequestStatus(data.getBooleanExtra("B",item.getExchangedApplicant()));
+                        item.setRequestStatus(data.getBooleanExtra("C",item.getExchangedOwner()));
+                        requests.set(lastItemSelectedPosition,item);
+                        myAdapter.notifyItemChanged(lastItemSelectedPosition);
+                    }
+
         }
     }
 }

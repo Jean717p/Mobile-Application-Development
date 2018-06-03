@@ -54,11 +54,13 @@ public class ShowRequest extends AppCompatActivity {
     private String requestType;
     private ListenerRegistration loanListener;
     private Context context;
+    private int resultCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setResult(RESULT_CANCELED);
+        resultCode = RESULT_CANCELED;
         if(getIntent()==null || getIntent().getExtras()==null){
             Log.d(TAG,"Error passing parameters");
         }
@@ -568,6 +570,7 @@ public class ShowRequest extends AppCompatActivity {
                                 }
                             }
                             setResult(RESULT_OK);
+                            resultCode = RESULT_OK;
                             overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
                             finish();
                             dialog.dismiss();
@@ -595,5 +598,17 @@ public class ShowRequest extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        if(loan!=null){
+            intent.putExtra("A",loan.getRequestStatus());
+            intent.putExtra("B",loan.getExchangedApplicant());
+            intent.putExtra("C",loan.getExchangedOwner());
+            setResult(resultCode,intent);
+        }
+        super.onBackPressed();
     }
 }

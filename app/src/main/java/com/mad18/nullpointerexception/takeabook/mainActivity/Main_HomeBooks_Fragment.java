@@ -15,13 +15,13 @@ import android.view.ViewGroup;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.firestore.GeoPoint;
+import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.info.InfoBook;
 import com.mad18.nullpointerexception.takeabook.searchBook.SearchBookAlgolia;
 import com.mad18.nullpointerexception.takeabook.util.Book;
-import com.mad18.nullpointerexception.takeabook.info.InfoBook;
-import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
-import com.mad18.nullpointerexception.takeabook.searchBook.SearchBook;
 
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -31,8 +31,8 @@ import java.util.List;
 public class Main_HomeBooks_Fragment extends Fragment {
     private FloatingActionMenu fam;
     private FloatingActionButton fabTitle, fabAuthor, fabIsbn;
-    CoordinatorLayout home_coordinatorLayout;
-    HomeRecyclerViewAdapter myAdapter;
+    private CoordinatorLayout home_coordinatorLayout;
+    private HomeRecyclerViewAdapter myAdapter;
 
     public Main_HomeBooks_Fragment() {
         // Required empty public constructor
@@ -61,7 +61,7 @@ public class Main_HomeBooks_Fragment extends Fragment {
             fabAuthor =  v.findViewById(R.id.top_floating_action_menu_author);
             fabIsbn = v.findViewById(R.id.top_floating_action_menu_ISBN);
             fam = v.findViewById(R.id.top_floating_action_menu);
-            myAdapter = new HomeRecyclerViewAdapter(getActivity(), MainActivity.homeBooks,
+            myAdapter = new HomeRecyclerViewAdapter(getActivity(), new LinkedList<Book>(),
                     new HomeRecyclerViewAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(Book item) {
@@ -168,8 +168,4 @@ public class Main_HomeBooks_Fragment extends Fragment {
         main_topBooks_fragment.setArguments(args);
         return main_topBooks_fragment;
     }
-
-
-
-
 }

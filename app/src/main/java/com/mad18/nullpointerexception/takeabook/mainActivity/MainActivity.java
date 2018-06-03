@@ -3,7 +3,6 @@ package com.mad18.nullpointerexception.takeabook.mainActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -54,6 +53,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -87,35 +87,29 @@ import static com.mad18.nullpointerexception.takeabook.myProfile.showProfile.sha
 import static java.util.stream.Collectors.toList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+    public static User thisUser;
+    public static List<Book> myBooks;
+    private List<Book> homeBooks;
     private final String TAG = "MainActivity";
     private final int REQUEST_ADDBOOK = 3, REQUEST_SETTINGS = 4;
     private Toolbar toolbar;
     private SharedPreferences sharedPref;
-
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private DocumentReference user_doc;
     private Context context = this;
-    public static User thisUser;
     private FloatingActionButton fab_my_lib;
-    public static List<Book> myBooks;
-    public static List<Book> homeBooks;
     private boolean isMyBooksSorted;
     private ViewPager viewPager;
     private MyPagerAdapter myPagerAdapter;
     private TabLayout tabLayout;
     private ListenerRegistration userListener;
-    Main_MyLibrary_Fragment f;
-    Main_HomeBooks_Fragment fragment_home;
+    private Main_MyLibrary_Fragment fragment_myLibrary;
+    private Main_HomeBooks_Fragment fragment_home;
+    private Main_BorrowedBooks_Fragment fragment_borrowed;
+    private Main_LentBooks_Fragment fragment_lent;
+    private NavigationView navigationView;
 
-    NavigationView navigationView;
-    //Called when a fragment is attached as a child of this fragment.
-
-    @Override
-    public void onAttachFragment(Fragment fragment) {
-        super.onAttachFragment(fragment);
-    }
-    //has not yet had a previous call to onCreate.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,8 +117,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         isMyBooksSorted = true;
-        Resources res;
-        res = getResources();
+
         myBooks = new LinkedList<>();
         homeBooks = new LinkedList<>();
         setContentView(R.layout.activity_main);
@@ -132,11 +125,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(savedInstanceState==null){
             //Download userData & books
             new updateUserData().doInBackground();
-            new UpdateHomeData().doInBackground();
             Intent intent = new Intent(this,SplashScreenActivity.class);
             startActivity(intent);
         }
         sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        /*
+        Resources res;
+        res = getResources();
         String y;
         y = sharedPref.getString("language", "");
         if(y.length()>0){
@@ -148,8 +143,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     SettingsActivity.changeLocale(res,"eng");
                     break;
             }
-        }
-
+        }*/
         // Add the parameters requested by the NavDrawer (Image, email, username)
         View hview = navigationView.getHeaderView(0);
         setNavDrawerParameters(hview);
@@ -188,7 +182,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabLayout.addTab(tabLayout.newTab().setText(R.string.my_library));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.lent_books));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.borrowed_books));
-
         // Set the tabs to fill the entire layout.
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         //
@@ -201,7 +194,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewPager.setAdapter(myPagerAdapter);
         viewPager.setOffscreenPageLimit(2);
         // Setting a listener for clicks.
-
         viewPager.addOnPageChangeListener(new
                 TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -216,46 +208,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         fabSearch.setVisibility(View.VISIBLE);
                         floatingActionButton.setVisibility(View.GONE);
                         fragment_home = (Main_HomeBooks_Fragment) adapter.getRegisteredFragment(viewPager.getCurrentItem());
-                        double user_lat=0,user_long=0;
-                        Location user_loc;
-                        if(fragment_home!=null && thisUser!=null){
-                            if(thisUser.getUsr_geoPoint()!=null){
-                                user_lat = thisUser.getUsr_geoPoint().getLatitude();
-                                user_long = thisUser.getUsr_geoPoint().getLongitude();
-                                user_loc = new Location("Provider");
-                                user_loc.setLatitude(user_lat);
-                                user_loc.setLongitude(user_long);
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                    homeBooks = homeBooks.stream().sorted((a,b)->{
-                                        Location book_loc_a = new Location("Provider");
-                                        Location book_loc_b = new Location("Provider");
-                                        book_loc_b.setLatitude(b.getBook_location().getLatitude());
-                                        book_loc_b.setLongitude(b.getBook_location().getLongitude());
-                                        book_loc_a.setLatitude(a.getBook_location().getLatitude());
-                                        book_loc_a.setLongitude(a.getBook_location().getLongitude());
-                                        return Float.compare(book_loc_a.distanceTo(user_loc),book_loc_b.distanceTo(user_loc));
-                                    }).collect(Collectors.toList());
-                                }
-                                else{
-                                    Collections.sort(homeBooks, (a, b) -> {
-                                        Location book_loc_b = new Location("Provider");
-                                        Location book_loc_a = new Location("Provider");
-                                        book_loc_b.setLatitude(b.getBook_location().getLatitude());
-                                        book_loc_b.setLongitude(b.getBook_location().getLongitude());
-                                        book_loc_a.setLatitude(a.getBook_location().getLatitude());
-                                        book_loc_a.setLongitude(a.getBook_location().getLongitude());
-                                        return Float.compare(book_loc_a.distanceTo(user_loc),book_loc_b.distanceTo(user_loc));
-                                    });
-                                }
-                                fragment_home.updateView(homeBooks,thisUser.getUsr_geoPoint());
-                            }
-                        }
                         break;
                     case 1:
                         fabSearch.setVisibility(View.GONE);
                         floatingActionButton.setVisibility(View.VISIBLE);
-                        f = (Main_MyLibrary_Fragment) adapter.getRegisteredFragment(viewPager.getCurrentItem());
-                        if(f!=null){
+                        fragment_myLibrary = (Main_MyLibrary_Fragment) adapter.getRegisteredFragment(viewPager.getCurrentItem());
+                        if(fragment_myLibrary !=null){
                             if(isMyBooksSorted==false){
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                     Comparator<Book> byTitle = Comparator.comparing(b->b.getBook_title());
@@ -272,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                         }
                                     });
                                 }
-                                f.updateView(myBooks);
+                                fragment_myLibrary.updateView(myBooks);
                             }
                         }
                         break;
@@ -290,8 +248,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -379,7 +335,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             // action with ID action_refresh was selected
             case R.id.action_refresh:
-//                f.updateView(myBooks);
+//                fragment_myLibrary.updateView(myBooks);
 //                Snackbar snackbar = Snackbar
 //                        .make(findViewById(R.id.main_library_coordinator_layout),getText(R.string.info_book_snackbar), Snackbar.LENGTH_LONG);
 //                snackbar.show();
@@ -469,7 +425,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     DocumentSnapshot doc = task.getResult();
                     SharedPreferences.Editor editor = sharedPref.edit();
                     navigationView = (NavigationView) findViewById(R.id.nav_view);
+                    User user1 = thisUser;
                     thisUser = doc.toObject(User.class);
+                    if(user1 == null || user1.getUsr_geoPoint().equals(thisUser.getUsr_geoPoint())==false){
+                        new UpdateHomeData().doInBackground();
+                    }
                     for(String tmp:sharedUserDataKeys){
                         editor.putString(tmp,doc.getString(tmp));
                         Log.d(TAG,tmp+" - "+doc.getString(tmp));
@@ -541,33 +501,72 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
         }
+
         protected String doInBackground(String... strings) {
-            FirebaseUser user = mAuth.getCurrentUser();
-            String user_id = user.getUid();
             CollectionReference booksRef = db.collection("books");
-            Query a = booksRef.whereGreaterThan("book_userid",user_id);
-            Query b = booksRef.whereLessThan("book_userid",user_id);
+            double lat = 0.0144927536231884;
+            double lon = 0.0181818181818182;
+            double distance = 186.411; //circa 300Km
+            double lowerLat = thisUser.getUsr_geoPoint().getLatitude() - (lat * distance);
+            double lowerLon = thisUser.getUsr_geoPoint().getLongitude() - (lon * distance);
+            double greaterLat = thisUser.getUsr_geoPoint().getLatitude() + (lat * distance);
+            double greaterLon = thisUser.getUsr_geoPoint().getLongitude() + (lon * distance);
+            GeoPoint lowerBoundGeo = new GeoPoint(lowerLat,lowerLon);
+            GeoPoint upperBoundGeo = new GeoPoint(greaterLat,greaterLon);
+            Query a = booksRef.whereGreaterThanOrEqualTo("book_location",lowerBoundGeo)
+                    .whereLessThanOrEqualTo("book_location",upperBoundGeo);
             a.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                 @Override
                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                     for(DocumentSnapshot d : queryDocumentSnapshots.getDocuments()) {
                         if (d != null && d.exists()) {
-                            homeBooks.add(d.toObject(Book.class));
+                            Book book = d.toObject(Book.class);
+                            if(book.getBook_userid().equals(thisUser.getUsr_id())==false){
+                                homeBooks.add(book);
+                            }
+                        }
+                    }
+                    if(viewPager!=null && viewPager.getAdapter()!=null){
+                        MyPagerAdapter adapter = (MyPagerAdapter) viewPager.getAdapter();
+                        Fragment fragment = adapter.getRegisteredFragment(viewPager.getCurrentItem());
+                        if(fragment instanceof Main_HomeBooks_Fragment) {
+                            fragment_home = (Main_HomeBooks_Fragment) fragment;
+                        }
+                        if(fragment_home!=null){
+                            double user_lat=0,user_long=0;
+                            Location user_loc;
+                            user_lat = thisUser.getUsr_geoPoint().getLatitude();
+                            user_long = thisUser.getUsr_geoPoint().getLongitude();
+                            user_loc = new Location("Provider");
+                            user_loc.setLatitude(user_lat);
+                            user_loc.setLongitude(user_long);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                homeBooks = homeBooks.stream().sorted((a,b)->{
+                                    Location book_loc_a = new Location("Provider");
+                                    Location book_loc_b = new Location("Provider");
+                                    book_loc_b.setLatitude(b.getBook_location().getLatitude());
+                                    book_loc_b.setLongitude(b.getBook_location().getLongitude());
+                                    book_loc_a.setLatitude(a.getBook_location().getLatitude());
+                                    book_loc_a.setLongitude(a.getBook_location().getLongitude());
+                                    return Float.compare(book_loc_a.distanceTo(user_loc),book_loc_b.distanceTo(user_loc));
+                                }).collect(Collectors.toList());
+                            }
+                            else{
+                                Collections.sort(homeBooks, (a, b) -> {
+                                    Location book_loc_b = new Location("Provider");
+                                    Location book_loc_a = new Location("Provider");
+                                    book_loc_b.setLatitude(b.getBook_location().getLatitude());
+                                    book_loc_b.setLongitude(b.getBook_location().getLongitude());
+                                    book_loc_a.setLatitude(a.getBook_location().getLatitude());
+                                    book_loc_a.setLongitude(a.getBook_location().getLongitude());
+                                    return Float.compare(book_loc_a.distanceTo(user_loc),book_loc_b.distanceTo(user_loc));
+                                });
+                            }
+                            fragment_home.updateView(homeBooks,thisUser.getUsr_geoPoint());
                         }
                     }
                 }
             });
-            b.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    for(DocumentSnapshot d : queryDocumentSnapshots.getDocuments()) {
-                        if (d != null && d.exists()) {
-                            homeBooks.add(d.toObject(Book.class));
-                        }
-                    }
-                }
-            });
-
             return "ok";
         }
     }
@@ -710,7 +709,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 ////            snackbar.show();
 //
 //            editor.putBoolean("book_removed",false);
-////            f.updateView(myBooks);
+////            fragment_myLibrary.updateView(myBooks);
 ////            new updateUserData().doInBackground();
 //            //TODO: refresh my library e modifica path foto conditions sulla falsa riga dell'immagine profilo
 //        }
