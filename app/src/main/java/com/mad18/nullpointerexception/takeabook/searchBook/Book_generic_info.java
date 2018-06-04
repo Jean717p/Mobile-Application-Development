@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide;
 import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
-import com.mad18.nullpointerexception.takeabook.addBook.JsonParser;
+import com.mad18.nullpointerexception.takeabook.util.JsonParser;
 
 import org.json.JSONException;
 import org.json.JSONObject;

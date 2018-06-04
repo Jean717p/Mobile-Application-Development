@@ -39,7 +39,7 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.mad18.nullpointerexception.takeabook.GlideApp;
-import com.mad18.nullpointerexception.takeabook.ImageViewPopUpHelper;
+import com.mad18.nullpointerexception.takeabook.util.ImageViewPopUpHelper;
 import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.requestBook.RequestBook;
 import com.mad18.nullpointerexception.takeabook.util.Book;
@@ -54,10 +54,10 @@ import java.util.List;
 public class InfoBook extends AppCompatActivity {
 
     private final int BOOK_EFFECTIVELY_REMOVED = 41;
-    private final int ibTextViewIds[] = new int[]{R.id.info_book_title, R.id.info_book_author, R.id.info_book_ISBN,
+    private final int REQUEST_BOOK = 7;
+    private final int idTextViewIds[] = new int[]{R.id.info_book_title, R.id.info_book_author, R.id.info_book_ISBN,
             R.id.info_book_editionYear, R.id.info_book_publisher, R.id.info_book_categories, R.id.info_book_description,
             R.id.info_book_pages};
-    private final int REQUEST_BOOK = 7;
 
     private BookWrapper bookToShowInfoOf;
     private FirebaseAuth mAuth;
@@ -265,7 +265,7 @@ public class InfoBook extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         TextView tv;
-        for (int i : ibTextViewIds) {
+        for (int i : idTextViewIds) {
             tv = findViewById(i);
             outState.putString(Integer.toString(i), tv.getText().toString());
         }
@@ -278,7 +278,7 @@ public class InfoBook extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         TextView tv;
-        for (int i : ibTextViewIds) {
+        for (int i : idTextViewIds) {
             tv = findViewById(i);
             tv.setText(savedInstanceState.getString(Integer.toString(i), ""));
         }

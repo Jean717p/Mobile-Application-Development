@@ -15,23 +15,22 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.OvershootInterpolator;
 
-//import com.github.clans.fab.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.mad18.nullpointerexception.takeabook.util.Book;
-import com.mad18.nullpointerexception.takeabook.info.InfoBook;
+import com.mad18.nullpointerexception.takeabook.AddBook;
 import com.mad18.nullpointerexception.takeabook.R;
-import com.mad18.nullpointerexception.takeabook.addBook.AddBook;
+import com.mad18.nullpointerexception.takeabook.info.InfoBook;
+import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
 
 import java.util.List;
 
-import android.view.animation.LinearInterpolator;
-import android.view.animation.OvershootInterpolator;
-
 import static com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.myBooks;
+
+//import com.github.clans.fab.FloatingActionButton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,9 +47,7 @@ public class Main_MyLibrary_Fragment extends Fragment {
     CoordinatorLayout mainContent;
     boolean mIsHiding = false;
     private FloatingActionButton floatingActionButton;
-    private int viewSize;
     MyLibraryRecyclerViewAdapter myAdapter;
-    private FirebaseFirestore db;
 
     public static Main_MyLibrary_Fragment newInstance(int page,String title) {
         Bundle args = new Bundle();
@@ -170,10 +167,8 @@ public class Main_MyLibrary_Fragment extends Fragment {
                         Bundle extras = data.getExtras();
                         BookWrapper bookWrapper = extras.getParcelable("book_removed");
                         if(bookWrapper!=null){
-                            for (Book bi: myBooks
-                                 ) {
+                            for (Book bi: myBooks) {
                                 if(bi.getBook_ISBN().equals(bookWrapper.getISBN())){
-                                    //myBooks.remove(bi);
                                     books.remove(bi);
                                     break;
                                 }

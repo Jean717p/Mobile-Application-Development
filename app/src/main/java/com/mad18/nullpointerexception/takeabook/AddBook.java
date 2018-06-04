@@ -1,4 +1,4 @@
-package com.mad18.nullpointerexception.takeabook.addBook;
+package com.mad18.nullpointerexception.takeabook;
 
 import android.Manifest;
 import android.content.Intent;
@@ -41,12 +41,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.mad18.nullpointerexception.takeabook.GlideApp;
-import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
 import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
 import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
+import com.mad18.nullpointerexception.takeabook.util.ScanBarcode;
 import com.mad18.nullpointerexception.takeabook.util.User;
 
 import org.json.JSONArray;
@@ -353,8 +352,6 @@ public class AddBook extends AppCompatActivity {
         ExtendedEditText eet;
         Map<String,Boolean>photourllist = new HashMap<>();
         DocumentReference bookRef = books.document();
-        String bookRefPath = bookRef.getPath();
-
         //Aggiunta libro a elenco libri
         if(bookToAdd==null){
             bookToAdd = new Book();
@@ -373,10 +370,7 @@ public class AddBook extends AppCompatActivity {
         bookToAdd.setBook_condition(staticSpinner.getSelectedItemPosition());
         bookToAdd.setBook_authors(authors);
         eet = findViewById(R.id.add_book_extended_edit_text_EditionYear);
-
-            bookToAdd.setBook_editionYear(Integer.parseInt(eet.getText().toString()));
-
-
+        bookToAdd.setBook_editionYear(Integer.parseInt(eet.getText().toString()));
         eet = findViewById(R.id.add_book_extended_edit_Title);
         bookToAdd.setBook_title(eet.getText().toString());
         if(bookToAdd.getBook_title().length()==0){
@@ -396,8 +390,8 @@ public class AddBook extends AppCompatActivity {
                         ByteArrayOutputStream out = new ByteArrayOutputStream();
                         Bitmap bookImgForName = bookImgMap.get(j);
                         bookImgForName.compress(Bitmap.CompressFormat.JPEG,75,out);
-                        mImageRef = FirebaseStorage.getInstance().getReference().child("users/"+user.getUid()+ "/books/" + bookRefPath.substring(6) + "/" + UUID.nameUUIDFromBytes(out.toByteArray()));
-                        photourllist.put("users/"+user.getUid()+ "/books/" + bookRefPath.substring(6)+ "/"+ UUID.nameUUIDFromBytes(out.toByteArray()), true);
+                        mImageRef = FirebaseStorage.getInstance().getReference().child("users/"+user.getUid()+ "/books/" + bookRef.getId() + "/" + UUID.nameUUIDFromBytes(out.toByteArray()));
+                        photourllist.put("users/"+user.getUid()+ "/books/" + bookRef.getId()+ "/"+ UUID.nameUUIDFromBytes(out.toByteArray()), true);
                         Uri photoImgUri = Uri.fromFile(file1);
                         mImageRef.putFile(photoImgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
@@ -410,9 +404,8 @@ public class AddBook extends AppCompatActivity {
             }
         }
         bookToAdd.setBook_photo_list(photourllist);
-        bookToAdd.setBook_id(bookRefPath);
+        bookToAdd.setBook_id(bookRef.getId());
         bookRef.set(bookToAdd);
-        bookRef.getPath();
         addIndexToAlgolia(bookToAdd);
 
         //Aggiunta libro all'elenco dell'utente
@@ -420,7 +413,7 @@ public class AddBook extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User u = documentSnapshot.toObject(User.class);
-                u.getUsr_books().put(bookRef.getPath().substring(6),true);
+                u.getUsr_books().put(bookRef.getId(),true);
 
                 users.document(user.getUid()).set(u);
             }
@@ -469,7 +462,7 @@ public class AddBook extends AppCompatActivity {
 
                         bookToAdd = new Book(bookwrap.getISBN(),bookwrap.getTitle(),
                                 bookwrap.getPublisher(),bookwrap.getEditionYear(),0,user.getUid(),Mauthors,"",bookwrap.getThumbnail(),
-                                Mcategories, MainActivity.thisUser.getUsr_geoPoint(), bookwrap.getPages());
+                                Mcategories, MainActivity.thisUser.getUsr_geoPoint(), bookwrap.getPages(),false);
 //                        for(int i:addBookTextViewIds){
 //                            findViewById(i).setVisibility(View.VISIBLE);
 //                        }

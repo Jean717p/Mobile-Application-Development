@@ -59,6 +59,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.mad18.nullpointerexception.takeabook.AddBook;
 import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.LoginActivity;
 import com.mad18.nullpointerexception.takeabook.R;
@@ -117,7 +118,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         isMyBooksSorted = true;
-
         myBooks = new LinkedList<>();
         homeBooks = new LinkedList<>();
         setContentView(R.layout.activity_main);
@@ -208,6 +208,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         fabSearch.setVisibility(View.VISIBLE);
                         floatingActionButton.setVisibility(View.GONE);
                         fragment_home = (Main_HomeBooks_Fragment) adapter.getRegisteredFragment(viewPager.getCurrentItem());
+                        if(homeBooks.size()>0 && thisUser!=null){
+                            fragment_home.updateView(homeBooks,thisUser.getUsr_geoPoint());
+                        }
                         break;
                     case 1:
                         fabSearch.setVisibility(View.GONE);
@@ -268,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent intent;
         switch (id) {
             case R.id.nav_addbook:
-                intent = new Intent(context,com.mad18.nullpointerexception.takeabook.addBook.AddBook.class);
+                intent = new Intent(context,AddBook.class);
                 //startActivityForResult(intent,REQUEST_ADDBOOK);
                 startActivity(intent);
                 break;
@@ -427,7 +430,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     navigationView = (NavigationView) findViewById(R.id.nav_view);
                     User user1 = thisUser;
                     thisUser = doc.toObject(User.class);
-                    if(user1 == null || user1.getUsr_geoPoint().equals(thisUser.getUsr_geoPoint())==false){
+                    if(user1 == null || user1.getUsr_geoPoint().equals(thisUser.getUsr_geoPoint())==false
+                            || homeBooks.size()==0){
                         new UpdateHomeData().doInBackground();
                     }
                     for(String tmp:sharedUserDataKeys){
@@ -521,7 +525,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     for(DocumentSnapshot d : queryDocumentSnapshots.getDocuments()) {
                         if (d != null && d.exists()) {
                             Book book = d.toObject(Book.class);
-                            if(book.getBook_userid().equals(thisUser.getUsr_id())==false){
+                            if(book.getBook_userid().equals(thisUser.getUsr_id())==false
+                                    && book.getBook_status()==false){
                                 homeBooks.add(book);
                             }
                         }
@@ -585,60 +590,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode){
-//            case REQUEST_ADDBOOK:
-//                if(resultCode == RESULT_OK){
-//                    isMyBooksSorted = false;
-//                    TabLayout.Tab t = tabLayout.getTabAt(1);
-//                    if(data!=null){
-//                        Bundle extras = data.getExtras();
-//                        if(extras!=null){
-//                            BookWrapper bookWrapper = extras.getParcelable("newbook");
-//                            if(bookWrapper!=null){
-//                                myBooks.add(new Book(bookWrapper));
-//                            }
-//                        }
-//                    }
-//                    if(t!=null){
-//                        if(t.isSelected()){
-//                            MyPagerAdapter adapter = (MyPagerAdapter) viewPager.getAdapter();
-//                            Main_MyLibrary_Fragment fragment = (Main_MyLibrary_Fragment) adapter.getItem(viewPager.getCurrentItem());
-//                            if(fragment!=null){
-//                                if(isMyBooksSorted==false){
-////                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-////                                        Comparator<Book> byTitle = Comparator.comparing(b->b.getBook_title());
-////                                        Comparator<Book> byAuthor = Comparator.comparing(b->b.getBook_first_author());
-////                                        myBooks = myBooks.stream().sorted(byAuthor.thenComparing(byTitle)).collect(toList());
-////                                    }
-////                                    else{
-////                                        Collections.sort(myBooks, (a, b) -> {
-////                                            if(a.getBook_first_author().equals(b.getBook_first_author())){
-////                                                return a.getBook_title().compareTo(b.getBook_title());
-////                                            }
-////                                            else{
-////                                                return a.getBook_first_author().compareTo(b.getBook_first_author());
-////                                            }
-////                                        });
-////                                    }
-//                                    fragment.updateView(myBooks);
-//                                }
-//                            }
-//                        }
-//                        else{
-//                            t.select();
+//            case REQUEST_SETTINGS:
+//                if(resultCode==RESULT_OK && data !=null){
+//                    Bundle extras = data.getExtras();
+//                    if(extras!=null){
+//                        Boolean langChanged = extras.getBoolean("langChanged");
+//                        if(langChanged){
+//                            this.recreate();
 //                        }
 //                    }
 //                }
-//                break;
-            case REQUEST_SETTINGS:
-                if(resultCode==RESULT_OK && data !=null){
-                    Bundle extras = data.getExtras();
-                    if(extras!=null){
-                        Boolean langChanged = extras.getBoolean("langChanged");
-                        if(langChanged){
-                            this.recreate();
-                        }
-                    }
-                }
         }
     }
 

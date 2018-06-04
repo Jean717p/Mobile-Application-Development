@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.mad18.nullpointerexception.takeabook.util.Book;
+import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.util.Book;
 
 import java.util.List;
 
@@ -62,7 +62,14 @@ public class ShowBooksRecyclerViewAdapter extends RecyclerView.Adapter<ShowBooks
             holder.tv_book_title.setText(parts[0]);
         }
         //holder.iv_book_thumbnail.setImageResource(mData.get(position));
-        Glide.with(myContext).load(mData.get(position).getBook_thumbnail_url()).into(holder.iv_book_thumbnail);
+        if(mData.get(position).getBook_thumbnail_url().length()>0){
+            GlideApp.with(myContext).load(mData.get(position).getBook_thumbnail_url())
+                    .placeholder(R.drawable.ic_thumbnail_cover_book)
+                    .into(holder.iv_book_thumbnail);
+        }
+        else{
+            holder.iv_book_thumbnail.setImageResource(R.drawable.ic_thumbnail_cover_book);
+        }
         holder.bind(mData.get(position), listener);
     }
 
@@ -88,7 +95,6 @@ public class ShowBooksRecyclerViewAdapter extends RecyclerView.Adapter<ShowBooks
                 @Override
                 public void onClick(View v) {
                     listener.onItemClick(item);
-
                 }
             });
         }

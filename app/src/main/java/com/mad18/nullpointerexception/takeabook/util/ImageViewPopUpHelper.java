@@ -1,4 +1,4 @@
-package com.mad18.nullpointerexception.takeabook;
+package com.mad18.nullpointerexception.takeabook.util;
 
 import android.app.Activity;
 import android.app.Dialog;

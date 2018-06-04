@@ -1,4 +1,4 @@
-package com.mad18.nullpointerexception.takeabook.addBook;
+package com.mad18.nullpointerexception.takeabook.util;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +8,6 @@ import android.util.Log;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.zxing.Result;
-import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,7 +20,10 @@ import java.util.List;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 
-
+/**
+ * @apiNote intent.putExtra("toSearch","toSearch") for download only (an already inserted isbn)
+ * @apiNote intent.putExtra("justScan","justScan") to just scan the barcode
+ */
 public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.ResultHandler{
     private ZXingScannerView mScannerView;
     private String uid = "";
@@ -69,9 +71,22 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
         // Do something with the result here
         //Log.v(TAG, rawResult.getText()); // Prints scan results
         //Log.v(TAG, rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
+
         Log.d("barcode format", rawResult.getBarcodeFormat().toString());
         Log.d("print scan result", rawResult.getText());
-        downloadJson(rawResult.getText());
+        if(rawResult.getText().length()==0){
+            setResult(RESULT_CANCELED);
+            finish();
+        }
+        else if(getIntent().getStringExtra("justScan")!=null){
+            Intent intent = new Intent();
+            intent.putExtra("isbn",rawResult.getText());
+            setResult(RESULT_OK,intent);
+            finish();
+        }
+        else{
+            downloadJson(rawResult.getText());
+        }
     }
 
     /**
@@ -148,7 +163,7 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
                     }
                     FirebaseUser fbuser = FirebaseAuth.getInstance().getCurrentUser();
                     BookWrapper bookWrapper = new BookWrapper(ISBN,title,authors, publisher,editionYear,
-                            thumbnail, categories,"",fbuser.getUid(),0,0, pages);
+                            thumbnail, categories,"",fbuser.getUid(),0,0, pages,false);
                     intent.putExtra("bookinfo", bookWrapper);
                     setResult(RESULT_OK,intent);
                     finish();

@@ -1,9 +1,11 @@
-package com.mad18.nullpointerexception.takeabook;
+package com.mad18.nullpointerexception.takeabook.searchBook;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
+import com.mad18.nullpointerexception.takeabook.R;
 
 public class BookFound extends AppCompatActivity {
 

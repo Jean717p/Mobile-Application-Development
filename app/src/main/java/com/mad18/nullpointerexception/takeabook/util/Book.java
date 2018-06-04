@@ -8,6 +8,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * book_userid = book's owner reference into firestore
+ * book_id = book reference into firestore
+ * book_status = is this book lent
+ * @author Jean717p
+ */
 public class Book {
 
     String book_ISBN;
@@ -23,13 +30,14 @@ public class Book {
     String book_description;
     GeoPoint book_location;
     String book_id;
+    Boolean book_status;
 
     Map<String,Boolean> book_photo_list= new HashMap<>();
 
 
     public Book() {}
 
-    public Book(String ISBN, String title, String publisher, int editionYear, int condition, String user, Map<String,Boolean> authors, String description, String thumbnail, Map<String,Boolean> categories, GeoPoint geoPoint, int book_pages){
+    public Book(String ISBN, String title, String publisher, int editionYear, int condition, String user, Map<String,Boolean> authors, String description, String thumbnail, Map<String,Boolean> categories, GeoPoint geoPoint, int book_pages,boolean book_status){
         book_ISBN = ISBN;
         book_title = title;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -54,6 +62,7 @@ public class Book {
         book_categories = categories;
         book_location = geoPoint;
         this.book_pages = book_pages;
+        this.book_status = book_status;
     }
 
     public Book (BookWrapper bw){
@@ -89,6 +98,7 @@ public class Book {
         }
         book_pages = bw.getPages();
         book_id = bw.getId();
+        this.book_status = bw.getStatus();
     }
 
     public String getBook_ISBN() {
@@ -213,4 +223,11 @@ public class Book {
         this.book_photo_list = book_photo_list;
     }
 
+    public Boolean getBook_status() {
+        return book_status;
+    }
+
+    public void setBook_status(Boolean book_status) {
+        this.book_status = book_status;
+    }
 }

@@ -22,7 +22,6 @@ public class BookWrapper implements Parcelable {
         public BookWrapper createFromParcel(Parcel in) {
             return new BookWrapper(in);
         }
-
         public BookWrapper[] newArray(int size) {
             return new BookWrapper[size];
         }
@@ -40,13 +39,13 @@ public class BookWrapper implements Parcelable {
     private int pages=0;
     private int condition = 0;
     private String id="";
-
+    private boolean status;
     private String description;
 
 
     //Constructor
     public BookWrapper(String ISBN,String title,List<String> authors, String publisher, int editionYear, String thumbnail,
-                       List<String> categories, String description, String user, double lat, double longitude, int pages){
+                       List<String> categories, String description, String user, double lat, double longitude, int pages, boolean status){
         this.ISBN = ISBN;
         this.title = title;
         this.authors = authors;
@@ -60,6 +59,7 @@ public class BookWrapper implements Parcelable {
         this.longitude = longitude;
         photo_list = new LinkedList<>();
         this.pages=pages;
+        this.status = status;
     }
 
     public BookWrapper(Book book){
@@ -78,6 +78,7 @@ public class BookWrapper implements Parcelable {
         this.pages= book.getBook_pages();
         this.condition = book.getBook_condition();
         this.id=book.getBook_id();
+        this.status = book.getBook_status();
     }
 
     public BookWrapper(Parcel in){
@@ -96,6 +97,7 @@ public class BookWrapper implements Parcelable {
         this.pages = in.readInt();
         this.condition = in.readInt();
         this.id = in.readString();
+        this.status = in.readByte() != 0;
     }
     @Override
     public int describeContents() {
@@ -126,6 +128,7 @@ public class BookWrapper implements Parcelable {
         dest.writeInt(this.pages);
         dest.writeInt(this.condition);
         dest.writeString(this.id);
+        dest.writeByte((byte) (this.status ? 1:0));
     }
     @Override
     public String toString() {
@@ -151,6 +154,7 @@ public class BookWrapper implements Parcelable {
                 ", pages='" + Spages + '\'' +
                 ", condition='" + condition + '\'' +
                 ", id='" + this.id + '\'' +
+                ", status='" + this.status + '\'' +
                 '}';
     }
 
@@ -270,5 +274,13 @@ public class BookWrapper implements Parcelable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

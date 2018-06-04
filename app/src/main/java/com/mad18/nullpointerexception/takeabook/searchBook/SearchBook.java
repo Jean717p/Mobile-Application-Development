@@ -27,7 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.mad18.nullpointerexception.takeabook.R;
-import com.mad18.nullpointerexception.takeabook.addBook.JsonParser;
+import com.mad18.nullpointerexception.takeabook.util.JsonParser;
 import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.util.MyAtomicCounter;
 import com.mad18.nullpointerexception.takeabook.util.OnCounterChangeListener;

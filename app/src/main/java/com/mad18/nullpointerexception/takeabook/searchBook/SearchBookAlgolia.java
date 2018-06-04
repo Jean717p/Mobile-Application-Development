@@ -31,6 +31,7 @@ import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.displaySearchOnMap.DisplaySearchOnMap;
 import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
+import com.mad18.nullpointerexception.takeabook.util.ScanBarcode;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 
@@ -82,7 +83,8 @@ public class SearchBookAlgolia extends AppCompatActivity {
                 ActivityCompat.requestPermissions(SearchBookAlgolia.this,
                         new String[]{Manifest.permission.CAMERA}, ZXING_CAMERA_PERMISSION);
             } else {
-                Intent intent = new Intent(SearchBookAlgolia.this, SearchBook_BarcodeScanner.class);
+                Intent intent = new Intent(SearchBookAlgolia.this, ScanBarcode.class);
+                intent.putExtra("justScan","justScan");
                 startActivityForResult(intent,REQUEST_SCANNER);
             }
         });
@@ -92,8 +94,6 @@ public class SearchBookAlgolia extends AppCompatActivity {
 
 
     private void setMyLayout(){
-
-
         Index algolia_index;
         MaterialSearchBar searchBar = findViewById(R.id.search_book_algolia_searchBar);
         searchBar.setHint(searchBase);
@@ -245,7 +245,6 @@ public class SearchBookAlgolia extends AppCompatActivity {
                 return index;
         }
         return index;
-
     }
 
     private void searchBooksOnFireStore(String ISBN){
@@ -310,7 +309,6 @@ public class SearchBookAlgolia extends AppCompatActivity {
                     else{
                         Toast.makeText(this, R.string.search_book_algolia_no_found, Toast.LENGTH_SHORT).show();
                     }
-
                 }
             }
         }
@@ -323,7 +321,8 @@ public class SearchBookAlgolia extends AppCompatActivity {
             case ZXING_CAMERA_PERMISSION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if(mClss != null) {
-                        Intent intent = new Intent(SearchBookAlgolia.this, SearchBook_BarcodeScanner.class);
+                        Intent intent = new Intent(SearchBookAlgolia.this, ScanBarcode.class);
+                        intent.putExtra("justScan","justScan");
                         startActivityForResult(intent, REQUEST_SCANNER);
                     }
                 } else {

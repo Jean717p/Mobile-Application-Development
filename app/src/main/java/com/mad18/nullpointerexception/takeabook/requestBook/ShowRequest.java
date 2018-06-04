@@ -153,7 +153,7 @@ public class ShowRequest extends AppCompatActivity {
                     applicant = myUser;
                     myAtomicCounter.decrement();
                 }
-                db.document(loan.getBookId())
+                db.collection("books").document(loan.getBookId())
                         .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -322,6 +322,8 @@ public class ShowRequest extends AppCompatActivity {
                                         .update("exchangedOwner", true,
                                                 "startDate", Calendar.getInstance().getTime()
                                         );
+                                db.collection("books").document(requested_book.getBook_id())
+                                        .update("book_status",true);
                                 TextView textView = findViewById(R.id.request_book_status);
                                 Button button = findViewById(R.id.request_book_send);
                                 button.setVisibility(View.GONE);

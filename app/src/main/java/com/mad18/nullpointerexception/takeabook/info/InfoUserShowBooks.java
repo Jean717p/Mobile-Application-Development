@@ -12,13 +12,13 @@ import android.view.MenuItem;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
+import com.mad18.nullpointerexception.takeabook.util.MyAtomicCounter;
+import com.mad18.nullpointerexception.takeabook.util.OnCounterChangeListener;
 import com.mad18.nullpointerexception.takeabook.util.User;
 import com.mad18.nullpointerexception.takeabook.util.UserWrapper;
 
@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class InfoUserShowBooks extends AppCompatActivity {
+    private final String TAG = "InfoUserShowBooks";
     private CoordinatorLayout mainContent;
     private ShowBooksRecyclerViewAdapter myAdapter;
     ArrayList<String> books = new ArrayList<>();
@@ -37,7 +38,7 @@ public class InfoUserShowBooks extends AppCompatActivity {
     private final int BOOK_EFFECTIVELY_ADDED = 31;
     private final int REQUEST_REMOVE_BOOK = 40;
     private final int BOOK_EFFECTIVELY_REMOVED = 41;
-    private int booksSize;
+    private MyAtomicCounter bookCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,6 @@ public class InfoUserShowBooks extends AppCompatActivity {
         RecyclerView rec = findViewById(R.id.info_user_show_books_recycle_view);
         mainContent = findViewById(R.id.info_user_show_books_coordinator_layout);
         books = bundle.getStringArrayList("UserBooks");
-        booksSize = books.size();
         myAdapter = new ShowBooksRecyclerViewAdapter(this, showBooks,
                 new ShowBooksRecyclerViewAdapter.OnItemClickListener() {
                     User u ;
@@ -80,6 +80,27 @@ public class InfoUserShowBooks extends AppCompatActivity {
                         InfoUserShowBooks.this.overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
                     }
                 });
+        rec.setLayoutManager(new GridLayoutManager(this, 3));
+        rec.setScrollContainer(true);
+        rec.setVerticalScrollBarEnabled(true);
+        rec.setAdapter(myAdapter);
+        rec.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    // ...
+                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    // ...
+                }
+            }
+        });
+        bookCounter = new MyAtomicCounter(books.size());
+        bookCounter.setListener(new OnCounterChangeListener() {
+            @Override
+            public void onCounterReachZero() {
+                updateView(showBooks);
+            }
+        });
         for (String x : books) {
             db.collection("books").document(x).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -90,40 +111,11 @@ public class InfoUserShowBooks extends AppCompatActivity {
                         if(book!=null){
                             showBooks.add(book);
                         }
-                        else{
-                            booksSize--;
-                        }
                     }
-                    else{
-                        booksSize--;
-                    }
-                    if(showBooks.size()>=booksSize){
-                        updateView(showBooks);
-                    }
+                    bookCounter.decrement();
                 }
             });
         }
-        rec.setLayoutManager(new GridLayoutManager(this, 3));
-        rec.setScrollContainer(true);
-        rec.setVerticalScrollBarEnabled(true);
-        rec.setAdapter(myAdapter);
-        rec.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                // While RecyclerView enters dragging state
-                // (scroll, fling) we want our FAB to disappear.
-                // Similarly when it enters idle state we want
-                // our FAB to appear back.
-
-                // (Just uncomment corresponding hide-show methods
-                // which you want to use)
-                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                    // ...
-                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    // ...
-                }
-            }
-        });
     }
 
     @Override

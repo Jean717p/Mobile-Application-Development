@@ -75,7 +75,7 @@ public class RequestReview extends AppCompatActivity {
         stars_book = rb.getNumStars();
         Date myDate = Calendar.getInstance().getTime();
         if(stars_book != 0){
-            Review rw_book = new Review(myUser.getUsr_id(), myUser.getUsr_name(), book_text, stars_book,myDate);
+            Review rw_book = new Review(myUser.getUsr_id(), myUser.getUsr_name(),myUser.getProfileImgStoragePath(), book_text, stars_book,myDate);
             FirebaseFirestore.getInstance().collection("books").document(bookToReview.getBook_id())
                     .collection("reviews").add(rw_book);
         }
@@ -85,7 +85,7 @@ public class RequestReview extends AppCompatActivity {
             }
         }
         if(stars_user != 0){
-            Review rw_user = new Review(myUser.getUsr_id(), myUser.getUsr_name(), user_text, stars_user,myDate);
+            Review rw_user = new Review(myUser.getUsr_id(), myUser.getUsr_name(),myUser.getProfileImgStoragePath(), user_text, stars_user,myDate);
             FirebaseFirestore.getInstance().collection("user").document(otherUser.getUsr_id()).collection("reviews")
                     .add(rw_user);
         }

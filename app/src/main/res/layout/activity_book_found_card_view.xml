@@ -8,7 +8,7 @@
     android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
     tools:background="@android:color/holo_orange_light"
-    tools:context=".BookFound"
+    tools:context=".searchBook.BookFound"
     >
 
     <android.support.v7.widget.CardView
