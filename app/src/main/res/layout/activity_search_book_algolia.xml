@@ -6,12 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".searchBook.SearchBookAlgolia">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/search_app_bar"
-        app:expanded="false"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
    <android.support.v7.widget.Toolbar
         android:id="@+id/search_toolbar"
         android:layout_width="match_parent"
@@ -21,23 +15,20 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark" />
 
-    <com.mancj.materialsearchbar.MaterialSearchBar
-        android:id="@+id/search_book_algolia_searchBar"
-        style="@style/MaterialSearchBarLight"
-        android:layout_margin="16dp"
-        app:mt_placeholderColor="@color/colorPrimary"
-        app:mt_highlightedTextColor="@color/colorAccent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        app:mt_maxSuggestionsCount="10" />
-</android.support.design.widget.AppBarLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/search_book_algolia_recycler_view"
+            android:scrollbars="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?actionBarSize"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/search_app_bar">
+        android:layout_below="@id/search_toolbar">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -58,6 +49,7 @@
 
         </RelativeLayout>
     </ScrollView>
+
 
 
 

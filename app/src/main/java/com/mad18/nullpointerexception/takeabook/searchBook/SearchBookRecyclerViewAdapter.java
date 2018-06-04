@@ -41,6 +41,7 @@ class SearchBookRecyclerViewAdapter extends RecyclerView.Adapter<SearchBookRecyc
 
     public void setData(List<Book> mData){
         this.mData = mData;
+        this.notifyDataSetChanged();
     }
 
     @NonNull
