@@ -28,7 +28,6 @@ public class ShowBooksRecyclerViewAdapter extends RecyclerView.Adapter<ShowBooks
         this.myContext = myContext;
         this.mData = mData;
         this.listener = listener;
-
     }
 
     public interface OnItemClickListener {

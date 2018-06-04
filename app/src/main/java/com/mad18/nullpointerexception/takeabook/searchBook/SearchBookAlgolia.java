@@ -8,10 +8,15 @@ import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -51,10 +56,16 @@ public class SearchBookAlgolia extends AppCompatActivity {
     private String searchBase;
     private Map<String, String> booklist = new HashMap<>();
     private ArrayList<BookWrapper> booksFound = new ArrayList<>();
+    private ArrayList<SearchBookAlgoliaItem> booksToShow = new ArrayList<>();
     private Context context;
     private View mClss;
+    private Index algolia_index;
     private ZXingScannerView barcodeScanner;
     private static final int ZXING_CAMERA_PERMISSION = 4, REQUEST_SCANNER=3, FINE_LOCATION_PERMISSION=7, FINE_LOCATION_PERMISSION_BARCODE = 6;
+    private RecyclerView mRecyclerView;
+    private SearchBookAlgoliaAdapter myAdapter;
+    private ImageView iw_scanbarcode;
+
 
     @Override
     protected void onResume() {
@@ -68,15 +79,16 @@ public class SearchBookAlgolia extends AppCompatActivity {
         setContentView(R.layout.activity_search_book_algolia);
         context = this;
         searchBase = getIntent().getStringExtra("action");
-        ImageView iw = findViewById(R.id.search_book_algolia_ImageView);
+        iw_scanbarcode = findViewById(R.id.search_book_algolia_ImageView);
         android.support.v7.widget.Toolbar toolbar = findViewById(R.id.search_toolbar);
+        mRecyclerView = findViewById(R.id.search_book_algolia_recycler_view);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Search " + searchBase);
         if(searchBase.equals("ISBN")){
-            iw.setVisibility(View.VISIBLE);
+            iw_scanbarcode.setVisibility(View.VISIBLE);
         }
-        iw.setOnClickListener(view -> {
+        iw_scanbarcode.setOnClickListener(view -> {
             if (ContextCompat.checkSelfPermission(SearchBookAlgolia.this, Manifest.permission.CAMERA)
                     != PackageManager.PERMISSION_GRANTED) {
                 mClss = view;
@@ -89,141 +101,27 @@ public class SearchBookAlgolia extends AppCompatActivity {
             }
         });
 
-        setMyLayout();
-    }
-
-
-    private void setMyLayout(){
-        Index algolia_index;
-        MaterialSearchBar searchBar = findViewById(R.id.search_book_algolia_searchBar);
-        searchBar.setHint(searchBase);
-        if((algolia_index = algoliaInit(searchBase)) != null){
-            searchBar.addTextChangeListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    if (charSequence.length() == 0) {
-                        searchBar.clearSuggestions();
-                        searchBar.hideSuggestionsList();
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    if (editable.length() == 0) {
-                        searchBar.clearSuggestions();
-                        searchBar.hideSuggestionsList();
-                    }
-                    String filter = "NOT UserID:" + FirebaseAuth.getInstance().getUid();
-                    if (!searchBase.equals("ISBN")) {
-                        Query query = new Query(editable.toString())
-                                .setAttributesToRetrieve("Title", "ISBN", "Author")
-                                .setFilters(filter)
-                                .setHitsPerPage(50);
-
-                        algolia_index.searchAsync(query, (jsonObject, e) -> {
-                            try {
-                                if(jsonObject != null){
-                                    if (jsonObject.has("hits")) {
-                                        JSONArray hits = jsonObject.getJSONArray("hits");
-                                        for (int i = 0; i < hits.length(); i++) {
-                                            JSONObject retrieved = hits.getJSONObject(i);
-                                            String title, isbn, author;
-                                            if (retrieved.has("Title")) {
-                                                title = retrieved.get("Title").toString();
-
-                                            }
-                                            else {
-                                                title = "";
-                                            }
-                                            if(retrieved.has("ISBN")){
-                                                isbn = retrieved.get("ISBN").toString();
-                                            }
-                                            else {
-                                                isbn = "";
-                                            }
-                                            if(retrieved.has("Author")){
-                                                author = retrieved.get("Author").toString();
-                                            }
-                                            else{
-                                                author = "";
-                                            }
-                                            String bookkey = "Title:" + title + " " + "Author:" + author;
-                                            booklist.put(bookkey, isbn);
-
-                                        }
-                                        List<String> l = new ArrayList<String>(booklist.keySet());
-                                        searchBar.setLastSuggestions(l);
-                                        searchBar.showSuggestionsList();
-                                    }
-                                }
-
-                            } catch (JSONException e1) {
-                                e1.printStackTrace();
-                            }
-
-                        });
-                    } else {
-                        Query query = new Query(editable.toString())
-                                .setAttributesToRetrieve(searchBase)
-                                //.setFilters(filter)
-                                .setHitsPerPage(50);
-
-                        algolia_index.searchAsync(query, (jsonObject, e) -> {
-                            try {
-                                if (jsonObject.has("hits")) {
-                                    JSONArray hits = jsonObject.getJSONArray("hits");
-                                    for (int i = 0; i < hits.length(); i++) {
-                                        JSONObject retrieved = hits.getJSONObject(i);
-                                        if (retrieved.has(searchBase)) {
-                                            String item_name = retrieved.get(searchBase).toString();
-                                            booklist.put(item_name, item_name);
-                                        }
-                                    }
-                                    List<String> l = new ArrayList<String>(booklist.keySet());
-                                    searchBar.setLastSuggestions(l);
-                                    searchBar.showSuggestionsList();
-                                }
-                            } catch (JSONException e1) {
-                                e1.printStackTrace();
-                            }
-
-                        });
-                    }
-
-                }
-            });
-        }
-
-
-        searchBar.setSuggstionsClickListener(new SuggestionsAdapter.OnItemViewClickListener() {
+        myAdapter = new SearchBookAlgoliaAdapter(new ArrayList<SearchBookAlgoliaItem>(), this, new SearchBookAlgoliaAdapter.OnItemClickListener() {
             @Override
-            public void OnItemClickListener(int position, View v) {
-                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions((Activity) context,
-                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_PERMISSION);
-                    return;
+            public void onItemClick(SearchBookAlgoliaItem item) {
+                //TODO: Far partire l'activity della mappa con tutto ciò che serve nel BUNDLE
+                searchBooksOnFireStore(item.getISBN());
+                if(booksFound.size() != 0){
+                    Intent intent = new Intent(context, DisplaySearchOnMap.class);
+                    Bundle b = new Bundle();
+                    b.putParcelableArrayList("bookToShow", booksFound);
+                    intent.putExtras(b);
+                    startActivity(intent);
                 }
                 else{
-
-                    String key = searchBar.getLastSuggestions().get(position).toString();
-                    String ISBN = booklist.get(key);
-                    searchBooksOnFireStore(ISBN);
+                    Toast.makeText(context, R.string.search_book_algolia_no_found, Toast.LENGTH_SHORT).show();
                 }
-
-            }
-
-            @Override
-            public void OnItemDeleteListener(int position, View v) {
 
             }
         });
-
+        mRecyclerView.setAdapter(myAdapter);
+        algolia_index = algoliaInit(searchBase);
+        initViews();
     }
 
     private Index algoliaInit(String flag){
@@ -247,33 +145,86 @@ public class SearchBookAlgolia extends AppCompatActivity {
         return index;
     }
 
-    private void searchBooksOnFireStore(String ISBN){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference booksRef = db.collection("books");
-        com.google.firebase.firestore.Query query_ISBN = booksRef.whereEqualTo("book_ISBN", ISBN);
-        Task<QuerySnapshot> bookToShow = query_ISBN.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search_book_algolia_menu, menu);
+        MenuItem search = menu.findItem(R.id.search_book_algolia_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
+        searchOnAlgolia(searchView);
+        return true;
+    }
+
+    private void initViews(){
+        mRecyclerView = (RecyclerView) findViewById(R.id.search_book_algolia_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(layoutManager);
+    }
+
+    private void searchOnAlgolia(SearchView searchView) {
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                List<DocumentSnapshot> documents = task.getResult().getDocuments();
-                for (DocumentSnapshot documentSnapshot : documents) {
-                    if (documentSnapshot != null) {
-                        if (documentSnapshot.exists()) {
-                            Book tmp = documentSnapshot.toObject(Book.class);
-                            booksFound.add(new BookWrapper(tmp));
+            public boolean onQueryTextSubmit(String query) {
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(newText.length() > 0){
+                    String filter = "NOT UserID:" + FirebaseAuth.getInstance().getUid();
+                    booksToShow.clear();
+                    Query query = new Query(newText)
+                            .setAttributesToRetrieve("Title", "ISBN", "Author", "ThumbnailURL")
+                            .setFilters(filter)
+                            .setHitsPerPage(50);
+
+                    algolia_index.searchAsync(query, (jsonObject, e) -> {
+                        try {
+                            if (jsonObject != null) {
+                                if (jsonObject.has("hits")) {
+                                    JSONArray hits = jsonObject.getJSONArray("hits");
+                                    for (int i = 0; i < hits.length(); i++) {
+                                        JSONObject retrieved = hits.getJSONObject(i);
+                                        String title, isbn, author, thumbnailURL;
+                                        if (retrieved.has("Title")) {
+                                            title = retrieved.get("Title").toString();
+                                        } else {
+                                            title = "";
+                                        }
+                                        if (retrieved.has("ISBN")) {
+                                            isbn = retrieved.get("ISBN").toString();
+                                        } else {
+                                            isbn = "";
+                                        }
+                                        if (retrieved.has("Author")) {
+                                            author = retrieved.get("Author").toString();
+                                        } else {
+                                            author = "";
+                                        }
+                                        if (retrieved.has("ThumbnailURL")) {
+                                            thumbnailURL = retrieved.get("ThumbnailURL").toString();
+                                        } else {
+                                            thumbnailURL = "";
+                                        }
+                                        booksToShow.add(new SearchBookAlgoliaItem(title, author, thumbnailURL, isbn));
+                                    }
+                                    //Update recycler view
+                                    updateView(booksToShow);
+                                }
+                            }
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
                         }
-                    }
-                }
-                if(booksFound.size() != 0){
-                    Intent intent = new Intent(context, DisplaySearchOnMap.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelableArrayList("bookToShow", booksFound);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
+                    });
                 }
                 else{
-                    Toast.makeText(context, R.string.search_book_algolia_no_found, Toast.LENGTH_SHORT).show();
+                    if(searchBase.equals("ISBN")){
+                        iw_scanbarcode.setVisibility(View.VISIBLE);
+                    }
                 }
-
+                return false;
             }
         });
     }
@@ -283,12 +234,22 @@ public class SearchBookAlgolia extends AppCompatActivity {
         switch (item.getItemId()){
             case android.R.id.home:
                 onBackPressed();
+                booksToShow.clear();
                 finish();
                 overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public void updateView(ArrayList<SearchBookAlgoliaItem> books){
+        if(myAdapter==null){
+            return;
+        }
+        myAdapter.setData(books);
+        myAdapter.notifyDataSetChanged();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -359,5 +320,38 @@ public class SearchBookAlgolia extends AppCompatActivity {
 
         return;
     }
+
+    private void searchBooksOnFireStore(String ISBN){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference booksRef = db.collection("books");
+        com.google.firebase.firestore.Query query_ISBN = booksRef.whereEqualTo("book_ISBN", ISBN);
+        Task<QuerySnapshot> bookToShow = query_ISBN.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                for (DocumentSnapshot documentSnapshot : documents) {
+                    if (documentSnapshot != null) {
+                        if (documentSnapshot.exists()) {
+                            Book tmp = documentSnapshot.toObject(Book.class);
+                            booksFound.add(new BookWrapper(tmp));
+                        }
+                    }
+                }
+                if(booksFound.size() != 0){
+                    Intent intent = new Intent(context, DisplaySearchOnMap.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList("bookToShow", booksFound);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(context, R.string.search_book_algolia_no_found, Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+    }
+
+
 
 }
