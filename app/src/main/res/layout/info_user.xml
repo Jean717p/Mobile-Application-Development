@@ -233,6 +233,7 @@
                 android:layout_below="@id/info_user_library_cv"
                 android:layout_width="match_parent"
                 android:layout_margin="8dp"
+                android:visibility="visible"
                 app:layout_constraintTop_toBottomOf="@id/info_user_library_cv"
                 android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
                 android:divider="@android:color/darker_gray"

@@ -2,6 +2,7 @@ package com.mad18.nullpointerexception.takeabook.info;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,8 +11,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,7 +49,99 @@ public class InfoUser extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.info_user);
+         ExpandableListView expandableListView = (ExpandableListView) findViewById(R.id.info_user_expandableListView);
+         ExpandableListAdapter adapter = new ExpandableListAdapter() {
+             @Override
+             public void registerDataSetObserver(DataSetObserver observer) {
 
+             }
+
+             @Override
+             public void unregisterDataSetObserver(DataSetObserver observer) {
+
+             }
+
+             @Override
+             public int getGroupCount() {
+                 return 0;
+             }
+
+             @Override
+             public int getChildrenCount(int groupPosition) {
+                 return 0;
+             }
+
+             @Override
+             public Object getGroup(int groupPosition) {
+                 return null;
+             }
+
+             @Override
+             public Object getChild(int groupPosition, int childPosition) {
+                 return null;
+             }
+
+             @Override
+             public long getGroupId(int groupPosition) {
+                 return 0;
+             }
+
+             @Override
+             public long getChildId(int groupPosition, int childPosition) {
+                 return 0;
+             }
+
+             @Override
+             public boolean hasStableIds() {
+                 return false;
+             }
+
+             @Override
+             public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+                 return null;
+             }
+
+             @Override
+             public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+                 return null;
+             }
+
+             @Override
+             public boolean isChildSelectable(int groupPosition, int childPosition) {
+                 return false;
+             }
+
+             @Override
+             public boolean areAllItemsEnabled() {
+                 return false;
+             }
+
+             @Override
+             public boolean isEmpty() {
+                 return false;
+             }
+
+             @Override
+             public void onGroupExpanded(int groupPosition) {
+
+             }
+
+             @Override
+             public void onGroupCollapsed(int groupPosition) {
+
+             }
+
+             @Override
+             public long getCombinedChildId(long groupId, long childId) {
+                 return 0;
+             }
+
+             @Override
+             public long getCombinedGroupId(long groupId) {
+                 return 0;
+             }
+         };
+         expandableListView.setAdapter(adapter);
         db = FirebaseFirestore.getInstance();
         Toolbar toolbar = findViewById(R.id.info_user_toolbar);
         setSupportActionBar(toolbar);
