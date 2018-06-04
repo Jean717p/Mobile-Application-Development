@@ -134,6 +134,8 @@
                 android:visibility="invisible"
                 />
 
+
+
             <TextView
                 android:id="@+id/request_book_end_date_owner"
                 android:layout_width="match_parent"
@@ -212,6 +214,26 @@
                     android:imeOptions="actionSearch"
                     />
             </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
+        <!-- QUESTA è LA COPPIA TEXTVIEW LABEL E TEXTVIEW DEL MESSAGGIO RICEVUTO !-->
+            <TextView
+                android:id="@+id/request_book_label_tv_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Message"
+                android:visibility="invisible"
+                android:layout_below="@id/request_book_status"/>
+
+            <TextView
+                android:id="@+id/request_book_tv_message"
+                android:layout_margin="16dp"
+                android:visibility="invisible"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/request_book_label_tv_message"/>
 
             <Button
                 android:id="@+id/request_book_cancel"
