@@ -57,6 +57,7 @@
             android:background="@drawable/corner_button"
             android:padding="16dp"
             android:text="@string/read_barcode"
+            android:textStyle="normal|bold"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
             android:textColor="@android:color/white"
             android:textSize="10sp" />

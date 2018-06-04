@@ -48,6 +48,7 @@ public class RequestBook extends AppCompatActivity {
         }
         setContentView(R.layout.activity_request_book);
         Toolbar toolbar = findViewById(R.id.request_book_toolbar);
+        toolbar.setTitle(R.string.title_activity_request_book);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Bundle bundle = getIntent().getExtras();
@@ -94,10 +95,10 @@ public class RequestBook extends AppCompatActivity {
         TextView tv;
         tv = findViewById(R.id.request_book_title);
         tv.setText(requested_book.getBook_title());
-        tv = findViewById(R.id.request_book_start_date);
-        tv.setVisibility(View.INVISIBLE);
-        tv = findViewById(R.id.request_book_label_status);
-        tv.setVisibility(View.INVISIBLE);
+    /*    tv = findViewById(R.id.request_book_end_date_owner);
+        tv.setHeight(0);
+        tv = findViewById(R.id.request_book_label_end_date_owner);
+        tv.setHeight(0)*/;
         tv = findViewById(R.id.request_book_owner);
         tv.setText(bookOwner.getUsr_name());
         tv.setTextColor(Color.BLUE);
@@ -138,7 +139,6 @@ public class RequestBook extends AppCompatActivity {
                             }
                         });
                         send.setVisibility(View.GONE);
-                        textView = findViewById(R.id.request_book_start_date);
                         textView.setText(formatter.format(myDate));
                         textView.setVisibility(View.VISIBLE);
                         setResult(RESULT_OK);

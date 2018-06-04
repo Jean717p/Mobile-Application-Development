@@ -111,7 +111,7 @@
             android:layout_marginTop="8dp"
             android:padding="3dp"
             android:textStyle="normal|bold"
-            android:text="@string/request_book_start_date"
+            android:text="@string/loan_book_start_date"
             android:textColor="@color/colorPrimary"
            />
 

@@ -44,6 +44,8 @@
     <string name="title_activity_book_generic_info">Informazioni libro</string>
     <string name="title_activity_fullscreen">Schermo intero</string>
     <string name="title_activity_list_of_chat">Lista delle chat</string>
+    <string name="title_activity_show_request">Visualizza richiesta</string>
+    <string name="title_activity_request_book">Richiedi libro</string>
 
 
     <!--Photo-->
@@ -178,7 +180,7 @@
     <string name="requests_book_archive">Archivio richieste</string>
     <string name="request_book_applicant">Richiedente</string>
     <string name="request_book_accept_request">Accetta richiesta</string>
-    <string name="request_book_start_date">Data richiesta</string>
+    <string name="request_book_start_date">Data:</string>
     <string name="request_book_book_title">Titolo del libro</string>
     <string name="request_book_status">Stato:</string>
     <string name="request_book_status_pending">In attesa</string>
@@ -221,6 +223,9 @@
     <string name="send_request">Invia richiesta</string>
     <string name="message">Messaggio</string>
     <string name="info_book_book_status">Stato:</string>
+
+    <string name="loan_book_start_date">Data richiesta</string>
+
 
 
 </resources>

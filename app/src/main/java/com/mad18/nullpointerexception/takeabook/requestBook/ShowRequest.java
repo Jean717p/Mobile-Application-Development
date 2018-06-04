@@ -67,6 +67,7 @@ public class ShowRequest extends AppCompatActivity {
         setContentView(R.layout.activity_request_book);
         context = this;
         Toolbar toolbar = findViewById(R.id.request_book_toolbar);
+        toolbar.setTitle(R.string.title_activity_show_request);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         loanRef = getIntent().getStringExtra("loanRef");

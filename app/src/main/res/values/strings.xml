@@ -44,6 +44,8 @@
     <string name="title_activity_book_generic_info">Book_generic_info</string>
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="title_activity_list_of_chat">listOfChatActivity</string>
+    <string name="title_activity_show_request">Show request</string>
+    <string name="title_activity_request_book">Request book</string>
 
 
     <!--Photo-->
@@ -178,7 +180,7 @@
     <string name="requests_book_archive">Requests archive</string>
     <string name="request_book_applicant">Applicant</string>
     <string name="request_book_accept_request">Accept request</string>
-    <string name="request_book_start_date">Request date</string>
+    <string name="request_book_start_date">Date:</string>
     <string name="request_book_status">Status:</string>
     <string name="request_book_status_pending">Pending</string>
     <string name="request_book_status_exchg_applicant">Waiting for applicant</string>
@@ -224,6 +226,9 @@
     <string name="start_date">Start date</string>
     <string name="request_book_book_title">Book title</string>
     <string name="info_book_book_status">Status:</string>
+
+    <string name="loan_book_start_date">Request date</string>
+
 
 
 </resources>

@@ -16,13 +16,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/request_book_toolbar">
-        <RelativeLayout android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent">
             <ImageView
-                android:padding="8dp"
                 android:id="@+id/request_book_main_image"
                 android:layout_width="110dp"
                 android:layout_height="150dp"
+                android:layout_margin="16dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 app:srcCompat ="@drawable/ic_thumbnail_cover_book" />
@@ -34,7 +35,7 @@
                 android:layout_marginLeft="@dimen/layout_margin"
                 android:layout_marginRight="8dp"
                 android:layout_toRightOf="@id/request_book_main_image"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/info_book_label_title"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:textColor="@color/colorPrimary"
@@ -49,6 +50,7 @@
                 android:layout_alignBaseline="@id/request_book_label_title"
                 android:layout_alignTop="@id/request_book_label_title"
                 android:layout_marginEnd="16dp"
+                android:layout_marginStart="4dp"
                 android:layout_toEndOf="@id/request_book_label_title"
                 android:fontFamily="sans-serif-light"
                 android:paddingBottom="4dp"
@@ -76,6 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:paddingBottom="4dp"
+                android:layout_marginStart="4dp"
                 android:fontFamily="sans-serif-light"
                 android:layout_alignBaseline="@id/request_book_label_owner"
                 android:layout_alignTop="@id/request_book_label_owner"
@@ -105,6 +108,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:paddingBottom="4dp"
+                android:layout_marginStart="4dp"
                 android:fontFamily="sans-serif-light"
                 android:layout_alignBaseline="@id/request_book_label_start_date"
                 android:layout_alignTop="@id/request_book_label_start_date"
@@ -119,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/layout_margin"
                 android:layout_marginRight="8dp"
-                android:text=""
+                android:text="@string/request_book_label_end_date"
                 android:textSize="15sp"
                 android:layout_toRightOf="@id/request_book_main_image"
                 android:textColor="@color/colorPrimary"
@@ -129,12 +133,14 @@
                 android:layout_below="@id/request_book_start_date"
                 android:visibility="invisible"
                 />
+
             <TextView
                 android:id="@+id/request_book_end_date_owner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:paddingBottom="4dp"
+                android:layout_marginStart="4dp"
                 android:fontFamily="sans-serif-light"
                 android:layout_alignBaseline="@id/request_book_label_end_date_owner"
                 android:layout_alignTop="@id/request_book_label_end_date_owner"
@@ -159,12 +165,14 @@
                 android:fontFamily="sans-serif-light"
                 android:layout_below="@id/request_book_end_date_owner"
                 />
+
             <TextView
                 android:id="@+id/request_book_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:paddingBottom="4dp"
+                android:layout_marginStart="4dp"
                 android:fontFamily="sans-serif-light"
                 android:layout_alignBaseline="@id/request_book_label_status"
                 android:layout_alignTop="@id/request_book_label_status"
@@ -173,51 +181,64 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:textSize="13sp"
                 />
-            <TextView
+
+
+
+
+            <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
                 android:id="@+id/request_book_label_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/request_book_message_to_owner"
-                android:textSize="15sp"
-                android:textColor="@color/colorPrimary"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-light"
-                android:layout_below="@id/request_book_main_image"
-                />
-            <EditText
-                android:id="@+id/request_book_message"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:layout_marginTop="8dp"
-                android:fontFamily="sans-serif-light"
-                android:layout_below="@id/request_book_label_message"
-                android:textColor="@color/textColor"
-                android:maxLength="150"
-                android:textSize="15sp"
-                android:inputType="textMultiLine"
-                />
+                android:layout_below="@id/request_book_status"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="16dp"
+                android:maxLength="13"
+                android:layout_centerHorizontal="true"
+                app:errorColor="#ddaa00"
+                app:hasClearButton="true"
+                app:helperTextColor="@color/colorAccent"
+                app:labelText="Write a message to owner"
+                app:maxCharacters="300"
+                app:panelBackgroundColor="@android:color/transparent"
+                app:primaryColor="@color/colorAccent">
+
+                <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+                    android:id="@+id/request_book_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="15"
+                    android:imeOptions="actionSearch"
+                    />
+            </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
             <Button
                 android:id="@+id/request_book_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/cancel"
+                android:background="@drawable/corner_button"
                 android:gravity="center"
+                android:textStyle="normal|bold"
                 android:layout_gravity="center"
-                android:layout_below="@id/request_book_message"
-                android:layout_marginTop="8dp"
+                android:textColor="@android:color/white"
+                android:layout_below="@id/request_book_label_message"
+                android:layout_margin="16dp"
                 />
             <Button
                 android:id="@+id/request_book_send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/send"
+                android:background="@drawable/corner_button"
+                android:textStyle="normal|bold"
+                android:textColor="@android:color/white"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:layout_below="@id/request_book_message"
+                android:layout_below="@id/request_book_label_message"
                 android:layout_toRightOf="@id/request_book_cancel"
-                android:layout_marginTop="8dp"
+                android:layout_margin="16dp"
                 />
         </RelativeLayout>
     </ScrollView>

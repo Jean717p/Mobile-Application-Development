@@ -24,6 +24,23 @@
             android:layout_marginTop="41dp"
             app:srcCompat ="@drawable/ic_book_cover" />
 
+
+
+        <Button
+            android:id="@+id/info_book_request_book_button"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="8dp"
+            android:layout_below="@id/info_book_main_image"
+            android:text="@string/info_book_request_this_book"
+            android:background="@drawable/corner_button"
+            android:textStyle="normal|bold"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:clickable="false"
+            />
+
         <TextView
             android:id="@+id/info_book_label_title"
             android:layout_width="wrap_content"
@@ -340,7 +357,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:layout_below="@id/info_book_book_conditions">
+            android:layout_below="@id/info_book_book_status">
 
             <LinearLayout
                 android:layout_margin="8dp"
