@@ -235,7 +235,9 @@ public class AddBook extends AppCompatActivity {
         Index title_index = client.getIndex("book_title");
         List<JSONObject> array_title = new ArrayList<JSONObject>();
         try {
-            array_title.add(new JSONObject().put("Title", b.getBook_title()).put("ISBN", b.getBook_ISBN()).put("UserID", b.getBook_userid()));
+            array_title.add(new JSONObject().put("Title", b.getBook_title()).put("ISBN", b.getBook_ISBN()).put("UserID", b.getBook_userid())
+                    .put("Author",b.getBook_first_author())
+                    .put("ThumbnailURL", b.getBook_thumbnail_url()));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -245,8 +247,9 @@ public class AddBook extends AppCompatActivity {
         Index author_index = client.getIndex("book_author");
         List<JSONObject> array_author = new ArrayList<JSONObject>();
         try {
-            array_author.add(new JSONObject().put("Author", b.getBook_first_author()).put("ISBN", b.getBook_ISBN())
-                    .put("User", b.getBook_first_author()).put("UserID", b.getBook_userid()));
+            array_author.add(new JSONObject().put("Title", b.getBook_title()).put("ISBN", b.getBook_ISBN()).put("UserID", b.getBook_userid())
+                    .put("Author",b.getBook_first_author())
+                    .put("ThumbnailURL", b.getBook_thumbnail_url()));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -256,7 +259,9 @@ public class AddBook extends AppCompatActivity {
         Index ISBN_index = client.getIndex("book_ISBN");
         List<JSONObject> array_ISBN= new ArrayList<JSONObject>();
         try {
-            array_ISBN.add(new JSONObject().put("ISBN", b.getBook_ISBN()).put("UserID", b.getBook_userid()));
+            array_ISBN.add(new JSONObject().put("Title", b.getBook_title()).put("ISBN", b.getBook_ISBN()).put("UserID", b.getBook_userid())
+                    .put("Author",b.getBook_first_author())
+                    .put("ThumbnailURL", b.getBook_thumbnail_url()));
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -25,9 +25,11 @@
 
     <ScrollView
         android:layout_width="match_parent"
+        android:id="@+id/search_book_algolia_scrollview"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
+        android:visibility="invisible"
         android:layout_below="@id/search_toolbar">
 
         <RelativeLayout
@@ -44,7 +46,6 @@
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:clickable="true"
-                android:visibility="invisible"
                 app:srcCompat="@drawable/ic_scanbarcode" />
 
         </RelativeLayout>

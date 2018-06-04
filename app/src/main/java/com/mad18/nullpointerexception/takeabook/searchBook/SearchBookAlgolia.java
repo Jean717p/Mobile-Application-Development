@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.algolia.search.saas.Client;
@@ -64,7 +65,7 @@ public class SearchBookAlgolia extends AppCompatActivity {
     private static final int ZXING_CAMERA_PERMISSION = 4, REQUEST_SCANNER=3, FINE_LOCATION_PERMISSION=7, FINE_LOCATION_PERMISSION_BARCODE = 6;
     private RecyclerView mRecyclerView;
     private SearchBookAlgoliaAdapter myAdapter;
-    private ImageView iw_scanbarcode;
+    private ScrollView sv_scanbarcode;
 
 
     @Override
@@ -79,15 +80,16 @@ public class SearchBookAlgolia extends AppCompatActivity {
         setContentView(R.layout.activity_search_book_algolia);
         context = this;
         searchBase = getIntent().getStringExtra("action");
-        iw_scanbarcode = findViewById(R.id.search_book_algolia_ImageView);
+        sv_scanbarcode = findViewById(R.id.search_book_algolia_scrollview);
         android.support.v7.widget.Toolbar toolbar = findViewById(R.id.search_toolbar);
         mRecyclerView = findViewById(R.id.search_book_algolia_recycler_view);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Search " + searchBase);
         if(searchBase.equals("ISBN")){
-            iw_scanbarcode.setVisibility(View.VISIBLE);
+            sv_scanbarcode.setVisibility(View.VISIBLE);
         }
+        ImageView iw_scanbarcode = findViewById(R.id.search_book_algolia_ImageView);
         iw_scanbarcode.setOnClickListener(view -> {
             if (ContextCompat.checkSelfPermission(SearchBookAlgolia.this, Manifest.permission.CAMERA)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -104,19 +106,7 @@ public class SearchBookAlgolia extends AppCompatActivity {
         myAdapter = new SearchBookAlgoliaAdapter(new ArrayList<SearchBookAlgoliaItem>(), this, new SearchBookAlgoliaAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(SearchBookAlgoliaItem item) {
-                //TODO: Far partire l'activity della mappa con tutto ciò che serve nel BUNDLE
                 searchBooksOnFireStore(item.getISBN());
-                if(booksFound.size() != 0){
-                    Intent intent = new Intent(context, DisplaySearchOnMap.class);
-                    Bundle b = new Bundle();
-                    b.putParcelableArrayList("bookToShow", booksFound);
-                    intent.putExtras(b);
-                    startActivity(intent);
-                }
-                else{
-                    Toast.makeText(context, R.string.search_book_algolia_no_found, Toast.LENGTH_SHORT).show();
-                }
-
             }
         });
         mRecyclerView.setAdapter(myAdapter);
@@ -221,7 +211,7 @@ public class SearchBookAlgolia extends AppCompatActivity {
                 }
                 else{
                     if(searchBase.equals("ISBN")){
-                        iw_scanbarcode.setVisibility(View.VISIBLE);
+                        sv_scanbarcode.setVisibility(View.VISIBLE);
                     }
                 }
                 return false;
@@ -325,10 +315,11 @@ public class SearchBookAlgolia extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference booksRef = db.collection("books");
         com.google.firebase.firestore.Query query_ISBN = booksRef.whereEqualTo("book_ISBN", ISBN);
-        Task<QuerySnapshot> bookToShow = query_ISBN.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        query_ISBN.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                booksFound.clear(); //Per evitare click multipli
                 for (DocumentSnapshot documentSnapshot : documents) {
                     if (documentSnapshot != null) {
                         if (documentSnapshot.exists()) {
