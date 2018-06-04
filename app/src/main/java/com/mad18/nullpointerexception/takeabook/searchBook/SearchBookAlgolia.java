@@ -84,7 +84,7 @@ public class SearchBookAlgolia extends AppCompatActivity {
                         new String[]{Manifest.permission.CAMERA}, ZXING_CAMERA_PERMISSION);
             } else {
                 Intent intent = new Intent(SearchBookAlgolia.this, ScanBarcode.class);
-                intent.putExtra("justScan","justScan");
+                intent.putExtra("justScan","ok");
                 startActivityForResult(intent,REQUEST_SCANNER);
             }
         });

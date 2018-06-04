@@ -38,6 +38,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -164,10 +165,11 @@ public class AddBook extends AppCompatActivity {
             }
         });
        if(state == null){
+           /*
             for(int i:addBookTextViewIds){
                 //(i).setVisibility(View.INVISIBLE);
                 findViewById(i).setEnabled(false);
-            }
+            }*/
 //            findViewById(R.id.add_book_text_field_ISBN).setVisibility(View.VISIBLE);
 //            findViewById(R.id.add_book_picture).setVisibility(View.INVISIBLE);
            findViewById(R.id.add_book_text_field_ISBN).setEnabled(true);
@@ -271,9 +273,12 @@ public class AddBook extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.add_book_done:
-                ExtendedEditText eet;
-                eet = findViewById(R.id.add_book_extended_edit_Title);
-                if(eet.getText().toString().length()>0) {
+                ExtendedEditText eet_title, eet_ISBN, eet_author;
+                eet_title = findViewById(R.id.add_book_extended_edit_Title);
+                eet_ISBN = findViewById(R.id.add_book_extended_edit_text_ISBN);
+                eet_author = findViewById(R.id.add_book_extended_edit_Author);
+                if(eet_ISBN.getText().toString().length()>0 || eet_author.getText().toString().length() > 0
+                        || eet_title.getText().toString().length() > 0) {
                     storeBookEditData();
                     Intent myLibIntent = new Intent();
                     myLibIntent.putExtra("new_book",new BookWrapper(bookToAdd));
@@ -348,37 +353,79 @@ public class AddBook extends AppCompatActivity {
         CollectionReference books = db.collection("books");
         CollectionReference users = db.collection("users");
         String bookImgPath;
-        Map<String,Boolean> authors = new HashMap<>();
+        Map<String,Boolean> authors = new HashMap<>(), categories = new HashMap<>();
         ExtendedEditText eet;
         Map<String,Boolean>photourllist = new HashMap<>();
         DocumentReference bookRef = books.document();
         //Aggiunta libro a elenco libri
         if(bookToAdd==null){
-            bookToAdd = new Book();
+            bookToAdd = new Book("","","",0,0,"",
+                    new HashMap<String,Boolean>(),"","",
+                    new HashMap<String,Boolean>(),
+                    new GeoPoint(0,0),
+                    0,false);
         }
+
         bookToAdd.setBook_userid(user.getUid());
         eet = findViewById(R.id.add_book_extended_edit_text_ISBN);
-        bookToAdd.setBook_ISBN(eet.getText().toString());
-        eet = findViewById(R.id.add_book_extended_edit_text_Description);
+        if(eet.getText().toString().length() > 0){
+            bookToAdd.setBook_ISBN(eet.getText().toString());
+        }
 
-        bookToAdd.setBook_description(eet.getText().toString());
+        eet = findViewById(R.id.add_book_extended_edit_text_Description);
+        if(eet.getText().toString().length() > 0){
+            bookToAdd.setBook_description(eet.getText().toString());
+        }
+        else{
+            bookToAdd.setBook_description("");
+        }
+
+
         eet = findViewById(R.id.add_book_extended_edit_Author);
-        String tmp[] = eet.getText().toString().split(","); //è la virgola???
-        for(int i=0;i<tmp.length;i++){
-            authors.put(tmp[i],true);
+        if(eet.getText().toString().length() > 0){
+            String tmp[] = eet.getText().toString().split(","); //è la virgola???
+            //bookToAdd.setBook_first_author(tmp[0]);
+            for(int i=0;i<tmp.length;i++){
+                authors.put(tmp[i],true);
+            }
+            bookToAdd.setBook_authors(authors);
         }
         bookToAdd.setBook_condition(staticSpinner.getSelectedItemPosition());
-        bookToAdd.setBook_authors(authors);
-        eet = findViewById(R.id.add_book_extended_edit_text_EditionYear);
-        bookToAdd.setBook_editionYear(Integer.parseInt(eet.getText().toString()));
-        eet = findViewById(R.id.add_book_extended_edit_Title);
-        bookToAdd.setBook_title(eet.getText().toString());
-        if(bookToAdd.getBook_title().length()==0){
-            return;
-        }
-        eet = findViewById(R.id.add_book_extended_edit_text_Publisher);
 
-        bookToAdd.setBook_publisher(eet.getText().toString());
+        eet = findViewById(R.id.add_book_extended_edit_text_EditionYear);
+        if(eet.getText().toString().length() > 0){
+            bookToAdd.setBook_editionYear(Integer.parseInt(eet.getText().toString()));
+        }
+
+
+        eet = findViewById(R.id.add_book_extended_edit_Title);
+        if(eet.getText().toString().length() > 0){
+            bookToAdd.setBook_title(eet.getText().toString());
+        }
+
+        /*
+        if(bookToAdd.getBook_title().length()==0 || bookToAdd.getBook_first_author().length()==0
+                || bookToAdd.getBook_ISBN().length() == 0){
+            return;
+        }*/
+
+        eet = findViewById(R.id.add_book_extended_edit_text_Publisher);
+        if(eet.getText().toString().length() > 0) {
+            bookToAdd.setBook_publisher(eet.getText().toString());
+        }
+
+        eet = findViewById(R.id.add_book_extended_edit_Category);
+        if(eet.getText().length() > 0){
+            String tmp[] = eet.getText().toString().split(","); //è la virgola???
+            //bookToAdd.setBook_first_author(tmp[0]);
+            for(int i=0;i<tmp.length;i++){
+                categories.put(tmp[i],true);
+            }
+            bookToAdd.setBook_categories(categories);
+        }
+
+
+
 
         //aggiunta foto allo storage
         for(int j= 0; j<4;j++ ) {
