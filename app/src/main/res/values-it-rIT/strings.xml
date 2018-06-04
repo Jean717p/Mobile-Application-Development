@@ -220,6 +220,7 @@
     <string name="sure_question">Sei sicuro?</string>
     <string name="send_request">Invia richiesta</string>
     <string name="message">Messaggio</string>
+    <string name="info_book_book_status">Stato:</string>
 
 
 </resources>
