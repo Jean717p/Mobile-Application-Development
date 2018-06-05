@@ -78,20 +78,16 @@ public class ImageViewPopUpHelper {
     }
 
     private void internalEnablePopUpOnClick(final Activity context, final ImageView imageView, final Drawable drawable) {
-
         this.context = context;
         poppedImageView = new ImageView(context);
-
         dialog = new Dialog(context);
         dialog.requestWindowFeature((int) Window.FEATURE_NO_TITLE);
         dialog.setContentView(poppedImageView);
         dialog.getWindow().setBackgroundDrawable(null); // Without this line there is a very small border around the image (1px)
         dialog.setCanceledOnTouchOutside(true); // Gingerbread support
-
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (drawable != null) {
                     if (imageViewDrawable != drawable) {
                         cacheResizedDrawable(drawable, true, true);
@@ -104,7 +100,6 @@ public class ImageViewPopUpHelper {
                         cacheResizedDrawable(imageView.getDrawable(), true, true);
                     }
                 }
-
                 dialog.show();
             }
         });

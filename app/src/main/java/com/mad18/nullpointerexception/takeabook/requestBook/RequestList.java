@@ -132,7 +132,7 @@ public class RequestList extends AppCompatActivity {
         });
         RecyclerView rec = findViewById(R.id.request_list_recycler_view);
         myAdapter = new RequestRecyclerViewAdapter(this, requests,
-                myUser.getUsr_id(), true,
+                myUser.getUsr_id(), !isArchive,
                 new RequestRecyclerViewAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(Loan item, int position) {
@@ -187,6 +187,10 @@ public class RequestList extends AppCompatActivity {
         switch (requestCode){
             case SHOW_REQUEST:
                 if(resultCode == RESULT_OK){
+                    if(requests.size()==1){
+                        finish();
+                        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+                    }
                     myAdapter.notifyItemRemoved(lastItemSelectedPosition);
                     requests.remove(lastItemSelectedPosition);
                 }

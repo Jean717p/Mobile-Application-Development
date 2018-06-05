@@ -1,6 +1,5 @@
 package com.mad18.nullpointerexception.takeabook.info;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -40,11 +39,11 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.mad18.nullpointerexception.takeabook.GlideApp;
-import com.mad18.nullpointerexception.takeabook.util.ImageViewPopUpHelper;
 import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.requestBook.RequestBook;
 import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
+import com.mad18.nullpointerexception.takeabook.util.ImageViewPopUpHelper;
 import com.mad18.nullpointerexception.takeabook.util.User;
 import com.mad18.nullpointerexception.takeabook.util.UserWrapper;
 
@@ -177,6 +176,9 @@ public class InfoBook extends AppCompatActivity {
                 }
                 @Override
                 public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                    if(iwPopUp==null||myActivity==null){
+                        return;
+                    }
                     ImageViewPopUpHelper.enablePopUpOnClick(myActivity,iwPopUp,resource);
                 }
             });

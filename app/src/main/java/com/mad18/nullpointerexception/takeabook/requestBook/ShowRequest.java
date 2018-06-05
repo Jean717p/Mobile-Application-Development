@@ -343,7 +343,6 @@ public class ShowRequest extends AppCompatActivity {
                                 textView.setText(R.string.request_book_status_on_loan);
                                 Snackbar.make(findViewById(R.id.request_book_send),
                                         R.string.request_book_status_on_loan, Snackbar.LENGTH_LONG).show();
-
                                 dialog.dismiss();
                             })
                             .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
@@ -369,15 +368,12 @@ public class ShowRequest extends AppCompatActivity {
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO: done / Dialog box Are u sure????
-
                     AlertDialog myQuittingDialogBox = new AlertDialog.Builder(ShowRequest.this)
                             //set message, title, and icon
                             .setTitle(R.string.request_book_close_loan)
                             .setMessage(R.string.sure_question)
                             .setIcon(R.drawable.ic_done_white_24px)
                             .setPositiveButton(R.string.affermative_response, (dialog, whichButton) -> {
-                                //your code
                                 TextView textView = findViewById(R.id.request_book_status);
                                 Button button = findViewById(R.id.request_book_send);
                                 button.setVisibility(View.GONE);
@@ -394,35 +390,17 @@ public class ShowRequest extends AppCompatActivity {
                                 db.collection("users").document(loan.getOwnerId())
                                         .collection("archive").document(loanRef)
                                         .set(toLoad);
-
+                                Intent intent = new Intent(context,RequestReview.class);
+                                intent.putExtra("otherUser", new UserWrapper(applicant));
+                                intent.putExtra("bookToReview", new BookWrapper(requested_book));
+                                intent.putExtra("thisUser", new UserWrapper(myUser));
+                                startActivity(intent);
+                                setResult(RESULT_OK);
+                                finish();
                                 dialog.dismiss();
                             })
                             .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                             .show();
-                    //TODO: StartActivity make a review.
-                    //TODO: Dialog box Are u sure????
-                    TextView textView = findViewById(R.id.request_book_status);
-                    Button button = findViewById(R.id.request_book_send);
-                    button.setVisibility(View.GONE);
-                    textView.setText(R.string.request_book_archived);
-                    Snackbar.make(findViewById(R.id.request_book_send),
-                            R.string.request_book_archived, Snackbar.LENGTH_LONG).show();
-                    db.collection("requests").document(loanRef)
-                            .update("endLoanOwner", Calendar.getInstance().getTime());
-                    DocumentReference doc = db.collection("users").document(loan.ownerId)
-                            .collection("requests").document(loan.getLoanId());
-                    doc.delete();
-                    HashMap<String,Boolean> toLoad = new HashMap<>();
-                    toLoad.put("owned",true);
-                    db.collection("users").document(loan.getOwnerId())
-                            .collection("archive").document(loanRef)
-                            .set(toLoad);
-                    Intent intent = new Intent(context,RequestReview.class);
-                    intent.putExtra("otherUser", new UserWrapper(applicant));
-                    intent.putExtra("bookToReview", new BookWrapper(requested_book));
-                    intent.putExtra("thisUser", new UserWrapper(myUser));
-                    startActivity(intent);
-                    finish();
                 }
             });
         }
@@ -430,15 +408,11 @@ public class ShowRequest extends AppCompatActivity {
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO: done /Dialog box Are u sure????
-
                     AlertDialog myQuittingDialogBox = new AlertDialog.Builder(ShowRequest.this)
-                            //set message, title, and icon
                             .setTitle(R.string.request_book_close_loan)
                             .setMessage(R.string.sure_question)
                             .setIcon(R.drawable.ic_done_white_24px)
                             .setPositiveButton(R.string.affermative_response, (dialog, whichButton) -> {
-                                //your code
                                 TextView textView = findViewById(R.id.request_book_status);
                                 Button button = findViewById(R.id.request_book_send);
                                 button.setVisibility(View.GONE);
@@ -455,36 +429,17 @@ public class ShowRequest extends AppCompatActivity {
                                 db.collection("users").document(loan.getApplicantId())
                                         .collection("archive").document(loanRef)
                                         .set(toLoad);
+                                Intent intent = new Intent(context,RequestReview.class);
+                                intent.putExtra("otherUser", new UserWrapper(owner));
+                                intent.putExtra("bookToReview", new BookWrapper(requested_book));
+                                intent.putExtra("thisUser", new UserWrapper(myUser));
+                                startActivity(intent);
+                                setResult(RESULT_OK);
+                                finish();
                                 dialog.dismiss();
                             })
                             .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                             .show();
-
-                    //TODO: StartActivity make a review.
-                    //TODO: Dialog box Are u sure????
-                    TextView textView = findViewById(R.id.request_book_status);
-                    Button button = findViewById(R.id.request_book_send);
-                    button.setVisibility(View.GONE);
-                    textView.setText(R.string.request_book_archived);
-                    Snackbar.make(findViewById(R.id.request_book_send),
-                            R.string.request_book_archived, Snackbar.LENGTH_LONG).show();
-                    db.collection("requests").document(loanRef)
-                            .update("endLoanApplicant", Calendar.getInstance().getTime());
-                    DocumentReference doc = db.collection("users").document(loan.getApplicantId())
-                            .collection("requests").document(loan.getLoanId());
-                    doc.delete();
-                    HashMap<String,Boolean> toLoad = new HashMap<>();
-                    toLoad.put("owned",false);
-                    db.collection("users").document(loan.getApplicantId())
-                            .collection("archive").document(loanRef)
-                            .set(toLoad);
-                    Intent intent = new Intent(context,RequestReview.class);
-                    intent.putExtra("otherUser", new UserWrapper(owner));
-                    intent.putExtra("bookToReview", new BookWrapper(requested_book));
-                    intent.putExtra("thisUser", new UserWrapper(myUser));
-                    startActivity(intent);
-                    finish();
-
                 }
             });
         }
@@ -544,7 +499,6 @@ public class ShowRequest extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO : done / DIALOG BOX ARE U SURE????
                 AlertDialog myQuittingDialogBox = new AlertDialog.Builder(ShowRequest.this)
                         //set message, title, and icon
                         .setTitle(R.string.info_book_delete_this_book)
