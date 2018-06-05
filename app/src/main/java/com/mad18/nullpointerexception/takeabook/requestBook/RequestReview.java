@@ -21,6 +21,7 @@ import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
+import com.mad18.nullpointerexception.takeabook.util.Review;
 import com.mad18.nullpointerexception.takeabook.util.User;
 import com.mad18.nullpointerexception.takeabook.util.UserWrapper;
 
@@ -108,15 +109,16 @@ public class RequestReview extends AppCompatActivity {
 
     private void sendDataFirebase(){
         String user_text, book_text;
-        int stars_book, stars_user;
+        float stars_book;
+        float stars_user;
         EditText et = findViewById(R.id.request_review_user_edit_text);
         user_text = et.getText().toString();
         et = findViewById(R.id.request_review_book_edit_text);
         book_text = et.getText().toString();
-        RatingBar rb = findViewById(R.id.request_review_ratingbar);
-        stars_user = rb.getNumStars();
+        RatingBar rb = findViewById(R.id.request_review_ratingbar_book);
+        stars_book = rb.getRating();
         rb = findViewById(R.id.request_review_ratingbar_user);
-        stars_book = rb.getNumStars();
+        stars_user = rb.getRating();
         Date myDate = Calendar.getInstance().getTime();
         if(stars_book != 0){
             Review rw_book = new Review(myUser.getUsr_id(), myUser.getUsr_name(),myUser.getProfileImgStoragePath(), book_text, stars_book,myDate);

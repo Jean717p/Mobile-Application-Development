@@ -43,7 +43,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/ic_account_circle_white_48px"
+                app:srcCompat="@drawable/ic_account_circle_white_48px"
                 tools:ignore="MissingConstraints" />
 
             <RatingBar
@@ -52,8 +52,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:layout_marginRight="8dp"
+                android:visibility="invisible"
                 android:layout_marginTop="16dp"
                 android:clickable="false"
+                android:isIndicator="true"
                 android:scaleX="0.7"
                 android:scaleY="0.7"
                 android:layout_marginBottom="16dp"
@@ -245,9 +247,11 @@
                     android:layout_height="match_parent">
 
                     <ImageView
-                        android:id="@+id/info_user_arrow2"
+                        android:id="@+id/info_user_iv_show_reviews"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
                         app:srcCompat="@drawable/ic_baseline_keyboard_arrow_right_24px"
                         android:layout_alignParentEnd="true"
                         android:layout_margin="8dp"
@@ -260,7 +264,7 @@
                         android:textStyle="bold|normal"
                         android:textColor="@color/colorPrimary"
                         android:text="@string/show_profile_reviews"
-                        android:layout_alignBaseline="@id/show_profile_arrow2"/>
+                        android:layout_alignBaseline="@id/info_user_iv_show_reviews"/>
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
 

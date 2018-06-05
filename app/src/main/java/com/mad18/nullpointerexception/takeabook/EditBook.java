@@ -6,11 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
@@ -32,22 +30,14 @@ import android.widget.TextView;
 
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.Index;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
 import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
 import com.mad18.nullpointerexception.takeabook.util.ScanBarcode;
@@ -57,7 +47,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -223,7 +212,8 @@ public class EditBook extends AppCompatActivity {
 
         if(book.getBook_thumbnail_url().length()>0){
             iw = findViewById(R.id.edit_book_thumbnail);
-            GlideApp.with(this).load(book.getBook_thumbnail_url()).placeholder(R.drawable.ic_thumbnail_cover_book).into(iw);
+            GlideApp.with(this).load(book.getBook_thumbnail_url())
+                    .placeholder(R.drawable.ic_thumbnail_cover_book).into(iw);
         }
 
         //fillPhotoList(book);

@@ -9,10 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.model.LatLng;
-import com.mad18.nullpointerexception.takeabook.util.Book;
+import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
+import com.mad18.nullpointerexception.takeabook.util.Book;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -64,10 +65,12 @@ public class HeaderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             Location my_position = new Location("Provider");
             book_position.setLatitude(dataItem.getBook_location().getLongitude());
             book_position.setLongitude(dataItem.getBook_location().getLatitude());
-            my_position.setLatitude(DisplaySearchOnMap_map.mLocation.latitude);
-            my_position.setLongitude(DisplaySearchOnMap_map.mLocation.longitude);
+            my_position.setLatitude(DisplaySearchOnMap_map.mLocation != null ? DisplaySearchOnMap_map.mLocation.latitude : MainActivity.thisUser.getUsr_geoPoint().getLatitude());
+            my_position.setLongitude(DisplaySearchOnMap_map.mLocation != null ? DisplaySearchOnMap_map.mLocation.longitude : MainActivity.thisUser.getUsr_geoPoint().getLongitude());
             ((MyItem) holder).mDistance.setText(String.format("%.2f km",my_position.distanceTo(book_position)/1000));
-            Glide.with(context).load(dataItem.getBook_thumbnail_url()).into(((MyItem) holder).mThumbnail);
+            GlideApp.with(context).load(dataItem.getBook_thumbnail_url())
+                    .placeholder(R.drawable.ic_thumbnail_cover_book)
+                    .into(((MyItem) holder).mThumbnail);
         } else if (holder instanceof HeaderItem) {
             ((HeaderItem) holder).mSpaceView.setVisibility(mIsSpaceVisible ? View.VISIBLE : View.GONE);
             ((HeaderItem) holder).mPosition = position;

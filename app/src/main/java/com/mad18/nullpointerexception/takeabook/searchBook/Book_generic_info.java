@@ -9,9 +9,9 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.mad18.nullpointerexception.takeabook.util.Book;
+import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
 import com.mad18.nullpointerexception.takeabook.util.JsonParser;
 
@@ -49,7 +49,11 @@ public class Book_generic_info extends AppCompatActivity {
         //toolbar.setTitle(book.getBook_title());
         this.setTitle(book.getBook_title());
         ImageView iw = findViewById(R.id.generic_info_book_image);
-        Glide.with(this).load(book.getBook_thumbnail_url()).into(iw);
+        if(book.getBook_thumbnail_url().length()>0){
+            GlideApp.with(this).load(book.getBook_thumbnail_url())
+                    .placeholder(R.drawable.ic_thumbnail_cover_book)
+                    .into(iw);
+        }
         TextView title = findViewById(R.id.generic_info_book_title);
         title.setText(book.getBook_title());
         TextView author = findViewById(R.id.generic_info_book_author);

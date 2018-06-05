@@ -19,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.util.Loan;
 import com.mad18.nullpointerexception.takeabook.util.MyAtomicCounter;
 import com.mad18.nullpointerexception.takeabook.util.OnCounterChangeListener;
 import com.mad18.nullpointerexception.takeabook.util.User;
@@ -94,8 +95,8 @@ public class RequestList extends AppCompatActivity {
                                     @Override
                                     public int compare(Loan a, Loan b) {
                                         Date ad,bd;
-                                        ad = a.getOwnerId().equals(myUser.getUsr_id()) ? a.endLoanOwner : a.getEndLoanApplicant();
-                                        bd = b.getOwnerId().equals(myUser.getUsr_id()) ? b.endLoanOwner : b.getEndLoanApplicant();
+                                        ad = a.getOwnerId().equals(myUser.getUsr_id()) ? a.getEndLoanOwner() : a.getEndLoanApplicant();
+                                        bd = b.getOwnerId().equals(myUser.getUsr_id()) ? b.getEndLoanOwner() : b.getEndLoanApplicant();
                                         return bd.compareTo(ad);
                                     }
                                 });

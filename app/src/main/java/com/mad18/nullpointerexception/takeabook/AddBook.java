@@ -31,7 +31,10 @@ import android.widget.Toast;
 
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.Index;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -90,6 +93,7 @@ public class AddBook extends AppCompatActivity {
     private Menu menu;
     private Spinner staticSpinner;
     private FirebaseUser user;
+    private StorageReference coverRef;
     //simo inizio
     private Bitmap bookImg,bookCover;
     private HashMap<Integer,Bitmap> bookImgMap = new HashMap<>();
@@ -392,14 +396,45 @@ public class AddBook extends AppCompatActivity {
         if(bookToAdd.getBook_thumbnail_url().length()==0 && bookCover!=null){
             ByteArrayOutputStream coverOut = new ByteArrayOutputStream();
             bookCover.compress(Bitmap.CompressFormat.JPEG,100,coverOut);
-            StorageReference coverRef = FirebaseStorage.getInstance().getReference().child(
+            coverRef = FirebaseStorage.getInstance().getReference().child(
                     "users/"+user.getUid()+ "/books/"+bookRef.getId()+"/"+UUID.nameUUIDFromBytes(coverOut.toByteArray())
             );
-            bookToAdd.setBook_thumbnail_url(coverRef.getPath());
             coverRef.putBytes(coverOut.toByteArray());
         }
-        bookRef.set(bookToAdd);
-        addIndexToAlgolia(bookToAdd);
+        bookRef.set(bookToAdd).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                if(coverRef!=null
+                        && bookToAdd.getBook_thumbnail_url().length()==0
+                        && bookCover!=null){
+                    coverRef.getDownloadUrl()
+                            .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    FirebaseFirestore.getInstance()
+                                            .collection("books")
+                                            .document(bookToAdd.getBook_id())
+                                            .update("book_thumbnail_url",uri.toString())
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    addIndexToAlgolia(bookToAdd);
+                                                }
+                                            });
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            addIndexToAlgolia(bookToAdd);
+                        }
+                    });
+                }
+                else{
+                    addIndexToAlgolia(bookToAdd);
+                }
+            }
+        });
+
         users.document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -570,7 +605,8 @@ public class AddBook extends AppCompatActivity {
 
         if(book.getBook_thumbnail_url().length()>0){
             iw = findViewById(R.id.add_book_picture);
-            GlideApp.with(this).load(book.getBook_thumbnail_url()).placeholder(R.drawable.ic_thumbnail_cover_book).into(iw);
+            GlideApp.with(this).load(book.getBook_thumbnail_url())
+                    .placeholder(R.drawable.ic_thumbnail_cover_book).into(iw);
             iw.setClickable(false);
             bookCover = null;
         }

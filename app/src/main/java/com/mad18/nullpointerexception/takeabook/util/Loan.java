@@ -1,24 +1,23 @@
-package com.mad18.nullpointerexception.takeabook.requestBook;
+package com.mad18.nullpointerexception.takeabook.util;
 
 import java.util.Date;
 
 public class Loan {
-
-    String loanId;
-    String ownerId;
-    String applicantId;
-    String ownerName;
-    String applicantName;
-    String bookTitle;
-    String bookThumbnail;
-    String bookId;
-    String requestText;
-    Boolean requestStatus; //A
-    Boolean exchangedApplicant; //B
-    Boolean exchangedOwner; //C
-    Date startDate;
-    Date endLoanOwner;
-    Date endLoanApplicant;
+    private String loanId;
+    private String ownerId;
+    private String applicantId;
+    private String ownerName;
+    private String applicantName;
+    private String bookTitle;
+    private String bookThumbnail;
+    private String bookId;
+    private String requestText;
+    private Boolean requestStatus; //A
+    private Boolean exchangedApplicant; //B
+    private Boolean exchangedOwner; //C
+    private Date startDate;
+    private Date endLoanOwner;
+    private Date endLoanApplicant;
 
     public Loan() {}
 

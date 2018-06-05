@@ -9,9 +9,9 @@
             android:icon="@drawable/ic_add_circle_black_24dp"
             android:title="@string/nav_element_addbook" />
         <item
-            android:id="@+id/nav_showprofile"
-            android:icon="@drawable/ic_person_black_24dp"
-            android:title="@string/nav_element_showprofile" />
+            android:id="@+id/nav_searchBook"
+            android:icon="@drawable/ic_search_black_24dp"
+            android:title="@string/search_book_button_text"/>
         <item
             android:id="@+id/nav_mychat"
             android:icon="@drawable/ic_chat_black_24dp"
@@ -33,6 +33,10 @@
             android:icon="@drawable/ic_local_library_black_24dp"
             android:title="@string/nav_element_mylibrary" />-->
         <item
+            android:id="@+id/nav_showprofile"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="@string/nav_element_showprofile" />
+        <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_baseline_settings_20px"
             android:visible="false"
@@ -42,8 +46,6 @@
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_exit_to_app_black_24px"
             android:title="@string/nav_element_logOut"/>
-
-
 
     </group>
 

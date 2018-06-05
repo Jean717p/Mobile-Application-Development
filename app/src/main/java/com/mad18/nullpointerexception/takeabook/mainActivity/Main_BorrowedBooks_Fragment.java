@@ -21,7 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.mad18.nullpointerexception.takeabook.R;
-import com.mad18.nullpointerexception.takeabook.requestBook.Loan;
+import com.mad18.nullpointerexception.takeabook.util.Loan;
 import com.mad18.nullpointerexception.takeabook.requestBook.RequestRecyclerViewAdapter;
 import com.mad18.nullpointerexception.takeabook.requestBook.ShowRequest;
 import com.mad18.nullpointerexception.takeabook.util.UserWrapper;

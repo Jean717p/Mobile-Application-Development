@@ -50,7 +50,7 @@
             android:id="@+id/review_rating_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:isIndicator="false"
+            android:isIndicator="true"
             android:layout_below="@id/review_username"
             android:layout_alignStart="@id/review_username"
             style="@android:style/Widget.Holo.RatingBar.Small"

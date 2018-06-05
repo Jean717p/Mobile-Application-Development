@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.util.Loan;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

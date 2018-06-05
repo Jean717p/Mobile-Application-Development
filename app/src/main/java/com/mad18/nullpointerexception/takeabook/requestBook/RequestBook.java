@@ -22,6 +22,7 @@ import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
 import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
+import com.mad18.nullpointerexception.takeabook.util.Loan;
 import com.mad18.nullpointerexception.takeabook.util.User;
 import com.mad18.nullpointerexception.takeabook.util.UserWrapper;
 
@@ -108,7 +109,8 @@ public class RequestBook extends AppCompatActivity {
         tv.setTextColor(Color.BLUE);
         if(requested_book.getBook_thumbnail_url().length()>0){
             ImageView iw = findViewById(R.id.request_book_main_image);
-            GlideApp.with(this).load(requested_book.getBook_thumbnail_url()).placeholder(R.drawable.ic_thumbnail_cover_book).into(iw);
+            GlideApp.with(this).load(requested_book.getBook_thumbnail_url())
+                    .placeholder(R.drawable.ic_thumbnail_cover_book).into(iw);
         }
         Button send = findViewById(R.id.request_book_send);
         send.setOnClickListener(view -> {

@@ -22,8 +22,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.Index;
@@ -38,25 +38,19 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.mad18.nullpointerexception.takeabook.EditBook;
 import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.R;
-import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
 import com.mad18.nullpointerexception.takeabook.requestBook.RequestBook;
 import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
 import com.mad18.nullpointerexception.takeabook.util.ImageViewPopUpHelper;
+import com.mad18.nullpointerexception.takeabook.util.Review;
 import com.mad18.nullpointerexception.takeabook.util.User;
 import com.mad18.nullpointerexception.takeabook.util.UserWrapper;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -174,7 +168,8 @@ public class InfoBook extends AppCompatActivity {
                 break;
         }
         GlideApp.with(this).load(book.getBook_thumbnail_url())
-                .placeholder(R.drawable.ic_thumbnail_cover_book).into(iw);
+                .placeholder(R.drawable.ic_thumbnail_cover_book)
+                .into(iw);
         horizontal_photo_list = (LinearLayout) findViewById(R.id.info_book_list_photo_container);
         for_me = new LinkedList<>(book.getBook_photo_list().keySet());
         for (int i = 0; i < book.getBook_photo_list().size(); i++) {
@@ -235,6 +230,38 @@ public class InfoBook extends AppCompatActivity {
                 tv2.setHeight(0);
                 tv2.setVisibility(View.INVISIBLE);
                 request_button.setVisibility(View.GONE);
+            }
+        });
+        iw = findViewById(R.id.info_book_iw_show_review);
+        iw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(myActivity,ShowReviews.class);
+                intent.putExtra("type","book");
+                intent.putExtra("thisBook",new BookWrapper(myBook));
+                startActivity(intent);
+            }
+        });
+        db.collection("books")
+                .document(myBook.getBook_id())
+                .collection("reviews")
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot querySnapshot) {
+                Float mean;
+                RatingBar ratingBar = findViewById(R.id.info_book_rating_bar);
+                if(querySnapshot.getDocuments().size()==0){
+                    findViewById(R.id.info_book_reviews_cv).setVisibility(View.GONE);
+                    return;
+                }
+                ratingBar.setVisibility(View.VISIBLE);
+                mean = 0f;
+                for(DocumentSnapshot doc:querySnapshot.getDocuments()){
+                    Review review = doc.toObject(Review.class);
+                    mean += review.getRating();
+                }
+                mean/=querySnapshot.size();
+                ratingBar.setRating(mean);
             }
         });
     }

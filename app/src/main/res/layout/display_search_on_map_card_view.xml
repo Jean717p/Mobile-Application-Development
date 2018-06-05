@@ -82,7 +82,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_toEndOf="@id/book_found_thumbnail"
                 android:layout_alignBaseline="@id/book_found_distance"
-                android:text="@string/display_search_on_map_distance"
+                android:text="@string/fragment_home_distance"
                 android:textSize="16sp"
                 android:textStyle="normal|bold" />
 

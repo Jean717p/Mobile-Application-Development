@@ -30,6 +30,7 @@ import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.info.InfoUser;
 import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
+import com.mad18.nullpointerexception.takeabook.util.Loan;
 import com.mad18.nullpointerexception.takeabook.util.MyAtomicCounter;
 import com.mad18.nullpointerexception.takeabook.util.OnCounterChangeListener;
 import com.mad18.nullpointerexception.takeabook.util.User;
@@ -382,7 +383,7 @@ public class ShowRequest extends AppCompatActivity {
                                         R.string.request_book_archived, Snackbar.LENGTH_LONG).show();
                                 db.collection("requests").document(loanRef)
                                         .update("endLoanOwner", Calendar.getInstance().getTime());
-                                DocumentReference doc = db.collection("users").document(loan.ownerId)
+                                DocumentReference doc = db.collection("users").document(loan.getOwnerId())
                                         .collection("requests").document(loan.getLoanId());
                                 doc.delete();
                                 HashMap<String,Boolean> toLoad = new HashMap<>();
@@ -462,8 +463,11 @@ public class ShowRequest extends AppCompatActivity {
         tv.setText(formatter.format(loan.getStartDate()));
         tv = findViewById(R.id.request_book_title);
         tv.setText(requested_book.getBook_title());
-        GlideApp.with(this).load(requested_book.getBook_thumbnail_url())
-                .placeholder(R.drawable.ic_thumbnail_cover_book).into(iw);
+        if(requested_book.getBook_thumbnail_url().length()>0){
+            GlideApp.with(this).load(requested_book.getBook_thumbnail_url())
+                    .placeholder(R.drawable.ic_thumbnail_cover_book)
+                    .into(iw);
+        }
         if(myUser.getUsr_id().equals(loan.getOwnerId())){
             if(loan.getEndLoanOwner()!=null){
                 tv = findViewById(R.id.request_book_end_date_owner);

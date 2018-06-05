@@ -2,17 +2,17 @@ package com.mad18.nullpointerexception.takeabook.mainActivity;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.support.v7.widget.CardView;
 
-import com.bumptech.glide.Glide;
-import com.mad18.nullpointerexception.takeabook.util.Book;
+import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.util.Book;
 
 import java.util.List;
 
@@ -58,7 +58,11 @@ public class MyLibraryRecyclerViewAdapter extends RecyclerView.Adapter<MyLibrary
             holder.tv_book_title.setText(parts[0]);
         }
        //holder.iv_book_thumbnail.setImageResource(mData.get(position));
-       Glide.with(myContext).load(mData.get(position).getBook_thumbnail_url()).into(holder.iv_book_thumbnail);
+        if(mData.get(position).getBook_thumbnail_url().length()>0){
+            GlideApp.with(myContext).load(mData.get(position).getBook_thumbnail_url())
+                    .placeholder(R.drawable.ic_thumbnail_cover_book)
+                    .into(holder.iv_book_thumbnail);
+        }
         holder.bind(mData.get(position), listener);
     }
 

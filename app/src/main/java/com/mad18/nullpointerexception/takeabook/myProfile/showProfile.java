@@ -15,17 +15,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.mad18.nullpointerexception.takeabook.R;
-import com.mad18.nullpointerexception.takeabook.SettingsActivity;
 import com.mad18.nullpointerexception.takeabook.info.InfoUserShowBooks;
+import com.mad18.nullpointerexception.takeabook.info.ShowReviews;
 import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
+import com.mad18.nullpointerexception.takeabook.util.Review;
 import com.mad18.nullpointerexception.takeabook.util.User;
 import com.mad18.nullpointerexception.takeabook.util.UserWrapper;
 
@@ -48,11 +52,14 @@ public class showProfile extends AppCompatActivity {
     public static final String sharedUserDataKeys[] = new String[]{"usr_name","usr_city","usr_mail","usr_about"};
     public static final String profileImgName = "profile.jpg";
     private FirebaseAuth mAuth;
+    private Context context;
     CardView showBooksProfile;
     CardView showReviews;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
         sharedPref = getSharedPreferences(getString(R.string.app_name),Context.MODE_PRIVATE);
         setContentView(R.layout.show_profile);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -64,7 +71,16 @@ public class showProfile extends AppCompatActivity {
         setTitle(R.string.title_activity_show_profile);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
-
+        ImageView imageView=findViewById(R.id.show_profile_iv_show_reviews);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ShowReviews.class);
+                intent.putExtra("type","user");
+                intent.putExtra("thisUser",new UserWrapper(MainActivity.thisUser));
+                startActivity(intent);
+            }
+        });
         ArrayList<String> userBooks = new ArrayList<>();
         db.collection("users").document(thisUser.getUsr_id()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -75,7 +91,6 @@ public class showProfile extends AppCompatActivity {
 
                     userBooks.add(x);
                 }
-
                 if (showBooksProfile != null) {
                     showBooksProfile.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -90,8 +105,28 @@ public class showProfile extends AppCompatActivity {
                         }
                     });
                 }
-
-
+            }
+        });
+        db.collection("users")
+                .document(FirebaseAuth.getInstance().getUid())
+                .collection("reviews")
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot querySnapshot) {
+                Float mean;
+                RatingBar ratingBar = findViewById(R.id.show_profile_rating_bar);
+                if(querySnapshot.getDocuments().size()==0){
+                    findViewById(R.id.show_profile_reviews_cv).setVisibility(View.GONE);
+                    return;
+                }
+                ratingBar.setVisibility(View.VISIBLE);
+                mean = 0f;
+                for(DocumentSnapshot doc:querySnapshot.getDocuments()){
+                    Review review = doc.toObject(Review.class);
+                    mean += review.getRating();
+                }
+                mean/=querySnapshot.size();
+                ratingBar.setRating(mean);
             }
         });
     }
@@ -170,14 +205,14 @@ public class showProfile extends AppCompatActivity {
                 file.delete();
             }
         }
-        switch (locale.getLanguage()){
-            case "it":
-                SettingsActivity.changeLocale(resources,"it");
-                break;
-            default:
-                SettingsActivity.changeLocale(resources,"en");
-                break;
-        }
+//        switch (locale.getLanguage()){
+//            case "it":
+//                SettingsActivity.changeLocale(resources,"it");
+//                break;
+//            default:
+//                SettingsActivity.changeLocale(resources,"en");
+//                break;
+//        }
         MainActivity.myBooks.clear();
     }
 }

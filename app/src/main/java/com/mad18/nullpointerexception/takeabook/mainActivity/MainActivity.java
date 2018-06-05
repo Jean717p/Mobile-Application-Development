@@ -68,6 +68,7 @@ import com.mad18.nullpointerexception.takeabook.SplashScreenActivity;
 import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
 import com.mad18.nullpointerexception.takeabook.myProfile.showProfile;
 import com.mad18.nullpointerexception.takeabook.requestBook.RequestList;
+import com.mad18.nullpointerexception.takeabook.searchBook.SearchBookAlgolia;
 import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.util.User;
 import com.mad18.nullpointerexception.takeabook.util.UserWrapper;
@@ -258,7 +259,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
-
     }
 
 
@@ -274,13 +274,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //startActivityForResult(intent,REQUEST_ADDBOOK);
                 startActivity(intent);
                 break;
-            case R.id.nav_showprofile:
-                intent = new Intent(this, com.mad18.nullpointerexception.takeabook.myProfile.showProfile.class);
-                startActivity(intent);
+            case R.id.nav_searchBook:
+                Intent search = new Intent(this, SearchBookAlgolia.class);
+                search.putExtra("action", "Title");
+                startActivity(search);
                 break;
             case R.id.nav_mychat:
                 intent = new Intent(context,com.mad18.nullpointerexception.takeabook.chatActivity.ListOfChatActivity.class);
-                //startActivityForResult(intent,REQUEST_ADDBOOK);
                 startActivity(intent);
                 break;
             case R.id.nav_request_sent:
@@ -301,12 +301,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 intent.putExtra("thisUser",new UserWrapper(thisUser));
                 startActivity(intent);
                 break;
+            case R.id.nav_showprofile:
+                intent = new Intent(this, com.mad18.nullpointerexception.takeabook.myProfile.showProfile.class);
+                startActivity(intent);
+                break;
             case R.id.nav_settings:
                 intent = new Intent(this, SettingsActivity.class);
                 startActivityForResult(intent,REQUEST_SETTINGS);
                 break;
             case R.id.nav_logout:
-            AuthUI.getInstance()
+                AuthUI.getInstance()
                         .signOut(this)
                         .addOnCompleteListener(task -> {
                             // user is now signed out
@@ -314,9 +318,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             deleteUserData(sharedPref, Locale.getDefault(),getResources());
                             finish();
                         });
-            break;
+                break;
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -443,7 +446,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     if(sharedPref.getString(profileImgName,"").length()==0
                             && thisUser.getProfileImgStoragePath().length() > 0){
                         StorageReference mImageRef = FirebaseStorage.getInstance().getReference(thisUser.getProfileImgStoragePath());
-                        //Glide.with(context).asBitmap().load(mImageRef).into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL) {
                         GlideApp.with(context).asBitmap().load(mImageRef).into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL) {
                             @Override
                             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
@@ -528,6 +530,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             a.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                 @Override
                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    for(DocumentSnapshot doc:queryDocumentSnapshots.getDocuments()){
+                        if(doc!=null && doc.exists()){
+                            Book book = doc.toObject(Book.class);
+                            if(homeBooks.containsKey(book.getBook_ISBN()) &&
+                                    homeBooks.get(book.getBook_ISBN()).getBook_id().equals(book.getBook_id()) &&
+                                    book.getBook_status()){
+                                homeBooks.remove(book.getBook_ISBN());
+                            }
+                        }
+                    }
                     for(DocumentSnapshot d : queryDocumentSnapshots.getDocuments()) {
                         if (d != null && d.exists()) {
                             Book book = d.toObject(Book.class);

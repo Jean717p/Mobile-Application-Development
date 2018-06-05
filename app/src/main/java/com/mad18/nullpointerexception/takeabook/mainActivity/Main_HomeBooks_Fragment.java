@@ -27,6 +27,7 @@ import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.displaySearchOnMap.DisplaySearchOnMap;
+import com.mad18.nullpointerexception.takeabook.info.InfoBook;
 import com.mad18.nullpointerexception.takeabook.searchBook.SearchBookAlgolia;
 import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
@@ -110,7 +111,17 @@ public class Main_HomeBooks_Fragment extends Fragment {
                                 user_loc.setLatitude(user_lat);
                                 user_loc.setLongitude(user_long);
                                 for(DocumentSnapshot doc:querySnapshot.getDocuments()){
-                                    x.add(doc.toObject(Book.class));
+                                    Book b = doc.toObject(Book.class);
+                                    if(b.getBook_userid().equals(thisUser.getUsr_id())==false){
+                                        x.add(b);
+                                    }
+                                }
+                                if(x.size()==1){
+                                    Intent intent = new Intent(getActivity(), InfoBook.class);
+                                    intent.putExtra("bookToShow",new BookWrapper(x.get(0)));
+                                    startActivity(intent);
+                                    myAtomicCounter.decrement();
+                                    return;
                                 }
                                 Collections.sort(x, (a, b) -> {
                                     Location book_loc_a = new Location("Provider");

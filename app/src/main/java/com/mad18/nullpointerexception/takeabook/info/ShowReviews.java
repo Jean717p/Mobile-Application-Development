@@ -1,8 +1,8 @@
 package com.mad18.nullpointerexception.takeabook.info;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -16,12 +16,14 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.mad18.nullpointerexception.takeabook.R;
-import com.mad18.nullpointerexception.takeabook.requestBook.Review;
 import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
+import com.mad18.nullpointerexception.takeabook.util.Review;
 import com.mad18.nullpointerexception.takeabook.util.User;
 import com.mad18.nullpointerexception.takeabook.util.UserWrapper;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,11 +37,12 @@ public class ShowReviews extends AppCompatActivity {
     private List<Review> reviews;
     private String type;
     private ListenerRegistration reviewsListener;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Context context = this;
+        context = this;
         setContentView(R.layout.activity_show_reviews);
         Toolbar toolbar = findViewById(R.id.show_reviews_toolbar);
         Bundle bundle = getIntent().getExtras();
@@ -54,23 +57,7 @@ public class ShowReviews extends AppCompatActivity {
             finish();
             return;
         }
-        RecyclerView rec = findViewById(R.id.request_list_recycler_view);
         myAdapter = new ShowReviewsRecyclerViewAdapter(this, new LinkedList<>());
-        rec.setLayoutManager(new LinearLayoutManager(
-                context, LinearLayoutManager.VERTICAL, false));
-        rec.setScrollContainer(true);
-        rec.setVerticalScrollBarEnabled(true);
-        rec.setAdapter(myAdapter);
-        rec.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                    // ...
-                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    // ...
-                }
-            }
-        });
         if(type.equals("book")){
             BookWrapper bookWrapper = bundle.getParcelable("thisBook");
             if(bookWrapper==null){
@@ -79,7 +66,8 @@ public class ShowReviews extends AppCompatActivity {
                 return;
             }
             myBook=new Book(bookWrapper);
-            reviewsListener = FirebaseFirestore.getInstance().collection("books")
+            reviewsListener = FirebaseFirestore.getInstance()
+                    .collection("books")
                     .document(myBook.getBook_id())
                     .collection("reviews")
                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -107,7 +95,8 @@ public class ShowReviews extends AppCompatActivity {
                 return;
             }
             myUser = new User(userWrapper);
-            reviewsListener = FirebaseFirestore.getInstance().collection("users")
+            reviewsListener = FirebaseFirestore.getInstance()
+                    .collection("users")
                     .document(myUser.getUsr_id())
                     .collection("reviews")
                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -129,7 +118,23 @@ public class ShowReviews extends AppCompatActivity {
         }
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle(""); //TODO:
+        setTitle(getString(R.string.app_name)); //TODO: change activity name
+        RecyclerView rec = findViewById(R.id.show_reviews_recycle_view);
+        rec.setLayoutManager(new LinearLayoutManager(
+                context, LinearLayoutManager.VERTICAL, false));
+        rec.setScrollContainer(true);
+        rec.setVerticalScrollBarEnabled(true);
+        rec.setAdapter(myAdapter);
+        rec.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    // ...
+                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    // ...
+                }
+            }
+        });
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
     }
 
@@ -137,6 +142,12 @@ public class ShowReviews extends AppCompatActivity {
         if(myAdapter ==null){
             return;
         }
+        Collections.sort(list, new Comparator<Review>() {
+            @Override
+            public int compare(Review a, Review b) {
+                return b.getReviewDate().compareTo(a.getReviewDate());
+            }
+        });
         myAdapter.setData(list);
         myAdapter.notifyDataSetChanged();
     }

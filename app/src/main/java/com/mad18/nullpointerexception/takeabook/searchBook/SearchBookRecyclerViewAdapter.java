@@ -11,9 +11,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.mad18.nullpointerexception.takeabook.util.Book;
+import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.util.Book;
 
 import java.util.List;
 
@@ -63,8 +63,13 @@ class SearchBookRecyclerViewAdapter extends RecyclerView.Adapter<SearchBookRecyc
             parts = title.split("[.]",2);
             holder.tv_book_title.setText(parts[0]);
         }
-        //holder.iv_book_thumbnail.setImageResource(mData.get(position));
-        Glide.with(myContext).load(mData.get(position).getBook_thumbnail_url()).into(holder.iv_book_thumbnail);
+        if(mData.get(position).getBook_thumbnail_url().length()>0){
+            GlideApp.with(myContext).load(mData.get(position).getBook_thumbnail_url())
+                    .into(holder.iv_book_thumbnail);
+        }
+        else{
+            holder.iv_book_thumbnail.setImageResource(R.drawable.ic_thumbnail_cover_book);
+        }
         holder.bind(mData.get(position), listener);
         holder.bindInfo(mData.get(position),infoListener);
     }

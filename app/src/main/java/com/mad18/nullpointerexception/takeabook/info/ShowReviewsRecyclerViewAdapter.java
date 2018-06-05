@@ -1,5 +1,4 @@
 package com.mad18.nullpointerexception.takeabook.info;
-import android.support.v7.widget.RecyclerView;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
@@ -11,9 +10,10 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.google.firebase.storage.FirebaseStorage;
 import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.R;
-import com.mad18.nullpointerexception.takeabook.requestBook.Review;
+import com.mad18.nullpointerexception.takeabook.util.Review;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -51,13 +51,15 @@ public class ShowReviewsRecyclerViewAdapter extends RecyclerView.Adapter<ShowRev
 
     @Override
     public void onBindViewHolder(@NonNull ShowReviewsRecyclerViewAdapter.MyViewHolder holder, int position) {
-        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Review review = mData.get(position);
         holder.tv_review_username.setText(review.getUsername());
         holder.tv_review_comment.setText(review.getText());
         holder.tv_review_date.setText(formatter.format(review.getReviewDate()));
+        holder.ratingBar_review.setRating(review.getRating());
         if(review.getUserPic().length()>0){
-            GlideApp.with(myContext).load(review.getUserPic())
+            GlideApp.with(myContext)
+                    .load(FirebaseStorage.getInstance().getReference(review.getUserPic()))
                     .placeholder(R.drawable.ic_account_circle_white_48px)
                     .into(holder.iv_user_image);
         }

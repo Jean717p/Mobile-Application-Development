@@ -2,34 +2,34 @@ package com.mad18.nullpointerexception.takeabook.info;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.DataSetObserver;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ExpandableListAdapter;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.R;
-import com.mad18.nullpointerexception.takeabook.util.User;
 import com.mad18.nullpointerexception.takeabook.chatActivity.AppConstants;
 import com.mad18.nullpointerexception.takeabook.chatActivity.ChatActivity;
+import com.mad18.nullpointerexception.takeabook.util.Review;
+import com.mad18.nullpointerexception.takeabook.util.User;
 import com.mad18.nullpointerexception.takeabook.util.UserWrapper;
 
 import java.util.ArrayList;
@@ -129,6 +129,38 @@ public class InfoUser extends AppCompatActivity {
             StorageReference mImageRef = FirebaseStorage.getInstance().getReference(otherUser.getProfileImgStoragePath());
             GlideApp.with(this).load(mImageRef).placeholder(R.drawable.ic_account_circle_white_48px).into(iv);
         }
+        ImageView imageView = findViewById(R.id.info_user_iv_show_reviews);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context,ShowReviews.class);
+                intent.putExtra("type","user");
+                intent.putExtra("thisUser",new UserWrapper(otherUser));
+                startActivity(intent);
+            }
+        });
+        db.collection("users")
+                .document(otherUser.getUsr_id())
+                .collection("reviews")
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot querySnapshot) {
+                Float mean;
+                RatingBar ratingBar = findViewById(R.id.info_user_rating_bar);
+                if(querySnapshot.getDocuments().size()==0){
+                    findViewById(R.id.info_user_reviews_cv).setVisibility(View.GONE);
+                    return;
+                }
+                ratingBar.setVisibility(View.VISIBLE);
+                mean = 0f;
+                for(DocumentSnapshot doc:querySnapshot.getDocuments()){
+                    Review review = doc.toObject(Review.class);
+                    mean += review.getRating();
+                }
+                mean/=querySnapshot.size();
+                ratingBar.setRating(mean);
+            }
+        });
     }
 
     @Override

@@ -352,13 +352,23 @@
             android:textColor="@color/textColor"
             android:textSize="15sp"
             />
+        <android.support.v7.widget.AppCompatRatingBar
+            android:id="@+id/info_book_rating_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="true"
+            android:layout_below="@id/info_book_label_book_status"
+            android:layout_alignStart="@id/info_book_label_book_status"
+            style="@android:style/Widget.Holo.RatingBar.Indicator"
+            android:visibility="invisible"
+            />
 
         <HorizontalScrollView
             android:id="@+id/info_book_horizontalScrollView_photos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:layout_below="@id/info_book_book_status">
+            android:layout_below="@id/info_book_rating_bar">
 
             <LinearLayout
                 android:layout_margin="8dp"

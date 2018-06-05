@@ -1,4 +1,4 @@
-package com.mad18.nullpointerexception.takeabook.requestBook;
+package com.mad18.nullpointerexception.takeabook.util;
 
 import java.util.Date;
 
@@ -6,11 +6,11 @@ public class Review {
 
     private String UserID, Username, text, userPic;
     private Date reviewDate;
-    private int rating;
+    private float rating;
 
-    public Review(){};
+    public Review(){}
 
-    public Review(String userID, String username,String userPic, String text, int rating,Date reviewDate) {
+    public Review(String userID, String username,String userPic, String text, float rating,Date reviewDate) {
         this.UserID = userID;
         this.Username = username;
         this.userPic = userPic;
@@ -43,11 +43,11 @@ public class Review {
         this.text = text;
     }
 
-    public int getRating() {
+    public float getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 
