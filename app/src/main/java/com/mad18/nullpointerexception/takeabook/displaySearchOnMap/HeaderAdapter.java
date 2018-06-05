@@ -1,6 +1,7 @@
 package com.mad18.nullpointerexception.takeabook.displaySearchOnMap;
 
 import android.content.Context;
+import android.location.Location;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,18 +33,18 @@ public class HeaderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private WeakReference<ItemClickListener> mCallbackRef;
 
-    public HeaderAdapter(Context ctx, ArrayList<Book> data, ItemClickListener listener) {
-        context = ctx;
-        mLayoutInflater = LayoutInflater.from(ctx);
-        mData = data;
-        mCallbackRef = new WeakReference<>(listener);
-    }
+        public HeaderAdapter(Context ctx, ArrayList<Book> data, ItemClickListener listener) {
+            context = ctx;
+            mLayoutInflater = LayoutInflater.from(ctx);
+            mData = data;
+            mCallbackRef = new WeakReference<>(listener);
+        }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_ITEM) {
             //inflate your layout and pass it to view holder
-            View v = mLayoutInflater.inflate(R.layout.activity_book_found_card_view, parent, false);
+            View v = mLayoutInflater.inflate(R.layout.display_search_on_map_card_view, parent, false);
             return new MyItem(v);
         } else if (viewType == TYPE_HEADER) {
             View v = mLayoutInflater.inflate(R.layout.transparent_header_view, parent, false);
@@ -59,6 +60,13 @@ public class HeaderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ((MyItem) holder).mTitleView.setText(dataItem.getBook_title());
             ((MyItem) holder).mPosition = position;
             ((MyItem) holder).mAuthor.setText(dataItem.getBook_first_author());
+            Location book_position = new Location("Provider");
+            Location my_position = new Location("Provider");
+            book_position.setLatitude(dataItem.getBook_location().getLongitude());
+            book_position.setLongitude(dataItem.getBook_location().getLatitude());
+            my_position.setLatitude(DisplaySearchOnMap_map.mLocation.latitude);
+            my_position.setLongitude(DisplaySearchOnMap_map.mLocation.longitude);
+            ((MyItem) holder).mDistance.setText(String.format("%.2f km",my_position.distanceTo(book_position)/1000));
             Glide.with(context).load(dataItem.getBook_thumbnail_url()).into(((MyItem) holder).mThumbnail);
         } else if (holder instanceof HeaderItem) {
             ((HeaderItem) holder).mSpaceView.setVisibility(mIsSpaceVisible ? View.VISIBLE : View.GONE);
@@ -80,11 +88,11 @@ public class HeaderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     private Book getItem(int position) {
-        return mData.get(position - 1);
+        return mData.get(position -1);
     }
 
     class MyItem extends HeaderItem {
-        TextView mTitleView,mAuthor;
+        TextView mTitleView,mAuthor, mDistance;
         ImageView mThumbnail;
 
         public MyItem(View itemView) {
@@ -92,6 +100,7 @@ public class HeaderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             mTitleView = (TextView) itemView.findViewById(R.id.book_found_title);
             mThumbnail = (ImageView) itemView.findViewById(R.id.book_found_thumbnail);
             mAuthor = (TextView) itemView.findViewById(R.id.book_found_author);
+            mDistance = (TextView) itemView.findViewById(R.id.book_found_distance);
         }
     }
 

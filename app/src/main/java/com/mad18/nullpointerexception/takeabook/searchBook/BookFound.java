@@ -12,7 +12,7 @@ public class BookFound extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_book_found_card_view);
+        setContentView(R.layout.display_search_on_map_card_view);
         RecyclerView rv = (RecyclerView)findViewById(R.id.book_found_rv);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);

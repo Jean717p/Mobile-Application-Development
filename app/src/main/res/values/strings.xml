@@ -230,6 +230,8 @@
 
     <string name="loan_book_start_date">Request date</string>
     <string name="request_book_label_text_message">Write a message to owner</string>
+    <string name="display_search_on_map_map">Mappa</string>
+    <string name="display_search_on_map_distance">Distance:</string>
 
 
 </resources>

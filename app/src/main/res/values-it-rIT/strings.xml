@@ -227,6 +227,8 @@
 
     <string name="loan_book_start_date">Data richiesta</string>
     <string name="request_book_label_text_message">Scrivi un messaggio al proprietario</string>
+    <string name="display_search_on_map_map">Mappa</string>
+    <string name="display_search_on_map_distance">Distance:</string>
 
 
 </resources>

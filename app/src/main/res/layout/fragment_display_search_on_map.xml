@@ -7,11 +7,13 @@
 
     <com.mad18.nullpointerexception.takeabook.displaySearchOnMap.SlidingUpPanelLayout
         android:id="@+id/display_search_on_map_slidingLayout"
+        android:layout_marginTop="@dimen/toolbar_height"
         android:gravity="bottom"
         app:shadowHeight="0dp"
         app:paralaxOffset="@dimen/parallax_offset"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
+
         <FrameLayout
             android:gravity="top"
             android:layout_width="fill_parent"
@@ -34,26 +36,20 @@
                 android:layout_height="@dimen/map_height"
                 android:layout_alignParentTop="true"/>
 
-            <View
-                android:id="@+id/display_search_on_map_whiteSpaceView"
-                android:visibility="gone"
-                android:background="@android:color/white"
-                android:layout_marginTop="@dimen/map_height"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
 
             <com.mad18.nullpointerexception.takeabook.displaySearchOnMap.DisplaySearchOnMap_booklistRV
                 android:id="@android:id/list"
-                android:cacheColorHint="@android:color/white"
+                android:cacheColorHint="@android:color/transparent"
                 android:drawSelectorOnTop="true"
                 android:dividerHeight="@dimen/divider_height"
                 android:divider="@android:color/darker_gray"
-                android:background="@android:color/transparent"
+                android:background="@color/white"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_below="@id/display_search_on_map_transparentView"
                 android:smoothScrollbar="false"/>
         </RelativeLayout>
+
     </com.mad18.nullpointerexception.takeabook.displaySearchOnMap.SlidingUpPanelLayout>
 
 </RelativeLayout>

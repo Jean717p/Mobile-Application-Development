@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.firestore.GeoPoint;
 import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.info.InfoBook;
 import com.mad18.nullpointerexception.takeabook.R;
@@ -61,7 +62,7 @@ public class DisplaySearchOnMap_map extends Fragment implements GoogleApiClient.
 
     private HeaderAdapter mHeaderAdapter;
 
-    private LatLng mLocation;
+    public static LatLng mLocation;
     private Marker mLocationMarker;
 
     private SupportMapFragment mMapFragment;
@@ -102,13 +103,13 @@ public class DisplaySearchOnMap_map extends Fragment implements GoogleApiClient.
 
         // transparent view at the top of ListView
         mTransparentView = rootView.findViewById(R.id.display_search_on_map_transparentView);
-        mWhiteSpaceView = rootView.findViewById(R.id.display_search_on_map_whiteSpaceView);
+        //mWhiteSpaceView = rootView.findViewById(R.id.display_search_on_map_whiteSpaceView);
 
         // init header view for ListView
         // mTransparentHeaderView = inflater.inflate(R.layout.transparent_header_view, mListView, false);
         // mSpaceView = mTransparentHeaderView.findViewById(R.id.space);
 
-        collapseMap();
+        //collapseMap();
 
         mSlidingUpPanelLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -169,7 +170,8 @@ public class DisplaySearchOnMap_map extends Fragment implements GoogleApiClient.
                 .build();
 
         setUpMapIfNeeded();
-
+        expandMap();
+        mSlidingUpPanelLayout.collapsePane();
     }
 
     private void setUpMapIfNeeded() {
@@ -274,12 +276,13 @@ public class DisplaySearchOnMap_map extends Fragment implements GoogleApiClient.
         super.onStop();
     }
 
-    private LatLng getLastKnownLocation() {
+    public LatLng getLastKnownLocation() {
         return getLastKnownLocation(true);
     }
 
 
-    private LatLng getLastKnownLocation(boolean isMoveMarker) {
+
+    public LatLng getLastKnownLocation(boolean isMoveMarker) {
         LocationManager lm = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_LOW);
@@ -348,9 +351,9 @@ public class DisplaySearchOnMap_map extends Fragment implements GoogleApiClient.
 
     private void collapseMap() {
         if (mHeaderAdapter != null) {
-            mHeaderAdapter.showSpace();
+            //mHeaderAdapter.showSpace();
         }
-        mTransparentView.setVisibility(View.GONE);
+        //mTransparentView.setVisibility(View.GONE);
         if (bookMap != null && mLocation != null) {
             bookMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLocation, 11f), 1000, null);
         }

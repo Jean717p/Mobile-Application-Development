@@ -74,7 +74,26 @@
                 android:layout_marginTop="13dp"
                 android:layout_toEndOf="@+id/book_found_label_author" />
 
+            <TextView
+                android:id="@+id/book_found_label_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/book_found_author"
+                android:layout_marginTop="16dp"
+                android:layout_toEndOf="@id/book_found_thumbnail"
+                android:layout_alignBaseline="@id/book_found_distance"
+                android:text="@string/display_search_on_map_distance"
+                android:textSize="16sp"
+                android:textStyle="normal|bold" />
 
+            <TextView
+                android:id="@+id/book_found_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/book_found_author"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="13dp"
+                android:layout_toEndOf="@+id/book_found_label_distance" />
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
