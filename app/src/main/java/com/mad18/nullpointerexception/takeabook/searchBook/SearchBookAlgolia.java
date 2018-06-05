@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.Index;
 import com.algolia.search.saas.Query;
+import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -65,8 +66,7 @@ public class SearchBookAlgolia extends AppCompatActivity {
     private static final int ZXING_CAMERA_PERMISSION = 4, REQUEST_SCANNER=3, FINE_LOCATION_PERMISSION=7, FINE_LOCATION_PERMISSION_BARCODE = 6;
     private RecyclerView mRecyclerView;
     private SearchBookAlgoliaAdapter myAdapter;
-    private ScrollView sv_scanbarcode;
-
+    private android.support.design.widget.FloatingActionButton fab_isbn;
 
     @Override
     protected void onResume() {
@@ -80,17 +80,16 @@ public class SearchBookAlgolia extends AppCompatActivity {
         setContentView(R.layout.activity_search_book_algolia);
         context = this;
         searchBase = getIntent().getStringExtra("action");
-        sv_scanbarcode = findViewById(R.id.search_book_algolia_scrollview);
         android.support.v7.widget.Toolbar toolbar = findViewById(R.id.search_toolbar);
         mRecyclerView = findViewById(R.id.search_book_algolia_recycler_view);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Search " + searchBase);
+        fab_isbn = findViewById(R.id.search_book_algolia_fab);
         if(searchBase.equals("ISBN")){
-            sv_scanbarcode.setVisibility(View.VISIBLE);
+            fab_isbn.setVisibility(View.VISIBLE);
         }
-        ImageView iw_scanbarcode = findViewById(R.id.search_book_algolia_ImageView);
-        iw_scanbarcode.setOnClickListener(view -> {
+        fab_isbn.setOnClickListener(view -> {
             if (ContextCompat.checkSelfPermission(SearchBookAlgolia.this, Manifest.permission.CAMERA)
                     != PackageManager.PERMISSION_GRANTED) {
                 mClss = view;
@@ -156,7 +155,6 @@ public class SearchBookAlgolia extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-
                 return false;
             }
 
@@ -166,12 +164,16 @@ public class SearchBookAlgolia extends AppCompatActivity {
                     String filter = "NOT UserID:" + FirebaseAuth.getInstance().getUid();
                     booksToShow.clear();
                     Query query = new Query(newText)
-                            .setAttributesToRetrieve("Title", "ISBN", "Author", "ThumbnailURL")
+                            .setAttributesToRetrieve("Title", "ISBN", "Author", "ThumbnailURL", "UserID")
                             .setFilters(filter)
                             .setHitsPerPage(50);
 
+                    if(searchBase.equals("ISBN")){
+                        fab_isbn.setVisibility(View.INVISIBLE);
+                    }
                     algolia_index.searchAsync(query, (jsonObject, e) -> {
                         try {
+
                             if (jsonObject != null) {
                                 if (jsonObject.has("hits")) {
                                     JSONArray hits = jsonObject.getJSONArray("hits");
@@ -211,7 +213,7 @@ public class SearchBookAlgolia extends AppCompatActivity {
                 }
                 else{
                     if(searchBase.equals("ISBN")){
-                        sv_scanbarcode.setVisibility(View.VISIBLE);
+                        fab_isbn.setVisibility(View.VISIBLE);
                     }
                 }
                 return false;
@@ -251,11 +253,17 @@ public class SearchBookAlgolia extends AppCompatActivity {
                     String ISBN = bundle.getString("ISBN");
                     searchBooksOnFireStore(ISBN);
                     if(booksFound.size() != 0){
-                        Intent intent = new Intent(context, DisplaySearchOnMap.class);
-                        Bundle b = new Bundle();
-                        b.putParcelableArrayList("bookToShow", booksFound);
-                        intent.putExtras(b);
-                        startActivity(intent);
+                        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(this,
+                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_PERMISSION);
+                        }
+                        else {
+                            Intent intent = new Intent(context, DisplaySearchOnMap.class);
+                            Bundle b = new Bundle();
+                            b.putParcelableArrayList("bookToShow", booksFound);
+                            intent.putExtras(b);
+                            startActivity(intent);
+                        }
                     }
                     else{
                         Toast.makeText(this, R.string.search_book_algolia_no_found, Toast.LENGTH_SHORT).show();
@@ -307,7 +315,6 @@ public class SearchBookAlgolia extends AppCompatActivity {
                 }
                 break;
         }
-
         return;
     }
 
@@ -329,20 +336,22 @@ public class SearchBookAlgolia extends AppCompatActivity {
                     }
                 }
                 if(booksFound.size() != 0){
-                    Intent intent = new Intent(context, DisplaySearchOnMap.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelableArrayList("bookToShow", booksFound);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
+                    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions((Activity) context,
+                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_PERMISSION);
+                    }
+                    else{
+                        Intent intent = new Intent(context, DisplaySearchOnMap.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelableArrayList("bookToShow", booksFound);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }
                 }
                 else{
                     Toast.makeText(context, R.string.search_book_algolia_no_found, Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
     }
-
-
-
 }

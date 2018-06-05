@@ -135,10 +135,6 @@ public class DisplaySearchOnMap_map extends Fragment implements GoogleApiClient.
         fragmentTransaction.add(R.id.display_search_on_map_mapContainer, mMapFragment, "map");
         fragmentTransaction.commit();
 
-        ArrayList<String> testData = new ArrayList<String>(100);
-        for (int i = 0; i < 100; i++) {
-            testData.add("Item " + i);
-        }
         // show white bg if there are not too many items
         // mWhiteSpaceView.setVisibility(View.VISIBLE);
 
