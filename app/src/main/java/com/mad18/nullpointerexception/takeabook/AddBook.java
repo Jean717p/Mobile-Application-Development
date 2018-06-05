@@ -233,7 +233,7 @@ public class AddBook extends AppCompatActivity {
         try {
             array_title.add(new JSONObject().put("Title", b.getBook_title()).put("ISBN", b.getBook_ISBN()).put("UserID", b.getBook_userid())
                     .put("Author",b.getBook_first_author())
-                    .put("ThumbnailURL", b.getBook_thumbnail_url()));
+                    .put("ThumbnailURL", b.getBook_thumbnail_url()).put("objectID",b.getBook_id()));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -245,7 +245,8 @@ public class AddBook extends AppCompatActivity {
         try {
             array_author.add(new JSONObject().put("Title", b.getBook_title()).put("ISBN", b.getBook_ISBN()).put("UserID", b.getBook_userid())
                     .put("Author",b.getBook_first_author())
-                    .put("ThumbnailURL", b.getBook_thumbnail_url()));
+                    .put("ThumbnailURL", b.getBook_thumbnail_url())
+                    .put("objectID",b.getBook_id()));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -257,7 +258,8 @@ public class AddBook extends AppCompatActivity {
         try {
             array_ISBN.add(new JSONObject().put("Title", b.getBook_title()).put("ISBN", b.getBook_ISBN()).put("UserID", b.getBook_userid())
                     .put("Author",b.getBook_first_author())
-                    .put("ThumbnailURL", b.getBook_thumbnail_url()));
+                    .put("ThumbnailURL", b.getBook_thumbnail_url())
+                    .put("objectID",b.getBook_id()));
         } catch (JSONException e) {
             e.printStackTrace();
         }
