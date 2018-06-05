@@ -24,6 +24,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.algolia.search.saas.Client;
+import com.algolia.search.saas.Index;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,8 +40,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.mad18.nullpointerexception.takeabook.EditBook;
 import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
 import com.mad18.nullpointerexception.takeabook.requestBook.RequestBook;
 import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
@@ -47,6 +51,11 @@ import com.mad18.nullpointerexception.takeabook.util.ImageViewPopUpHelper;
 import com.mad18.nullpointerexception.takeabook.util.User;
 import com.mad18.nullpointerexception.takeabook.util.UserWrapper;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -54,10 +63,12 @@ import java.util.List;
 public class InfoBook extends AppCompatActivity {
 
     private final int BOOK_EFFECTIVELY_REMOVED = 41;
-    private final int REQUEST_BOOK = 7;
+    private final int BOOK_EFFECTIVELY_MODIFIED = 81;
     private final int idTextViewIds[] = new int[]{R.id.info_book_title, R.id.info_book_author, R.id.info_book_ISBN,
             R.id.info_book_editionYear, R.id.info_book_publisher, R.id.info_book_categories, R.id.info_book_description,
             R.id.info_book_pages};
+    private final int REQUEST_BOOK = 7;
+    private final int MODIFY_BOOK = 8;
 
     private BookWrapper bookToShowInfoOf;
     private FirebaseAuth mAuth;
@@ -167,6 +178,7 @@ public class InfoBook extends AppCompatActivity {
             horizontal_photo_list_element = getLayoutInflater().inflate(R.layout.cell_in_image_list, null);
             ImageView imageView = (ImageView) horizontal_photo_list_element.findViewById(R.id.image_in_horizontal_list_cell);
             StorageReference mImageRef = FirebaseStorage.getInstance().getReference(for_me.get(i));
+            GlideApp.with(context).load(mImageRef).placeholder(R.drawable.ic_thumbnail_cover_book).into(imageView);
             GlideApp.with(context).asDrawable().load(mImageRef).into(new SimpleTarget<Drawable>(SimpleTarget.SIZE_ORIGINAL, SimpleTarget.SIZE_ORIGINAL) {
                 private ImageView iwPopUp;
                 @Override
@@ -182,7 +194,6 @@ public class InfoBook extends AppCompatActivity {
                     ImageViewPopUpHelper.enablePopUpOnClick(myActivity,iwPopUp,resource);
                 }
             });
-            GlideApp.with(context).load(mImageRef).placeholder(R.drawable.ic_thumbnail_cover_book).into(imageView);
             horizontal_photo_list.addView(horizontal_photo_list_element);
         }
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -204,7 +215,7 @@ public class InfoBook extends AppCompatActivity {
                     !bookToShowInfoOf.getStatus()) {
                 request_button.setClickable(true);
                 request_button.setVisibility(View.VISIBLE);
-                request_button.setOnClickListener( (View view) -> checkAlreadyRequested());
+                request_button.setOnClickListener( (View view) -> checkAlreadyRequested("request"));
                 tv2.setText(bookOwner.getUsr_name());
                 tv2.setTextColor(Color.BLUE);
                 tv2.setClickable(true);
@@ -243,8 +254,11 @@ public class InfoBook extends AppCompatActivity {
     }
 
     private void DeleteBook(Book bookToDelete) {
+
+        deleteIndexToAlgolia(bookToDelete);
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.document(bookToDelete.getBook_id()).delete().addOnSuccessListener(aVoid -> {
+        db.collection("books").document(bookToDelete.getBook_id()).delete().addOnSuccessListener(aVoid -> {
                 Log.d("delete","deleted from books");
                 DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(bookToDelete.getBook_userid());
                 docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -252,7 +266,7 @@ public class InfoBook extends AppCompatActivity {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         User owner = documentSnapshot.toObject(User.class);
                         owner.getUsr_books().remove(bookToDelete.getBook_id());
-                        docRef.update("usr_books",owner.getUsr_books(), SetOptions.merge());
+                        docRef.update("usr_books",owner.getUsr_books());
                     }
                 });
                 List<String> x = new LinkedList<String>(bookToDelete.getBook_photo_list().keySet());
@@ -276,28 +290,26 @@ public class InfoBook extends AppCompatActivity {
             });
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        TextView tv;
-        for (int i : idTextViewIds) {
-            tv = findViewById(i);
-            outState.putString(Integer.toString(i), tv.getText().toString());
-        }
-//        /**
-//         * da mettere l'immagine thumbnail + le immagini inserite dal proprietario
-//         */
+    public void deleteIndexToAlgolia(Book b){
+        String algoliaID = "P15KSBYCLA";
+        String algoliaKey = "18740ed4b222f99d8f8dcd7c17002b84";
+        Client client = new Client(algoliaID, algoliaKey);
+
+
+        /* Titolo */
+        Index title_index = client.getIndex("book_title");
+        title_index.deleteObjectAsync(b.getBook_id(),null);
+
+        /* Autore */
+        Index author_index = client.getIndex("book_author");
+        author_index.deleteObjectAsync(b.getBook_id(),null);
+
+
+        /* ISBN */
+        Index ISBN_index = client.getIndex("book_ISBN");
+        ISBN_index.deleteObjectAsync(b.getBook_id(),null);
     }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        TextView tv;
-        for (int i : idTextViewIds) {
-            tv = findViewById(i);
-            tv.setText(savedInstanceState.getString(Integer.toString(i), ""));
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -319,18 +331,17 @@ public class InfoBook extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.info_book_delete_book:
-                //TODO: if isLent == false
-                AskOption();
+                checkAlreadyRequested("delete");
                 return true;
             case R.id.info_book_modify_book:
-                //TODO: fase di modifica e update del libro
-                Toast.makeText(this, "Features in progress, soon available", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Features in progress, soon available", Toast.LENGTH_SHORT).show();
+                checkAlreadyRequested("modify");
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void checkAlreadyRequested(){
+    private void checkAlreadyRequested(String check){
         FirebaseFirestore.getInstance().collection("requests")
                 .whereEqualTo("bookId",bookToShowInfoOf.getId())
                 .whereEqualTo("applicantId",FirebaseAuth.getInstance().getUid())
@@ -346,16 +357,27 @@ public class InfoBook extends AppCompatActivity {
                         return;
                     }
                     else{
-                        Intent toRequestBook = new Intent(InfoBook.this, RequestBook.class);
-                        toRequestBook.putExtra("requested_book", bookToShowInfoOf);
-                        toRequestBook.putExtra("otherUser",new UserWrapper(bookOwner));
-                        startActivityForResult(toRequestBook,REQUEST_BOOK);
+                        switch (check){
+                            case "request":
+                                Intent toRequestBook = new Intent(InfoBook.this, RequestBook.class);
+                                toRequestBook.putExtra("requested_book", bookToShowInfoOf);
+                                toRequestBook.putExtra("otherUser",new UserWrapper(bookOwner));
+                                startActivityForResult(toRequestBook,REQUEST_BOOK);
+                                break;
+                            case "delete":
+                                AskOption();
+                                break;
+                            case "modify":
+                                Intent toEditBook = new Intent(InfoBook.this, EditBook.class);
+                                toEditBook.putExtra("book_to_modify", bookToShowInfoOf);
+                                startActivityForResult(toEditBook, MODIFY_BOOK);
+                        }
                     }
                 }
                 else{
                     Snackbar.make(findViewById(R.id.request_book_send),
                             R.string.connecting, Snackbar.LENGTH_LONG).show();
-                    checkAlreadyRequested();
+                    checkAlreadyRequested(check);
                 }
             }
         });
@@ -371,6 +393,31 @@ public class InfoBook extends AppCompatActivity {
                             R.string.request_book_sent, Snackbar.LENGTH_LONG).show();
                 }
                 break;
+            case MODIFY_BOOK:
+                if(resultCode == RESULT_OK){
+                    Snackbar.make(findViewById(R.id.info_book_ISBN),
+                            R.string.request_book_modified, Snackbar.LENGTH_LONG).show();
+                    if(data!=null) {
+                        Bundle extras = data.getExtras();
+                        if (extras != null) {
+                            BookWrapper bw = extras.getParcelable("bookToShowModified");
+//                            bookToShowInfoOf = extras.getParcelable("bookToShowModified");
+                            if (bookToShowInfoOf != null) {
+//                                myBook = new Book(bookToShowInfoOf);
+//                                fillInfoBookViews();
+                                Intent bookModifiedIntent = new Intent();
+                                bookModifiedIntent.putExtra("book_modified", bw);
+                                setResult(BOOK_EFFECTIVELY_MODIFIED, bookModifiedIntent);
+                                finish();
+                            }
+                        }
+                    }
+                }
+                else{
+                    finish();
+                }
+                break;
         }
     }
+
 }

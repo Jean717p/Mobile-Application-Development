@@ -217,7 +217,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".requestBook.RequestReview"></activity>
+        <activity android:name=".requestBook.RequestReview" />
+        <activity android:name=".EditBook"></activity>
     </application>
 
 </manifest>

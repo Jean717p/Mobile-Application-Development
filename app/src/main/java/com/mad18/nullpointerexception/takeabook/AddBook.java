@@ -140,7 +140,7 @@ public class AddBook extends AppCompatActivity {
         }
         staticSpinner = findViewById(R.id.add_book_spinner_book_cond);
         //create a list of items for the spinner.
-        String[] items = new String[]{"condizioni del libro", "Ottime", "Buone", "Scarse"};
+        //String[] items = new String[]{"condizioni del libro", "Ottime", "Buone", "Scarse"};
         //create an adapter to describe how the items are displayed, adapters are used in several places in android.
         //There are multiple variations of this, but this is the basic variant.
         ArrayAdapter<CharSequence> staticAdapter = ArrayAdapter

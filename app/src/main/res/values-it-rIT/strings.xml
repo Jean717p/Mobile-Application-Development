@@ -111,6 +111,7 @@
     <string name="info_book_modify_this_book">Modifica</string>
     <string name="info_book_request_this_book">Richiedi</string>
     <string name="info_book_delete">Elimina</string>
+    <string name="info_book_modified">Il libro è stato modificato correttamente</string>
 
 
     <!--add book Related-->
@@ -227,8 +228,9 @@
 
     <string name="loan_book_start_date">Data richiesta</string>
     <string name="request_book_label_text_message">Scrivi un messaggio al proprietario</string>
+    <string name="request_book_modified">Libro modificato correttamente</string>
+    <string name="title_activity_edit_book">Modifica libro</string>
     <string name="display_search_on_map_map">Mappa</string>
     <string name="display_search_on_map_distance">Distance:</string>
-
 
 </resources>

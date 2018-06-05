@@ -41,6 +41,7 @@ public class Main_MyLibrary_Fragment extends Fragment {
     private String title;
     private final int REQUEST_ADDBOOK = 3;
     private final int BOOK_EFFECTIVELY_ADDED = 31;
+    private final int BOOK_EFFECTIVELY_MODIFIED = 81;
     private final int REQUEST_REMOVE_BOOK = 40;
     private final int BOOK_EFFECTIVELY_REMOVED = 41;
     private int page;
@@ -178,6 +179,26 @@ public class Main_MyLibrary_Fragment extends Fragment {
                             Snackbar.make(getActivity().findViewById(R.id.main_library_coordinator_layout),
                                     R.string.info_book_deleted, Snackbar.LENGTH_LONG).show();
                             updateView(myBooks);
+                        }
+                    }
+                }
+                if(resultCode == BOOK_EFFECTIVELY_MODIFIED){
+                    if(data!=null){
+                        Bundle extras = data.getExtras();
+                        BookWrapper bookWrapper = extras.getParcelable("book_modified");
+                        if(bookWrapper!=null){
+                            Book b = new Book(bookWrapper);
+                            for (ListIterator<Book> iter = myBooks.listIterator(); iter.hasNext(); ) {
+                                Book element = iter.next();
+                                if(element.getBook_id().equals(b.getBook_id())){
+                                    iter.remove();
+                                    break;
+                                }
+                            }
+                            myBooks.add(new Book(bookWrapper));
+                            updateView(myBooks);
+                            Snackbar.make(getActivity().findViewById(R.id.main_library_coordinator_layout),
+                                    R.string.info_book_modified, Snackbar.LENGTH_LONG).show();
                         }
                     }
                 }
