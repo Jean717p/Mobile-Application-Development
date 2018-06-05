@@ -390,6 +390,8 @@ public class ShowRequest extends AppCompatActivity {
                                 db.collection("users").document(loan.getOwnerId())
                                         .collection("archive").document(loanRef)
                                         .set(toLoad);
+                                db.collection("books").document(loan.getBookId())
+                                        .update("book_status",false);
                                 Intent intent = new Intent(context,RequestReview.class);
                                 intent.putExtra("otherUser", new UserWrapper(applicant));
                                 intent.putExtra("bookToReview", new BookWrapper(requested_book));

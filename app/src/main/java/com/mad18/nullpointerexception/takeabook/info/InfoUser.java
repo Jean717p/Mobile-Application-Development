@@ -216,8 +216,6 @@ public class InfoUser extends AppCompatActivity {
             CardView cardView = findViewById(R.id.info_user_about_cv);
             cardView.setVisibility(View.GONE);
         }
-
-
         if(otherUser.getProfileImgStoragePath().length() > 0){
             ImageView iv = findViewById(R.id.info_user_photo_profile);
             StorageReference mImageRef = FirebaseStorage.getInstance().getReference(otherUser.getProfileImgStoragePath());

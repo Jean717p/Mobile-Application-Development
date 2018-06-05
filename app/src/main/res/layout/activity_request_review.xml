@@ -186,7 +186,7 @@
                         android:layout_marginBottom="5dp"
                         android:baselineAligned="false"
                         android:visibility="visible"
-                        android:src="@drawable/ic_account_circle_white_48px"/>
+                        />
 
                     <TextView
                         android:id="@+id/request_review_label_user"

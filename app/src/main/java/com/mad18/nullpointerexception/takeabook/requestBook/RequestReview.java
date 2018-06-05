@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.mad18.nullpointerexception.takeabook.GlideApp;
 import com.mad18.nullpointerexception.takeabook.R;
 import com.mad18.nullpointerexception.takeabook.util.Book;
@@ -73,10 +75,16 @@ public class RequestReview extends AppCompatActivity {
     private void fillCardViews(){
         TextView textView =findViewById(R.id.request_review_username);
         textView.setText(otherUser.getUsr_name());
+        ImageView iwu = findViewById(R.id.request_review_user_image);
+        ImageView iwb = findViewById(R.id.request_review_book_image);
         if(otherUser.getProfileImgStoragePath().length()>0){
-            GlideApp.with(this).load(otherUser.getProfileImgStoragePath())
+            StorageReference mImageRef = FirebaseStorage.getInstance().getReference(otherUser.getProfileImgStoragePath());
+            GlideApp.with(this).load(mImageRef)
                     .placeholder(R.drawable.ic_account_circle_white_48px)
-                    .into((ImageView) findViewById(R.id.request_review_user_image));
+                    .into(iwu);
+        }
+        else{
+            iwu.setImageResource(R.drawable.ic_account_circle_white_48px);
         }
         if(myUser.getUsr_id().equals(bookToReview.getBook_userid())){
             CardView cw = findViewById(R.id.request_review_cardview_book);
@@ -90,7 +98,10 @@ public class RequestReview extends AppCompatActivity {
             if(bookToReview.getBook_thumbnail_url().length()>0){
                 GlideApp.with(this).load(bookToReview.getBook_thumbnail_url())
                         .placeholder(R.drawable.ic_thumbnail_cover_book)
-                        .into((ImageView)findViewById(R.id.request_review_book_image));
+                        .into(iwb);
+            }
+            else{
+                iwb.setImageResource(R.drawable.ic_thumbnail_cover_book);
             }
         }
     }
@@ -119,7 +130,7 @@ public class RequestReview extends AppCompatActivity {
         }
         if(stars_user != 0){
             Review rw_user = new Review(myUser.getUsr_id(), myUser.getUsr_name(),myUser.getProfileImgStoragePath(), user_text, stars_user,myDate);
-            FirebaseFirestore.getInstance().collection("user").document(otherUser.getUsr_id()).collection("reviews")
+            FirebaseFirestore.getInstance().collection("users").document(otherUser.getUsr_id()).collection("reviews")
                     .add(rw_user);
         }
         else{
