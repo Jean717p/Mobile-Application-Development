@@ -492,7 +492,7 @@ public class ShowRequest extends AppCompatActivity {
 
     //Setto il messaggio, la thumbnail, il titolo del libro, il nome e il link al profilo dell'altro utente
     private  void fillCommonViews(){
-        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
         TextView tv = findViewById(R.id.request_book_tv_message);
         tv.setText(loan.getRequestText());
         ImageView iw = findViewById(R.id.request_book_main_image);

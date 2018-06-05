@@ -187,9 +187,9 @@
     <string name="request_book_status_exchg_confirm">To confirm</string>
     <string name="request_book_status_on_loan">On loan</string>
     <string name="request_book_status_closed">Closed</string>
-    <string name="request_book_label_start_date_loan">Loan start date:</string>
+    <string name="request_book_label_start_date_loan">Start loan:</string>
     <string name="request_book_archived">Archived</string>
-    <string name="request_book_label_end_date">Loan end date:</string>
+    <string name="request_book_label_end_date">End loan:</string>
     <string name="request_book_status_request_accepted">Request accepted</string>
     <string name="request_book_wait_owner">Waiting for owner</string>
     <string name="request_book_applicant_has_sent_request">Applicant has sent request</string>
@@ -226,10 +226,10 @@
     <string name="start_date">Start date</string>
     <string name="request_book_book_title">Book title</string>
     <string name="info_book_book_status">Status:</string>
-    <string name="info_book_status_free">Free</string>
+    <string name="info_book_status_free">Available</string>
 
     <string name="loan_book_start_date">Request date</string>
-
+    <string name="request_book_label_text_message">Write a message to owner</string>
 
 
 </resources>

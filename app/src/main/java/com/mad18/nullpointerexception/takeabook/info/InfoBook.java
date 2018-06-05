@@ -1,5 +1,6 @@
 package com.mad18.nullpointerexception.takeabook.info;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -89,6 +90,7 @@ public class InfoBook extends AppCompatActivity {
         fillInfoBookViews();
     }
 
+
     private void fillInfoBookViews() {
         TextView tv;
         tv = findViewById(R.id.info_book_title);
@@ -129,11 +131,12 @@ public class InfoBook extends AppCompatActivity {
         tv = findViewById(R.id.info_book_book_status);
         if(bookToShowInfoOf.getStatus()){
             tv.setText(R.string.request_book_status_on_loan);
-            tv.setTextColor(Color.RED);
+            tv.setTextColor(Color.parseColor("#D50000"));
         }
         else{
             tv.setText(R.string.info_book_status_free);
-            tv.setTextColor(Color.GREEN);
+            tv.setTextColor(Color.parseColor("#4CAF50"));
+
         }
         tv = findViewById(R.id.info_book_categories);
         tmp = bookToShowInfoOf.getCategories().toString();

@@ -19,6 +19,8 @@
     <color name="grey">#E5E5E5</color>
     <color name="gradEnd">#FFE082</color>
     <color name="gradStart">#FF8F00</color>
+    <color name="status_color_available">#4CAF50</color>
+    <color name="status_color_notavailable">#D50000</color>
 
     <color name="black_overlay">#66000000</color>
 

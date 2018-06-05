@@ -279,13 +279,14 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:paddingBottom="4dp"
+            android:textStyle="normal|bold"
             android:fontFamily="sans-serif-light"
             android:layout_alignBaseline="@id/info_book_label_owner"
             android:layout_alignTop="@id/info_book_label_owner"
             android:layout_toEndOf="@id/info_book_label_owner"
             android:textColor="@color/textColor"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textSize="13sp"
+            android:textSize="15sp"
             android:text="Owner"
             />
 
@@ -344,12 +345,12 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:paddingBottom="4dp"
-            android:fontFamily="sans-serif-light"
+            android:textStyle="bold|normal"
             android:layout_alignBaseline="@id/info_book_label_book_status"
             android:layout_alignTop="@id/info_book_label_book_status"
             android:layout_toEndOf="@id/info_book_label_book_status"
             android:textColor="@color/textColor"
-            android:textSize="13sp"
+            android:textSize="15sp"
             />
 
         <HorizontalScrollView

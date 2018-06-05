@@ -99,7 +99,7 @@
     <string name="info_book_label_edition_year"> Anno edizione:</string>
     <string name="info_book_label_publisher">Editore:</string>
     <string name="info_book_label_description">Descrizione:</string>
-    <string name="info_book_label_owner">Appartiene a:</string>
+    <string name="info_book_label_owner">Proprietario:</string>
     <string name="info_book_label_book_conditions">Condizioni:</string>
     <string name="info_book_label_book_num_pages">N. pagine:</string>
     <string name="info_book_snackbar">La libreria è stata aggiornata</string>
@@ -178,7 +178,7 @@
     <string name="requests_book_sent">Richieste inviate</string>
     <string name="requests_book_received">Richieste ricevute</string>
     <string name="requests_book_archive">Archivio richieste</string>
-    <string name="request_book_applicant">Richiedente</string>
+    <string name="request_book_applicant">Richiedente:</string>
     <string name="request_book_accept_request">Accetta richiesta</string>
     <string name="request_book_start_date">Data:</string>
     <string name="request_book_book_title">Titolo del libro</string>
@@ -188,9 +188,9 @@
     <string name="request_book_status_exchg_confirm">Da confermare</string>
     <string name="request_book_status_on_loan">In prestito</string>
     <string name="request_book_status_closed">Chiuso</string>
-    <string name="request_book_label_start_date_loan">Prestito iniziato:</string>
+    <string name="request_book_label_start_date_loan">Inizio prestito:</string>
     <string name="request_book_archived">Archiviata</string>
-    <string name="request_book_label_end_date">Data chiusura</string>
+    <string name="request_book_label_end_date">Fine prestito:</string>
     <string name="request_book_status_request_accepted">Richiesta Accettata</string>
     <string name="request_book_wait_owner">Aspetta il proprietario</string>
     <string name="request_book_applicant_has_sent_request">IL richiedente ha inviato la richiesta</string>
@@ -199,7 +199,7 @@
     <string name="request_book_confirm_exchange">Conferma scambio</string>
     <string name="request_book_applicant_has_confirmed_exchange">IL richedente ha confermato lo scambio</string>
     <string name="request_book_waiting_for_owner_exchange_confirmation">Aspetta la conferma dello scambio dal proprietario</string>
-    <string name="request_book_start_date_loan">Data inizio prestito</string>
+    <string name="request_book_start_date_loan">Inizio prestito:</string>
     <string name="request_book_close_loan">Chiudi prestito</string>
 
     <!--Altro-->
@@ -223,10 +223,10 @@
     <string name="send_request">Invia richiesta</string>
     <string name="message">Messaggio</string>
     <string name="info_book_book_status">Stato:</string>
-    <string name="info_book_status_free">Free</string>
+    <string name="info_book_status_free">Disponibile</string>
 
     <string name="loan_book_start_date">Data richiesta</string>
-
+    <string name="request_book_label_text_message">Scrivi un messaggio al proprietario</string>
 
 
 </resources>

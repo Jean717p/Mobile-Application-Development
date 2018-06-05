@@ -120,7 +120,7 @@ public class RequestBook extends AppCompatActivity {
                     .setPositiveButton(R.string.affermative_response, (dialog, whichButton) -> {
                         DocumentReference newReqRef = db.collection("requests").document();
                         ExtendedEditText eet = findViewById(R.id.request_book_message);
-                        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
                         Date myDate = Calendar.getInstance().getTime();
                         Loan loan = new Loan(bookOwner.getUsr_id(),user.getUsr_id(),bookOwner.getUsr_name(),user.getUsr_name(),
                                 requested_book.getBook_title(),requested_book.getBook_thumbnail_url(),requested_book.getBook_id(),
