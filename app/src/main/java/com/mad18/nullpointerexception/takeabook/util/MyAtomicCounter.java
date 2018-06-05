@@ -42,4 +42,9 @@ public class MyAtomicCounter{
             }
         }
     }
+
+    public int getAndIncrement(){
+        return atomicInteger.getAndIncrement();
+    }
+
 }

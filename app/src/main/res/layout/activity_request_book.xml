@@ -196,12 +196,11 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="16dp"
-                android:maxLength="13"
                 android:layout_centerHorizontal="true"
                 app:errorColor="#ddaa00"
                 app:hasClearButton="true"
                 app:helperTextColor="@color/colorAccent"
-                app:labelText="Write a message to owner"
+                app:labelText="@string/message"
                 app:maxCharacters="300"
                 app:panelBackgroundColor="@android:color/transparent"
                 app:primaryColor="@color/colorAccent">
@@ -211,19 +210,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="15"
-                    android:imeOptions="actionSearch"
                     />
             </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
 
         <!-- QUESTA è LA COPPIA TEXTVIEW LABEL E TEXTVIEW DEL MESSAGGIO RICEVUTO !-->
             <TextView
                 android:id="@+id/request_book_label_tv_message"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Message"
+                android:textColor="@color/colorAccent"
+                android:text="@string/message"
                 android:visibility="invisible"
                 android:layout_below="@id/request_book_status"/>
 
@@ -231,7 +230,7 @@
                 android:id="@+id/request_book_tv_message"
                 android:layout_margin="16dp"
                 android:visibility="invisible"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/request_book_label_tv_message"/>
 

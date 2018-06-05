@@ -226,6 +226,7 @@
     <string name="start_date">Start date</string>
     <string name="request_book_book_title">Book title</string>
     <string name="info_book_book_status">Status:</string>
+    <string name="info_book_status_free">Free</string>
 
     <string name="loan_book_start_date">Request date</string>
 

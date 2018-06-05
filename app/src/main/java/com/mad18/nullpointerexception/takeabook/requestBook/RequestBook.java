@@ -32,6 +32,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import studio.carbonylgroup.textfieldboxes.ExtendedEditText;
+
 public class RequestBook extends AppCompatActivity {
     private final String TAG = "RequestBook";
     private User user;
@@ -95,10 +97,12 @@ public class RequestBook extends AppCompatActivity {
         TextView tv;
         tv = findViewById(R.id.request_book_title);
         tv.setText(requested_book.getBook_title());
-    /*    tv = findViewById(R.id.request_book_end_date_owner);
-        tv.setHeight(0);
-        tv = findViewById(R.id.request_book_label_end_date_owner);
-        tv.setHeight(0)*/;
+        tv = findViewById(R.id.request_book_label_start_date);
+        tv.setVisibility(View.INVISIBLE);
+        tv = findViewById(R.id.request_book_start_date);
+        tv.setVisibility(View.INVISIBLE);
+        tv = findViewById(R.id.request_book_label_status);
+        tv.setVisibility(View.INVISIBLE);
         tv = findViewById(R.id.request_book_owner);
         tv.setText(bookOwner.getUsr_name());
         tv.setTextColor(Color.BLUE);
@@ -115,12 +119,12 @@ public class RequestBook extends AppCompatActivity {
                     .setIcon(R.drawable.ic_done_white_24px)
                     .setPositiveButton(R.string.affermative_response, (dialog, whichButton) -> {
                         DocumentReference newReqRef = db.collection("requests").document();
-                        TextView textView = findViewById(R.id.request_book_message);
+                        ExtendedEditText eet = findViewById(R.id.request_book_message);
                         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                         Date myDate = Calendar.getInstance().getTime();
                         Loan loan = new Loan(bookOwner.getUsr_id(),user.getUsr_id(),bookOwner.getUsr_name(),user.getUsr_name(),
                                 requested_book.getBook_title(),requested_book.getBook_thumbnail_url(),requested_book.getBook_id(),
-                                textView.getText().toString(), Calendar.getInstance().getTime(),
+                                eet.getText().toString(), Calendar.getInstance().getTime(),
                                 newReqRef.getId()
                         );
                         requestDocId = newReqRef.getId();
@@ -138,9 +142,6 @@ public class RequestBook extends AppCompatActivity {
                                 reqOwner.set(toUpdate);
                             }
                         });
-                        send.setVisibility(View.GONE);
-                        textView.setText(formatter.format(myDate));
-                        textView.setVisibility(View.VISIBLE);
                         setResult(RESULT_OK);
                         finish();
                         overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
@@ -151,32 +152,19 @@ public class RequestBook extends AppCompatActivity {
         });
         Button cancel = findViewById(R.id.request_book_cancel);
         cancel.setOnClickListener(view -> {
-            if(requestDocId.length()==0){
-                onBackPressed();
-                return;
-            }
-            else{
-                AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
-                        //set message, title, and icon
-                        .setTitle(R.string.cancel)
-                        .setMessage(R.string.sure_question)
-                        .setIcon(R.drawable.ic_done_white_24px)
-                        .setPositiveButton(R.string.affermative_response, (dialog, whichButton) -> {
-                            //your code
-                            DocumentReference newReqRef = db.collection("requests").document(requestDocId);
-                            newReqRef.delete();
-                            DocumentReference reqMe = db.collection("users").document(user.getUsr_id())
-                                    .collection("requests").document(requestDocId);
-                            reqMe.delete();
-                            DocumentReference reqOwner = db.collection("users").document(bookOwner.getUsr_id())
-                                    .collection("requests").document(requestDocId);
-                            reqOwner.delete();
-                            onBackPressed();
-                            dialog.dismiss();
-                        })
-                        .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
-                        .show();
-            }
+            AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
+                    //set message, title, and icon
+                    .setTitle(R.string.cancel)
+                    .setMessage(R.string.sure_question)
+                    .setIcon(R.drawable.ic_done_white_24px)
+                    .setPositiveButton(R.string.affermative_response, (dialog, whichButton) -> {
+                        setResult(RESULT_CANCELED);
+                        finish();
+                        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
+                        dialog.dismiss();
+                    })
+                    .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                    .show();
         });
     }
 }

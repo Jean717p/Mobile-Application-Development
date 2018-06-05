@@ -126,6 +126,15 @@ public class InfoBook extends AppCompatActivity {
         } else {
             tv.setText(bookToShowInfoOf.getPublisher());
         }
+        tv = findViewById(R.id.info_book_book_status);
+        if(bookToShowInfoOf.getStatus()){
+            tv.setText(R.string.request_book_status_on_loan);
+            tv.setTextColor(Color.RED);
+        }
+        else{
+            tv.setText(R.string.info_book_status_free);
+            tv.setTextColor(Color.GREEN);
+        }
         tv = findViewById(R.id.info_book_categories);
         tmp = bookToShowInfoOf.getCategories().toString();
         if (tmp.length() > 2) {
@@ -186,7 +195,8 @@ public class InfoBook extends AppCompatActivity {
             mAuth = FirebaseAuth.getInstance();
             FirebaseUser user = mAuth.getCurrentUser();
             final Button request_button = findViewById(R.id.info_book_request_book_button);
-            if(!bookToShowInfoOf.getUser_id().equals(user.getUid())) {
+            if(!bookToShowInfoOf.getUser_id().equals(user.getUid()) &&
+                    !bookToShowInfoOf.getStatus()) {
                 request_button.setClickable(true);
                 request_button.setVisibility(View.VISIBLE);
                 request_button.setOnClickListener( (View view) -> checkAlreadyRequested());

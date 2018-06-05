@@ -140,6 +140,9 @@ public class ScanBarcode extends AppCompatActivity implements ZXingScannerView.R
                                 try{
                                     String SeditionYear = tmp.getString("publishedDate");
                                     editionYear = Integer.parseInt(SeditionYear);
+                                    if(editionYear<0){
+                                        editionYear=0;
+                                    }
                                 }
                                 catch (Exception e){
                                     editionYear = 0;

@@ -27,6 +27,7 @@ import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
 
 import java.util.List;
+import java.util.ListIterator;
 
 import static com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.myBooks;
 
@@ -159,7 +160,6 @@ public class Main_MyLibrary_Fragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        List<Book> books = myAdapter.getData();
         switch (requestCode){
             case REQUEST_REMOVE_BOOK:
                 if(resultCode == BOOK_EFFECTIVELY_REMOVED){
@@ -167,19 +167,17 @@ public class Main_MyLibrary_Fragment extends Fragment {
                         Bundle extras = data.getExtras();
                         BookWrapper bookWrapper = extras.getParcelable("book_removed");
                         if(bookWrapper!=null){
-                            for (Book bi: myBooks) {
-                                if(bi.getBook_ISBN().equals(bookWrapper.getISBN())){
-                                    books.remove(bi);
+                            Book b = new Book(bookWrapper);
+                            for (ListIterator<Book> iter = myBooks.listIterator(); iter.hasNext(); ) {
+                                Book element = iter.next();
+                                if(element.getBook_id().equals(b.getBook_id())){
+                                    iter.remove();
                                     break;
                                 }
                             }
-                            //myBooks.remove(new Book(bookWrapper));
-                            //books.remove(new Book(bookWrapper));
-                            myAdapter.setData(books);
-                            myAdapter.notifyDataSetChanged();
                             Snackbar.make(getActivity().findViewById(R.id.main_library_coordinator_layout),
                                     R.string.info_book_deleted, Snackbar.LENGTH_LONG).show();
-                            //updateView(myBooks);
+                            updateView(myBooks);
                         }
                     }
                 }
@@ -191,13 +189,10 @@ public class Main_MyLibrary_Fragment extends Fragment {
                         if(extras!=null){
                             BookWrapper bookWrapper = extras.getParcelable("new_book");
                             if(bookWrapper!=null){
-                                //myBooks.add(new Book(bookWrapper));
-                                books.add(new Book(bookWrapper));
-                                myAdapter.setData(books);
-                                myAdapter.notifyDataSetChanged();
+                                myBooks.add(new Book(bookWrapper));
+                                updateView(myBooks);
                                 Snackbar.make(getActivity().findViewById(R.id.main_library_coordinator_layout),
                                         R.string.add_book_added, Snackbar.LENGTH_LONG).show();
-                                //updateView(myBooks);
                             }
                         }
                     }

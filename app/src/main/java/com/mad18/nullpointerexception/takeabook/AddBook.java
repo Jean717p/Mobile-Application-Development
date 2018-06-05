@@ -41,9 +41,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
-import com.mad18.nullpointerexception.takeabook.myProfile.editProfile;
 import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
 import com.mad18.nullpointerexception.takeabook.util.ScanBarcode;
@@ -54,7 +52,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,35 +64,37 @@ import studio.carbonylgroup.textfieldboxes.ExtendedEditText;
 
 
 public class AddBook extends AppCompatActivity {
+    private final String TAG = "AddBook";
     private final int BOOK_EFFECTIVELY_ADDED = 31;
-    //private final String TAG = "AddBook";
     private static final int ZXING_CAMERA_PERMISSION = 4;
-    private final int REQUEST_PICK_IMAGE = 1, REQUEST_IMAGE_CAPTURE = 2, REQUEST_SCANNER=3;
     private final int REQUEST_PERMISSION_CAMERA = 2, REQUEST_PERMISSION_GALLERY=1;
+    private final int REQUEST_PICK_IMAGE = 1, REQUEST_IMAGE_CAPTURE = 2, REQUEST_SCANNER=3,
+                        REQUEST_PICK_IMAGE_COVER =4, REQUEST_IMAGE_CAPTURE_COVER=5;
     private final int addBookTextViewIds[] = {R.id.add_book_text_field_Title,R.id.add_book_text_field_Author,
             R.id.add_book_text_field_EditionYear,R.id.add_book_text_field_Publisher,
             R.id.add_book_text_field_ISBN,R.id.add_book_text_field_Description,R.id.add_book_text_field_Category,
             R.id.add_book_text_field_Pages};
+    private final int addBookEditTextViewIds[] = {
+            R.id.add_book_extended_edit_text_ISBN,
+            R.id.add_book_extended_edit_Title,
+            R.id.add_book_extended_edit_Author,
+            R.id.add_book_extended_edit_text_EditionYear,
+            R.id.add_book_extended_edit_text_Publisher,
+            R.id.add_book_extended_edit_text_Description,
+            R.id.add_book_extended_edit_Category,
+            R.id.add_book_extended_edit_text_Pages
+    };
     private Book bookToAdd;
     private View mClss;
     private Toolbar toolbar;
     private Menu menu;
     private Spinner staticSpinner;
-
-
-    private android.support.design.widget.FloatingActionButton img_fab;
     private FirebaseUser user;
-
     //simo inizio
-    private Bitmap bookImg;
+    private Bitmap bookImg,bookCover;
     private HashMap<Integer,Bitmap> bookImgMap = new HashMap<>();
     // horizontal_photo_list is the child of the HorizontalScrollView ...
     private LinearLayout horizontal_photo_list;
-
-    // this is an array that holds the IDs of the drawables ...
-    private int[] photo_conditions_by_user = {R.drawable.ic_book_cover, R.drawable.ic_book_cover, R.drawable.ic_book_cover,
-            R.drawable.ic_book_cover};
-
     private View horizontal_photo_list_element;
     private TextView text;
 
@@ -115,8 +114,6 @@ public class AddBook extends AppCompatActivity {
         Button scan = (Button)findViewById(R.id.read_barcode);
         Button search = (Button)findViewById(R.id.add_book_read_ISBN); //new search
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
-
-
         ExtendedEditText eetS;
         eetS = findViewById(R.id.add_book_extended_edit_text_ISBN);
         eetS.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -125,7 +122,7 @@ public class AddBook extends AppCompatActivity {
                if(actionID == EditorInfo.IME_ACTION_SEARCH){
                    searchAfterISBNInsertion();
                }
-                return false;
+               return false;
             }
         });
         horizontal_photo_list = (LinearLayout) findViewById(R.id.horizontal_photo_layout);
@@ -135,12 +132,10 @@ public class AddBook extends AppCompatActivity {
             imageView.setOnClickListener(v -> {
                 globalImgPos = Integer.parseInt(imageView.getTag().toString());
                 globalViewImgElement = imageView;
-                selectBookImg();
+                selectBookImg(false);
             });
-
             imageView.setTag(i);
             imageView.setImageResource(R.drawable.ic_addbook);
-
             horizontal_photo_list.addView(horizontal_photo_list_element);
         }
         staticSpinner = findViewById(R.id.add_book_spinner_book_cond);
@@ -175,20 +170,20 @@ public class AddBook extends AppCompatActivity {
            findViewById(R.id.add_book_text_field_ISBN).setEnabled(true);
            findViewById(R.id.add_book_text_field_Description).setEnabled(true);
            findViewById(R.id.add_book_text_field_Publisher).setEnabled(true);
-            bookImg = null;
+           bookImg = null;
         }
-
         search.setOnClickListener(view -> { //new search
             searchAfterISBNInsertion();
         });
+       ImageView iw = findViewById(R.id.add_book_picture);
+       iw.setClickable(true);
+       iw.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               selectBookImg(true);
+           }
+       });
     }
-
-
-//    /**
-//     * Crea il menu (toolbar) partendo dall'xml add_book_menu.xml
-//     * @param menu
-//     * @return
-//     */
 
     public void searchAfterISBNInsertion(){
         ExtendedEditText isbneditfield = findViewById(R.id.add_book_extended_edit_text_ISBN);
@@ -216,6 +211,7 @@ public class AddBook extends AppCompatActivity {
             toast.show();
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
@@ -282,7 +278,7 @@ public class AddBook extends AppCompatActivity {
                 eet_title = findViewById(R.id.add_book_extended_edit_Title);
                 eet_ISBN = findViewById(R.id.add_book_extended_edit_text_ISBN);
                 eet_author = findViewById(R.id.add_book_extended_edit_Author);
-                if(eet_ISBN.getText().toString().length()>0 || eet_author.getText().toString().length() > 0
+                if(eet_ISBN.getText().toString().length()==13 || eet_author.getText().toString().length() > 0
                         || eet_title.getText().toString().length() > 0) {
                     storeBookEditData();
                     Intent myLibIntent = new Intent();
@@ -306,40 +302,6 @@ public class AddBook extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        /*
-        ExtendedEditText eet;
-        for(int i:addBookTextViewIds){
-            eet = findViewById(i);
-            outState.putString(Integer.toString(i),eet.getText().toString());
-        }
-        if(bookImg!=null){
-            outState.putString("bookEditImgPath",editProfile.saveImageToInternalStorage(bookImg,"temp_"+"bookEditImage",this));
-        }
-        */
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        ExtendedEditText text;
-        for(int i:addBookTextViewIds){
-            text = findViewById(i);
-            text.setText(savedInstanceState.getString(Integer.toString(i),""));
-        }
-        String bookImgPath = savedInstanceState.getString("bookEditImgPath");
-        if(bookImgPath!=null){
-            File file = new File(bookImgPath);
-            if(file.exists()){
-                bookImg = editProfile.loadImageFromStorage(bookImgPath,R.id.add_book_picture,this);
-                file.delete();
-            }
-        }
-    }
-
     /**
      * Metodo che si occupa di inserire nel database Firebase i dati relativi al libro aggiunto dall'utente.
      * Setta tutti i parametri ricevuti dalle edit text in un oggetto bookToAdd della classe book, che verrà poi inserito
@@ -350,8 +312,7 @@ public class AddBook extends AppCompatActivity {
      */
 
     private void storeBookEditData(){
-        ExtendedEditText text;
-        String s; File file;
+        ExtendedEditText eet;
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         StorageReference mImageRef;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -359,7 +320,6 @@ public class AddBook extends AppCompatActivity {
         CollectionReference users = db.collection("users");
         String bookImgPath;
         Map<String,Boolean> authors = new HashMap<>(), categories = new HashMap<>();
-        ExtendedEditText eet;
         Map<String,Boolean>photourllist = new HashMap<>();
         DocumentReference bookRef = books.document();
         //Aggiunta libro a elenco libri
@@ -370,13 +330,11 @@ public class AddBook extends AppCompatActivity {
                     new GeoPoint(0,0),
                     0,false);
         }
-
         bookToAdd.setBook_userid(user.getUid());
         eet = findViewById(R.id.add_book_extended_edit_text_ISBN);
         if(eet.getText().toString().length() > 0){
             bookToAdd.setBook_ISBN(eet.getText().toString());
         }
-
         eet = findViewById(R.id.add_book_extended_edit_text_Description);
         if(eet.getText().toString().length() > 0){
             bookToAdd.setBook_description(eet.getText().toString());
@@ -384,90 +342,72 @@ public class AddBook extends AppCompatActivity {
         else{
             bookToAdd.setBook_description("");
         }
-
-
         eet = findViewById(R.id.add_book_extended_edit_Author);
         if(eet.getText().toString().length() > 0){
             String tmp[] = eet.getText().toString().split(","); //è la virgola???
-            //bookToAdd.setBook_first_author(tmp[0]);
             for(int i=0;i<tmp.length;i++){
                 authors.put(tmp[i],true);
             }
             bookToAdd.setBook_authors(authors);
         }
         bookToAdd.setBook_condition(staticSpinner.getSelectedItemPosition());
-
         eet = findViewById(R.id.add_book_extended_edit_text_EditionYear);
         if(eet.getText().toString().length() > 0){
             bookToAdd.setBook_editionYear(Integer.parseInt(eet.getText().toString()));
         }
-
-
         eet = findViewById(R.id.add_book_extended_edit_Title);
         if(eet.getText().toString().length() > 0){
             bookToAdd.setBook_title(eet.getText().toString());
         }
-
-        /*
-        if(bookToAdd.getBook_title().length()==0 || bookToAdd.getBook_first_author().length()==0
-                || bookToAdd.getBook_ISBN().length() == 0){
-            return;
-        }*/
-
         eet = findViewById(R.id.add_book_extended_edit_text_Publisher);
         if(eet.getText().toString().length() > 0) {
             bookToAdd.setBook_publisher(eet.getText().toString());
         }
-
         eet = findViewById(R.id.add_book_extended_edit_Category);
         if(eet.getText().length() > 0){
-            String tmp[] = eet.getText().toString().split(","); //è la virgola???
-            //bookToAdd.setBook_first_author(tmp[0]);
+            String tmp[] = eet.getText().toString().split(",");
             for(int i=0;i<tmp.length;i++){
                 categories.put(tmp[i],true);
             }
             bookToAdd.setBook_categories(categories);
         }
-
-
-
-
         //aggiunta foto allo storage
         for(int j= 0; j<4;j++ ) {
             if(bookImgMap.containsKey(j)){
                 if (bookImgMap.get(j) != null) {
-                    bookImgPath = editProfile.saveImageToInternalStorage(bookImgMap.get(j), "temp_" + "bookEditImage"+ j, this);
-                    if (bookImgPath != null) {
-                        File file1 = new File(bookImgPath);
-                        ByteArrayOutputStream out = new ByteArrayOutputStream();
-                        Bitmap bookImgForName = bookImgMap.get(j);
-                        bookImgForName.compress(Bitmap.CompressFormat.JPEG,75,out);
-                        mImageRef = FirebaseStorage.getInstance().getReference().child("users/"+user.getUid()+ "/books/" + bookRef.getId() + "/" + UUID.nameUUIDFromBytes(out.toByteArray()));
-                        photourllist.put("users/"+user.getUid()+ "/books/" + bookRef.getId()+ "/"+ UUID.nameUUIDFromBytes(out.toByteArray()), true);
-                        Uri photoImgUri = Uri.fromFile(file1);
-                        mImageRef.putFile(photoImgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                file1.delete();
-                            }
-                        });
-                    }
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    Bitmap bookImgForName = bookImgMap.get(j);
+                    bookImgForName.compress(Bitmap.CompressFormat.JPEG,100,out);
+                    String path = "users/"+user.getUid()+ "/books/" + bookRef.getId() + "/" + UUID.nameUUIDFromBytes(out.toByteArray());
+                    mImageRef = FirebaseStorage.getInstance().getReference().child(path);
+                    photourllist.put(path, true);
+                    mImageRef.putBytes(out.toByteArray());
                 }
             }
         }
         bookToAdd.setBook_photo_list(photourllist);
         bookToAdd.setBook_id(bookRef.getId());
+        if(bookToAdd.getBook_thumbnail_url().length()==0 && bookCover!=null){
+            ByteArrayOutputStream coverOut = new ByteArrayOutputStream();
+            bookCover.compress(Bitmap.CompressFormat.JPEG,100,coverOut);
+            StorageReference coverRef = FirebaseStorage.getInstance().getReference().child(
+                    "users/"+user.getUid()+ "/books/"+bookRef.getId()+"/"+UUID.nameUUIDFromBytes(coverOut.toByteArray())
+            );
+            bookToAdd.setBook_thumbnail_url(coverRef.getPath());
+            coverRef.putBytes(coverOut.toByteArray());
+        }
         bookRef.set(bookToAdd);
         addIndexToAlgolia(bookToAdd);
-
-        //Aggiunta libro all'elenco dell'utente
         users.document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User u = documentSnapshot.toObject(User.class);
+                if(u==null){
+                    return;
+                }
                 u.getUsr_books().put(bookRef.getId(),true);
-
-                users.document(user.getUid()).set(u);
+                users.document(u.getUsr_id())
+                        .update("usr_books",u.getUsr_books());
             }
         });
     }
@@ -494,24 +434,18 @@ public class AddBook extends AppCompatActivity {
                     if(data!=null) {
                         Bundle bundle = data.getExtras();
                         BookWrapper bookwrap = (BookWrapper) bundle.getParcelable("bookinfo");
-                        //TextView titleView = (TextView)findViewById(R.id.add_book_title);
-                        // titleView.setText(bookwrap.getTitle());
                         for(int i:addBookTextViewIds){
                             findViewById(i).setVisibility(View.VISIBLE);
                         }
                         findViewById(R.id.add_book_picture).setVisibility(View.VISIBLE);
                         Map<String,Boolean> Mauthors = new HashMap<>();
                         Map<String,Boolean> Mcategories = new HashMap<>();
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                        Mauthors.putAll(bookwrap.getAuthors().stream().collect(Collectors.toMap((String s)->s,s-> true)));
-//                    }
                         for (String key: bookwrap.getAuthors()) {
                             Mauthors.put(key,true);
                         }
                         for (String key: bookwrap.getCategories()) {
                             Mcategories.put(key,true);
                         }
-
                         bookToAdd = new Book(bookwrap.getISBN(),bookwrap.getTitle(),
                                 bookwrap.getPublisher(),bookwrap.getEditionYear(),0,user.getUid(),Mauthors,"",bookwrap.getThumbnail(),
                                 Mcategories, MainActivity.thisUser.getUsr_geoPoint(), bookwrap.getPages(),false);
@@ -519,40 +453,66 @@ public class AddBook extends AppCompatActivity {
 //                            findViewById(i).setVisibility(View.VISIBLE);
 //                        }
                         fillAddBookViews(bookToAdd);
-
-                        //findViewById(R.id.add_book_picture).setVisibility(View.VISIBLE);
-
                     }
                     break;
-                case REQUEST_IMAGE_CAPTURE:
-                    if (data != null) {
-                        bookImg = (Bitmap) data.getExtras().get("data");
+                case REQUEST_PICK_IMAGE:
+                if (data != null) {
+                    Uri selectedMediaUri = data.getData();
+                    try {
+                        bookImg = MediaStore.Images.Media.getBitmap(this.getContentResolver(),selectedMediaUri);
                         iw = globalViewImgElement;
-                        if(iw!=null && bookImg != null) {
+                        if(iw!=null && !bookImg.equals("")) {
                             bookImg = Bitmap.createScaledBitmap(bookImg,768, 1024, true);
                             iw.setImageBitmap(bookImg);
                             bookImgMap.put(globalImgPos,bookImg);
                         }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                    break;
-                case REQUEST_PICK_IMAGE:
+                }
+                break;
+                case REQUEST_PICK_IMAGE_COVER:
                     if (data != null) {
                         Uri selectedMediaUri = data.getData();
                         try {
-                            bookImg = MediaStore.Images.Media.getBitmap(this.getContentResolver(),selectedMediaUri);
+                            bookCover = Bitmap.createScaledBitmap(
+                                    (Bitmap) MediaStore.Images.Media.getBitmap(this.getContentResolver(),selectedMediaUri),
+                                    128,206,true);
+                            iw = findViewById(R.id.add_book_picture);
+                            if(iw!=null && !bookCover.equals("")) {
+                                iw.setImageBitmap(bookCover);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                case REQUEST_IMAGE_CAPTURE:
+                    if (data != null) {
+                            bookImg = (Bitmap) data.getExtras().get("data");
                             iw = globalViewImgElement;
-                            if(iw!=null && !bookImg.equals("")) {
+                            if(iw!=null && bookImg != null) {
                                 bookImg = Bitmap.createScaledBitmap(bookImg,768, 1024, true);
                                 iw.setImageBitmap(bookImg);
                                 bookImgMap.put(globalImgPos,bookImg);
                             }
-                        } catch (IOException e) {
+                        }
+                    break;
+                case REQUEST_IMAGE_CAPTURE_COVER:
+                if (data != null) {
+                    try{
+                        bookCover = Bitmap.createScaledBitmap(
+                                (Bitmap) data.getExtras().get("data"),128,206,true);
+                        iw = findViewById(R.id.add_book_picture);
+                        iw.setImageBitmap(bookCover);
+                    }
+                        catch (Exception e){
                             e.printStackTrace();
                         }
-
-
-                    }
-                    break;
+                }
+                break;
             }
         }
     }
@@ -568,6 +528,17 @@ public class AddBook extends AppCompatActivity {
         ExtendedEditText eet;
         String tmp;
         ImageView iw;
+        if(book.getBook_title().length()>0){
+            for(int i:addBookEditTextViewIds){
+                ExtendedEditText e = findViewById(i);
+                e.setText("");
+            }
+            eet = findViewById(R.id.add_book_extended_edit_Title);
+            eet.setText(book.getBook_title());
+        }
+        else{
+            Toast.makeText(this, R.string.add_book_title_not_found, Toast.LENGTH_SHORT).show();
+        }
         eet = findViewById(R.id.add_book_extended_edit_text_ISBN);
         eet.setText(book.getBook_ISBN());
         eet = findViewById(R.id.add_book_extended_edit_Author);
@@ -576,17 +547,9 @@ public class AddBook extends AppCompatActivity {
             eet.setText(tmp.substring(1,tmp.length()-1));
         }
         eet = findViewById(R.id.add_book_extended_edit_text_EditionYear);
-        if(book.getBook_editionYear()!=-1){
+        if(book.getBook_editionYear()>0){
             eet.setText(String.valueOf(book.getBook_editionYear()));
         }
-        eet = findViewById(R.id.add_book_extended_edit_Title);
-        if(book.getBook_title().length()>1){
-            eet.setText(book.getBook_title());
-        }
-        else{
-            Toast.makeText(this, R.string.add_book_title_not_found, Toast.LENGTH_SHORT).show();
-        }
-
         eet = findViewById(R.id.add_book_extended_edit_text_Publisher);
         if(book.getBook_publisher().length()>2){
             eet.setText(book.getBook_publisher());
@@ -606,15 +569,16 @@ public class AddBook extends AppCompatActivity {
         if(book.getBook_thumbnail_url().length()>0){
             iw = findViewById(R.id.add_book_picture);
             GlideApp.with(this).load(book.getBook_thumbnail_url()).placeholder(R.drawable.ic_thumbnail_cover_book).into(iw);
+            iw.setClickable(false);
+            bookCover = null;
         }
-
     }
 
     /**
      * Metodo che si occupa di generare il menu per poter scegliere tra lo scatto di una foto, la scelta
      * di un'immagine dalla galleria o la rimozione di un'immagine
      */
-    private void selectBookImg(){
+    private void selectBookImg(boolean isCover){
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
         //pictureDialog.setTitle("Select Action");
         String[] pictureDialogItems = {
@@ -625,13 +589,13 @@ public class AddBook extends AppCompatActivity {
                 (dialog, which) -> {
                     switch (which) {
                         case 0:
-                            choosePhotoFromGallery();
+                            choosePhotoFromGallery(isCover);
                             break;
                         case 1:
-                            choosePhotoFromCamera();
+                            choosePhotoFromCamera(isCover);
                             break;
                         case 2:
-                            removeBookImg();
+                            removeBookImg(isCover);
                             break;
                     }
                 });
@@ -642,7 +606,7 @@ public class AddBook extends AppCompatActivity {
      * Crea l'intent per permettere la scelta di una foto dalla galleria, controllando i permessi necessari.
      */
 
-    public void choosePhotoFromGallery() {
+    public void choosePhotoFromGallery(boolean isCover) {
         if(ActivityCompat.checkSelfPermission(AddBook.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(AddBook.this,new String[]{
                             Manifest.permission.WRITE_EXTERNAL_STORAGE }
@@ -651,13 +615,18 @@ public class AddBook extends AppCompatActivity {
         }
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(galleryIntent, REQUEST_PICK_IMAGE);
+        if(isCover){
+            startActivityForResult(galleryIntent, REQUEST_PICK_IMAGE_COVER);
+        }
+        else{
+            startActivityForResult(galleryIntent, REQUEST_PICK_IMAGE);
+        }
     }
 
     /**
      * Crea l'intent per lo scatto di un'immagine dalla fotocamera, controllando i permessi necessari
      */
-    private void choosePhotoFromCamera() {
+    private void choosePhotoFromCamera(boolean isCover) {
         if(ActivityCompat.checkSelfPermission(AddBook.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
                 ||ActivityCompat.checkSelfPermission(AddBook.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(AddBook.this,new String[]{
@@ -666,64 +635,54 @@ public class AddBook extends AppCompatActivity {
             return;
         }
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+        if(isCover){
+            startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE_COVER);
+        }
+        else{
+            startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+        }
     }
 
     /**
      * Si occupa della rimozione dell'immagine dalla ImageView in cui è contenuta.
      */
 
-    private void removeBookImg(){
+    private void removeBookImg(boolean isCover){
         ImageView iw;
-        if(bookImgMap.isEmpty()==false){
+        if(isCover){
+            if(bookCover!=null){
+                iw = findViewById(R.id.add_book_picture);
+                bookCover.recycle();
+                bookCover = null;
+                iw.setImageResource(R.drawable.ic_addbook);
+            }
+        }
+        else if(bookImgMap.isEmpty()==false){
             iw = globalViewImgElement;
             bookImgMap.remove(globalImgPos);
             iw.setImageResource(R.drawable.ic_addbook);
         }
     }
 
-    /**
-     * Si occupa di gestire il risultato della richiesta dei permessi.
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
-     */
-
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode,  String permissions[], int[] grantResults) {
-//        switch (requestCode) {
-//            case ZXING_CAMERA_PERMISSION:
-//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    if(mClss != null) {
-//                        Intent intent = new Intent(AddBook.this, ScanBarcode.class);
-//                        startActivityForResult(intent, REQUEST_SCANNER);
-//                    }
-//                } else {
-//                    Toast.makeText(this, R.string.add_book_permission_camera, Toast.LENGTH_SHORT).show();
-//                }
-//                return;
-//        }
-//    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         //dopo che l'utente ci ha fornito la risposta alla richesta di permessi
         switch (requestCode){
-            case REQUEST_PERMISSION_GALLERY:
-                if(grantResults.length>0) {
-                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        choosePhotoFromGallery();
-                    }
-                }
-                break;
-            case REQUEST_PERMISSION_CAMERA:
-                if(grantResults.length>0){
-                    if(grantResults[0]==PackageManager.PERMISSION_GRANTED
-                            && grantResults[1]==PackageManager.PERMISSION_GRANTED){
-                        choosePhotoFromCamera();
-                    }
-                }
-                break;
+//            case REQUEST_PERMISSION_GALLERY:
+//                if(grantResults.length>0) {
+//                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                        //choosePhotoFromGallery();
+//                    }
+//                }
+//                break;
+//            case REQUEST_PERMISSION_CAMERA:
+//                if(grantResults.length>0){
+//                    if(grantResults[0]==PackageManager.PERMISSION_GRANTED
+//                            && grantResults[1]==PackageManager.PERMISSION_GRANTED){
+//                        //choosePhotoFromCamera();
+//                    }
+//                }
+//                break;
             case ZXING_CAMERA_PERMISSION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if(mClss != null) {
@@ -736,65 +695,42 @@ public class AddBook extends AppCompatActivity {
                 return;
         }
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
     }
 
-//    private void setScaledImage(ImageView imageView, final int resId) {
-//        final ImageView iv = imageView;
-//        ViewTreeObserver viewTreeObserver = iv.getViewTreeObserver();
-//        viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-//            public boolean onPreDraw() {
-//                iv.getViewTreeObserver().removeOnPreDrawListener(this);
-//                int imageViewHeight = iv.getMeasuredHeight();
-//                int imageViewWidth = iv.getMeasuredWidth();
-//                iv.setImageBitmap(
-//                        decodeSampledBitmapFromResource(getResources(),
-//                                resId, imageViewWidth, imageViewHeight));
-//                return true;
-//            }
-//        });
-//    }
-//
-//    private static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
-//                                                          int reqWidth, int reqHeight) {
-//
-//        // First decode with inJustDecodeBounds = true to check dimensions
-//        final BitmapFactory.Options options = new BitmapFactory.Options();
-//        options.inJustDecodeBounds = true;
-//        BitmapFactory.decodeResource(res, resId, options);
-//
-//        // Calculate inSampleSize
-//        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-//
-//        // Decode bitmap with inSampleSize set
-//        options.inJustDecodeBounds = false;
-//        return BitmapFactory.decodeResource(res, resId, options);
-//    }
-//
-//    private static int calculateInSampleSize(
-//            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-//
-//        // Raw height and width of image
-//        final int height = options.outHeight;
-//        final int width = options.outWidth;
-//        int inSampleSize = 1;
-//
-//        if (height > reqHeight || width > reqWidth) {
-//
-//            final int halfHeight = height / 2;
-//            final int halfWidth = width / 2;
-//
-//            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-//            // height and width larger than the requested height and width.
-//            while ((halfHeight / inSampleSize) > reqHeight
-//                    && (halfWidth / inSampleSize) > reqWidth) {
-//                inSampleSize *= 2;
-//            }
+    //    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        ExtendedEditText eet;
+//        for(int i:addBookTextViewIds){
+//            eet = findViewById(i);
+//            outState.putString(Integer.toString(i),eet.getText().toString());
 //        }
-//
-//        return inSampleSize;
+////        if(bookImg!=null){
+////            outState.putString("bookEditImgPath",editProfile.saveImageToInternalStorage(bookImg,"temp_"+"bookEditImage",this));
+////        }
 //    }
+//
+//    @Override
+//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+//        super.onRestoreInstanceState(savedInstanceState);
+//        ExtendedEditText text;
+//        for(int i:addBookTextViewIds){
+//            text = findViewById(i);
+//            text.setText(savedInstanceState.getString(Integer.toString(i),""));
+//        }
+////        String bookImgPath = savedInstanceState.getString("bookEditImgPath");
+////        if(bookImgPath!=null){
+////            File file = new File(bookImgPath);
+////            if(file.exists()){
+////                bookImg = editProfile.loadImageFromStorage(bookImgPath,R.id.add_book_picture,this);
+////                file.delete();
+////            }
+////        }
+//    }
+
 }

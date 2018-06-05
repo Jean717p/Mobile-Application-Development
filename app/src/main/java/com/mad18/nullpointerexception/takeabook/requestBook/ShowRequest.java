@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -176,6 +177,17 @@ public class ShowRequest extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        Button cancel = findViewById(R.id.request_book_cancel);
+        Button accept = findViewById(R.id.request_book_send);
+        RelativeLayout.LayoutParams acceptParams = (RelativeLayout.LayoutParams) accept.getLayoutParams();
+        RelativeLayout.LayoutParams cancelParams = (RelativeLayout.LayoutParams) cancel.getLayoutParams();
+        acceptParams.removeRule(RelativeLayout.BELOW);
+        acceptParams.addRule(RelativeLayout.BELOW,R.id.request_book_tv_message);
+        cancelParams.removeRule(RelativeLayout.BELOW);
+        cancelParams.addRule(RelativeLayout.BELOW,R.id.request_book_tv_message);
+        findViewById(R.id.request_book_tv_message).setVisibility(View.VISIBLE);
+        findViewById(R.id.request_book_label_tv_message).setVisibility(View.VISIBLE);
+        findViewById(R.id.request_book_label_message).setVisibility(View.GONE);
     }
 
     private void updateView(){
@@ -481,12 +493,9 @@ public class ShowRequest extends AppCompatActivity {
     //Setto il messaggio, la thumbnail, il titolo del libro, il nome e il link al profilo dell'altro utente
     private  void fillCommonViews(){
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        TextView tv = findViewById(R.id.request_book_label_message);
-        tv.setText(R.string.message);
-        tv = findViewById(R.id.request_book_message);
-        ImageView iw = findViewById(R.id.request_book_main_image);
+        TextView tv = findViewById(R.id.request_book_tv_message);
         tv.setText(loan.getRequestText());
-        tv.setEnabled(false);
+        ImageView iw = findViewById(R.id.request_book_main_image);
         tv = findViewById(R.id.request_book_start_date);
         tv.setText(formatter.format(loan.getStartDate()));
         tv = findViewById(R.id.request_book_title);

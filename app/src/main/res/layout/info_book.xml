@@ -32,7 +32,7 @@
 
             <!-- Rest of your content -->
             <include
-                android:id="@+id/cv"
+                android:id="@+id/info_book_cv"
                 layout="@layout/info_book_card_view"/>
             <include
                 android:layout_width="wrap_content"
