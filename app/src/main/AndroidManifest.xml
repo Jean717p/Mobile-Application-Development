@@ -218,6 +218,7 @@
         </service>
 
         <activity android:name=".requestBook.RequestReview" />
+        <activity android:name=".info.ShowReviews"></activity>
         <activity android:name=".EditBook"></activity>
     </application>
 

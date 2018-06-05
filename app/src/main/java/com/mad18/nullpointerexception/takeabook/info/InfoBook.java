@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -81,6 +82,7 @@ public class InfoBook extends AppCompatActivity {
     private Context context;
     private AppCompatActivity myActivity;
     private Book myBook;
+    CardView showReviews;
 
 
     @Override
@@ -94,6 +96,7 @@ public class InfoBook extends AppCompatActivity {
         setTitle(R.string.title_activity_info_book);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        showReviews = findViewById(R.id.info_book_reviews_cv);
         bookToShowInfoOf = getIntent().getExtras().getParcelable("bookToShow");
         myBook = new Book(bookToShowInfoOf);
         sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);

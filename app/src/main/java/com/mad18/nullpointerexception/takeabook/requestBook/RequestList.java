@@ -61,11 +61,13 @@ public class RequestList extends AppCompatActivity {
         isArchive = false;
         switch (type){
             case "sent":
+                toolbar.setTitle(R.string.requests_book_sent);
                 query = FirebaseFirestore.getInstance().collection("users")
                         .document(myUser.getUsr_id()).collection("requests")
                         .whereEqualTo("owned",false);
                 break;
             case "received":
+                toolbar.setTitle(R.string.requests_book_received);
                 query = FirebaseFirestore.getInstance().collection("users")
                         .document(myUser.getUsr_id()).collection("requests")
                         .whereEqualTo("owned",true);

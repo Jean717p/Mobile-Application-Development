@@ -54,6 +54,8 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="16dp"
                 android:clickable="false"
+                android:scaleX="0.7"
+                android:scaleY="0.7"
                 android:layout_marginBottom="16dp"
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_marginLeft="8dp"
@@ -67,12 +69,15 @@
                 android:layout_margin="16dp"
                 android:text="@string/show_profile_send_message"
                 android:clickable="true"
-                android:background="@android:color/white"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
+                android:background="@drawable/corner_button"
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_marginLeft="8dp"
+                android:textStyle="normal|bold"
+                android:layout_gravity="center"
+                android:textColor="@android:color/white"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/info_user_rating_bar"/>
             <android.support.v7.widget.CardView
@@ -184,7 +189,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
                         app:layout_constraintBaseline_toBaselineOf="@id/info_user_about_me_label"
                         app:layout_constraintEnd_toStartOf="@id/info_user_about_me_label"
                         app:layout_constraintHorizontal_bias="0.0"
@@ -227,17 +234,49 @@
 
             </android.support.v7.widget.CardView>
 
-            <ExpandableListView
+            <android.support.v7.widget.CardView
+                android:id="@+id/info_user_reviews_cv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:layout_constraintTop_toBottomOf="@id/info_user_library_cv">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/info_user_arrow2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_baseline_keyboard_arrow_right_24px"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="8dp"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:textSize="16dp"
+                        android:textStyle="bold|normal"
+                        android:textColor="@color/colorPrimary"
+                        android:text="@string/show_profile_reviews"
+                        android:layout_alignBaseline="@id/show_profile_arrow2"/>
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+
+          <!--  <ExpandableListView
                 android:id="@+id/info_user_expandableListView"
                 android:layout_height="match_parent"
                 android:layout_below="@id/info_user_library_cv"
                 android:layout_width="match_parent"
                 android:layout_margin="8dp"
                 android:visibility="visible"
+                android:listSelector="@color/colorPrimary"
                 app:layout_constraintTop_toBottomOf="@id/info_user_library_cv"
                 android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
                 android:divider="@android:color/darker_gray"
-                android:dividerHeight="0.5dp" />
+                android:dividerHeight="0.5dp" />-->
 
 
         </android.support.constraint.ConstraintLayout>

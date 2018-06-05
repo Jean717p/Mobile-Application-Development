@@ -58,7 +58,7 @@ public class RequestRecyclerViewAdapter extends RecyclerView.Adapter<RequestRecy
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
         Loan loan = mData.get(position);
         if(thisUserId.equals(loan.getOwnerId())){
-            holder.tv_loan_label_username.setText(R.string.request_book_applicant);
+            holder.tv_loan_label_username.setText(R.string.request_book_applicant_no_dots);
             holder.tv_loan_applicant_name.setText(loan.getApplicantName());
             if(loan.getEndLoanOwner()!=null){
                 holder.tv_loan_request_end_date.setText(formatter.format(loan.getEndLoanOwner()));
@@ -83,7 +83,7 @@ public class RequestRecyclerViewAdapter extends RecyclerView.Adapter<RequestRecy
             }
         }
         else{
-            holder.tv_loan_label_username.setText(R.string.info_book_label_owner);
+            holder.tv_loan_label_username.setText(R.string.info_book_label_owner_no_dots);
             holder.tv_loan_applicant_name.setText(loan.getOwnerName());
             if(showStatusIcon){
                 if(loan.getExchangedOwner()){

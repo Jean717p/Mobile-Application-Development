@@ -49,6 +49,7 @@ public class showProfile extends AppCompatActivity {
     public static final String profileImgName = "profile.jpg";
     private FirebaseAuth mAuth;
     CardView showBooksProfile;
+    CardView showReviews;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +57,7 @@ public class showProfile extends AppCompatActivity {
         setContentView(R.layout.show_profile);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         showBooksProfile = findViewById(R.id.show_profile_library_cv);
+        showReviews = findViewById(R.id.show_profile_reviews_cv);
         Toolbar toolbar = findViewById(R.id.show_profile_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

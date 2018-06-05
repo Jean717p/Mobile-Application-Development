@@ -53,6 +53,8 @@
                 android:layout_margin="16dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="16dp"
+                android:scaleX="0.7"
+                android:scaleY="0.7"
                 android:layout_marginBottom="16dp"
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_marginLeft="8dp"
@@ -248,22 +250,55 @@
                         android:textColor="@color/colorPrimary"
                         android:text="@string/show_profile_books"
                         android:layout_alignBaseline="@id/show_profile_arrow"/>
+
+
                 </RelativeLayout>
 
             </android.support.v7.widget.CardView>
 
+            <android.support.v7.widget.CardView
+                android:id="@+id/show_profile_reviews_cv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:layout_constraintTop_toBottomOf="@id/show_profile_library_cv">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/show_profile_arrow2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_baseline_keyboard_arrow_right_24px"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="8dp"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:textSize="16dp"
+                        android:textStyle="bold|normal"
+                        android:textColor="@color/colorPrimary"
+                        android:text="@string/show_profile_reviews"
+                        android:layout_alignBaseline="@id/show_profile_arrow2"/>
+                    </RelativeLayout>
+            </android.support.v7.widget.CardView>
 
 
+<!--
             <ExpandableListView
                 android:id="@+id/show_profile_expandableListView"
                 android:layout_height="match_parent"
                 android:layout_below="@id/show_profile_library_cv"
                 android:layout_width="match_parent"
                 android:layout_margin="8dp"
+                android:listSelector="@color/colorPrimary"
                 app:layout_constraintTop_toBottomOf="@id/show_profile_library_cv"
                 android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
                 android:divider="@android:color/darker_gray"
-                android:dividerHeight="0.5dp" />
+                android:dividerHeight="0.5dp" />-->
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

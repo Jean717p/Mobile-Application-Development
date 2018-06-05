@@ -40,15 +40,47 @@
                 android:layout_margin="8dp"
                 layout="@layout/cardview_description"/>
 
-            <ExpandableListView
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/info_book_reviews_cv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/info_book_arrow2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_baseline_keyboard_arrow_right_24px"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="8dp"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:textSize="16dp"
+                        android:textStyle="bold|normal"
+                        android:textColor="@color/colorPrimary"
+                        android:text="@string/show_profile_reviews"
+                        android:layout_alignBaseline="@id/info_book_arrow2"/>
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+
+           <!-- <ExpandableListView
                 android:id="@+id/info_book_expandableListView"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 android:layout_margin="8dp"
+                android:listSelector="@color/colorPrimary"
                 android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
                 android:divider="@android:color/darker_gray"
                 android:dividerHeight="0.5dp" />
-
+-->
 
         </LinearLayout>
 

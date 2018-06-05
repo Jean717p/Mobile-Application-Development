@@ -452,6 +452,11 @@ public class ShowRequest extends AppCompatActivity {
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
         TextView tv = findViewById(R.id.request_book_tv_message);
         tv.setText(loan.getRequestText());
+        if(tv.length()==0){
+            tv.setVisibility(View.INVISIBLE);
+            TextView t = findViewById(R.id.request_book_label_tv_message);
+            t.setVisibility(View.INVISIBLE);
+        }
         ImageView iw = findViewById(R.id.request_book_main_image);
         tv = findViewById(R.id.request_book_start_date);
         tv.setText(formatter.format(loan.getStartDate()));

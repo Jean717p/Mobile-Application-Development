@@ -211,13 +211,13 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="image_fullscreen">image_fullscreen</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="info_book_request_already_done">Book already requested/still on loan</string>
-    <string name="search_book_algolia_request_permission">Grant the permission to view the map!</string>
+    <string name="info_book_request_already_done">Libro già richiesto/ancora in prestito</string>
+    <string name="search_book_algolia_request_permission">Autorizza accesso alla mappa</string>
     <string name="search_book_algolia_no_found">Nessun libro trovato</string>
     <string name="search_book_toolbar_title">Ricerca per</string>
-    <string name="request_review_review">Review</string>
-    <string name="request_review_write">Write your review</string>
-    <string name="request_review_no_rating">Please insert also a rating</string>
+    <string name="request_review_review">Recensione</string>
+    <string name="request_review_write">Scrivi una recensione</string>
+    <string name="request_review_no_rating">Inserisci una recensione</string>
 
     <string name="affermative_response">Sì</string>
     <string name="sure_question">Sei sicuro?</string>
@@ -228,6 +228,10 @@
 
     <string name="loan_book_start_date">Data richiesta</string>
     <string name="request_book_label_text_message">Scrivi un messaggio al proprietario</string>
+    <string name="request_book_applicant_no_dots">Richiedente</string>
+    <string name="info_book_label_owner_no_dots">Proprietario/a</string>
+    <string name="show_profile_reviews">Show reviews</string>
+
     <string name="request_book_modified">Libro modificato correttamente</string>
     <string name="title_activity_edit_book">Modifica libro</string>
     <string name="display_search_on_map_map">Mappa</string>

@@ -178,8 +178,8 @@
     <string name="request_book_sent">Request sent!</string>
     <string name="requests_book_sent">Sent requests</string>
     <string name="requests_book_received">Received requests</string>
-    <string name="requests_book_archive">Requests archive</string>
-    <string name="request_book_applicant">Applicant</string>
+    <string name="requests_book_archive">Closed requests</string>
+    <string name="request_book_applicant">Applicant:</string>
     <string name="request_book_accept_request">Accept request</string>
     <string name="request_book_start_date">Date:</string>
     <string name="request_book_status">Status:</string>
@@ -199,7 +199,7 @@
     <string name="request_book_confirm_exchange">Confirm exchange</string>
     <string name="request_book_applicant_has_confirmed_exchange">Applicant has confirmed exchange</string>
     <string name="request_book_waiting_for_owner_exchange_confirmation">Waiting for owner\'s exchange confirmation</string>
-    <string name="request_book_start_date_loan">Start date loan</string>
+    <string name="request_book_start_date_loan">Start loan:</string>
     <string name="request_book_close_loan">Close loan</string>
 
     <!--Altro-->
@@ -232,6 +232,9 @@
 
     <string name="loan_book_start_date">Request date</string>
     <string name="request_book_label_text_message">Write a message to owner</string>
+    <string name="request_book_applicant_no_dots">Applicant</string>
+    <string name="info_book_label_owner_no_dots">Owner</string>
+    <string name="show_profile_reviews">Show reviews</string>
     <string name="title_activity_edit_book">Edit book</string>
     <string name="display_search_on_map_map">Mappa</string>
     <string name="display_search_on_map_distance">Distance:</string>
