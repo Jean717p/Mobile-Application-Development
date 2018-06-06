@@ -108,6 +108,13 @@ public class showProfile extends AppCompatActivity {
                 }
                 mean/=querySnapshot.size();
                 ratingBar.setRating(mean);
+                TextView textView = findViewById(R.id.show_profile_rating_count);
+                String s = "("+querySnapshot.getDocuments().size()+")";
+                textView.setText(s);
+                textView.setVisibility(View.VISIBLE);
+                textView = findViewById(R.id.show_profile_rating_average);
+                textView.setText(String.format(Locale.US,"%.1f",mean));
+                textView.setVisibility(View.VISIBLE);
             }
         });
 

@@ -30,6 +30,8 @@ import com.mad18.nullpointerexception.takeabook.util.Review;
 import com.mad18.nullpointerexception.takeabook.util.User;
 import com.mad18.nullpointerexception.takeabook.util.UserWrapper;
 
+import java.util.Locale;
+
 public class InfoUser extends AppCompatActivity {
     private String TAG = "InfoUser";
     private FirebaseFirestore db;
@@ -138,6 +140,13 @@ public class InfoUser extends AppCompatActivity {
                 }
                 mean/=querySnapshot.size();
                 ratingBar.setRating(mean);
+                TextView textView = findViewById(R.id.info_user_rating_count);
+                String s = "("+querySnapshot.getDocuments().size()+")";
+                textView.setText(s);
+                textView.setVisibility(View.VISIBLE);
+                textView = findViewById(R.id.info_user_rating_average);
+                textView.setText(String.format(Locale.US,"%.1f",mean));
+                textView.setVisibility(View.VISIBLE);
             }
         });
     }

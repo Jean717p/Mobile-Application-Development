@@ -53,6 +53,7 @@ import com.mad18.nullpointerexception.takeabook.util.UserWrapper;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 
 public class InfoBook extends AppCompatActivity {
@@ -259,6 +260,13 @@ public class InfoBook extends AppCompatActivity {
                 }
                 mean/=querySnapshot.size();
                 ratingBar.setRating(mean);
+                TextView textView = findViewById(R.id.info_book_rating_count);
+                String s = "("+querySnapshot.getDocuments().size()+")";
+                textView.setText(s);
+                textView.setVisibility(View.VISIBLE);
+                textView = findViewById(R.id.info_book_rating_average);
+                textView.setText(String.format(Locale.US,"%.1f",mean));
+                textView.setVisibility(View.VISIBLE);
             }
         });
     }

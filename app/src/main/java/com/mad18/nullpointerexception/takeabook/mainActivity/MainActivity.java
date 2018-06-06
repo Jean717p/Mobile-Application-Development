@@ -29,8 +29,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -322,32 +320,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.toolbar_main, menu); //.xml file name
-        return super.onCreateOptionsMenu(menu);
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // action with ID action_refresh was selected
-            case R.id.action_refresh:
-//                fragment_myLibrary.updateView(myBooks);
-//                Snackbar snackbar = Snackbar
-//                        .make(findViewById(R.id.main_library_coordinator_layout),getText(R.string.info_book_snackbar), Snackbar.LENGTH_LONG);
-//                snackbar.show();
-                break;
-
-        }
-
         return true;
     }
 
@@ -694,4 +666,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return "Page "+position;
         }
     }
+
 }

@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -57,7 +58,8 @@ public class ShowRequest extends AppCompatActivity {
     private ListenerRegistration loanListener;
     private Context context;
     private int resultCode;
-   private Toolbar toolbar;
+    private Toolbar toolbar;
+    private DateFormat formatter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,7 @@ public class ShowRequest extends AppCompatActivity {
         context = this;
         toolbar = findViewById(R.id.request_book_toolbar);
         toolbar.setTitle(R.string.title_activity_show_request);
+        formatter = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         loanRef = getIntent().getStringExtra("loanRef");
@@ -236,6 +239,35 @@ public class ShowRequest extends AppCompatActivity {
         cancel.setText(R.string.info_book_delete);
         Button button = findViewById(R.id.request_book_send);
         button.setVisibility(View.GONE);
+        if(myUser.getUsr_id().equals(loan.getOwnerId())
+                && loan.getEndLoanOwner()!=null){
+            ViewGroup.LayoutParams params;
+            tv = findViewById(R.id.request_book_end_date_owner);
+            tv.setText(formatter.format(loan.getEndLoanOwner()));
+            tv.setVisibility(View.VISIBLE);
+            params = tv.getLayoutParams();
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            tv.setLayoutParams(params);
+            tv = findViewById(R.id.request_book_label_end_date_owner);
+            tv.setVisibility(View.VISIBLE);
+            params = tv.getLayoutParams();
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            tv.setLayoutParams(params);
+        }
+        else if(loan.getEndLoanApplicant()!=null){
+            ViewGroup.LayoutParams params;
+            tv = findViewById(R.id.request_book_end_date_owner);
+            tv.setText(formatter.format(loan.getEndLoanApplicant()));
+            tv.setVisibility(View.VISIBLE);
+            params = tv.getLayoutParams();
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            tv.setLayoutParams(params);
+            tv = findViewById(R.id.request_book_label_end_date_owner);
+            tv.setVisibility(View.VISIBLE);
+            params = tv.getLayoutParams();
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            tv.setLayoutParams(params);
+        }
     }
 
     private void fillViewsPendingRequest(){
@@ -321,7 +353,6 @@ public class ShowRequest extends AppCompatActivity {
     }
     private void fillViewPendingExchangeOwner(){
         fillCommonViews();
-
         TextView tv = findViewById(R.id.request_book_status);
         Button acceptReq = findViewById(R.id.request_book_send);
         if (myUser.getUsr_id().equals(loan.getOwnerId())) { //sono l'owner
@@ -456,7 +487,6 @@ public class ShowRequest extends AppCompatActivity {
 
     //Setto il messaggio, la thumbnail, il titolo del libro, il nome e il link al profilo dell'altro utente
     private  void fillCommonViews(){
-        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
         TextView tv = findViewById(R.id.request_book_tv_message);
         tv.setText(loan.getRequestText());
         if(tv.length()==0){
@@ -475,13 +505,6 @@ public class ShowRequest extends AppCompatActivity {
                     .into(iw);
         }
         if(myUser.getUsr_id().equals(loan.getOwnerId())){
-            if(loan.getEndLoanOwner()!=null){
-                tv = findViewById(R.id.request_book_end_date_owner);
-                tv.setText(formatter.format(loan.getEndLoanOwner()));
-                tv.setVisibility(View.VISIBLE);
-                tv = findViewById(R.id.request_book_label_end_date_owner);
-                tv.setVisibility(View.VISIBLE);
-            }
             tv = findViewById(R.id.request_book_label_owner);
             tv.setText(R.string.request_book_applicant);
             tv = findViewById(R.id.request_book_owner);
@@ -495,13 +518,6 @@ public class ShowRequest extends AppCompatActivity {
             });
         }
         else{
-            if(loan.getEndLoanApplicant()!=null){
-                tv = findViewById(R.id.request_book_end_date_owner);
-                tv.setText(formatter.format(loan.getEndLoanApplicant()));
-                tv.setVisibility(View.VISIBLE);
-                tv = findViewById(R.id.request_book_label_end_date_owner);
-                tv.setVisibility(View.VISIBLE);
-            }
             tv = findViewById(R.id.request_book_owner);
             tv.setText(owner.getUsr_name());
             tv.setTextColor(Color.BLUE);
