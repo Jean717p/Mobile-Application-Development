@@ -56,6 +56,7 @@
                 android:layout_marginLeft="8dp"
                 android:scaleX="0.7"
                 android:scaleY="0.7"
+                android:visibility="gone"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="16dp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -203,7 +204,9 @@
                         android:layout_height="wrap_content"
                         android:layout_alignBaseline="@id/show_profile_title_about"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
                         android:layout_toRightOf="@id/show_profile_title_about"
                         android:text="Bio"
                         app:layout_constraintBaseline_toBaselineOf="@id/show_profile_title_about"
@@ -214,13 +217,47 @@
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
 
+
+            <android.support.v7.widget.CardView
+                android:clickable="true"
+                android:id="@+id/show_profile_library_cv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/show_profile_about_cv"
+                android:layout_margin="8dp">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/show_profile_arrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_baseline_keyboard_arrow_right_24px"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="8dp"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:textSize="16dp"
+                        android:textStyle="bold|normal"
+                        android:textColor="@color/colorPrimary"
+                        android:text="@string/show_profile_books"
+                        android:layout_alignBaseline="@id/show_profile_arrow"/>
+
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
             <android.support.v7.widget.CardView
                 android:id="@+id/show_profile_reviews_cv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:clickable="true"
-                app:layout_constraintTop_toBottomOf="@id/show_profile_about_cv">
+                app:layout_constraintTop_toBottomOf="@id/show_profile_library_cv">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -239,7 +276,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignBaseline="@id/show_profile_iv_show_reviews"
                         android:layout_margin="16dp"
-                        android:text="@string/show_profile_books"
+                        android:text="@string/show_profile_reviews"
                         android:textColor="@color/colorPrimary"
                         android:textSize="16sp"
                         android:textStyle="bold|normal" />

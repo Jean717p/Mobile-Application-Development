@@ -4,6 +4,11 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_showprofile"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="@string/nav_element_showprofile" />
         <item
             android:id="@+id/nav_addbook"
             android:icon="@drawable/ic_add_circle_black_24dp"
@@ -32,10 +37,6 @@
             android:id="@+id/nav_mylibrary"
             android:icon="@drawable/ic_local_library_black_24dp"
             android:title="@string/nav_element_mylibrary" />-->
-        <item
-            android:id="@+id/nav_showprofile"
-            android:icon="@drawable/ic_person_black_24dp"
-            android:title="@string/nav_element_showprofile" />
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_baseline_settings_20px"

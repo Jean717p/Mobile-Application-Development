@@ -23,7 +23,7 @@
             android:layout_marginBottom="5dp"
             android:baselineAligned="false"
             android:visibility="visible"
-            app:srcCompat="@mipmap/ic_launcher_round" />
+            android:src="@drawable/ic_account_circle_white_48px" />
 
         <TextView
             android:id="@+id/review_username"

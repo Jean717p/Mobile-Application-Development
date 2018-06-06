@@ -129,6 +129,8 @@ public class showProfile extends AppCompatActivity {
                 ratingBar.setRating(mean);
             }
         });
+
+
     }
 
     @Override
