@@ -51,7 +51,7 @@ public class ShowReviewsRecyclerViewAdapter extends RecyclerView.Adapter<ShowRev
 
     @Override
     public void onBindViewHolder(@NonNull ShowReviewsRecyclerViewAdapter.MyViewHolder holder, int position) {
-        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
         Review review = mData.get(position);
         holder.tv_review_username.setText(review.getUsername());
         holder.tv_review_comment.setText(review.getText());

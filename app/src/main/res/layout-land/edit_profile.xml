@@ -87,12 +87,23 @@
                 android:layout_below="@id/edit_profile_Username"
                 android:textColor="@color/colorPrimary"
                 />
+            <Button
+                android:id="@+id/edit_profile_map"
+                android:layout_width="46dp"
+                android:layout_height="31dp"
+                android:paddingBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/edit_profile_title_City"
+                android:background="@drawable/corner_button"
+                android:drawableTop="@drawable/ic_map_white_24dp" />
             <!--city-->
             <EditText
                 android:id="@+id/edit_profile_City"
                 android:hint="@string/City"
                 android:layout_below="@id/edit_profile_title_City"
-                android:layout_width="match_parent"
+                android:layout_width="297dp"
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:textSize="@dimen/edit_text_content_height"

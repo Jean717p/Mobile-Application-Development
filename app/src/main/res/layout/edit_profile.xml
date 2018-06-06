@@ -94,6 +94,8 @@
                 android:layout_width="46dp"
                 android:layout_height="31dp"
                 android:layout_alignParentEnd="true"
+                android:paddingBottom="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_below="@+id/edit_profile_title_City"
                 android:background="@drawable/corner_button"
                 android:drawableTop="@drawable/ic_map_white_24dp" />

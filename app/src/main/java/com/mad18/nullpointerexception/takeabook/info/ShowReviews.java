@@ -45,6 +45,8 @@ public class ShowReviews extends AppCompatActivity {
         context = this;
         setContentView(R.layout.activity_show_reviews);
         Toolbar toolbar = findViewById(R.id.show_reviews_toolbar);
+        setSupportActionBar(toolbar);
+        setTitle(R.string.show_profile_reviews);
         Bundle bundle = getIntent().getExtras();
         if(bundle==null){
             Log.d(TAG,"Error bundle");

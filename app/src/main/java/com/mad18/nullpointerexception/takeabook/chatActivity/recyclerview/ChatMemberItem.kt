@@ -32,7 +32,7 @@ data class ChatMemberItem(val person: User,
             viewHolder.item_chat_member_profile_picture.setImageResource(R.drawable.ic_account_circle_white_48px)
         }
         if(lastMessageTimeStamp.after(Date(0))){
-            val dateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm")
+            val dateFormat = SimpleDateFormat("yyyy/MM/dd, HH:mm")
             viewHolder.item_chat_member_time.text = dateFormat.format(lastMessageTimeStamp)
             viewHolder.item_chat_member_last_msg.text = lastMessage
         }
