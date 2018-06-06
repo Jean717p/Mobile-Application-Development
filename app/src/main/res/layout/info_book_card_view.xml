@@ -48,7 +48,7 @@
             android:layout_marginLeft="@dimen/layout_margin"
             android:layout_marginRight="8dp"
             android:layout_toRightOf="@id/info_book_main_image"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="48dp"
             android:text="@string/info_book_label_title"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textColor="@color/colorPrimary"
@@ -352,15 +352,45 @@
             android:textColor="@color/textColor"
             android:textSize="15sp"
             />
+        <TextView
+            android:id="@+id/info_book_rating_average"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4,6"
+            android:visibility="invisible"
+            android:layout_below="@id/info_book_book_status"
+           android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_toStartOf="@id/info_book_rating_bar"
+            android:layout_alignBaseline="@id/info_book_rating_bar"
+         />
+
+        <TextView
+            android:id="@+id/info_book_rating_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(120)"
+            android:visibility="invisible"
+            android:layout_below="@id/info_book_book_status"
+            android:layout_alignBaseline="@id/info_book_rating_bar"
+            android:layout_toEndOf="@id/info_book_rating_bar"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+           />
+
         <android.support.v7.widget.AppCompatRatingBar
             android:id="@+id/info_book_rating_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:isIndicator="true"
-            android:layout_below="@id/info_book_label_book_status"
-            android:layout_alignStart="@id/info_book_label_book_status"
-            style="@android:style/Widget.Holo.RatingBar.Indicator"
             android:visibility="invisible"
+            android:layout_below="@id/info_book_book_status"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:layout_alignStart="@id/info_book_label_book_status"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             />
 
         <HorizontalScrollView

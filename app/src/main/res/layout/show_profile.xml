@@ -43,10 +43,35 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_account_circle_white_48px"
+                android:src="@drawable/ic_account_circle_white_48px"
                 tools:ignore="MissingConstraints" />
 
-            <RatingBar
+            <TextView
+                android:id="@+id/show_profile_rating_average"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                android:text="4,6"
+                android:textSize="11dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/show_profile_rating_bar"
+                app:layout_constraintRight_toLeftOf="@id/show_profile_rating_bar"
+                app:layout_constraintTop_toBottomOf="@id/show_profile_personalPhoto" />
+
+            <TextView
+                android:id="@+id/show_profile_rating_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:text="(120)"
+                android:visibility="gone"
+                android:textSize="11dp"
+                app:layout_constraintLeft_toRightOf="@id/show_profile_rating_bar"
+                app:layout_constraintTop_toBottomOf="@id/show_profile_personalPhoto" />
+
+            <android.support.v7.widget.AppCompatRatingBar
                 android:id="@+id/show_profile_rating_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -55,8 +80,7 @@
                 android:layout_marginTop="16dp"
                 android:isIndicator="true"
                 android:visibility="gone"
-                android:scaleX="0.7"
-                android:scaleY="0.7"
+                style="@style/Widget.AppCompat.RatingBar.Small"
                 android:layout_marginBottom="16dp"
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_marginLeft="8dp"

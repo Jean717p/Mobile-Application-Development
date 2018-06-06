@@ -109,8 +109,7 @@ public class InfoUser extends AppCompatActivity {
             StorageReference mImageRef = FirebaseStorage.getInstance().getReference(otherUser.getProfileImgStoragePath());
             GlideApp.with(this).load(mImageRef).placeholder(R.drawable.ic_account_circle_white_48px).into(iv);
         }
-        ImageView imageView = findViewById(R.id.info_user_iv_show_reviews);
-        imageView.setOnClickListener(new View.OnClickListener() {
+        showReviews.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context,ShowReviews.class);

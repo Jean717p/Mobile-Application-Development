@@ -57,6 +57,7 @@ public class ShowRequest extends AppCompatActivity {
     private ListenerRegistration loanListener;
     private Context context;
     private int resultCode;
+   private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,7 @@ public class ShowRequest extends AppCompatActivity {
         }
         setContentView(R.layout.activity_request_book);
         context = this;
-        Toolbar toolbar = findViewById(R.id.request_book_toolbar);
+        toolbar = findViewById(R.id.request_book_toolbar);
         toolbar.setTitle(R.string.title_activity_show_request);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -241,6 +242,10 @@ public class ShowRequest extends AppCompatActivity {
         fillCommonViews();
         Button acceptReq = findViewById(R.id.request_book_send);
         TextView tv;
+        tv = findViewById(R.id.request_book_end_date_owner);
+        tv.setHeight(0);
+        tv = findViewById(R.id.request_book_label_end_date_owner);
+        tv.setHeight(0);
         tv = findViewById(R.id.request_book_status);
         if(myUser.getUsr_id().equals(loan.getOwnerId())){ //sono l'owner
             tv.setText(R.string.request_book_applicant_has_sent_request);
@@ -316,6 +321,7 @@ public class ShowRequest extends AppCompatActivity {
     }
     private void fillViewPendingExchangeOwner(){
         fillCommonViews();
+
         TextView tv = findViewById(R.id.request_book_status);
         Button acceptReq = findViewById(R.id.request_book_send);
         if (myUser.getUsr_id().equals(loan.getOwnerId())) { //sono l'owner

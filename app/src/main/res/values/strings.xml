@@ -7,7 +7,7 @@
     <!--Profile-->
     <string name="profile_photo">Profile photo</string>
     <string name="Username">Username:</string>
-    <string name="City">City:</string>
+    <string name="City">Location:</string>
     <string name="Email">Email:</string>
     <string name="AboutMe">Bio:</string>
     <string name="Address">Address</string>

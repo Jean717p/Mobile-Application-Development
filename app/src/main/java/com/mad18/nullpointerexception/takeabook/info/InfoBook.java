@@ -230,8 +230,7 @@ public class InfoBook extends AppCompatActivity {
                 request_button.setVisibility(View.GONE);
             }
         });
-        iw = findViewById(R.id.info_book_iw_show_review);
-        iw.setOnClickListener(new View.OnClickListener() {
+      showReviews.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(myActivity,ShowReviews.class);

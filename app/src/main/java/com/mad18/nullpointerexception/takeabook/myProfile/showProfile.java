@@ -67,8 +67,7 @@ public class showProfile extends AppCompatActivity {
         setTitle(R.string.title_activity_show_profile);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
-        ImageView imageView=findViewById(R.id.show_profile_iv_show_reviews);
-        imageView.setOnClickListener(new View.OnClickListener() {
+        showReviews.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ShowReviews.class);
