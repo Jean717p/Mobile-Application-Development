@@ -216,8 +216,13 @@ public class editProfile extends AppCompatActivity {
                 user_data.put(x,text.getText().toString());
             }
         }
-        if(geoPoint != null) {
+        if(geoPoint != null && geoPoint.equals(u.getUsr_geoPoint())==false) {
             tmp_gp.put("usr_geoPoint", geoPoint);
+            for(String x:u.getUsr_books().keySet()){
+                db.collection("books")
+                        .document(x)
+                        .update("book_location",geoPoint);
+            }
         }
         if(profileImgChanged==true){
             if(profileImg!=null){
@@ -341,9 +346,7 @@ public class editProfile extends AppCompatActivity {
         ImageView iw;
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-
                 case REQUEST_PICK_IMAGE:
-
                     if (data != null) {
                         Uri selectedMediaUri = data.getData();
                         try {

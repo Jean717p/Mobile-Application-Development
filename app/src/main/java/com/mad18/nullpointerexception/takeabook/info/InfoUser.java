@@ -3,10 +3,10 @@ package com.mad18.nullpointerexception.takeabook.info;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,9 +16,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -32,13 +30,11 @@ import com.mad18.nullpointerexception.takeabook.util.Review;
 import com.mad18.nullpointerexception.takeabook.util.User;
 import com.mad18.nullpointerexception.takeabook.util.UserWrapper;
 
-import java.util.ArrayList;
-
 public class InfoUser extends AppCompatActivity {
+    private String TAG = "InfoUser";
     private FirebaseFirestore db;
     private User otherUser;
     private Menu menu;
-    User u;
     private Context context;
     private Button chat_fab;
 
@@ -61,9 +57,12 @@ public class InfoUser extends AppCompatActivity {
         showBooks = findViewById(R.id.info_user_library_cv);
         showReviews = findViewById(R.id.info_user_reviews_cv);
         UserWrapper userWrapper = getIntent().getExtras().getParcelable("otherUser");
+        if(userWrapper==null){
+            finish();
+            Log.d(TAG,"Error bundle");
+        }
         otherUser = new User(userWrapper);
         fillInfoUserViews();
-
         if(chat_fab!=null){
             chat_fab.setOnClickListener(v -> {
                 Intent chatIntent = new Intent(this, ChatActivity.class);
@@ -72,37 +71,18 @@ public class InfoUser extends AppCompatActivity {
                 startActivity(chatIntent);
             });
         }
-        ArrayList<String> userBooks = new ArrayList<>();
-        db.collection("users").document(otherUser.getUsr_id()).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot userdoc = task.getResult();
-               User user  = userdoc.toObject(User.class);
-               u = user;
-               for(String x : user.getUsr_books().keySet()){
-
-                   userBooks.add(x);
-               }
-
-               if(showBooks!=null){
-                   showBooks.setOnClickListener(new View.OnClickListener() {
-                       @Override
-                       public void onClick(View v) {
-                           Intent showBooksIntent = new Intent(InfoUser.this ,InfoUserShowBooks.class);
-                           Bundle bundle = new Bundle();
-                           UserWrapper userWrapper = new UserWrapper(u);
-                           bundle.putParcelable("user",userWrapper);
-                           bundle.putStringArrayList("UserBooks", userBooks);
-                           showBooksIntent.putExtras(bundle);
-                           startActivity(showBooksIntent);
-                       }
-                   });
-               }
-
-
-            }
-        });
+        if(showBooks!=null){
+            showBooks.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent showBooksIntent = new Intent(InfoUser.this ,InfoUserShowBooks.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("owner",new UserWrapper(otherUser));
+                    showBooksIntent.putExtras(bundle);
+                    startActivity(showBooksIntent);
+                }
+            });
+        }
     }
 
     @Override

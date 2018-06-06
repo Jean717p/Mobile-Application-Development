@@ -18,9 +18,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,13 +28,11 @@ import com.mad18.nullpointerexception.takeabook.info.InfoUserShowBooks;
 import com.mad18.nullpointerexception.takeabook.info.ShowReviews;
 import com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity;
 import com.mad18.nullpointerexception.takeabook.util.Review;
-import com.mad18.nullpointerexception.takeabook.util.User;
 import com.mad18.nullpointerexception.takeabook.util.UserWrapper;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Locale;
 
 import static com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.thisUser;
@@ -81,32 +77,18 @@ public class showProfile extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        ArrayList<String> userBooks = new ArrayList<>();
-        db.collection("users").document(thisUser.getUsr_id()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot userdoc = task.getResult();
-                User user = userdoc.toObject(User.class);
-                for (String x : user.getUsr_books().keySet()) {
-
-                    userBooks.add(x);
+        if (showBooksProfile != null) {
+            showBooksProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent showBooksIntent = new Intent(showProfile.this, InfoUserShowBooks.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("owner", new UserWrapper(thisUser));
+                    showBooksIntent.putExtras(bundle);
+                    startActivity(showBooksIntent);
                 }
-                if (showBooksProfile != null) {
-                    showBooksProfile.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent showBooksIntent = new Intent(showProfile.this, InfoUserShowBooks.class);
-                            Bundle bundle = new Bundle();
-                            UserWrapper userWrapper = new UserWrapper(thisUser);
-                            bundle.putParcelable("user", userWrapper);
-                            bundle.putStringArrayList("UserBooks", userBooks);
-                            showBooksIntent.putExtras(bundle);
-                            startActivity(showBooksIntent);
-                        }
-                    });
-                }
-            }
-        });
+            });
+        }
         db.collection("users")
                 .document(FirebaseAuth.getInstance().getUid())
                 .collection("reviews")

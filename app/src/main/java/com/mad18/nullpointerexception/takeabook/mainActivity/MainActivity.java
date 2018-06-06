@@ -460,34 +460,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         });
                     }
                     for (String x : thisUser.getUsr_books().keySet()) {
-                        db.collection("books").document(x).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                DocumentSnapshot bookDoc = task.getResult();
-                                Book book = bookDoc.toObject(Book.class);
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                    if(myBooks.stream().filter(b->b.getBook_ISBN().equals(book.getBook_ISBN())).count()==0){
-                                        myBooks.add(bookDoc.toObject(Book.class));
-                                        isMyBooksSorted = false;
-                                    }
-                                }
-                                else{
-                                    boolean bookNotPresent = true;
-                                    for(Book b:myBooks){
-                                        if(b.getBook_ISBN().equals(book.getBook_ISBN())){
-                                            bookNotPresent = false;
-                                            break;
+                        db.collection("books")
+                                .document(x).get()
+                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot bookDoc) {
+                                        Book book = bookDoc.toObject(Book.class);
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                            if(myBooks.stream().filter(b->b.getBook_id().equals(book.getBook_id())).count()==0){
+                                                myBooks.add(bookDoc.toObject(Book.class));
+                                                isMyBooksSorted = false;
+                                            }
+                                        }
+                                        else{
+                                            boolean bookNotPresent = true;
+                                            for(Book b:myBooks){
+                                                if(b.getBook_id().equals(book.getBook_id())){
+                                                    bookNotPresent = false;
+                                                    break;
+                                                }
+                                            }
+                                            if(bookNotPresent){
+                                                if(book!=null) {
+                                                    myBooks.add(book);
+                                                    isMyBooksSorted = false;
+                                                }
+                                            }
                                         }
                                     }
-                                    if(bookNotPresent){
-                                        if(book!=null) {
-                                            myBooks.add(book);
-                                            isMyBooksSorted = false;
-                                        }
-                                    }
-                                }
-                            }
-                        });
+                                });
                     }
                 }
             });

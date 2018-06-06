@@ -1,13 +1,14 @@
 package com.mad18.nullpointerexception.takeabook.info;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,23 +23,20 @@ import com.mad18.nullpointerexception.takeabook.util.OnCounterChangeListener;
 import com.mad18.nullpointerexception.takeabook.util.User;
 import com.mad18.nullpointerexception.takeabook.util.UserWrapper;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
+
+import static java.util.stream.Collectors.toList;
 
 public class InfoUserShowBooks extends AppCompatActivity {
     private final String TAG = "InfoUserShowBooks";
-    private CoordinatorLayout mainContent;
     private ShowBooksRecyclerViewAdapter myAdapter;
-    ArrayList<String> books = new ArrayList<>();
-    List<Book> showBooks = new LinkedList<>();
     private FirebaseFirestore db;
-    private final int REQUEST_ADDBOOK = 3;
-    private final int BOOK_EFFECTIVELY_ADDED = 31;
-    private final int REQUEST_REMOVE_BOOK = 40;
-    private final int BOOK_EFFECTIVELY_REMOVED = 41;
+    private User owner;
     private MyAtomicCounter bookCounter;
+    private List<Book> showBooks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,36 +44,34 @@ public class InfoUserShowBooks extends AppCompatActivity {
         setContentView(R.layout.activity_info_user_show_books);
         Toolbar toolbar = findViewById(R.id.info_user_show_books_toolbar);
         Bundle bundle = getIntent().getExtras();
-        UserWrapper userWrapper = bundle.getParcelable("user");
+        UserWrapper userWrapper = bundle.getParcelable("owner");
+        if(userWrapper==null){
+            finish();
+            Log.d(TAG,"error bundle");
+        }
+        owner = new User(userWrapper);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle(userWrapper.getUser_wrapper_name()+" 's books");
-        Locale current = getResources().getConfiguration().locale;
-        switch (current.getLanguage()) {
+        switch (getResources().getConfiguration().locale.getLanguage()) {
             case "it":
                 setTitle("Libri di " + userWrapper.getUser_wrapper_name());
                 break;
             case "en":
                 setTitle(userWrapper.getUser_wrapper_name() + " 's books");
                 break;
+                default:
+                    setTitle(userWrapper.getUser_wrapper_name() + " 's books");
+                    break;
         }
-
+        showBooks = new LinkedList<>();
         db = FirebaseFirestore.getInstance();
         RecyclerView rec = findViewById(R.id.info_user_show_books_recycle_view);
-        mainContent = findViewById(R.id.info_user_show_books_coordinator_layout);
-        books = bundle.getStringArrayList("UserBooks");
         myAdapter = new ShowBooksRecyclerViewAdapter(this, showBooks,
                 new ShowBooksRecyclerViewAdapter.OnItemClickListener() {
-                    User u ;
-
                     @Override
                     public void onItemClick(Book item) {
                         Intent intent = new Intent(InfoUserShowBooks.this, InfoBook.class);
-                        BookWrapper bw = new BookWrapper(item);
-                        UserWrapper uw;
-                        uw = bundle.getParcelable("user");
-                        bw.setUser_id(uw.getUser_wrapper_id());
-                        intent.putExtra("bookToShow",bw);
+                        intent.putExtra("bookToShow",new BookWrapper(item));
                         startActivity(intent);
                         InfoUserShowBooks.this.overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
                     }
@@ -94,14 +90,14 @@ public class InfoUserShowBooks extends AppCompatActivity {
                 }
             }
         });
-        bookCounter = new MyAtomicCounter(books.size());
+        bookCounter = new MyAtomicCounter(owner.getUsr_books().size());
         bookCounter.setListener(new OnCounterChangeListener() {
             @Override
             public void onCounterReachZero() {
                 updateView(showBooks);
             }
         });
-        for (String x : books) {
+        for (String x : owner.getUsr_books().keySet()) {
             db.collection("books").document(x).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -130,11 +126,26 @@ public class InfoUserShowBooks extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void updateView(List<Book> books){
-        if(myAdapter==null){
+    public void updateView(List<Book> booksToUpdate){
+        if(myAdapter==null || booksToUpdate == null || booksToUpdate.size()==0){
             return;
         }
-        myAdapter.setData(books);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Comparator<Book> byTitle = Comparator.comparing(b->b.getBook_title());
+            Comparator<Book> byAuthor = Comparator.comparing(b->b.getBook_first_author());
+            booksToUpdate = booksToUpdate.stream().sorted(byAuthor.thenComparing(byTitle)).collect(toList());
+        }
+        else{
+            Collections.sort(booksToUpdate, (a, b) -> {
+                if(a.getBook_first_author().equals(b.getBook_first_author())){
+                    return a.getBook_title().compareTo(b.getBook_title());
+                }
+                else{
+                    return a.getBook_first_author().compareTo(b.getBook_first_author());
+                }
+            });
+        }
+        myAdapter.setData(booksToUpdate);
         myAdapter.notifyDataSetChanged();
     }
 }

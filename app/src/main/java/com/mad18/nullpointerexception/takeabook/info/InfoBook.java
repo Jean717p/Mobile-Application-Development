@@ -199,8 +199,6 @@ public class InfoBook extends AppCompatActivity {
         user_doc = db.collection("users").document(bookToShowInfoOf.getUser_id());
         user_doc.get().addOnCompleteListener(task -> {
             DocumentSnapshot doc = task.getResult();
-            //thisUser = doc.toObject(User.class);
-            UserWrapper bookOwnerWrapped;
             if(doc==null){
                 return;
             }
