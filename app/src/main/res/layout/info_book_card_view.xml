@@ -15,31 +15,29 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:padding="8dp"
             android:id="@+id/info_book_main_image"
             android:layout_width="110dp"
             android:layout_height="150dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginTop="41dp"
-            app:srcCompat ="@drawable/ic_book_cover" />
-
+            android:padding="8dp"
+            app:srcCompat="@drawable/ic_book_cover" />
 
 
         <Button
             android:id="@+id/info_book_request_book_button"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:layout_margin="8dp"
             android:layout_below="@id/info_book_main_image"
-            android:text="@string/info_book_request_this_book"
-            android:background="@drawable/corner_button"
-            android:textStyle="normal|bold"
-            android:textColor="@android:color/white"
-            android:gravity="center"
             android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:background="@drawable/corner_button"
             android:clickable="false"
-            />
+            android:gravity="center"
+            android:text="@string/info_book_request_this_book"
+            android:textColor="@android:color/white"
+            android:textStyle="normal|bold" />
 
         <TextView
             android:id="@+id/info_book_label_title"
@@ -47,60 +45,57 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/layout_margin"
             android:layout_marginRight="8dp"
-            android:layout_toRightOf="@id/info_book_main_image"
             android:layout_marginTop="48dp"
+            android:layout_toRightOf="@id/info_book_main_image"
+            android:fontFamily="sans-serif-light"
             android:text="@string/info_book_label_title"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp"
-            android:fontFamily="sans-serif-light"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
 
         <TextView
             android:id="@+id/info_book_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:paddingBottom="4dp"
-            android:fontFamily="sans-serif-light"
-            android:layout_alignTop="@id/info_book_label_title"
-            android:layout_toEndOf="@id/info_book_label_title"
             android:layout_alignBaseline="@id/info_book_label_title"
+            android:layout_alignTop="@id/info_book_label_title"
+            android:layout_marginEnd="16dp"
+            android:layout_toEndOf="@id/info_book_label_title"
+            android:fontFamily="sans-serif-light"
+            android:paddingBottom="4dp"
             android:textColor="@color/textColor"
-            android:textSize="13sp"
-            />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/info_book_label_author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/info_book_title"
             android:layout_marginBottom="24dp"
-            android:layout_toRightOf="@id/info_book_main_image"
             android:layout_marginLeft="@dimen/layout_margin"
             android:layout_marginRight="8dp"
-            android:layout_below="@id/info_book_title"
+            android:layout_toRightOf="@id/info_book_main_image"
+            android:fontFamily="sans-serif-light"
             android:text="@string/info_book_label_author"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp"
-            android:fontFamily="sans-serif-light"
-            android:textStyle="bold"
-          />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/info_book_author"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:paddingBottom="4dp"
-            android:fontFamily="sans-serif-light"
             android:layout_alignBaseline="@id/info_book_label_author"
             android:layout_alignTop="@id/info_book_label_author"
+            android:layout_marginEnd="16dp"
             android:layout_toEndOf="@id/info_book_label_author"
+            android:fontFamily="sans-serif-light"
+            android:paddingBottom="4dp"
             android:textColor="@color/textColor"
-            android:textSize="13sp"
-            />
+            android:textSize="13sp" />
 
 
         <TextView
@@ -112,27 +107,25 @@
             android:layout_marginLeft="@dimen/layout_margin"
             android:layout_marginRight="8dp"
             android:layout_toRightOf="@id/info_book_main_image"
+            android:fontFamily="sans-serif-light"
             android:text="@string/info_book_label_ISBN"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp"
-            android:fontFamily="sans-serif-light"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/info_book_ISBN"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:paddingBottom="4dp"
-            android:fontFamily="sans-serif-light"
             android:layout_alignBaseline="@id/info_book_label_ISBN"
             android:layout_alignTop="@id/info_book_label_ISBN"
+            android:layout_marginEnd="16dp"
             android:layout_toEndOf="@id/info_book_label_ISBN"
+            android:fontFamily="sans-serif-light"
+            android:paddingBottom="4dp"
             android:textColor="@color/textColor"
-            android:textSize="13sp"
-            />
+            android:textSize="13sp" />
 
 
         <TextView
@@ -144,151 +137,146 @@
             android:layout_marginLeft="@dimen/layout_margin"
             android:layout_marginRight="8dp"
             android:layout_toRightOf="@id/info_book_main_image"
+            android:fontFamily="sans-serif-light"
             android:text="@string/info_book_label_edition_year"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp"
-            android:fontFamily="sans-serif-light"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/info_book_editionYear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:paddingBottom="4dp"
-            android:fontFamily="sans-serif-light"
             android:layout_alignBaseline="@id/info_book_label_editionYear"
             android:layout_alignTop="@id/info_book_label_editionYear"
+            android:layout_marginEnd="16dp"
             android:layout_toEndOf="@id/info_book_label_editionYear"
+            android:fontFamily="sans-serif-light"
+            android:paddingBottom="4dp"
             android:textColor="@color/textColor"
-            android:textSize="13sp"
-            />
+            android:textSize="13sp" />
 
 
         <TextView
             android:id="@+id/info_book_label_publisher"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignStart="@id/info_book_toolbar"
+            android:layout_below="@id/info_book_editionYear"
             android:layout_marginLeft="@dimen/layout_margin"
             android:layout_marginRight="8dp"
             android:layout_toRightOf="@id/info_book_main_image"
-            android:text="@string/info_book_label_publisher"
-            android:textSize="15sp"
-            android:textColor="@color/colorPrimary"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:layout_alignStart="@id/info_book_toolbar"
-            android:layout_below="@id/info_book_editionYear"
             android:fontFamily="sans-serif-light"
-            android:textStyle="bold"
-            />
+            android:text="@string/info_book_label_publisher"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/info_book_publisher"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:paddingBottom="4dp"
-            android:fontFamily="sans-serif-light"
             android:layout_alignBaseline="@id/info_book_label_publisher"
             android:layout_alignTop="@id/info_book_label_publisher"
+            android:layout_marginEnd="16dp"
             android:layout_toEndOf="@id/info_book_label_publisher"
+            android:fontFamily="sans-serif-light"
+            android:paddingBottom="4dp"
             android:textColor="@color/textColor"
-            android:textSize="13sp"
-            />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/info_book_label_categories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignStart="@id/info_book_toolbar"
+            android:layout_below="@id/info_book_publisher"
             android:layout_marginLeft="@dimen/layout_margin"
             android:layout_marginRight="8dp"
             android:layout_toRightOf="@id/info_book_main_image"
-            android:text="@string/info_book_label_category"
-            android:textSize="15sp"
-            android:textColor="@color/colorPrimary"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textStyle="bold"
             android:fontFamily="sans-serif-light"
-            android:layout_alignStart="@id/info_book_toolbar"
-            android:layout_below="@id/info_book_publisher"
-            />
+            android:text="@string/info_book_label_category"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/info_book_categories"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:paddingBottom="4dp"
-            android:fontFamily="sans-serif-light"
             android:layout_alignBaseline="@id/info_book_label_categories"
             android:layout_alignTop="@id/info_book_label_categories"
+            android:layout_marginEnd="16dp"
             android:layout_toEndOf="@id/info_book_label_categories"
+            android:fontFamily="sans-serif-light"
+            android:paddingBottom="4dp"
             android:textColor="@color/textColor"
-            android:textSize="13sp"
-            />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/info_book_label_pages"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignStart="@id/info_book_toolbar"
+            android:layout_below="@id/info_book_categories"
             android:layout_marginLeft="@dimen/layout_margin"
             android:layout_marginRight="8dp"
             android:layout_toRightOf="@id/info_book_main_image"
-            android:text="@string/info_book_label_pages"
-            android:textSize="15sp"
-            android:textColor="@color/colorPrimary"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textStyle="bold"
             android:fontFamily="sans-serif-light"
-            android:layout_alignStart="@id/info_book_toolbar"
-            android:layout_below="@id/info_book_categories"
-            />
+            android:text="@string/info_book_label_pages"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/info_book_pages"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:paddingBottom="4dp"
-            android:fontFamily="sans-serif-light"
             android:layout_alignBaseline="@id/info_book_label_pages"
             android:layout_alignTop="@id/info_book_label_pages"
+            android:layout_marginEnd="16dp"
             android:layout_toEndOf="@id/info_book_label_pages"
+            android:fontFamily="sans-serif-light"
+            android:paddingBottom="4dp"
             android:textColor="@color/textColor"
-            android:textSize="13sp"
-            />
+            android:textSize="13sp" />
 
 
         <TextView
             android:id="@+id/info_book_label_owner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/layout_margin"
-            android:layout_marginRight="8dp"
-            android:text="@string/info_book_label_owner"
-            android:textSize="15sp"
-            android:layout_toRightOf="@id/info_book_main_image"
-            android:textColor="@color/colorPrimary"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textStyle="bold"
-            android:fontFamily="sans-serif-light"
             android:layout_alignStart="@id/info_book_toolbar"
             android:layout_below="@id/info_book_pages"
-            />
+            android:layout_marginLeft="@dimen/layout_margin"
+            android:layout_marginRight="8dp"
+            android:layout_toRightOf="@id/info_book_main_image"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/info_book_label_owner"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/info_book_owner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:paddingBottom="4dp"
-            android:textStyle="normal|bold"
-            android:fontFamily="sans-serif-light"
             android:layout_alignBaseline="@id/info_book_label_owner"
             android:layout_alignTop="@id/info_book_label_owner"
+            android:layout_marginEnd="16dp"
             android:layout_toEndOf="@id/info_book_label_owner"
-            android:textColor="@color/textColor"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textSize="15sp"
+            android:fontFamily="sans-serif-light"
+            android:paddingBottom="4dp"
             android:text="Owner"
-            />
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textColor="@color/textColor"
+            android:textSize="15sp"
+            android:textStyle="normal|bold" />
 
         <!--etichetta e contenuto Descrition-->
 
@@ -296,115 +284,114 @@
             android:id="@+id/info_book_label_book_conditions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/info_book_main_image"
-            android:layout_marginLeft="@dimen/layout_margin"
-            android:layout_marginRight="8dp"
-            android:text="@string/info_book_label_book_conditions"
-            android:textSize="15sp"
-            android:textColor="@color/colorPrimary"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textStyle="bold"
-            android:fontFamily="sans-serif-light"
             android:layout_alignStart="@id/info_book_toolbar"
             android:layout_below="@id/info_book_owner"
-            />
+            android:layout_marginLeft="@dimen/layout_margin"
+            android:layout_marginRight="8dp"
+            android:layout_toRightOf="@id/info_book_main_image"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/info_book_label_book_conditions"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/info_book_book_conditions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:paddingBottom="4dp"
-            android:fontFamily="sans-serif-light"
             android:layout_alignBaseline="@id/info_book_label_book_conditions"
             android:layout_alignTop="@id/info_book_label_book_conditions"
+            android:layout_marginEnd="16dp"
             android:layout_toEndOf="@id/info_book_label_book_conditions"
+            android:fontFamily="sans-serif-light"
+            android:paddingBottom="4dp"
             android:textColor="@color/textColor"
-            android:textSize="13sp"
-            />
+            android:textSize="13sp" />
 
 
         <TextView
             android:id="@+id/info_book_label_book_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/info_book_main_image"
-            android:layout_marginLeft="@dimen/layout_margin"
-            android:layout_marginRight="8dp"
-            android:text="@string/info_book_book_status"
-            android:textSize="15sp"
-            android:textColor="@color/colorPrimary"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textStyle="bold"
-            android:fontFamily="sans-serif-light"
             android:layout_alignStart="@id/info_book_toolbar"
             android:layout_below="@id/info_book_book_conditions"
-            />
+            android:layout_marginLeft="@dimen/layout_margin"
+            android:layout_marginRight="8dp"
+            android:layout_toRightOf="@id/info_book_main_image"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/info_book_book_status"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/info_book_book_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:paddingBottom="4dp"
-            android:textStyle="bold|normal"
             android:layout_alignBaseline="@id/info_book_label_book_status"
             android:layout_alignTop="@id/info_book_label_book_status"
+            android:layout_marginEnd="16dp"
             android:layout_toEndOf="@id/info_book_label_book_status"
+            android:paddingBottom="4dp"
             android:textColor="@color/textColor"
             android:textSize="15sp"
-            />
+            android:textStyle="bold|normal" />
+
         <TextView
             android:id="@+id/info_book_rating_average"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="4,6"
-            android:visibility="invisible"
             android:layout_below="@id/info_book_book_status"
-           android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:layout_toStartOf="@id/info_book_rating_bar"
-            android:layout_alignBaseline="@id/info_book_rating_bar"
-         />
+            android:layout_marginTop="8dp"
+            android:text="4,6"
+            android:textSize="13dp"
+            android:layout_alignStart="@id/info_book_label_book_status"
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/info_book_rating_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="(120)"
-            android:visibility="invisible"
-            android:layout_below="@id/info_book_book_status"
+            android:layout_toLeftOf="@id/info_book_rating_bar"
             android:layout_alignBaseline="@id/info_book_rating_bar"
-            android:layout_toEndOf="@id/info_book_rating_bar"
-            android:layout_marginTop="16dp"
+            android:layout_below="@id/info_book_book_status"
             android:layout_marginBottom="16dp"
-           />
+            android:layout_marginTop="8dp"
+            android:layout_toEndOf="@id/info_book_rating_bar"
+            android:text="(120)"
+            android:textSize="13dp"
+            android:visibility="invisible" />
 
         <android.support.v7.widget.AppCompatRatingBar
             android:id="@+id/info_book_rating_bar"
+            style="@style/Widget.AppCompat.RatingBar.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:isIndicator="true"
-            android:visibility="invisible"
+            android:paddingBottom="8dp"
+            android:layout_toRightOf="@id/info_book_rating_average"
             android:layout_below="@id/info_book_book_status"
-            style="@style/Widget.AppCompat.RatingBar.Small"
-            android:layout_alignStart="@id/info_book_label_book_status"
-            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            />
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:isIndicator="true"
+            android:visibility="invisible" />
 
         <HorizontalScrollView
             android:id="@+id/info_book_horizontalScrollView_photos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_below="@id/info_book_rating_bar">
+            android:layout_below="@id/info_book_rating_bar"
+            android:layout_margin="8dp">
 
             <LinearLayout
-                android:layout_margin="8dp"
                 android:id="@+id/info_book_list_photo_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="8dp"
                 android:orientation="horizontal">
 
             </LinearLayout>

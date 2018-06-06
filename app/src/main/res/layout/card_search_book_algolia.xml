@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/book_found_card_view"
-        android:layout_width="match_parent"
-        android:layout_marginBottom="7dp"
-        android:layout_marginTop="7dp"
-        android:layout_height="120dp">
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/book_found_card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="4dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -14,18 +14,23 @@
 
             <ImageView
                 android:id="@+id/book_found_thumbnail"
-                android:layout_width="110dp"
-                android:layout_height="150dp"
+                android:layout_width="60dp"
+                android:layout_height="90dp"
+                android:layout_marginTop="8dp"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="16dp" />
 
             <TextView
+                android:layout_marginTop="4dp"
                 android:id="@+id/book_found_label_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/book_found_thumbnail"
                 android:text="@string/info_book_label_title"
+                android:textColor="@color/colorPrimaryDark"
                 android:textSize="16dp"
                 android:textStyle="normal|bold" />
 
@@ -34,10 +39,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@id/book_found_label_title"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_toRightOf="@id/book_found_label_title"
-                android:textSize="13sp" />
+                android:textSize="13dp"/>
 
 
             <TextView
@@ -47,10 +51,11 @@
                 android:layout_alignBaseline="@id/book_found_author"
                 android:layout_below="@id/book_found_title"
                 android:layout_marginTop="16dp"
+                android:textColor="@color/colorPrimaryDark"
                 android:layout_toEndOf="@id/book_found_thumbnail"
                 android:text="@string/info_book_label_author"
-                android:textSize="16sp"
-                android:textStyle="normal|bold" />
+                android:textSize="16dp"
+                android:textStyle="normal|bold"  />
 
 
             <TextView
@@ -60,6 +65,7 @@
                 android:layout_below="@+id/book_found_title"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="13dp"
+                android:textSize="13dp"
                 android:layout_toEndOf="@+id/book_found_label_author" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
