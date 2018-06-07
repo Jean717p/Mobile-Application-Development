@@ -150,6 +150,9 @@ public class SearchBookAlgolia extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.search_book_algolia_menu, menu);
         MenuItem search = menu.findItem(R.id.search_book_algolia_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
+        searchView.setIconifiedByDefault(false);
+        searchView.requestFocus();
+        search.expandActionView();
         searchOnAlgolia(searchView);
         return true;
     }
