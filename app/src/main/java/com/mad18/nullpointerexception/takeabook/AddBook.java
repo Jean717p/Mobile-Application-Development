@@ -139,7 +139,7 @@ public class AddBook extends AppCompatActivity {
                 selectBookImg(false);
             });
             imageView.setTag(i);
-            imageView.setImageResource(R.drawable.ic_addbook);
+            imageView.setImageResource(R.drawable.ic_insert_photo);
             horizontal_photo_list.addView(horizontal_photo_list_element);
         }
         staticSpinner = findViewById(R.id.add_book_spinner_book_cond);
@@ -692,13 +692,13 @@ public class AddBook extends AppCompatActivity {
                 iw = findViewById(R.id.add_book_picture);
                 bookCover.recycle();
                 bookCover = null;
-                iw.setImageResource(R.drawable.ic_addbook);
+                iw.setImageResource(R.drawable.ic_insert_photo);
             }
         }
         else if(bookImgMap.isEmpty()==false){
             iw = globalViewImgElement;
             bookImgMap.remove(globalImgPos);
-            iw.setImageResource(R.drawable.ic_addbook);
+            iw.setImageResource(R.drawable.ic_insert_photo);
         }
     }
 

@@ -241,7 +241,7 @@ public class EditBook extends AppCompatActivity {
         for (;i<4; i++ ){
             horizontal_photo_list_element = getLayoutInflater().inflate(R.layout.cell_in_image_list, null);
             ImageView imageView = (ImageView) horizontal_photo_list_element.findViewById(R.id.image_in_horizontal_list_cell);
-            imageView.setImageResource(R.drawable.ic_addbook);
+            imageView.setImageResource(R.drawable.ic_insert_photo);
             imageView.setOnClickListener(v -> {
                 globalImgPos = Integer.parseInt(imageView.getTag().toString());
                 globalViewImgElement = imageView;
@@ -466,7 +466,7 @@ public class EditBook extends AppCompatActivity {
         iw = globalViewImgElement;
         modified[globalImgPos] = true;
         bookImgMap.put(globalImgPos,null);
-        iw.setImageResource(R.drawable.ic_addbook);
+        iw.setImageResource(R.drawable.ic_insert_photo);
 //        if(bookImgMap.isEmpty()==false){
 //            iw = globalViewImgElement;
 //            photoPosToBeRemoved[globalImgPos] = true;

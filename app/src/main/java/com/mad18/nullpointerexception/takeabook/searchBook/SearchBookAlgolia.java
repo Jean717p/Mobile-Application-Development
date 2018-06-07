@@ -159,6 +159,28 @@ public class SearchBookAlgolia extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                // While RecyclerView enters dragging state
+                // (scroll, fling) we want our FAB to disappear.
+                // Similarly when it enters idle state we want
+                // our FAB to appear back.
+
+                // (Just uncomment corresponding hide-show methods
+                // which you want to use)
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    // Hiding FAB
+                    fab_isbn.hide();
+                    // ...
+                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    // Showing FAB
+                    // ...
+                    fab_isbn.show();
+                }
+            }
+        });
+
     }
 
     private void searchOnAlgolia(SearchView searchView) {
