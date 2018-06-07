@@ -167,7 +167,7 @@
 
         <!-- Algolia - SearchBook -->
 
-        <activity android:name=".searchBook.SearchBookAlgolia" />
+        <activity android:name=".searchBook.SearchBookAlgolia"/>
 
         <!-- Request a book + loan management -->
 
@@ -218,7 +218,9 @@
 
         <activity android:name=".requestBook.RequestReview" />
         <activity android:name=".info.ShowReviews"></activity>
-        <activity android:name=".EditBook"></activity>
+        <activity android:name=".EditBook">
+            android:screenOrientation="portrait"
+        </activity>
     </application>
 
 </manifest>

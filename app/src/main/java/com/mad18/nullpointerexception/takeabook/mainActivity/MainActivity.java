@@ -16,6 +16,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -265,6 +266,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        if(thisUser==null
+                && id!=R.id.nav_logout
+                && id!=R.id.nav_settings){
+            Snackbar.make(findViewById(R.id.mainActivity_drawer_username),getString(R.string.no_internet),Snackbar.LENGTH_LONG);
+            return false;
+        }
         Intent intent;
         switch (id) {
             case R.id.nav_addbook:

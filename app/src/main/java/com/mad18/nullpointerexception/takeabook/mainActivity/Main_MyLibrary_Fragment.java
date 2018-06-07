@@ -121,6 +121,10 @@ public class Main_MyLibrary_Fragment extends Fragment {
             floatingActionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(MainActivity.thisUser==null){
+                        Snackbar.make(floatingActionButton,getActivity().getString(R.string.no_internet),Snackbar.LENGTH_LONG);
+                        return;
+                    }
                     Intent addbook = new Intent(getActivity(), AddBook.class);
                     startActivityForResult(addbook,REQUEST_ADDBOOK);
                    // startActivity(addbook);

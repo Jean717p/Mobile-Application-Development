@@ -139,7 +139,7 @@ public class AddBook extends AppCompatActivity {
                 selectBookImg(false);
             });
             imageView.setTag(i);
-            imageView.setImageResource(R.drawable.ic_addbook);
+            imageView.setImageResource(R.drawable.ic_insert_photo);
             horizontal_photo_list.addView(horizontal_photo_list_element);
         }
         staticSpinner = findViewById(R.id.add_book_spinner_book_cond);
@@ -328,7 +328,6 @@ public class AddBook extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference books = db.collection("books");
         CollectionReference users = db.collection("users");
-        String bookImgPath;
         Map<String,Boolean> authors = new HashMap<>(), categories = new HashMap<>();
         Map<String,Boolean>photourllist = new HashMap<>();
         DocumentReference bookRef = books.document();
@@ -696,13 +695,13 @@ public class AddBook extends AppCompatActivity {
                 iw = findViewById(R.id.add_book_picture);
                 bookCover.recycle();
                 bookCover = null;
-                iw.setImageResource(R.drawable.ic_addbook);
+                iw.setImageResource(R.drawable.ic_insert_photo);
             }
         }
         else if(bookImgMap.isEmpty()==false){
             iw = globalViewImgElement;
             bookImgMap.remove(globalImgPos);
-            iw.setImageResource(R.drawable.ic_addbook);
+            iw.setImageResource(R.drawable.ic_insert_photo);
         }
     }
 
@@ -743,36 +742,5 @@ public class AddBook extends AppCompatActivity {
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
     }
-
-    //    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        ExtendedEditText eet;
-//        for(int i:addBookTextViewIds){
-//            eet = findViewById(i);
-//            outState.putString(Integer.toString(i),eet.getText().toString());
-//        }
-////        if(bookImg!=null){
-////            outState.putString("bookEditImgPath",editProfile.saveImageToInternalStorage(bookImg,"temp_"+"bookEditImage",this));
-////        }
-//    }
-//
-//    @Override
-//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-//        super.onRestoreInstanceState(savedInstanceState);
-//        ExtendedEditText text;
-//        for(int i:addBookTextViewIds){
-//            text = findViewById(i);
-//            text.setText(savedInstanceState.getString(Integer.toString(i),""));
-//        }
-////        String bookImgPath = savedInstanceState.getString("bookEditImgPath");
-////        if(bookImgPath!=null){
-////            File file = new File(bookImgPath);
-////            if(file.exists()){
-////                bookImg = editProfile.loadImageFromStorage(bookImgPath,R.id.add_book_picture,this);
-////                file.delete();
-////            }
-////        }
-//    }
 
 }

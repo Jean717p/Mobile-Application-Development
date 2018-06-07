@@ -5,28 +5,24 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.Index;
 import com.algolia.search.saas.Query;
-import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,8 +35,6 @@ import com.mad18.nullpointerexception.takeabook.displaySearchOnMap.DisplaySearch
 import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
 import com.mad18.nullpointerexception.takeabook.util.ScanBarcode;
-import com.mancj.materialsearchbar.MaterialSearchBar;
-import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -150,9 +144,6 @@ public class SearchBookAlgolia extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.search_book_algolia_menu, menu);
         MenuItem search = menu.findItem(R.id.search_book_algolia_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
-        searchView.setIconifiedByDefault(false);
-        searchView.requestFocus();
-        search.expandActionView();
         searchOnAlgolia(searchView);
         return true;
     }
@@ -162,6 +153,28 @@ public class SearchBookAlgolia extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                // While RecyclerView enters dragging state
+                // (scroll, fling) we want our FAB to disappear.
+                // Similarly when it enters idle state we want
+                // our FAB to appear back.
+
+                // (Just uncomment corresponding hide-show methods
+                // which you want to use)
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    // Hiding FAB
+                    fab_isbn.hide();
+                    // ...
+                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    // Showing FAB
+                    // ...
+                    fab_isbn.show();
+                }
+            }
+        });
+
     }
 
     private void searchOnAlgolia(SearchView searchView) {

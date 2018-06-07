@@ -289,9 +289,7 @@ public class InfoBook extends AppCompatActivity {
     }
 
     private void DeleteBook(Book bookToDelete) {
-
         deleteIndexToAlgolia(bookToDelete);
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("books").document(bookToDelete.getBook_id()).delete().addOnSuccessListener(aVoid -> {
                 Log.d("delete","deleted from books");

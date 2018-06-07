@@ -8,6 +8,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -186,7 +187,10 @@ public class Main_HomeBooks_Fragment extends Fragment {
                 fabTitle.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        if(MainActivity.thisUser==null){
+                            Snackbar.make(fabTitle,getActivity().getString(R.string.no_internet),Snackbar.LENGTH_LONG);
+                            return;
+                        }
                         Intent search = new Intent(getActivity(), SearchBookAlgolia.class);
                         search.putExtra("action", "Title");
                         startActivity(search);
@@ -200,7 +204,10 @@ public class Main_HomeBooks_Fragment extends Fragment {
                 fabAuthor.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        if(MainActivity.thisUser==null){
+                            Snackbar.make(fabAuthor,getActivity().getString(R.string.no_internet),Snackbar.LENGTH_LONG);
+                            return;
+                        }
                         Intent search = new Intent(getActivity(), SearchBookAlgolia.class);
                         search.putExtra("action", "Author");
                         startActivity(search);
@@ -214,14 +221,16 @@ public class Main_HomeBooks_Fragment extends Fragment {
                 fabIsbn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if(MainActivity.thisUser==null){
+                            Snackbar.make(fabIsbn,getActivity().getString(R.string.no_internet),Snackbar.LENGTH_LONG);
+                            return;
+                        }
                         MainActivity mainActivity = (MainActivity) getActivity();
                         Intent search = new Intent(getActivity(), SearchBookAlgolia.class);
                         search.putExtra("action", "ISBN");
-                        if(thisUser!=null){
-                            if(thisUser.getUsr_geoPoint()!=null){
-                                search.putExtra("user_long", thisUser.getUsr_geoPoint().getLongitude());
-                                search.putExtra("user_lat", thisUser.getUsr_geoPoint().getLatitude());
-                            }
+                        if(thisUser.getUsr_geoPoint()!=null){
+                            search.putExtra("user_long", thisUser.getUsr_geoPoint().getLongitude());
+                            search.putExtra("user_lat", thisUser.getUsr_geoPoint().getLatitude());
                         }
                         startActivity(search);
                     }

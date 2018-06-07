@@ -1,14 +1,13 @@
 package com.mad18.nullpointerexception.takeabook;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
@@ -30,6 +29,10 @@ import android.widget.TextView;
 
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.Index;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -58,10 +61,9 @@ import java.util.UUID;
 public class EditBook extends AppCompatActivity {
 
     private static final int ZXING_CAMERA_PERMISSION = 4;
-    private final int REQUEST_PICK_IMAGE = 1, REQUEST_IMAGE_CAPTURE = 2, REQUEST_SCANNER=3;
+    private final int REQUEST_PICK_IMAGE = 1, REQUEST_IMAGE_CAPTURE = 2, REQUEST_SCANNER=3,
+            REQUEST_PICK_IMAGE_COVER =4, REQUEST_IMAGE_CAPTURE_COVER=5;
     private final int REQUEST_PERMISSION_CAMERA = 2, REQUEST_PERMISSION_GALLERY=1;
-
-    private SharedPreferences sharedPref;
     private final String TAG = "editBook";
     private Menu menu;
 
@@ -76,16 +78,17 @@ public class EditBook extends AppCompatActivity {
     private Boolean modified[] = {false, false, false, false};
     private List<String> newPhotosPos;
     private Spinner staticSpinner;
-
+    private AppCompatActivity myActivity;
     private Book bookInMod ;
-
+    private Bitmap bookCover;
+    private boolean isCoverChanged;
+    private StorageReference coverRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_book);
-
-        sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        myActivity = this;
         Toolbar toolbar = findViewById(R.id.edit_book_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -96,10 +99,7 @@ public class EditBook extends AppCompatActivity {
         BookWrapper bookWrapper = (BookWrapper) bundle.getParcelable("book_to_modify");
         bookInMod = new Book(bookWrapper);
         newPhotosPos = new LinkedList<>(bookInMod.getBook_photo_list().keySet());
-
-
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
-
         Button read_barcode = findViewById(R.id.edit_book_read_barcode);
         read_barcode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,11 +115,31 @@ public class EditBook extends AppCompatActivity {
                 .createFromResource(this, R.array.book_conditions,
                         android.R.layout.simple_dropdown_item_1line);
         staticSpinner.setAdapter(staticAdapter);
-
+        isCoverChanged = false;
+        if(bookInMod.getBook_thumbnail_url().length()>0){
+            try {
+                FirebaseStorage.getInstance()
+                        .getReferenceFromUrl(bookInMod.getBook_thumbnail_url())
+                        .getDownloadUrl()
+                        .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                ImageView imageView = myActivity.findViewById(R.id.edit_book_thumbnail);
+                                imageView.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        selectBookImg(true);
+                                    }
+                                });
+                            }
+                        });
+            }catch (Exception e){
+                Log.d(TAG,"Probably is not a storageReference \\_(^_^)_/");
+                e.printStackTrace();
+            }
+        }
         fillBookViews(bookInMod);
         fillPhotoList(bookInMod);
-
-
     }
 
     @Override
@@ -225,31 +245,36 @@ public class EditBook extends AppCompatActivity {
         for_me = new LinkedList<>(book.getBook_photo_list().keySet());
 
         int i;
-        for (i = 0; i < book.getBook_photo_list().size(); i++) {
-            horizontal_photo_list_element = getLayoutInflater().inflate(R.layout.cell_in_image_list, null);
-            ImageView imageView = (ImageView) horizontal_photo_list_element.findViewById(R.id.image_in_horizontal_list_cell);
-            StorageReference mImageRef = FirebaseStorage.getInstance().getReference(for_me.get(i));
-            GlideApp.with(this).load(mImageRef).placeholder(R.drawable.ic_thumbnail_cover_book).into(imageView);
-            imageView.setOnClickListener(v -> {
-                globalImgPos = Integer.parseInt(imageView.getTag().toString());
-                globalViewImgElement = imageView;
-                selectBookImg();
-            });
-            imageView.setTag(i);
-            horizontal_photo_list.addView(horizontal_photo_list_element);
-        }
-        for (;i<4; i++ ){
-            horizontal_photo_list_element = getLayoutInflater().inflate(R.layout.cell_in_image_list, null);
-            ImageView imageView = (ImageView) horizontal_photo_list_element.findViewById(R.id.image_in_horizontal_list_cell);
-            imageView.setImageResource(R.drawable.ic_addbook);
-            imageView.setOnClickListener(v -> {
-                globalImgPos = Integer.parseInt(imageView.getTag().toString());
-                globalViewImgElement = imageView;
-                selectBookImg();
-            });
+        try {
+            for (i = 0; i < book.getBook_photo_list().size(); i++) {
+                horizontal_photo_list_element = getLayoutInflater().inflate(R.layout.cell_in_image_list, null);
+                ImageView imageView = (ImageView) horizontal_photo_list_element.findViewById(R.id.image_in_horizontal_list_cell);
+                StorageReference mImageRef = FirebaseStorage.getInstance().getReference(for_me.get(i));
+                GlideApp.with(this).load(mImageRef).placeholder(R.drawable.ic_thumbnail_cover_book).into(imageView);
+                imageView.setOnClickListener(v -> {
+                    globalImgPos = Integer.parseInt(imageView.getTag().toString());
+                    globalViewImgElement = imageView;
+                    selectBookImg(false);
+                });
+                imageView.setTag(i);
+                horizontal_photo_list.addView(horizontal_photo_list_element);
+            }
+            for (; i < 4; i++) {
+                horizontal_photo_list_element = getLayoutInflater().inflate(R.layout.cell_in_image_list, null);
+                ImageView imageView = (ImageView) horizontal_photo_list_element.findViewById(R.id.image_in_horizontal_list_cell);
+                imageView.setImageResource(R.drawable.ic_insert_photo);
+                imageView.setOnClickListener(v -> {
+                    globalImgPos = Integer.parseInt(imageView.getTag().toString());
+                    globalViewImgElement = imageView;
+                    selectBookImg(false);
+                });
 
-            imageView.setTag(i);
-            horizontal_photo_list.addView(horizontal_photo_list_element);
+                imageView.setTag(i);
+                horizontal_photo_list.addView(horizontal_photo_list_element);
+            }
+        }catch(Exception e){
+            Log.d(TAG,"Probably activity destroyed before setup \\_(^_^)_/");
+            e.printStackTrace();
         }
     }
 
@@ -269,11 +294,8 @@ public class EditBook extends AppCompatActivity {
         }
         et = findViewById(R.id.edit_book_ISBN);
         bookInMod.setBook_ISBN(et.getText().toString());
-
-
         et = findViewById(R.id.edit_book_description);
         bookInMod.setBook_description(et.getText().toString());
-
         et = findViewById(R.id.edit_book_authors);
         String tmp[] = et.getText().toString().split(","); //è la virgola???
         for(int i=0;i<tmp.length;i++){
@@ -315,8 +337,55 @@ public class EditBook extends AppCompatActivity {
         }
         bookInMod.setBook_photo_list(photourllist);
         bookRef.set(bookInMod, SetOptions.merge());
-        editIndexToAlgolia(bookInMod);
-
+        if(isCoverChanged){
+            FirebaseStorage.getInstance()
+                    .getReferenceFromUrl(bookInMod.getBook_thumbnail_url())
+                    .delete();
+            if(bookCover != null){
+                ByteArrayOutputStream coverOut = new ByteArrayOutputStream();
+                bookCover.compress(Bitmap.CompressFormat.JPEG,100,coverOut);
+                coverRef = FirebaseStorage.getInstance()
+                        .getReference()
+                        .child(
+                        "users/"+bookInMod.getBook_userid()+ "/books/"+bookInMod.getBook_id()+"/"+UUID.nameUUIDFromBytes(coverOut.toByteArray())
+                );
+                coverRef.putBytes(coverOut.toByteArray());
+                coverRef.getDownloadUrl()
+                        .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                bookInMod.setBook_thumbnail_url(uri.toString());
+                                db.collection("books")
+                                        .document(bookInMod.getBook_id())
+                                        .update("book_thumbnail_url",uri.toString())
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                editIndexToAlgolia(bookInMod);
+                                            }
+                                        });
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                bookInMod.setBook_thumbnail_url("");
+                                coverRef.delete();
+                                editIndexToAlgolia(bookInMod);
+                            }
+                        });
+            }
+            else{
+                bookInMod.setBook_thumbnail_url("");
+                db.collection("books")
+                        .document(bookInMod.getBook_id())
+                        .update("book_thumbnail_url","");
+                editIndexToAlgolia(bookInMod);
+            }
+        }
+        else{
+            editIndexToAlgolia(bookInMod);
+        }
     }
 
     public void editIndexToAlgolia(Book b){
@@ -334,9 +403,13 @@ public class EditBook extends AppCompatActivity {
         Index title_index = client.getIndex("book_title");
         List<JSONObject> array_title = new ArrayList<JSONObject>();
         try {
-            array_title.add(new JSONObject().put("Title", b.getBook_title()).put("ISBN", b.getBook_ISBN()).put("UserID", b.getBook_userid())
+            array_title.add(new JSONObject()
+                    .put("Title", b.getBook_title())
+                    .put("ISBN", b.getBook_ISBN())
+                    .put("UserID", b.getBook_userid())
                     .put("Author",authors)
-                    .put("ThumbnailURL", b.getBook_thumbnail_url()).put("objectID",b.getBook_id()));
+                    .put("ThumbnailURL", b.getBook_thumbnail_url())
+                    .put("objectID",b.getBook_id()));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -346,7 +419,10 @@ public class EditBook extends AppCompatActivity {
         Index author_index = client.getIndex("book_author");
         List<JSONObject> array_author = new ArrayList<JSONObject>();
         try {
-            array_author.add(new JSONObject().put("Title", b.getBook_title()).put("ISBN", b.getBook_ISBN()).put("UserID", b.getBook_userid())
+            array_author.add(new JSONObject()
+                    .put("Title", b.getBook_title())
+                    .put("ISBN", b.getBook_ISBN())
+                    .put("UserID", b.getBook_userid())
                     .put("Author",authors)
                     .put("ThumbnailURL", b.getBook_thumbnail_url())
                     .put("objectID",b.getBook_id()));
@@ -359,7 +435,10 @@ public class EditBook extends AppCompatActivity {
         Index ISBN_index = client.getIndex("book_ISBN");
         List<JSONObject> array_ISBN= new ArrayList<JSONObject>();
         try {
-            array_ISBN.add(new JSONObject().put("Title", b.getBook_title()).put("ISBN", b.getBook_ISBN()).put("UserID", b.getBook_userid())
+            array_ISBN.add(new JSONObject()
+                    .put("Title", b.getBook_title())
+                    .put("ISBN", b.getBook_ISBN())
+                    .put("UserID", b.getBook_userid())
                     .put("Author",authors)
                     .put("ThumbnailURL", b.getBook_thumbnail_url())
                     .put("objectID",b.getBook_id()));
@@ -414,11 +493,44 @@ public class EditBook extends AppCompatActivity {
                         }
                     }
                     break;
+                case REQUEST_IMAGE_CAPTURE_COVER:
+                    if (data != null) {
+                        try{
+                            bookCover = Bitmap.createScaledBitmap(
+                                    (Bitmap) data.getExtras().get("data"),128,206,true);
+                            iw = findViewById(R.id.add_book_picture);
+                            iw.setImageBitmap(bookCover);
+                            isCoverChanged = true;
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                case REQUEST_PICK_IMAGE_COVER:
+                    if (data != null) {
+                        Uri selectedMediaUri = data.getData();
+                        try {
+                            bookCover = Bitmap.createScaledBitmap(
+                                    (Bitmap) MediaStore.Images.Media.getBitmap(this.getContentResolver(),selectedMediaUri),
+                                    128,206,true);
+                            iw = findViewById(R.id.add_book_picture);
+                            if(iw!=null && !bookCover.equals("")) {
+                                iw.setImageBitmap(bookCover);
+                                isCoverChanged = true;
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
             }
         }
     }
 
-    private void selectBookImg(){
+    private void selectBookImg(boolean isCover){
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
         //pictureDialog.setTitle("Select Action");
         String[] pictureDialogItems = {
@@ -429,55 +541,80 @@ public class EditBook extends AppCompatActivity {
                 (dialog, which) -> {
                     switch (which) {
                         case 0:
-                            choosePhotoFromGallery();
+                            choosePhotoFromGallery(isCover);
                             break;
                         case 1:
-                            choosePhotoFromCamera();
+                            choosePhotoFromCamera(isCover);
                             break;
                         case 2:
-                            removeBookImg();
+                            removeBookImg(isCover);
                             break;
                     }
                 });
         pictureDialog.show();
     }
 
-    private void choosePhotoFromGallery() {
-        if(ActivityCompat.checkSelfPermission(EditBook.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(EditBook.this,new String[]{
-                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE }
+    /**
+     * Crea l'intent per permettere la scelta di una foto dalla galleria, controllando i permessi necessari.
+     */
+
+    public void choosePhotoFromGallery(boolean isCover) {
+        if(ActivityCompat.checkSelfPermission(myActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(myActivity,new String[]{
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE }
                     ,REQUEST_PERMISSION_GALLERY);
             return;
         }
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(galleryIntent, REQUEST_PICK_IMAGE);
+        if(isCover){
+            startActivityForResult(galleryIntent, REQUEST_PICK_IMAGE_COVER);
+        }
+        else{
+            startActivityForResult(galleryIntent, REQUEST_PICK_IMAGE);
+        }
     }
 
-    private void choosePhotoFromCamera() {
-        if(ActivityCompat.checkSelfPermission(EditBook.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                ||ActivityCompat.checkSelfPermission(EditBook.this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(EditBook.this,new String[]{
-                            android.Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE }
+    /**
+     * Crea l'intent per lo scatto di un'immagine dalla fotocamera, controllando i permessi necessari
+     */
+    private void choosePhotoFromCamera(boolean isCover) {
+        if(ActivityCompat.checkSelfPermission(myActivity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                ||ActivityCompat.checkSelfPermission(myActivity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(myActivity,new String[]{
+                            Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE }
                     ,REQUEST_PERMISSION_CAMERA);
             return;
         }
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+        if(isCover){
+            startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE_COVER);
+        }
+        else{
+            startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+        }
     }
 
-    private void removeBookImg(){
+    /**
+     * Si occupa della rimozione dell'immagine dalla ImageView in cui è contenuta.
+     */
+    private void removeBookImg(boolean isCover){
         ImageView iw;
-        iw = globalViewImgElement;
-        modified[globalImgPos] = true;
-        bookImgMap.put(globalImgPos,null);
-        iw.setImageResource(R.drawable.ic_addbook);
-//        if(bookImgMap.isEmpty()==false){
-//            iw = globalViewImgElement;
-//            photoPosToBeRemoved[globalImgPos] = true;
-//            bookImgMap.remove(globalImgPos);
-//            iw.setImageResource(R.drawable.ic_addbook);
-//        }
+        if(isCover){
+            if(bookCover!=null){
+                iw = findViewById(R.id.add_book_picture);
+                bookCover.recycle();
+                iw.setImageResource(R.drawable.ic_addbook);
+            }
+            isCoverChanged = true;
+            bookCover = null;
+        }
+        else if(bookImgMap.isEmpty()==false){
+            iw = globalViewImgElement;
+            //bookImgMap.remove(globalImgPos);
+            modified[globalImgPos] = true;
+            bookImgMap.put(globalImgPos,null);
+            iw.setImageResource(R.drawable.ic_insert_photo);
+        }
     }
-
 }
