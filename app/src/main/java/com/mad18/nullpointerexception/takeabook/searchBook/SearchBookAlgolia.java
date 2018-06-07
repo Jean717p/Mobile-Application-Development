@@ -84,7 +84,18 @@ public class SearchBookAlgolia extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.search_book_algolia_recycler_view);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("Search " + searchBase);
+        switch (searchBase){
+            case "ISBN":
+                setTitle(getString(R.string.search_book_algolia_isbn));
+                break;
+            case "Author":
+                setTitle(getString(R.string.search_book_algolia_author));
+                break;
+            case "Title":
+                setTitle(getString(R.string.search_book_algolia_title));
+                break;
+
+        }
         fab_isbn = findViewById(R.id.search_book_algolia_fab);
         if(searchBase.equals("ISBN")){
             fab_isbn.setVisibility(View.VISIBLE);
@@ -250,7 +261,7 @@ public class SearchBookAlgolia extends AppCompatActivity {
             if (requestCode==REQUEST_SCANNER){
                 if(data != null){
                     Bundle bundle = data.getExtras();
-                    String ISBN = bundle.getString("ISBN");
+                    String ISBN = bundle.getString("isbn");
                     searchBooksOnFireStore(ISBN);
                     if(booksFound.size() != 0){
                         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -264,9 +275,6 @@ public class SearchBookAlgolia extends AppCompatActivity {
                             intent.putExtras(b);
                             startActivity(intent);
                         }
-                    }
-                    else{
-                        Toast.makeText(this, R.string.search_book_algolia_no_found, Toast.LENGTH_SHORT).show();
                     }
                 }
             }

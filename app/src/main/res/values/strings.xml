@@ -238,7 +238,9 @@
     <string name="title_activity_edit_book">Edit book</string>
     <string name="display_search_on_map_map">Mappa</string>
     <string name="display_search_on_map_distance">Distance:</string>
-
+    <string name="search_book_algolia_isbn">Search ISBN</string>
+    <string name="search_book_algolia_author">Search Author</string>
+    <string name="search_book_algolia_title">Search Title</string>
 
 
 </resources>

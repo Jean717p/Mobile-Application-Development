@@ -9,4 +9,11 @@
         android:title="@string/search_books"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView"/>
+    <!--
+    <item
+        android:id="@+id/action_filter"
+        android:icon="@drawable/ic_filter"
+        android:title="filter"
+        app:showAsAction="always"/>
+    !-->
 </menu>

@@ -236,5 +236,8 @@
     <string name="title_activity_edit_book">Modifica libro</string>
     <string name="display_search_on_map_map">Mappa</string>
     <string name="display_search_on_map_distance">Distance:</string>
+    <string name="search_book_algolia_isbn">Cerca ISBN</string>
+    <string name="search_book_algolia_author">Cerca autore</string>
+    <string name="search_book_algolia_title">Cerca titolo</string>
 
 </resources>
