@@ -496,7 +496,6 @@ public class editProfile extends AppCompatActivity {
         }
         try {
             b = BitmapFactory.decodeStream(new FileInputStream(file));
-            b = Bitmap.createScaledBitmap(b ,2048, 2048, true);
             img.setImageBitmap(b);
         } catch (FileNotFoundException e) {
             e.printStackTrace();

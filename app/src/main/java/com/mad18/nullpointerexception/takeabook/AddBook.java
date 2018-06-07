@@ -139,7 +139,7 @@ public class AddBook extends AppCompatActivity {
                 selectBookImg(false);
             });
             imageView.setTag(i);
-            imageView.setImageResource(R.drawable.ic_insert_photo);
+            imageView.setImageResource(R.drawable.ic_addbook);
             horizontal_photo_list.addView(horizontal_photo_list_element);
         }
         staticSpinner = findViewById(R.id.add_book_spinner_book_cond);
@@ -229,14 +229,18 @@ public class AddBook extends AppCompatActivity {
         String algoliaID = "P15KSBYCLA";
         String algoliaKey = "18740ed4b222f99d8f8dcd7c17002b84";
         Client client = new Client(algoliaID, algoliaKey);
-
+        String tmp = b.getBook_authors().keySet().toString();
+        String authors = "";
+        if(tmp.length()>2){
+            authors = tmp.substring(1,tmp.length()-1);
+        }
 
         /* Titolo */
         Index title_index = client.getIndex("book_title");
         List<JSONObject> array_title = new ArrayList<JSONObject>();
         try {
             array_title.add(new JSONObject().put("Title", b.getBook_title()).put("ISBN", b.getBook_ISBN()).put("UserID", b.getBook_userid())
-                    .put("Author",b.getBook_first_author())
+                    .put("Author",authors)
                     .put("ThumbnailURL", b.getBook_thumbnail_url()).put("objectID",b.getBook_id()));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -248,7 +252,7 @@ public class AddBook extends AppCompatActivity {
         List<JSONObject> array_author = new ArrayList<JSONObject>();
         try {
             array_author.add(new JSONObject().put("Title", b.getBook_title()).put("ISBN", b.getBook_ISBN()).put("UserID", b.getBook_userid())
-                    .put("Author",b.getBook_first_author())
+                    .put("Author",authors)
                     .put("ThumbnailURL", b.getBook_thumbnail_url())
                     .put("objectID",b.getBook_id()));
         } catch (JSONException e) {
@@ -261,7 +265,7 @@ public class AddBook extends AppCompatActivity {
         List<JSONObject> array_ISBN= new ArrayList<JSONObject>();
         try {
             array_ISBN.add(new JSONObject().put("Title", b.getBook_title()).put("ISBN", b.getBook_ISBN()).put("UserID", b.getBook_userid())
-                    .put("Author",b.getBook_first_author())
+                    .put("Author",authors)
                     .put("ThumbnailURL", b.getBook_thumbnail_url())
                     .put("objectID",b.getBook_id()));
         } catch (JSONException e) {
@@ -692,13 +696,13 @@ public class AddBook extends AppCompatActivity {
                 iw = findViewById(R.id.add_book_picture);
                 bookCover.recycle();
                 bookCover = null;
-                iw.setImageResource(R.drawable.ic_insert_photo);
+                iw.setImageResource(R.drawable.ic_addbook);
             }
         }
         else if(bookImgMap.isEmpty()==false){
             iw = globalViewImgElement;
             bookImgMap.remove(globalImgPos);
-            iw.setImageResource(R.drawable.ic_insert_photo);
+            iw.setImageResource(R.drawable.ic_addbook);
         }
     }
 

@@ -306,6 +306,9 @@ public class DisplaySearchOnMap_map extends Fragment implements GoogleApiClient.
             if (isMoveMarker) {
                 moveMarker(latLng);
             }
+            if(mHeaderAdapter!=null){
+                mHeaderAdapter.notifyDataSetChanged();
+            }
             return latLng;
         }
         return null;

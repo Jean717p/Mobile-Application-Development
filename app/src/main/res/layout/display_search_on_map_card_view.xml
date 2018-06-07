@@ -40,54 +40,54 @@
 
             <TextView
                 android:layout_marginTop="4dp"
-                android:id="@+id/book_found_label_title"
+                android:id="@+id/book_found_label_conditions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/book_found_thumbnail"
-                android:text="@string/info_book_label_title"
+                android:text="@string/info_book_label_book_conditions"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="16dp"
                 android:textStyle="normal|bold" />
 
             <TextView
-                android:id="@+id/book_found_title"
+                android:id="@+id/book_found_conditions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/book_found_label_title"
+                android:layout_alignBaseline="@id/book_found_label_conditions"
                 android:layout_marginStart="8dp"
-                android:layout_toRightOf="@id/book_found_label_title"
+                android:layout_toRightOf="@id/book_found_label_conditions"
                 android:textSize="13dp" />
 
 
             <TextView
-                android:id="@+id/book_found_label_author"
+                android:id="@+id/book_found_label_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/book_found_author"
-                android:layout_below="@id/book_found_title"
+                android:layout_alignBaseline="@id/book_found_status"
+                android:layout_below="@id/book_found_conditions"
                 android:layout_marginTop="16dp"
                 android:textColor="@color/colorPrimaryDark"
                 android:layout_toEndOf="@id/book_found_thumbnail"
-                android:text="@string/info_book_label_author"
+                android:text="@string/info_book_book_status"
                 android:textSize="16dp"
                 android:textStyle="normal|bold" />
 
 
             <TextView
-                android:id="@+id/book_found_author"
+                android:id="@+id/book_found_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/book_found_title"
+                android:layout_below="@id/book_found_conditions"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="13dp"
                 android:textSize="13dp"
-                android:layout_toEndOf="@+id/book_found_label_author" />
+                android:layout_toEndOf="@id/book_found_label_status" />
 
             <TextView
                 android:id="@+id/book_found_label_distance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/book_found_author"
+                android:layout_below="@id/book_found_status"
                 android:layout_marginTop="16dp"
                 android:layout_toEndOf="@id/book_found_thumbnail"
                 android:layout_alignBaseline="@id/book_found_distance"
@@ -100,11 +100,11 @@
                 android:id="@+id/book_found_distance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/book_found_author"
+                android:layout_below="@id/book_found_status"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="13dp"
                 android:textSize="13dp"
-                android:layout_toEndOf="@+id/book_found_label_distance" />
+                android:layout_toEndOf="@id/book_found_label_distance" />
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>

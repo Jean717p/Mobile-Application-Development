@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mad18.nullpointerexception.takeabook.GlideApp;
-import com.mad18.nullpointerexception.takeabook.searchBook.SearchBookAlgoliaItem;
 
 import com.mad18.nullpointerexception.takeabook.R;
 
@@ -64,8 +63,8 @@ public class SearchBookAlgoliaAdapter extends RecyclerView.Adapter<SearchBookAlg
         private ImageView iw_thumbnail;
         public ViewHolder(View view) {
             super(view);
-            tv_title = (TextView)view.findViewById(R.id.book_found_title);
-            tv_author = (TextView)view.findViewById(R.id.book_found_author);
+            tv_title = (TextView)view.findViewById(R.id.book_found_conditions);
+            tv_author = (TextView)view.findViewById(R.id.book_found_status);
             iw_thumbnail = (ImageView) view.findViewById(R.id.book_found_thumbnail);
         }
 

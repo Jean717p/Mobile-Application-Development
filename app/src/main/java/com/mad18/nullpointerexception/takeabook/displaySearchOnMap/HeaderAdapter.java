@@ -1,7 +1,9 @@
 package com.mad18.nullpointerexception.takeabook.displaySearchOnMap;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Location;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +25,7 @@ public class HeaderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private static final int TYPE_ITEM = 1;
     private ArrayList<Book> mData;
     private Context context;
+    private FragmentActivity myActivity;
 
     private LayoutInflater mLayoutInflater;
 
@@ -34,9 +37,10 @@ public class HeaderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private WeakReference<ItemClickListener> mCallbackRef;
 
-        public HeaderAdapter(Context ctx, ArrayList<Book> data, ItemClickListener listener) {
-            context = ctx;
-            mLayoutInflater = LayoutInflater.from(ctx);
+        public HeaderAdapter(FragmentActivity myActivity, ArrayList<Book> data, ItemClickListener listener) {
+            context = myActivity;
+            this.myActivity = myActivity;
+            mLayoutInflater = LayoutInflater.from(myActivity);
             mData = data;
             mCallbackRef = new WeakReference<>(listener);
         }
@@ -58,9 +62,30 @@ public class HeaderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof MyItem) {
             Book dataItem = getItem(position);
-            ((MyItem) holder).mTitleView.setText(dataItem.getBook_title());
+            switch (dataItem.getBook_condition()) {
+                case 0:
+                    ((MyItem) holder).mConditions.setText(myActivity.getString(R.string.add_book_info_not_available));
+                    break;
+                case 1:
+                    ((MyItem) holder).mConditions.setText(myActivity.getResources().getStringArray(R.array.book_conditions)[1]);
+                    break;
+                case 2:
+                    ((MyItem) holder).mConditions.setText(myActivity.getResources().getStringArray(R.array.book_conditions)[2]);
+                    break;
+                case 3:
+                    ((MyItem) holder).mConditions.setText(myActivity.getResources().getStringArray(R.array.book_conditions)[3]);
+                    break;
+            }
             ((MyItem) holder).mPosition = position;
-            ((MyItem) holder).mAuthor.setText(dataItem.getBook_first_author());
+            if(dataItem.getBook_status()){
+                ((MyItem) holder).mStatus.setText(R.string.request_book_status_on_loan);
+                ((MyItem) holder).mStatus.setTextColor(Color.parseColor("#D50000"));
+            }
+            else{
+                ((MyItem) holder).mStatus.setText(R.string.info_book_status_free);
+                ((MyItem) holder).mStatus.setTextColor(Color.parseColor("#4CAF50"));
+
+            }
             Location book_position = new Location("Provider");
             Location my_position = new Location("Provider");
             book_position.setLatitude(dataItem.getBook_location().getLongitude());
@@ -95,14 +120,14 @@ public class HeaderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     class MyItem extends HeaderItem {
-        TextView mTitleView,mAuthor, mDistance;
+        TextView mConditions, mStatus, mDistance;
         ImageView mThumbnail;
 
         public MyItem(View itemView) {
             super(itemView);
-            mTitleView = (TextView) itemView.findViewById(R.id.book_found_title);
+            mConditions = (TextView) itemView.findViewById(R.id.book_found_conditions);
             mThumbnail = (ImageView) itemView.findViewById(R.id.book_found_thumbnail);
-            mAuthor = (TextView) itemView.findViewById(R.id.book_found_author);
+            mStatus = (TextView) itemView.findViewById(R.id.book_found_status);
             mDistance = (TextView) itemView.findViewById(R.id.book_found_distance);
         }
     }
