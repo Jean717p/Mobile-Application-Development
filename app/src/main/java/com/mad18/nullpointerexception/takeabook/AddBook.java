@@ -437,7 +437,6 @@ public class AddBook extends AppCompatActivity {
                 }
             }
         });
-
         users.document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -445,8 +444,10 @@ public class AddBook extends AppCompatActivity {
                 if(u==null){
                     return;
                 }
-                u.getUsr_books().put(bookRef.getId(),true);
-                users.document(u.getUsr_id())
+                u.getUsr_books().put(bookToAdd.getBook_id(),true);
+                FirebaseFirestore.getInstance()
+                        .collection("users")
+                        .document(u.getUsr_id())
                         .update("usr_books",u.getUsr_books());
             }
         });
@@ -605,13 +606,19 @@ public class AddBook extends AppCompatActivity {
         if(book.getBook_pages()!=0){
             eet.setText(String.valueOf(book.getBook_pages()));
         }
-
+        iw = findViewById(R.id.add_book_picture);
         if(book.getBook_thumbnail_url().length()>0){
-            iw = findViewById(R.id.add_book_picture);
             GlideApp.with(this).load(book.getBook_thumbnail_url())
                     .placeholder(R.drawable.ic_thumbnail_cover_book).into(iw);
             iw.setClickable(false);
+            if(bookCover!=null){
+                bookCover.recycle();
+            }
             bookCover = null;
+        }
+        else{
+            iw.setImageResource(R.drawable.ic_thumbnail_cover_book);
+            iw.setClickable(true);
         }
     }
 
@@ -695,7 +702,7 @@ public class AddBook extends AppCompatActivity {
                 iw = findViewById(R.id.add_book_picture);
                 bookCover.recycle();
                 bookCover = null;
-                iw.setImageResource(R.drawable.ic_insert_photo);
+                iw.setImageResource(R.drawable.ic_thumbnail_cover_book);
             }
         }
         else if(bookImgMap.isEmpty()==false){

@@ -181,8 +181,6 @@ public class Main_HomeBooks_Fragment extends Fragment {
                     }
                 }
             });
-
-
             if(fabTitle !=null){
                 fabTitle.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -196,10 +194,7 @@ public class Main_HomeBooks_Fragment extends Fragment {
                         startActivity(search);
                     }
                 });
-
-
             }
-
             if(fabAuthor !=null){
                 fabAuthor.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -213,10 +208,7 @@ public class Main_HomeBooks_Fragment extends Fragment {
                         startActivity(search);
                     }
                 });
-
-
             }
-
             if(fabIsbn !=null){
                 fabIsbn.setOnClickListener(new View.OnClickListener() {
                     @Override

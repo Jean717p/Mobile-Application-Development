@@ -11,6 +11,7 @@
         android:id="@+id/main_app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:stateListAnimator="@null"
         android:theme="@style/AppTheme.AppBarOverlay"
         android:fitsSystemWindows="true"
         >
