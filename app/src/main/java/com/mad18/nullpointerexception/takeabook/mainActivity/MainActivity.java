@@ -41,6 +41,10 @@ import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.firebase.ui.auth.AuthUI;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -93,7 +97,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static List<Book> myBooks;
     private Map<String,Book> homeBooks;
     private final String TAG = "MainActivity";
-    private final int REQUEST_ADDBOOK = 3, REQUEST_SETTINGS = 4;
+    private final int REQUEST_ADDBOOK = 3, REQUEST_SETTINGS = 4, PLACE_PICKER_REQUEST=7;
+    private AppCompatActivity myActivity;
     private Toolbar toolbar;
     private SharedPreferences sharedPref;
     private FirebaseFirestore db;
@@ -116,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
+        myActivity = this;
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         isMyBooksSorted = true;
@@ -123,13 +129,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         homeBooks = new HashMap<>();
         setContentView(R.layout.activity_main);
         myOnCreateLayout();
+        sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         if(savedInstanceState==null){
             //Download userData & books
             new updateUserData().doInBackground();
             Intent intent = new Intent(this,SplashScreenActivity.class);
             startActivity(intent);
         }
-        sharedPref = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
 //        Resources res;
 //        res = getResources();
 //        String y;
@@ -407,10 +413,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     DocumentSnapshot doc = task.getResult();
+                    if(!task.isSuccessful() || doc == null){
+                        return;
+                    }
+                    thisUser = doc.toObject(User.class);
+                    if(!doc.exists() || thisUser.getUsr_geoPoint()==null){
+                        Snackbar.make(myActivity.findViewById(R.id.main_toolbar),
+                                myActivity.getString(R.string.insert_location),
+                                Snackbar.LENGTH_LONG);
+                        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                        try {
+                            startActivityForResult(builder.build(myActivity), PLACE_PICKER_REQUEST);
+                        } catch (GooglePlayServicesRepairableException e) {
+                            e.printStackTrace();
+                        } catch (GooglePlayServicesNotAvailableException e) {
+                            e.printStackTrace();
+                        } catch (Exception e){
+                            Log.d(TAG,"Puff geopoint/user not exists \\_(^_^)_/");
+                            e.printStackTrace();
+                        }
+                        return;
+                    }
                     SharedPreferences.Editor editor = sharedPref.edit();
                     navigationView = (NavigationView) findViewById(R.id.nav_view);
                     User user1 = thisUser;
-                    thisUser = doc.toObject(User.class);
                     if(user1 == null || user1.getUsr_geoPoint().equals(thisUser.getUsr_geoPoint())==false
                             || homeBooks.size()==0){
                         new UpdateHomeData().doInBackground();
@@ -607,6 +633,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode){
+                case PLACE_PICKER_REQUEST:
+                    if (data != null){
+                        Place place = PlacePicker.getPlace(context, data);
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        User u = new User(user.getEmail(), user.getDisplayName(),
+                                place.getName().toString(), "",
+                                new HashMap<String, Boolean>(),
+                                new GeoPoint(place.getLatLng().latitude,place.getLatLng().longitude),
+                                user.getUid(), new LinkedList<String>());
+                        db.collection("users").document(user.getUid()).set(u);
+                    }
+                    else{
+                        Snackbar.make(myActivity.findViewById(R.id.main_toolbar),
+                                myActivity.getString(R.string.insert_location),
+                                Snackbar.LENGTH_LONG);
+                        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                        try {
+                            startActivityForResult(builder.build(myActivity), PLACE_PICKER_REQUEST);
+                        } catch (GooglePlayServicesRepairableException e) {
+                            e.printStackTrace();
+                        } catch (GooglePlayServicesNotAvailableException e) {
+                            e.printStackTrace();
+                        } catch (Exception e){
+                            Log.d(TAG,"Results: Puff geopoint\\_(^_^)_/");
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
 //            case REQUEST_SETTINGS:
 //                if(resultCode==RESULT_OK && data !=null){
 //                    Bundle extras = data.getExtras();
