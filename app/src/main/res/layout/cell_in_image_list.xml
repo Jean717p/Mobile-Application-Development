@@ -12,13 +12,14 @@
         android:layout_height="120dp"
         android:orientation="vertical" >
 
-        <ImageButton android:id="@+id/image_in_horizontal_list_cell"
+        <ImageView android:id="@+id/image_in_horizontal_list_cell"
             android:layout_width="90dp"
             android:layout_height="120dp"
-            app:srcCompat="@drawable/ic_addbook"
+            app:srcCompat="@drawable/ic_insert_photo"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:clickable="true"/>
 
 </LinearLayout>
 
