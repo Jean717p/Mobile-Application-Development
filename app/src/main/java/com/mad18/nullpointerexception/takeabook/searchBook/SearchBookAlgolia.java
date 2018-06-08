@@ -52,7 +52,7 @@ public class SearchBookAlgolia extends AppCompatActivity {
     private String searchBase;
     private Map<String, String> booklist = new HashMap<>();
     private ArrayList<BookWrapper> booksFound = new ArrayList<>();
-    private ArrayList<SearchBookAlgoliaItem> booksToShow = new ArrayList<>();
+    private HashMap<String, SearchBookAlgoliaItem> booksToShow = new HashMap<>();
     private Context context;
     private View mClss;
     private Index algolia_index;
@@ -167,7 +167,7 @@ public class SearchBookAlgolia extends AppCompatActivity {
                     // Hiding FAB
                     fab_isbn.hide();
                     // ...
-                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                } else if (newState == RecyclerView.SCROLL_STATE_IDLE && searchBase.equals("ISBN")) {
                     // Showing FAB
                     // ...
                     fab_isbn.show();
@@ -227,10 +227,12 @@ public class SearchBookAlgolia extends AppCompatActivity {
                                         } else {
                                             thumbnailURL = "";
                                         }
-                                        booksToShow.add(new SearchBookAlgoliaItem(title, author, thumbnailURL, isbn));
+
+                                        booksToShow.put(isbn, new SearchBookAlgoliaItem(title, author, thumbnailURL, isbn));
                                     }
                                     //Update recycler view
-                                    updateView(booksToShow);
+                                    ArrayList tmp = new ArrayList(booksToShow.values());
+                                    updateView(tmp);
                                 }
                             }
                         } catch (JSONException e1) {
