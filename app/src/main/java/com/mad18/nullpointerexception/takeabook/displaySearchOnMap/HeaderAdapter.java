@@ -88,8 +88,8 @@ public class HeaderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }
             Location book_position = new Location("Provider");
             Location my_position = new Location("Provider");
-            book_position.setLatitude(dataItem.getBook_location().getLongitude());
-            book_position.setLongitude(dataItem.getBook_location().getLatitude());
+            book_position.setLatitude(dataItem.getBook_location().getLatitude());
+            book_position.setLongitude(dataItem.getBook_location().getLongitude());
             my_position.setLatitude(DisplaySearchOnMap_map.mLocation != null ? DisplaySearchOnMap_map.mLocation.latitude : MainActivity.thisUser.getUsr_geoPoint().getLatitude());
             my_position.setLongitude(DisplaySearchOnMap_map.mLocation != null ? DisplaySearchOnMap_map.mLocation.longitude : MainActivity.thisUser.getUsr_geoPoint().getLongitude());
             ((MyItem) holder).mDistance.setText(String.format("%.2f km",my_position.distanceTo(book_position)/1000));
@@ -147,8 +147,8 @@ public class HeaderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public void onClick(View v) {
             ItemClickListener callback = mCallbackRef != null ? mCallbackRef.get() : null;
             if (callback != null) {
-                callback.onItemClicked(new LatLng(getItem(mPosition).getBook_location().getLongitude(),
-                        getItem(mPosition).getBook_location().getLatitude()));
+                callback.onItemClicked(new LatLng(getItem(mPosition).getBook_location().getLatitude(),
+                        getItem(mPosition).getBook_location().getLongitude()));
             }
 
         }

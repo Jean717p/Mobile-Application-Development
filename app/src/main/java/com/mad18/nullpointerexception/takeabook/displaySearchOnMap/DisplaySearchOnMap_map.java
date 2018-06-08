@@ -22,10 +22,9 @@ import android.widget.ListView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -35,12 +34,10 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.firestore.GeoPoint;
-import com.mad18.nullpointerexception.takeabook.util.Book;
-import com.mad18.nullpointerexception.takeabook.info.InfoBook;
 import com.mad18.nullpointerexception.takeabook.R;
+import com.mad18.nullpointerexception.takeabook.info.InfoBook;
+import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -208,7 +205,7 @@ public class DisplaySearchOnMap_map extends Fragment implements GoogleApiClient.
 
                     for (BookWrapper i: bookList){
                         Marker marker = bookMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(i.getLongitude(),i.getLat()))
+                                .position(new LatLng(i.getLat(),i.getLongitude()))
                                 .title(i.getTitle())
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                         );
@@ -438,6 +435,10 @@ public class DisplaySearchOnMap_map extends Fragment implements GoogleApiClient.
 
     @Override
     public boolean onMarkerClick(final Marker marker) {
+        if(getActivity().getIntent().getBooleanExtra("isFromInfoBook",false)){
+            getActivity().finish();
+            getActivity().overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+        }
         BookWrapper bw = (BookWrapper) marker.getTag();
         Intent intent = new Intent(getActivity(), InfoBook.class);
         intent.putExtra("bookToShow",bw);

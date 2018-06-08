@@ -91,8 +91,8 @@ public class BookWrapper implements Parcelable {
         this.categories = in.createStringArrayList();
         this.description = in.readString();
         this.user_id = in.readString();
-        this.longitude = in.readDouble();
         this.lat = in.readDouble();
+        this.longitude = in.readDouble();
         this.photo_list = in.createStringArrayList();
         this.pages = in.readInt();
         this.condition = in.readInt();
@@ -150,6 +150,8 @@ public class BookWrapper implements Parcelable {
                 ", editionYear='" + SeditionYear + '\'' +
                 ", description='" + description + '\'' +
                 ", user_id='" + user_id + '\'' +
+                ", lat='" + lat + '\'' +
+                ", longitude='" + longitude + '\'' +
                 allphotolist+
                 ", pages='" + Spages + '\'' +
                 ", condition='" + condition + '\'' +

@@ -31,11 +31,26 @@
             android:layout_height="30dp"
             android:layout_below="@id/info_book_main_image"
             android:layout_gravity="center"
+            android:gravity="center"
             android:layout_margin="8dp"
             android:background="@drawable/corner_button"
             android:clickable="false"
-            android:gravity="center"
             android:text="@string/info_book_request_this_book"
+            android:textColor="@android:color/white"
+            android:textStyle="normal|bold" />
+
+        <Button
+            android:id="@+id/info_book_map_button"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_below="@id/info_book_request_book_button"
+            android:layout_margin="8dp"
+            android:background="@drawable/corner_button"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/display_search_on_map_map"
             android:textColor="@android:color/white"
             android:textStyle="normal|bold" />
 
