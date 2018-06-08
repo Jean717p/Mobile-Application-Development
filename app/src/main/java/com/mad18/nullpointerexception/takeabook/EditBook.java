@@ -235,7 +235,6 @@ public class EditBook extends AppCompatActivity {
             GlideApp.with(this).load(book.getBook_thumbnail_url())
                     .placeholder(R.drawable.ic_thumbnail_cover_book).into(iw);
         }
-
         //fillPhotoList(book);
     }
 
