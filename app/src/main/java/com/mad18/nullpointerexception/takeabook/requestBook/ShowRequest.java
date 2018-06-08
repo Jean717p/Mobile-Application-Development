@@ -375,6 +375,9 @@ public class ShowRequest extends AppCompatActivity {
                                         );
                                 db.collection("books").document(requested_book.getBook_id())
                                         .update("book_status",true);
+                                db.collection("users") //Trigger user update on mainactivity
+                                        .document(owner.getUsr_id())
+                                        .update("toUpdate",requested_book.getBook_id());
                                 TextView textView = findViewById(R.id.request_book_status);
                                 Button button = findViewById(R.id.request_book_send);
                                 button.setVisibility(View.GONE);

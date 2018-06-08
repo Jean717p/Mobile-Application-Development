@@ -188,7 +188,7 @@ public class InfoBook extends AppCompatActivity {
             if(myBook.getBook_status()){
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mapButton.getLayoutParams();
                 params.removeRule(RelativeLayout.BELOW);
-                params.addRule(RelativeLayout.BELOW,R.id.info_book_map_button);
+                params.addRule(RelativeLayout.BELOW,R.id.info_book_main_image);
             }
             mapButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -250,7 +250,7 @@ public class InfoBook extends AppCompatActivity {
                     !bookToShowInfoOf.getStatus()) {
                 request_button.setClickable(true);
                 request_button.setVisibility(View.VISIBLE);
-                request_button.setOnClickListener( (View view) -> checkAlreadyRequested("request"));
+                request_button.setOnClickListener( (View view) -> checkAlreadyRequested());
                 tv2.setText(bookOwner.getUsr_name());
                 tv2.setTextColor(Color.BLUE);
                 tv2.setClickable(true);
@@ -403,17 +403,32 @@ public class InfoBook extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.info_book_delete_book:
-                checkAlreadyRequested("delete");
+                if(myBook.getBook_status()){
+                    Snackbar.make(findViewById(R.id.info_book_owner),
+                            R.string.info_book_still_on_loan, Snackbar.LENGTH_LONG).show();
+                    return false;
+                }
+                else{
+                    AskOption();
+                }
                 return true;
             case R.id.info_book_modify_book:
-                //Toast.makeText(this, "Features in progress, soon available", Toast.LENGTH_SHORT).show();
-                checkAlreadyRequested("modify");
+                if(myBook.getBook_status()){
+                    Snackbar.make(findViewById(R.id.info_book_owner),
+                            R.string.info_book_still_on_loan, Snackbar.LENGTH_LONG).show();
+                    return false;
+                }
+                else{
+                    Intent toEditBook = new Intent(InfoBook.this, EditBook.class);
+                    toEditBook.putExtra("book_to_modify", bookToShowInfoOf);
+                    startActivityForResult(toEditBook, MODIFY_BOOK);
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void checkAlreadyRequested(String check){
+    private void checkAlreadyRequested(){
         FirebaseFirestore.getInstance().collection("requests")
                 .whereEqualTo("bookId",bookToShowInfoOf.getId())
                 .whereEqualTo("applicantId",FirebaseAuth.getInstance().getUid())
@@ -426,30 +441,18 @@ public class InfoBook extends AppCompatActivity {
                     if(task.getResult().getDocuments().size()>0){
                         Snackbar.make(findViewById(R.id.info_book_owner),
                                 R.string.info_book_request_already_done, Snackbar.LENGTH_LONG).show();
-                        return;
                     }
                     else{
-                        switch (check){
-                            case "request":
-                                Intent toRequestBook = new Intent(InfoBook.this, RequestBook.class);
-                                toRequestBook.putExtra("requested_book", bookToShowInfoOf);
-                                toRequestBook.putExtra("otherUser",new UserWrapper(bookOwner));
-                                startActivityForResult(toRequestBook,REQUEST_BOOK);
-                                break;
-                            case "delete":
-                                AskOption();
-                                break;
-                            case "modify":
-                                Intent toEditBook = new Intent(InfoBook.this, EditBook.class);
-                                toEditBook.putExtra("book_to_modify", bookToShowInfoOf);
-                                startActivityForResult(toEditBook, MODIFY_BOOK);
-                        }
+                        Intent toRequestBook = new Intent(InfoBook.this, RequestBook.class);
+                        toRequestBook.putExtra("requested_book", bookToShowInfoOf);
+                        toRequestBook.putExtra("otherUser",new UserWrapper(bookOwner));
+                        startActivityForResult(toRequestBook,REQUEST_BOOK);
                     }
                 }
                 else{
                     Snackbar.make(findViewById(R.id.request_book_send),
                             R.string.connecting, Snackbar.LENGTH_LONG).show();
-                    checkAlreadyRequested(check);
+                    checkAlreadyRequested();
                 }
             }
         });

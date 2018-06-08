@@ -210,7 +210,7 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="image_fullscreen">image_fullscreen</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="info_book_request_already_done">Book already requested/still on loan</string>
+    <string name="info_book_request_already_done">Book already requested</string>
 
     <string name="search_book_algolia_request_permission">Grant the permission to view the map!</string>
     <string name="search_book_algolia_no_found">No book found!</string>
@@ -241,6 +241,7 @@
     <string name="search_book_algolia_isbn">Search ISBN</string>
     <string name="search_book_algolia_author">Search Author</string>
     <string name="search_book_algolia_title">Search Title</string>
+    <string name="info_book_still_on_loan">You can\'t edit/delete a book on loan</string>
 
 
 </resources>

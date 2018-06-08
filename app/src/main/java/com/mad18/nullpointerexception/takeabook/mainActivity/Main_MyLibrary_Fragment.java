@@ -4,6 +4,7 @@ package com.mad18.nullpointerexception.takeabook.mainActivity;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -26,10 +27,13 @@ import com.mad18.nullpointerexception.takeabook.info.InfoBook;
 import com.mad18.nullpointerexception.takeabook.util.Book;
 import com.mad18.nullpointerexception.takeabook.util.BookWrapper;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
 
 import static com.mad18.nullpointerexception.takeabook.mainActivity.MainActivity.myBooks;
+import static java.util.stream.Collectors.toList;
 
 //import com.github.clans.fab.FloatingActionButton;
 
@@ -135,8 +139,23 @@ public class Main_MyLibrary_Fragment extends Fragment {
     }
 
     public void updateView(List<Book> books){
-        if(myAdapter==null){
+        if(myAdapter==null || books==null){
             return;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Comparator<Book> byTitle = Comparator.comparing(Book::getBook_title);
+            Comparator<Book> byAuthor = Comparator.comparing(Book::getBook_first_author);
+            books = books.stream().sorted(byAuthor.thenComparing(byTitle)).collect(toList());
+        }
+        else{
+            Collections.sort(books, (a, b) -> {
+                if(a.getBook_first_author().equals(b.getBook_first_author())){
+                    return a.getBook_title().compareTo(b.getBook_title());
+                }
+                else{
+                    return a.getBook_first_author().compareTo(b.getBook_first_author());
+                }
+            });
         }
         myAdapter.setData(books);
         myAdapter.notifyDataSetChanged();

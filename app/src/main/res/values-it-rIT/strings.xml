@@ -112,6 +112,7 @@
     <string name="info_book_request_this_book">Richiedi</string>
     <string name="info_book_delete">Elimina</string>
     <string name="info_book_modified">Il libro è stato modificato correttamente</string>
+    <string name="info_book_still_on_loan">Non puoi modificare/cancellare un libro in prestito</string>
 
 
     <!--add book Related-->
@@ -211,7 +212,7 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="image_fullscreen">image_fullscreen</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="info_book_request_already_done">Libro già richiesto/ancora in prestito</string>
+    <string name="info_book_request_already_done">Libro già richiesto</string>
     <string name="search_book_algolia_request_permission">Autorizza accesso alla mappa</string>
     <string name="search_book_algolia_no_found">Nessun libro trovato</string>
     <string name="search_book_toolbar_title">Ricerca per</string>
@@ -239,5 +240,6 @@
     <string name="search_book_algolia_isbn">Cerca ISBN</string>
     <string name="search_book_algolia_author">Cerca autore</string>
     <string name="search_book_algolia_title">Cerca titolo</string>
+
 
 </resources>

@@ -60,6 +60,7 @@ public class BookWrapper implements Parcelable {
         photo_list = new LinkedList<>();
         this.pages=pages;
         this.status = status;
+        this.id="";
     }
 
     public BookWrapper(Book book){
