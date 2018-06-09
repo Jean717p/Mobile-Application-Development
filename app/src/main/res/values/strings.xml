@@ -236,7 +236,7 @@
     <string name="info_book_label_owner_no_dots">Owner</string>
     <string name="show_profile_reviews">Reviews</string>
     <string name="title_activity_edit_book">Edit book</string>
-    <string name="display_search_on_map_map">Mappa</string>
+    <string name="display_search_on_map_map">Map</string>
     <string name="display_search_on_map_distance">Distance:</string>
     <string name="search_book_algolia_isbn">Search ISBN</string>
     <string name="search_book_algolia_author">Search Author</string>
