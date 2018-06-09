@@ -237,6 +237,7 @@ public class ShowRequest extends AppCompatActivity {
         tv.setVisibility(View.VISIBLE);
         Button cancel = findViewById(R.id.request_book_cancel);
         cancel.setText(R.string.info_book_delete);
+        cancel.setVisibility(View.VISIBLE);
         Button button = findViewById(R.id.request_book_send);
         button.setVisibility(View.GONE);
         if(myUser.getUsr_id().equals(loan.getOwnerId())
@@ -405,6 +406,7 @@ public class ShowRequest extends AppCompatActivity {
         Button btn = findViewById(R.id.request_book_send);
         btn.setVisibility(View.VISIBLE);
         btn.setText(R.string.request_book_close_loan);
+        findViewById(R.id.request_book_cancel).setVisibility(View.GONE);
         if (myUser.getUsr_id().equals(loan.getOwnerId())) {
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
